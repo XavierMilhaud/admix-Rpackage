@@ -13,9 +13,11 @@ knitr::opts_chunk$set(
 )
 ```
 
+
 # Welcome to R package admix
 
 <!-- badges: start -->
+[![R-CMD-check](https://github.com/XavierMilhaud/admix/workflows/R-CMD-check/badge.svg)](https://github.com/XavierMilhaud/admix/actions)
 
 The goal of admix is to provide code for estimation, hypothesis testing and clustering methods in admixture models. 
 

@@ -9,3 +9,4 @@
 ^docs$
 ^vignettes/covid19-pairwise-testing\.Rmd$
 ^cran-comments\.md$
+^\.github$

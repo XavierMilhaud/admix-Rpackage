@@ -5,6 +5,8 @@
 
 <!-- badges: start -->
 
+[![R-CMD-check](https://github.com/XavierMilhaud/admix/workflows/R-CMD-check/badge.svg)](https://github.com/XavierMilhaud/admix/actions)
+
 The goal of admix is to provide code for estimation, hypothesis testing
 and clustering methods in admixture models.
 
@@ -76,8 +78,7 @@ data1 <- rsimmix(n = 1000, unknownComp_weight = 0.8, list.comp, list.param)[['mi
 list.comp <- list(f = NULL, g = 'norm')
 list.param <- list(f = NULL, g = list(mean = 0, sd = 1))
 BVdk_estimParam(data1, method = 'L-BFGS-B', list.comp, list.param)
-#> [1] 0.8007227 3.0118901
+#> [1] 0.7977239 3.0114174
 ```
 
 <!-- badges: end -->
-
