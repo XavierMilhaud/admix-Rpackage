@@ -1,0 +1,30 @@
+#' Short-term Mortality Fluctuations (STMF) data series, restricted to 6 countries (Belgium, France, Italy, Netherlands, Spain, Germany).
+#'
+#' Weekly death counts provide the most objective and comparable way of assessing the scale of short-term mortality
+#' elevations across countries (32 countries) and time. Extraction date: 09/21/2020.
+#'
+#' @format A data frame with 88146 rows and 19 variables:
+#' \describe{
+#'   \item{CountryCode}{Mortality database country code}
+#'   \item{Year}{Year}
+#'   \item{Week}{Week number}
+#'   \item{Sex}{Gender ('m': male, 'f': female, 'b': both)}
+#'   \item{D0_14}{Age range 0-14}
+#'   \item{D15_64}{Age range 15-64}
+#'   \item{D65_74}{Age range 65-74}
+#'   \item{D75_84}{Age range 75-84}
+#'   \item{D85p}{Age range 85-+}
+#'   \item{DTotal}{Count of deaths for all ages combined}
+#'   \item{R0_14}{Crude death rate for age range 0-14}
+#'   \item{R15_64}{Crude death rate for age range 15-64}
+#'   \item{R65_74}{Crude death rate for age range 65-74}
+#'   \item{R75_84}{Crude death rate for age range 75-84}
+#'   \item{R85p}{Crude death rate for age range 85-+}
+#'   \item{RTotal}{Crude death rate for all ages combined}
+#'   \item{Split}{Indicates if data were split from aggregated age groups (0 if the original data has necessary detailed age scale).
+#'   For example, if the original age scale was 0-4, 5-29, 30-65, 65+, then split will be equal to 1}
+#'   \item{SplitSex}{Indicates if the original data are available by sex (0) or data are interpolated (1)}
+#'   \item{Forecast}{Equals 1 for all years where forecasted population exposures were used to calculate weekly death rates}
+#' }
+#' @source \url{https://www.mortality.org}
+"stmf_small"

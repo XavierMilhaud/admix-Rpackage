@@ -1,0 +1,98 @@
+---
+title: "Clustering of unknown subpopulations in admixture models"
+author: "Xavier Milhaud"
+bibliography: references.bib
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Clustering of unknown subpopulations in admixture models}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE,
+  message = FALSE
+)
+```
+
+```{r setup}
+library(admix)
+```
+
+
+The clustering of populations following admixture models is, for now, based on the K-sample test theory. Consider $K$ samples. For $i=1,...,K$, sample $X^{(i)} = (X_1^{(i)}, ..., X_{n_i}^{(i)})$ follows
+$$L_i(x) = p_i F_i(x) + (1-p_i) G_i, \qquad x \in \mathbb{R}.$$
+
+We still use IBM approach to perform pairwise hypothesis testing. The idea is to adapt the K-sample test procedure to obtain a data-driven method that cluster the $K$ populations into $N$ subgroups, characterized by a common unknown mixture component. The advantages of such an approach is twofold:
+
+* the number $N$ of clusters is automatically chosen by the procedure,
+* Each subgroup is validated by the K-sample testing method, which has theoretical guarantees.
+
+This clustering technique thus allows to cluster unobserved subpopulations instead of individuals. We call this algorithm the K-sample 2-component mixture clustering (K2MC).
+
+
+# Algorithm
+
+We now detail the steps of the algorithm.
+
+  1. Initialization: create the first cluster to be filled, i.e. $c = 1$. By convention, $S_0=\emptyset$.
+  2. Select $\{x,y\}={\rm argmin}\{d_n(i,j); i \neq j \in S \setminus \bigcup_{k=1}^c S_{k-1}\}$.
+  3. Test $H_0$ between $x$ and $y$.
+  
+    If $H_0$ is not rejected then $S_1 = \{x,y\}$,\\
+    Else $S_1 = \{x\}$, $S_{c+1} = \{y\}$ and then $c=c+1$.
+    
+  4. While $S\setminus \bigcup_{k=1}^c S_k = \emptyset$ do
+  
+    Select $u={\rm argmin}\{d(i,j); i\in S_c, j\in S\setminus \bigcup_{k=1}^c S_k\}$;
+    Test $H_0$ the simultaneous equality of all the $f_j$, $j\in S_c$ :\\
+      If $H_0$ not rejected, then put $S_c=S_c\bigcup \{u\}$;\\
+      Else $S_{c+1} = \{u\}$ and $c = c+1$.
+
+
+# Applications
+
+## On $\mathbb{R}^+$
+
+We present a case study with 5 populations to cluster on $\mathbb{R}^+$, with Gamma-Exponential and Gamma-Gamma mixtures.
+
+```{r}
+## Simulate data (chosen parameters indicate 3 clusters (populations (1,3), (2,5) and 4)!):
+list.comp <- list(f1 = "gamma", g1 = "exp",
+                  f2 = "gamma", g2 = "exp",
+                  f3 = "gamma", g3 = "gamma",
+                  f4 = "exp", g4 = "exp",
+                  f5 = "gamma", g5 = "exp")
+list.param <- list(f1 = list(shape = 16, rate = 4), g1 = list(rate = 1/3.5),
+                   f2 = list(shape = 14, rate = 2), g2 = list(rate = 1/5),
+                   f3 = list(shape = 16, rate = 4), g3 = list(shape = 12, rate = 2),
+                   f4 = list(rate = 1/2), g4 = list(rate = 1/7),
+                   f5 = list(shape = 14, rate = 2), g5 = list(rate = 1/6))
+A.sim <- rsimmix(n=6000, unknownComp_weight=0.7, comp.dist = list(list.comp$f1,list.comp$g1),
+                 comp.param = list(list.param$f1, list.param$g1))$mixt.data
+B.sim <- rsimmix(n=6000, unknownComp_weight=0.6, comp.dist = list(list.comp$f2,list.comp$g2),
+                 comp.param = list(list.param$f2, list.param$g2))$mixt.data
+C.sim <- rsimmix(n=6000, unknownComp_weight=0.5, comp.dist = list(list.comp$f3,list.comp$g3),
+                 comp.param = list(list.param$f3, list.param$g3))$mixt.data
+D.sim <- rsimmix(n=6000, unknownComp_weight=0.4, comp.dist = list(list.comp$f4,list.comp$g4),
+                 comp.param = list(list.param$f4, list.param$g4))$mixt.data
+E.sim <- rsimmix(n=6000, unknownComp_weight=0.3, comp.dist = list(list.comp$f5,list.comp$g5),
+                 comp.param = list(list.param$f5, list.param$g5))$mixt.data
+## Look for the clusters:
+list.comp <- list(f1 = NULL, g1 = "exp",
+                  f2 = NULL, g2 = "exp",
+                  f3 = NULL, g3 = "gamma",
+                  f4 = NULL, g4 = "exp",
+                  f5 = NULL, g5 = "exp")
+list.param <- list(f1 = NULL, g1 = list(rate = 1/3.5),
+                   f2 = NULL, g2 = list(rate = 1/5),
+                   f3 = NULL, g3 = list(shape = 12, rate = 2),
+                   f4 = NULL, g4 = list(rate = 1/7),
+                   f5 = NULL, g5 = list(rate = 1/6))
+clusters <- admix_clustering(samples = list(A.sim,B.sim,C.sim,D.sim,E.sim), n_sim_tab = 10,
+                             comp.dist=list.comp, comp.param=list.param, parallel=TRUE, n_cpu=2)
+clusters
+```

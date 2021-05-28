@@ -1,0 +1,11 @@
+^admix\.Rproj$
+^\.Rproj\.user$
+^LICENSE\.md$
+^doc$
+^Meta$
+^README\.Rmd$
+^README\.html$
+^_pkgdown\.yml$
+^docs$
+^vignettes/covid19-pairwise-testing\.Rmd$
+^cran-comments\.md$

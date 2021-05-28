@@ -1,0 +1,8 @@
+#' Heliocentric velocity measured from the Milky Way.
+#'
+#' @format A data frame with ... rows and .. variables:
+#' \describe{
+#'   \item{V1}{The heliocentric velocity of Milky way}
+#' }
+#' @source \url{https://www.aanda.org/articles/aa/full_html/2018/08/aa32905-18/aa32905-18.html}
+"milkyWay"

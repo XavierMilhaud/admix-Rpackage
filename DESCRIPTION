@@ -1,0 +1,57 @@
+Package: admix
+Title: Package admix for admixture (aka contamination) models
+Version: 0.3.2
+Authors@R: 
+    person(given = "Xavier",
+           family = "Milhaud",
+           role = c("cre", "aut", "ctb"),
+           email = "xavier.milhaud.research@gmail.com")
+Description: This package implements several methods to estimate the
+    unknown quantities related to two-component admixture models,
+    depending on the assumptions made on the unknown component density. In
+    practice, one can estimate both the mixture weight and the unknown
+    component density in a wide variety of frameworks. On top of that,
+    hypothesis tests can be performed in one and two-samples contexts to
+    test the unknown component density. Finally, clustering of unknown
+    mixture components is also feasible in a K-samples setting.
+License: GPL (>= 3)
+URL: https://github.com/XavierMilhaud/admix
+BugReports: https://github.com/XavierMilhaud/admix/issues
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+Imports: 
+    base,
+    fdrtool,
+    graphics,
+    gtools,
+    Iso,
+    latex2exp,
+    MASS,
+    methods,
+    orthopolynom,
+    pracma,
+    Rcpp,
+    stats,
+    utils
+Suggests: 
+    rmutil,
+    doParallel,
+    foreach,
+    evd,
+    logitnorm,
+    flexsurv,
+    plyr,
+    reshape2,
+    gridExtra,
+    lattice,
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown
+Depends: 
+    R (>= 2.10)
+LinkingTo: 
+    Rcpp
+Config/testthat/edition: 3
+VignetteBuilder: knitr
