@@ -23,6 +23,7 @@
 #' @return A list with three elements: 1) the identified clusters; 2) the cluster affiliation; 3) the discrepancy matrix.
 #'
 #' @examples
+#' \dontrun{
 #' ## Simulate data (chosen parameters indicate 2 clusters (populations (1,3), (2,4))!):
 #' list.comp <- list(f1 = "gamma", g1 = "exp",
 #'                   f2 = "gamma", g2 = "exp",
@@ -51,7 +52,7 @@
 #'                    f4 = NULL, g4 = list(rate = 1/7))
 #' clusters <- admix_clustering(samples = list(A.sim,B.sim,C.sim,D.sim), n_sim_tab = 8,
 #'                              comp.dist=list.comp, comp.param=list.param, parallel=TRUE, n_cpu=2)
-#' clusters$clustering
+#' clusters$clustering}
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export

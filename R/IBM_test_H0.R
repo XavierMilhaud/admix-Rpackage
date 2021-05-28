@@ -28,6 +28,7 @@
 #'         test, and 4) the estimated weights of the unknown component for each of the two admixture models.
 #'
 #' @examples
+#' \dontrun{
 #' ####### Under the null hypothesis H0 :
 #' ## Simulate data:
 #' list.comp <- list(f1 = "norm", g1 = "norm",
@@ -59,7 +60,7 @@
 #' list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
 #'                    f2 = NULL, g2 = list(mean = 3, sd = 1.2))
 #' IBM_test_H0(sample1 = X.sim, sample2 = Y.sim, known.p = NULL, comp.dist = list.comp,
-#'             comp.param=list.param, sim_U = U[["U_sim"]], min_size=NULL, parallel=TRUE, n_cpu=2)
+#'             comp.param=list.param, sim_U = U[["U_sim"]], min_size=NULL, parallel=TRUE, n_cpu=2)}
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export

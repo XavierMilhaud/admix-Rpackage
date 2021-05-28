@@ -57,6 +57,7 @@ of interest. See 'Details' below and the cited paper therein for further informa
 See the paper presenting the IBM approach at the following HAL weblink: https://hal.archives-ouvertes.fr/hal-03201760
 }
 \examples{
+\dontrun{
 ## Simulate data:
 list.comp <- list(f1 = 'norm', g1 = 'norm',
                   f2 = 'norm', g2 = 'norm')
@@ -74,7 +75,7 @@ list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
 U <- IBM_tabul_stochasticInteg(n.sim = 8, n.varCovMat = 50, sample1 = X.sim, sample2 = Y.sim,
                                min_size = NULL, comp.dist = list.comp, comp.param = list.param,
                                parallel = TRUE, n_cpu = 2)
-plot(density(U[["U_sim"]]))
+plot(density(U[["U_sim"]]))}
 
 }
 \author{

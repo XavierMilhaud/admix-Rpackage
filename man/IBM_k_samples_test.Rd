@@ -59,6 +59,7 @@ H0 : f_1 = ... = f_K  against  H1 : f_i differs from f_j (i diff j, and i,j in 1
 See the paper presenting the IBM approach at the following HAL weblink: https://hal.archives-ouvertes.fr/hal-03201760
 }
 \examples{
+\dontrun{
 ####### Under the alternative hypothesis H1 (with K=3 populations):
 list.comp <- list(f1 = "norm", g1 = "norm",
                   f2 = "norm", g2 = "norm",
@@ -81,7 +82,7 @@ list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
                    f3 = NULL, g3 = list(mean = 3, sd = 0.8))
 obj <- IBM_k_samples_test(samples= list(sim1,sim2,sim3), sim_U=NULL, n_sim_tab=8, min_size=NULL,
                           comp.dist=list.comp, comp.param=list.param, parallel=TRUE, n_cpu=2)
-obj$rejection_rule
+obj$rejection_rule}
 
 }
 \author{

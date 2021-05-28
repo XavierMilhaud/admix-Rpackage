@@ -45,6 +45,7 @@ using Inversion - Best Matching (IBM) approach, see 'Details' below for further 
 See the paper presenting the IBM approach at the following HAL weblink: https://hal.archives-ouvertes.fr/hal-03201760
 }
 \examples{
+\dontrun{
 ## Simulate data (chosen parameters indicate 2 clusters (populations (1,3), (2,4))!):
 list.comp <- list(f1 = "gamma", g1 = "exp",
                   f2 = "gamma", g2 = "exp",
@@ -73,7 +74,7 @@ list.param <- list(f1 = NULL, g1 = list(rate = 1/3.5),
                    f4 = NULL, g4 = list(rate = 1/7))
 clusters <- admix_clustering(samples = list(A.sim,B.sim,C.sim,D.sim), n_sim_tab = 8,
                              comp.dist=list.comp, comp.param=list.param, parallel=TRUE, n_cpu=2)
-clusters$clustering
+clusters$clustering}
 
 }
 \author{

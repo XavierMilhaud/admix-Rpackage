@@ -1,12 +1,12 @@
 Package: admix
-Title: Package admix for admixture (aka contamination) models
+Title: Package Admix for Admixture (aka Contamination) Models
 Version: 0.3.2
 Authors@R: 
     person(given = "Xavier",
            family = "Milhaud",
            role = c("cre", "aut", "ctb"),
            email = "xavier.milhaud.research@gmail.com")
-Description: This package implements several methods to estimate the
+Description: Implements several methods to estimate the
     unknown quantities related to two-component admixture models,
     depending on the assumptions made on the unknown component density. In
     practice, one can estimate both the mixture weight and the unknown

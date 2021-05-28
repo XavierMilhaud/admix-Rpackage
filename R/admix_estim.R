@@ -38,7 +38,7 @@
 #' ## Simulate data:
 #' sim1 <- rsimmix(n = 400, unknownComp_weight = 0.8, comp.dist = list(list.comp$f1,list.comp$g1),
 #'                 comp.param = list(list.param$f1, list.param$g1))$mixt.data
-#' sim2 <- rsimmix(n= 600, unknownComp_weight = 0.65, comp.dist = list(list.comp$f2,list.comp$g2),
+#' sim2 <- rsimmix(n= 400, unknownComp_weight = 0.85, comp.dist = list(list.comp$f2,list.comp$g2),
 #'                 comp.param = list(list.param$f2, list.param$g2))$mixt.data
 #' ## Estimate the mixture weights of the admixture models:
 #' list.comp <- list(f1 = NULL, g1 = "norm",

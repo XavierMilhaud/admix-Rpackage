@@ -56,6 +56,7 @@ Perform the following hypothesis test: H0 : f1 = f2 versus H1 : f1 differs from 
 See the paper presenting the IBM approach at the following HAL weblink: https://hal.archives-ouvertes.fr/hal-03201760
 }
 \examples{
+\dontrun{
 ####### Under the null hypothesis H0 :
 ## Simulate data:
 list.comp <- list(f1 = "norm", g1 = "norm",
@@ -87,7 +88,7 @@ list.comp <- list(f1 = NULL, g1 = "norm",
 list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
                    f2 = NULL, g2 = list(mean = 3, sd = 1.2))
 IBM_test_H0(sample1 = X.sim, sample2 = Y.sim, known.p = NULL, comp.dist = list.comp,
-            comp.param=list.param, sim_U = U[["U_sim"]], min_size=NULL, parallel=TRUE, n_cpu=2)
+            comp.param=list.param, sim_U = U[["U_sim"]], min_size=NULL, parallel=TRUE, n_cpu=2)}
 
 }
 \author{

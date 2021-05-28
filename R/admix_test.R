@@ -40,6 +40,7 @@
 #' @return A list containing...
 #'
 #' @examples
+#' \dontrun{
 #' ##### On a simulated example to see whether the true parameters are well estimated. With 1 sample:
 #' list.comp <- list(f1 = "norm", g1 = "norm")
 #' list.param <- list(f1 = list(mean = 0, sd = 1), g1 = list(mean = 2, sd = 0.7))
@@ -71,7 +72,7 @@
 #' #           parallel = TRUE, n_cpu = 2)
 #' admix_test(samples = list(sim1,sim2), sym.f = TRUE, test.method = 'Poly', sim_U = NULL,
 #'            min_size = NULL, comp.dist = list.comp, comp.param = list.param, support = "Real",
-#'            parallel = FALSE, n_cpu = NULL)
+#'            parallel = FALSE, n_cpu = NULL)}
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export

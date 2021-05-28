@@ -4,9 +4,9 @@
 \name{admix-package}
 \alias{admix}
 \alias{admix-package}
-\title{admix: Package admix for admixture (aka contamination) models}
+\title{admix: Package Admix for Admixture (aka Contamination) Models}
 \description{
-This package implements several methods to estimate the
+Implements several methods to estimate the
     unknown quantities related to two-component admixture models,
     depending on the assumptions made on the unknown component density. In
     practice, one can estimate both the mixture weight and the unknown

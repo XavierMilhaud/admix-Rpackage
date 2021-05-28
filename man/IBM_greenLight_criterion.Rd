@@ -51,6 +51,7 @@ components of two samples following admixture models. Based on the IBM approach,
 See the paper presenting the IBM approach at the following HAL weblink: https://hal.archives-ouvertes.fr/hal-03201760
 }
 \examples{
+\dontrun{
 ## Simulate data:
 list.comp <- list(f1 = 'norm', g1 = 'norm',
                   f2 = 'norm', g2 = 'norm')
@@ -70,7 +71,7 @@ estim <- IBM_estimProp(sample1[['mixt.data']], sample2[['mixt.data']], known.pro
                        with.correction = FALSE, n.integ = 1000)
 IBM_greenLight_criterion(estim.obj = estim, sample1 = sample1[['mixt.data']],
                         sample2 = sample2[['mixt.data']], comp.dist = list.comp,
-                        comp.param = list.param, min_size = NULL, alpha = 0.05)
+                        comp.param = list.param, min_size = NULL, alpha = 0.05)}
 
 }
 \author{

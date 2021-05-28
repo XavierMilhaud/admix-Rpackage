@@ -63,6 +63,7 @@ Further information for the IBM approach are given in 'Details' below.
 See the paper presenting the IBM approach at the following HAL weblink: https://hal.archives-ouvertes.fr/hal-03201760
 }
 \examples{
+\dontrun{
 ######## Analysis by simulated data:
 ## Simulate Gamma - Exponential admixtures :
 list.comp <- list(f1 = "gamma", g1 = "exp",
@@ -84,7 +85,7 @@ estim <- IBM_estimProp(sample1 =X.sim, sample2 =Y.sim, known.prop = NULL, comp.d
 IBM_estimVarCov_gaussVect(x = mean(X.sim), y = mean(Y.sim), estim.obj = estim,
                           fixed.p1 = estim[["p.X.fixed"]], known.p = NULL, sample1=X.sim,
                           sample2 = Y.sim, min_size = NULL,
-                          comp.dist = list.comp, comp.param = list.param)
+                          comp.dist = list.comp, comp.param = list.param)}
 
 }
 \author{
