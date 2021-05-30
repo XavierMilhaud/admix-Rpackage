@@ -30,6 +30,7 @@
 #' @return A list containing the estimated weight of every unknown component distribution among admixture samples.
 #'
 #' @examples
+#' \dontrun{
 #' ##### On a simulated example to see whether the true parameters are well estimated.
 #' list.comp <- list(f1 = "norm", g1 = "norm",
 #'                   f2 = "norm", g2 = "norm")
@@ -47,7 +48,7 @@
 #'                    f2 = NULL, g2 = list(mean = -3, sd = 1.1))
 #' estim <- admix_estim(samples = list(sim1,sim2), sym.f = TRUE, est.method = 'BVdk',
 #'                      comp.dist = list.comp, comp.param = list.param)
-#' estim
+#' estim}
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export

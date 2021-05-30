@@ -25,6 +25,7 @@
 #'         are set equal to mean(data) by default, with no corresponding arguments here).
 #'
 #' @examples
+#' \dontrun{
 #' ## Simulate data:
 #' list.comp <- list(f = 'norm', g = 'norm')
 #' list.param <- list(f = c(mean = 4, sd = 1), g = c(mean = 7, sd = 0.5))
@@ -36,7 +37,7 @@
 #'                               comp.dist = list.comp, comp.param = list.param)
 #' ## Estimate the variance of the two estimators (first mixture weight, then location shift):
 #' BVdk_varCov_estimators(data = sim.data[['mixt.data']], loc = estimators[2], p = estimators[1],
-#'                        comp.dist = list.comp, comp.param = list.param)
+#'                        comp.dist = list.comp, comp.param = list.param)}
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
