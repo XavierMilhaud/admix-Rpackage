@@ -1,11 +1,21 @@
 Package: admix
 Title: Package Admix for Admixture (aka Contamination) Models
 Version: 0.3.2
-Authors@R: 
+Authors@R: c(
     person(given = "Xavier",
            family = "Milhaud",
-           role = c("cre", "aut", "ctb"),
+           role = c("aut", "cre"),
            email = "xavier.milhaud.research@gmail.com")
+    person(given = "Pierre",
+           family = "Vandekerkhove",
+           role = "ctb")
+    person(given = "Denys",
+           family = "Pommeret",
+           role = "ctb")
+    person(given = "Yahia",
+           family = "Salhi",
+           role = "ctb")
+           )
 Description: Implements several methods to estimate the unknown quantities related 
     to two-component admixture models, where the two components can belong to any
     distribution (note that in the case of multinomial mixtures, the two components
