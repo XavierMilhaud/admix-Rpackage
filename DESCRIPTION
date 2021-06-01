@@ -5,13 +5,13 @@ Authors@R: c(
     person(given = "Xavier",
            family = "Milhaud",
            role = c("aut", "cre"),
-           email = "xavier.milhaud.research@gmail.com")
+           email = "xavier.milhaud.research@gmail.com"),
     person(given = "Pierre",
            family = "Vandekerkhove",
-           role = "ctb")
+           role = "ctb"),
     person(given = "Denys",
            family = "Pommeret",
-           role = "ctb")
+           role = "ctb"),
     person(given = "Yahia",
            family = "Salhi",
            role = "ctb")

@@ -25,7 +25,14 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Xavier Milhaud \email{xavier.milhaud.research@gmail.com} [contributor]
+\strong{Maintainer}: Xavier Milhaud \email{xavier.milhaud.research@gmail.com}
+
+Other contributors:
+\itemize{
+  \item Pierre Vandekerkhove [contributor]
+  \item Denys Pommeret [contributor]
+  \item Yahia Salhi [contributor]
+}
 
 }
 \keyword{internal}
