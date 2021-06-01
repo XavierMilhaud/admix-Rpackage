@@ -1,6 +1,6 @@
 #' Detect the support of the random variables under study
 #'
-#' Given two sets of observations (two samples), the function provides with the most plausible type of support for the
+#' Given one or two sets of observations (two samples), the function provides with the most plausible type of support for the
 #' underlying random variables to be studied. Basically, if less than 3 percent of the observations have different values,
 #' we consider that the support is discrete. Otherwise, we consider it as a continuous support.
 #'
@@ -25,12 +25,21 @@
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-detect_support_type <- function(sample1, sample2)
+detect_support_type <- function(sample1, sample2 = NULL)
 {
-  if ( ((length(unique(sample1)) / length(sample1)) < 0.03) & ((length(unique(sample2)) / length(sample2)) < 0.03) ) {
-    support <- "discrete"
-  }  else {
-    support <- "continuous"
+  if (is.null(sample2)) {
+    if ((length(unique(sample1)) / length(sample1)) < 0.03) {
+      support <- "discrete"
+    }  else {
+      support <- "continuous"
+    }
+  } else {
+    if ( ((length(unique(sample1)) / length(sample1)) < 0.03) & ((length(unique(sample2)) / length(sample2)) < 0.03) ) {
+      support <- "discrete"
+    }  else {
+      support <- "continuous"
+    }
   }
+
   return(support)
 }

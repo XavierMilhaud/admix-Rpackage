@@ -4,7 +4,7 @@
 \alias{detect_support_type}
 \title{Detect the support of the random variables under study}
 \usage{
-detect_support_type(sample1, sample2)
+detect_support_type(sample1, sample2 = NULL)
 }
 \arguments{
 \item{sample1}{The first sample of observations under study.}
@@ -15,7 +15,7 @@ detect_support_type(sample1, sample2)
 The type of support, either discrete or continuous.
 }
 \description{
-Given two sets of observations (two samples), the function provides with the most plausible type of support for the
+Given one or two sets of observations (two samples), the function provides with the most plausible type of support for the
 underlying random variables to be studied. Basically, if less than 3 percent of the observations have different values,
 we consider that the support is discrete. Otherwise, we consider it as a continuous support.
 }

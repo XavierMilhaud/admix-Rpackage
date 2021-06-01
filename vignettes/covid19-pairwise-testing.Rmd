@@ -126,18 +126,6 @@ where the probability $p=P(A)$ of being impacted by COVID-19 is unknown, the pro
 
 We now proceed to the pairwise testing across the six countries using the Inversion Best-Matching (IBM) method (warning: you need some time to perform this step, at least ten minutes depending on your machine):
 ```{r warning = FALSE}
-## First, define a function that allows to get the decontaminated version (Inversion step) of the unknown CDF Fi:
-decontaminated_cdf <- function(p, COUNTRY) {
-  i <- which(CNT == COUNTRY)
-  G.probs <- probs_countries[[i]]$probs
-  L.probs <- sample[[i]]$X[length(sample[[i]]$X$YEAR), -1] / sum(sample[[i]]$X[length(sample[[i]]$X$YEAR), -1])
-  G.X <- stepfun(x = 1:length(G.probs), y = cumsum(c(0, G.probs)))
-  L.X <- stepfun(x = 1:length(L.probs), y = cumsum(c(0, L.probs)))
-  FX <- function(z) { (1/p) * (L.X(z) - (1-p) * G.X(z)) }
-  F.X <- stepfun(x = 1:length(G.probs), FX(0:4))
-  return( list(FX = F.X, GX = G.X) )
-}
-
 ## Then proceed to the pairwise testing of effects across all countries:
 pairwise_res <- vector(mode = "list", length = (length(CNT)*(length(CNT)-1)/2))
 counter <- 1
@@ -159,10 +147,14 @@ for (a in 1:(length(CNT)-1)) {
       res_test <- NULL
       res_test <- IBM_test_H0(sample1 = X.sim, sample2 = Y.sim, known.p=NULL, comp.dist = list.comp, comp.param = list.param,
                               sim_U = U.H0[["U_sim"]], min_size=NULL, parallel=TRUE, n_cpu=2)$decision
-      ## Decontaminated CDFs:
+      ## Decontaminated densities:
+      A.decontamin <- decontamin_density_unknownComp(sample1 = X.sim, comp.dist = list.comp[1:2],
+                                                     comp.param = list.param[1:2], estim_prop$prop.estim[1])
+      B.decontamin <- decontamin_density_unknownComp(sample1 = Y.sim, comp.dist = list.comp[3:4],
+                                                     comp.param = list.param[3:4], estim_prop$prop.estim[2])
       df <- data.frame(AGE = AGES,
-                       A = diff(decontaminated_cdf(estim_prop$prop.estim[1], probs_countries[[a]]$L)$FX(0:5))[1:4],
-                       B = diff(decontaminated_cdf(estim_prop$prop.estim[2], probs_countries[[b]]$L)$FX(0:5))[1:4])
+                       A = A.decontamin$decontamin_f(1:length(AGES)),
+                       B = B.decontamin$decontamin_f(1:length(AGES)))
     }
     obj <- NULL
     obj <- list(countries = c(probs_countries[[a]]$L,probs_countries[[b]]$L),
