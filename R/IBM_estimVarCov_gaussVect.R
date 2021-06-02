@@ -33,7 +33,7 @@
 #' @return The estimated variance-covariance matrix of the gaussian vector Z = (hat(p1),(hat(p2),Dn(z)), at location '(x,y)'.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' ######## Analysis by simulated data:
 #' ## Simulate Gamma - Exponential admixtures :
 #' list.comp <- list(f1 = "gamma", g1 = "exp",

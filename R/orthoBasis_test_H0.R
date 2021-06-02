@@ -41,7 +41,7 @@
 #'         variance-covariance matrix of the test statistic; 5) selected rank for testing, and 6) estimates of the two component weights.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' ###### Using Bordes and Vandekerkhove estimation (valid if symetric unknown component densities).
 #' #### First under the null hypothesis H0.
 #' ## Simulate data:

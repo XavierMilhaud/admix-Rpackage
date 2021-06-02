@@ -25,7 +25,7 @@
 #'         are set equal to mean(data) by default, with no corresponding arguments here).
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' ## Simulate data:
 #' list.comp <- list(f = 'norm', g = 'norm')
 #' list.param <- list(f = c(mean = 4, sd = 1), g = c(mean = 7, sd = 0.5))
