@@ -19,7 +19,8 @@ admix_estim(
 
 \item{est.method}{The estimation method to be applied. Can be one of 'BVdk' (Bordes and Vandekerkhove estimator), 'PS' (Patra and Sen
 estimator), or 'IBM' (Inversion Best-Matching approach). The same estimation method is performed on each sample.
-For further details, see section 'Details' below.}
+Important note: estimation by 'IBM' is unbiased only under H0, meaning that choosing this method requires to perform
+previously the test hypothesis between the pairs of samples. For further details, see section 'Details' below.}
 
 \item{comp.dist}{A list with 2*K elements corresponding to the component distributions (specified with R native names for these distributions)
 involved in the K admixture models. Elements, grouped by 2, refer to the unknown and known components of each admixture model,

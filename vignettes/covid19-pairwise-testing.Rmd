@@ -141,7 +141,7 @@ for (a in 1:(length(CNT)-1)) {
     estim_prop <- IBM_estimProp(sample1 = X.sim, sample2 = Y.sim, known.prop = NULL, comp.dist = list.comp,
                                 comp.param = list.param, with.correction = F, n.integ = 1000)
     if (prod(estim_prop$prop.estim < c(1,1)) == 1) {
-      U.H0 <- IBM_tabul_stochasticInteg(n.sim = 8, n.varCovMat = 100, sample1 = X.sim, sample2 = Y.sim,
+      U.H0 <- IBM_tabul_stochasticInteg(n.sim = 50, n.varCovMat = 100, sample1 = X.sim, sample2 = Y.sim,
                                         min_size = NULL, comp.dist = list.comp, comp.param = list.param,
                                         parallel = TRUE, n_cpu = 2)
       res_test <- NULL
