@@ -73,10 +73,9 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
 
   ## Look for all possible couples on which the discrepancy will be computed :
   model.list <- lapply(X = seq.int(from = 1, to = length(comp.dist), by = 2), FUN = seq.int, length.out = 2)
-  permut.matrix_sorted <- t(apply(gtools::permutations(n = length(model.list), r = 2, v = 1:length(model.list), set = F,
-                                                       repeats.allowed = F), 1, sort))
   ## K*(K-1)/2 combinations of populations under study:
-  couples.list <- unique(permut.matrix_sorted)
+  couples.list <- NULL
+  for (i in 1:(length(samples)-1)) { for (j in (i+1):length(samples)) { couples.list <- rbind(couples.list,c(i,j)) } }
   couples.expr <- couples.param <- vector(mode = "list", length = nrow(couples.list))
   empirical.contr <- q_H <- numeric(length = nrow(couples.list))
 

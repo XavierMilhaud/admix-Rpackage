@@ -54,7 +54,7 @@
 #' list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
 #'                    f2 = NULL, g2 = list(mean = 4, sd = 1.1),
 #'                    f3 = NULL, g3 = list(mean = 3, sd = 0.8))
-#' obj <- IBM_k_samples_test(samples= list(sim1,sim2,sim3), sim_U=NULL, n_sim_tab=8, min_size=NULL,
+#' obj <- IBM_k_samples_test(samples=list(sim1,sim2,sim3), sim_U=NULL, n_sim_tab=50, min_size=NULL,
 #'                           comp.dist=list.comp, comp.param=list.param, parallel=TRUE, n_cpu=2)
 #' obj$rejection_rule}
 #'
@@ -81,9 +81,11 @@ IBM_k_samples_test <- function(samples = NULL, sim_U = NULL, n_sim_tab = 100, mi
 
   ## Look for all possible couples on which the discrepancy will be computed :
   model.list <- lapply(X = seq.int(from = 1, to = length(comp.dist), by = 2), FUN = seq.int, length.out = 2)
-  permut.matrix_sorted <- t(apply(gtools::permutations(n = length(model.list), r = 2, v = 1:length(model.list),
-                                                       set = FALSE, repeats.allowed = FALSE), 1, sort))
-  couples.list <- unique(permut.matrix_sorted)
+  couples.list <- NULL
+  for (i in 1:(length(samples)-1)) {
+    for (j in (i+1):length(samples)) { couples.list <- rbind(couples.list,c(i,j)) }
+  }
+
   couples.expr <- couples.param <- vector(mode = "list", length = nrow(couples.list))
   empirical.contr <- q_H <- numeric(length = nrow(couples.list))
 
@@ -101,7 +103,7 @@ IBM_k_samples_test <- function(samples = NULL, sim_U = NULL, n_sim_tab = 100, mi
   }
 
   ## Give a simple and useful representation of results for each couple:
-  contrast.matrix <- discrepancy.id <- discrepancy.rank <- matrix(NA, nrow = length(model.list), ncol = length(model.list))
+  contrast.matrix <- discrepancy.id <- discrepancy.rank <- matrix(NA, nrow = length(samples), ncol = length(samples))
   for (k in 1:nrow(couples.list)) {
     contrast.matrix[couples.list[k, ][1], couples.list[k, ][2]] <- empirical.contr[k]
     discrepancy.id[couples.list[k, ][1], couples.list[k, ][2]] <- paste(couples.list[k, ][1], couples.list[k, ][2], sep = "-")

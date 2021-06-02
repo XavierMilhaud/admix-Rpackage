@@ -36,7 +36,6 @@ Imports:
     base,
     fdrtool,
     graphics,
-    gtools,
     Iso,
     latex2exp,
     MASS,

@@ -118,8 +118,8 @@ admix_test <- function(samples = NULL, sym.f = FALSE, test.method = c("Poly","IC
       warnings("This is a pairwise testing among all the samples provided.")
       ## Look for all possible couples on which the test will be performed :
       model.list <- lapply(X = seq.int(from = 1, to = length(comp.dist), by = 2), FUN = seq.int, length.out = 2)
-      couples.list <- unique(t(apply(gtools::permutations(n = length(model.list), r = 2, v = 1:length(model.list),
-                                                          set = FALSE, repeats.allowed = FALSE), 1, sort)))
+      couples.list <- NULL
+      for (i in 1:(length(samples)-1)) { for (j in (i+1):length(samples)) { couples.list <- rbind(couples.list,c(i,j)) } }
       test_res <- couples.expr <- couples.param <- vector(mode = "list", length = nrow(couples.list))
       for (k in 1:nrow(couples.list)) {
         couples.expr[[k]] <- comp.dist[c(model.list[[couples.list[k, ][1]]], model.list[[couples.list[k, ][2]]])]
