@@ -31,7 +31,7 @@
 #' @return A list containing the estimated weight of every unknown component distribution among admixture samples.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' ##### On a simulated example to see whether the true parameters are well estimated.
 #' list.comp <- list(f1 = "norm", g1 = "norm",
 #'                   f2 = "norm", g2 = "norm")

@@ -27,7 +27,7 @@
 #'         the testing problem (f1 = f2).
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' ## Simulate data:
 #' list.comp <- list(f1 = 'norm', g1 = 'norm',
 #'                   f2 = 'norm', g2 = 'norm')

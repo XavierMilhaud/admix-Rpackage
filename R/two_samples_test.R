@@ -45,7 +45,7 @@
 #' @return The decision of the test with further information such as p-value and others, depending on the method used.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' ##### Under the null hypothesis H0 :
 #' ## Simulate data:
 #' list.comp <- list(f1 = "norm", g1 = "norm",

@@ -40,7 +40,7 @@
 #' @return A list containing...
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' ##### On a simulated example to see whether the true parameters are well estimated. With 1 sample:
 #' list.comp <- list(f1 = "norm", g1 = "norm")
 #' list.param <- list(f1 = list(mean = 0, sd = 1), g1 = list(mean = 2, sd = 0.7))

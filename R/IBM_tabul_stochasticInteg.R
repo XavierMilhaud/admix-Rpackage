@@ -29,7 +29,7 @@
 #'         support that were used to evaluate the variance-covariance matrix of empirical processes.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' ## Simulate data:
 #' list.comp <- list(f1 = 'norm', g1 = 'norm',
 #'                   f2 = 'norm', g2 = 'norm')

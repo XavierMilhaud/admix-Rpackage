@@ -23,7 +23,7 @@
 #' @return A list with three elements: 1) the identified clusters; 2) the cluster affiliation; 3) the discrepancy matrix.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' ## Simulate data (chosen parameters indicate 2 clusters (populations (1,3), (2,4))!):
 #' list.comp <- list(f1 = "gamma", g1 = "exp",
 #'                   f2 = "gamma", g2 = "exp",
