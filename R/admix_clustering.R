@@ -51,7 +51,7 @@
 #'                    f3 = NULL, g3 = list(shape = 12, rate = 2),
 #'                    f4 = NULL, g4 = list(rate = 1/7))
 #' clusters <- admix_clustering(samples = list(A.sim,B.sim,C.sim,D.sim), n_sim_tab = 8,
-#'                              comp.dist=list.comp, comp.param=list.param, parallel=TRUE, n_cpu=2)
+#'                              comp.dist=list.comp, comp.param=list.param, parallel=FALSE, n_cpu=2)
 #' clusters$clustering}
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>

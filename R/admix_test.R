@@ -15,6 +15,8 @@
 #'                    only 'Poly' is available and the test is a gaussianity test. For further details, see section 'Details' below.
 #' @param sim_U (Used only with 'ICV' testing method, otherwise useless) Random draws of the inner convergence part of the contrast
 #'               as defined in the IBM approach (see 'Details' below).
+#' @param n_sim_tab (Used only with 'ICV' testing method, otherwise useless) Number of simulated gaussian processes used in the
+#'                   tabulation of the inner convergence distribution in the IBM approach.
 #' @param min_size (Potentially used with 'ICV' testing method, otherwise useless) Minimal size among all samples (needed to take
 #'                  into account the correction factor for the variance-covariance assessment).
 #' @param comp.dist A list with 2*K elements corresponding to the component distributions (specified with R native names for these distributions)
@@ -49,15 +51,15 @@
 #' ## Perform the test hypothesis:
 #' list.comp <- list(f1 = NULL, g1 = "norm")
 #' list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7))
-#' admix_test(samples = list(sim1), sym.f = TRUE, test.method = 'Poly', sim_U = NULL,
+#' admix_test(samples = list(sim1), sym.f = TRUE, test.method = 'Poly', sim_U = NULL, n_sim_tab=50,
 #'            min_size = NULL, comp.dist = list.comp, comp.param = list.param, support = "Real",
-#'            parallel = TRUE, n_cpu = 2)
+#'            parallel = FALSE, n_cpu = 2)
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-admix_test <- function(samples = NULL, sym.f = FALSE, test.method = c("Poly","ICV"), sim_U = NULL, min_size = NULL,
-                       comp.dist = NULL, comp.param = NULL, support = c("Real","Integer","Positive","Bounded.continuous"),
+admix_test <- function(samples = NULL, sym.f = FALSE, test.method = c("Poly","ICV"), sim_U = NULL, n_sim_tab = 50,
+                       min_size = NULL, comp.dist = NULL, comp.param = NULL, support = c("Real","Integer","Positive","Bounded.continuous"),
                        parallel = FALSE, n_cpu = 4)
 {
   stopifnot( length(comp.dist) == (2*length(samples)) )
@@ -78,13 +80,14 @@ admix_test <- function(samples = NULL, sym.f = FALSE, test.method = c("Poly","IC
   if (meth == "ICV") {
 
     if (n_samples == 2) {
-      U <- IBM_tabul_stochasticInteg(n.sim = 100, n.varCovMat = 100, sample1 = samples[[1]], sample2 = samples[[2]], min_size = NULL,
+      U <- IBM_tabul_stochasticInteg(n.sim = n_sim_tab, n.varCovMat = 100, sample1 = samples[[1]], sample2 = samples[[2]], min_size = NULL,
                                      comp.dist = comp.dist, comp.param = comp.param, parallel = parallel, n_cpu = n_cpu)
       test_res <- IBM_test_H0(sample1 = samples[[1]], sample2 = samples[[2]], known.p = NULL, comp.dist = comp.dist,
                               comp.param = comp.param, sim_U = U[["U_sim"]], min_size=NULL, parallel=parallel, n_cpu=n_cpu)
     } else if (n_samples > 2) {
-      test_res <- IBM_k_samples_test(samples = samples, sim_U = NULL, min_size = NULL, comp.dist = comp.dist,
-                                     comp.param = comp.param, parallel = parallel, n_cpu = n_cpu)
+      test_res <- IBM_k_samples_test(samples = samples, sim_U = NULL, n_sim_tab = n_sim_tab,
+                                     min_size = NULL, comp.dist = comp.dist, comp.param = comp.param,
+                                     parallel = parallel, n_cpu = n_cpu)
     } else stop("Incorrect number of samples under study!")
 
   } else if (meth == "Poly") {

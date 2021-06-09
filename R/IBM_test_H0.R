@@ -18,6 +18,7 @@
 #'                   two ones to those of the second admixture model. If there are unknown elements, they must be specified as 'NULL' objects.
 #'                   For instance, 'comp.param' could be specified as follows: : list(f1=NULL, g1=list(mean=0,sd=1), f2=NULL, g2=list(mean=3,sd=1.1)).
 #' @param sim_U Random draws of the inner convergence part of the contrast as defined in the IBM approach (see 'Details' below).
+#' @param n_sim_tab Number of simulated gaussian processes used in the tabulation of the inner convergence distribution in the IBM approach.
 #' @param min_size (default to NULL) In the k-sample case, useful to provide the minimal size among all samples. Otherwise, useless.
 #' @param parallel (default to FALSE) Boolean to indicate whether parallel computations are performed (speed-up the tabulation).
 #' @param n_cpu (default to 2) Number of cores used when parallelizing.
@@ -59,14 +60,14 @@
 #'                   f2 = NULL, g2 = "norm")
 #' list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
 #'                    f2 = NULL, g2 = list(mean = 3, sd = 1.2))
-#' IBM_test_H0(sample1 = X.sim, sample2 = Y.sim, known.p = NULL, comp.dist = list.comp,
-#'             comp.param=list.param, sim_U = U[["U_sim"]], min_size=NULL, parallel=TRUE, n_cpu=2)}
+#' IBM_test_H0(sample1=X.sim,sample2=Y.sim,known.p=NULL, comp.dist=list.comp,comp.param=list.param,
+#'             sim_U = U[["U_sim"]], n_sim_tab = 30, min_size=NULL, parallel=FALSE, n_cpu=2)}
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-IBM_test_H0 <- function(sample1, sample2, known.p = NULL, comp.dist = NULL, comp.param = NULL, sim_U = NULL, min_size = NULL,
-                        parallel = FALSE, n_cpu = 4)
+IBM_test_H0 <- function(sample1, sample2, known.p = NULL, comp.dist = NULL, comp.param = NULL, sim_U = NULL,
+                        n_sim_tab = 50, min_size = NULL, parallel = FALSE, n_cpu = 4)
 {
   ## Estimate the proportions of the mixtures:
   estim <- IBM_estimProp(sample1 = sample1, sample2 = sample2, known.prop = known.p, comp.dist = comp.dist, comp.param = comp.param,
@@ -103,7 +104,7 @@ IBM_test_H0 <- function(sample1, sample2, known.p = NULL, comp.dist = NULL, comp
     p_value <- 1e-16
   } else {
     if (is.null(sim_U)) {
-      tab_dist <- IBM_tabul_stochasticInteg(n.sim = 120, n.varCovMat = 100, sample1 = sample1, sample2 = sample2, min_size = min_size,
+      tab_dist <- IBM_tabul_stochasticInteg(n.sim = n_sim_tab, n.varCovMat = 100, sample1 = sample1, sample2 = sample2, min_size = min_size,
                                            comp.dist = comp.dist, comp.param = comp.param, parallel = parallel, n_cpu = n_cpu)
       sim_U <- tab_dist$U_sim
       contrast_val <- tab_dist$contrast_value

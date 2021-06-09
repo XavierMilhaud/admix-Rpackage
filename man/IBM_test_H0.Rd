@@ -11,6 +11,7 @@ IBM_test_H0(
   comp.dist = NULL,
   comp.param = NULL,
   sim_U = NULL,
+  n_sim_tab = 50,
   min_size = NULL,
   parallel = FALSE,
   n_cpu = 4
@@ -35,6 +36,8 @@ two ones to those of the second admixture model. If there are unknown elements, 
 For instance, 'comp.param' could be specified as follows: : list(f1=NULL, g1=list(mean=0,sd=1), f2=NULL, g2=list(mean=3,sd=1.1)).}
 
 \item{sim_U}{Random draws of the inner convergence part of the contrast as defined in the IBM approach (see 'Details' below).}
+
+\item{n_sim_tab}{Number of simulated gaussian processes used in the tabulation of the inner convergence distribution in the IBM approach.}
 
 \item{min_size}{(default to NULL) In the k-sample case, useful to provide the minimal size among all samples. Otherwise, useless.}
 
@@ -87,8 +90,8 @@ list.comp <- list(f1 = NULL, g1 = "norm",
                   f2 = NULL, g2 = "norm")
 list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
                    f2 = NULL, g2 = list(mean = 3, sd = 1.2))
-IBM_test_H0(sample1 = X.sim, sample2 = Y.sim, known.p = NULL, comp.dist = list.comp,
-            comp.param=list.param, sim_U = U[["U_sim"]], min_size=NULL, parallel=TRUE, n_cpu=2)}
+IBM_test_H0(sample1=X.sim,sample2=Y.sim,known.p=NULL, comp.dist=list.comp,comp.param=list.param,
+            sim_U = U[["U_sim"]], n_sim_tab = 30, min_size=NULL, parallel=FALSE, n_cpu=2)}
 
 }
 \author{
