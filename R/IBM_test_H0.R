@@ -28,7 +28,7 @@
 #'         test, and 4) the estimated weights of the unknown component for each of the two admixture models.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' ####### Under the null hypothesis H0 :
 #' ## Simulate data:
 #' list.comp <- list(f1 = "norm", g1 = "norm",

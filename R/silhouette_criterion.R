@@ -7,7 +7,7 @@
 #' @return the silhouette criterion computed for each of the K populations under study.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' ###### Case study with 5 populations to cluster on R+ with Gamma-Exponential mixtures.
 #' ## Simulate data (chosen parameters indicate 3 clusters (populations (1,3), (2,5) and 4)!):
 #' list.comp <- list(f1 = "gamma", g1 = "exp",
@@ -41,11 +41,10 @@
 #'                    f3 = NULL, g3 = list(shape = 12, rate = 2),
 #'                    f4 = NULL, g4 = list(rate = 1/7),
 #'                    f5 = NULL, g5 = list(rate = 1/6))
-#' clusters <- k_samples_clustering(samples = list(A.sim,B.sim,C.sim,D.sim,E.sim),
+#' clusters <- admix_clustering(samples = list(A.sim,B.sim,C.sim,D.sim,E.sim), n_sim_tab = 8,
 #'                  comp.dist = list.comp, comp.param = list.param, parallel = TRUE, n_cpu = 2)
 #' clusters
-#' silhouette_criterion(clusters_obj = clusters)
-#' }
+#' silhouette_criterion(clusters_obj = clusters) }
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export

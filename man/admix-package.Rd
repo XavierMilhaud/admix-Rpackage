@@ -10,7 +10,9 @@ Implements several methods to estimate the unknown quantities related
     to two-component admixture models, where the two components can belong to any
     distribution (note that in the case of multinomial mixtures, the two components
     must belong to the same family). Estimation methods depend on the assumptions 
-    made on the unknown component density. In practice, one can estimate both the 
+    made on the unknown component density (see Bordes and Vandekerkhove (2010) <doi:10.3103/S1066530710010023>; 
+    Patra and Sen (2016) <doi:10.1111/rssb.12148>); Milhaud, Pommeret, Salhi and Vandekerkhove 
+    (2021) <https://hal.archives-ouvertes.fr/hal-03201760>). In practice, one can estimate both the 
     mixture weight and the unknown component density in a wide variety of frameworks.
     On top of that, hypothesis tests can be performed in one and two-samples contexts 
     to test the unknown component density. Finally, clustering of unknown

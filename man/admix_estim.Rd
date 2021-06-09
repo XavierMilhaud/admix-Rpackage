@@ -51,25 +51,24 @@ Multiple Testing; JRSS Series B, 78, pp. 869--893. ; iii) BVdk estimator: Bordes
 Semiparametric two-component mixture model when a component is known: an asymptotically normal estimator; Math. Meth. Stat.; 19, pp. 22--41.
 }
 \examples{
-\dontrun{
 ##### On a simulated example to see whether the true parameters are well estimated.
 list.comp <- list(f1 = "norm", g1 = "norm",
                   f2 = "norm", g2 = "norm")
 list.param <- list(f1 = list(mean = 0, sd = 1), g1 = list(mean = 2, sd = 0.7),
                    f2 = list(mean = 0, sd = 1), g2 = list(mean = -3, sd = 1.1))
 ## Simulate data:
-sim1 <- rsimmix(n = 350, unknownComp_weight = 0.8, comp.dist = list(list.comp$f1,list.comp$g1),
+sim1 <- rsimmix(n = 2100, unknownComp_weight = 0.8, comp.dist = list(list.comp$f1,list.comp$g1),
                 comp.param = list(list.param$f1, list.param$g1))$mixt.data
-sim2 <- rsimmix(n= 330, unknownComp_weight = 0.85, comp.dist = list(list.comp$f2,list.comp$g2),
+sim2 <- rsimmix(n= 2000, unknownComp_weight = 0.85, comp.dist = list(list.comp$f2,list.comp$g2),
                 comp.param = list(list.param$f2, list.param$g2))$mixt.data
 ## Estimate the mixture weights of the admixture models:
 list.comp <- list(f1 = NULL, g1 = "norm",
                   f2 = NULL, g2 = "norm")
 list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
                    f2 = NULL, g2 = list(mean = -3, sd = 1.1))
-estim <- admix_estim(samples = list(sim1,sim2), sym.f = TRUE, est.method = 'BVdk',
+estim <- admix_estim(samples = list(sim1,sim2), sym.f = TRUE, est.method = 'IBM',
                      comp.dist = list.comp, comp.param = list.param)
-estim}
+estim
 
 }
 \author{

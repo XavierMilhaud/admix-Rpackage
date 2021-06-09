@@ -29,7 +29,7 @@
 #'         support that were used to evaluate the variance-covariance matrix of empirical processes.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' ## Simulate data:
 #' list.comp <- list(f1 = 'norm', g1 = 'norm',
 #'                   f2 = 'norm', g2 = 'norm')
@@ -44,9 +44,9 @@
 #'                   f2 = NULL, g2 = 'norm')
 #' list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
 #'                    f2 = NULL, g2 = list(mean = 3, sd = 1.2))
-#' U <- IBM_tabul_stochasticInteg(n.sim = 8, n.varCovMat = 50, sample1 = X.sim, sample2 = Y.sim,
+#' U <- IBM_tabul_stochasticInteg(n.sim = 4, n.varCovMat = 30, sample1 = X.sim, sample2 = Y.sim,
 #'                                min_size = NULL, comp.dist = list.comp, comp.param = list.param,
-#'                                parallel = TRUE, n_cpu = 2)
+#'                                parallel = FALSE, n_cpu = 2)
 #' plot(density(U[["U_sim"]]))}
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>

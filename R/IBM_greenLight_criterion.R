@@ -27,7 +27,7 @@
 #'         the testing problem (f1 = f2).
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' ## Simulate data:
 #' list.comp <- list(f1 = 'norm', g1 = 'norm',
 #'                   f2 = 'norm', g2 = 'norm')
@@ -47,7 +47,8 @@
 #'                        with.correction = FALSE, n.integ = 1000)
 #' IBM_greenLight_criterion(estim.obj = estim, sample1 = sample1[['mixt.data']],
 #'                         sample2 = sample2[['mixt.data']], comp.dist = list.comp,
-#'                         comp.param = list.param, min_size = NULL, alpha = 0.05)}
+#'                         comp.param = list.param, min_size = NULL, alpha = 0.05)
+#' }
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export

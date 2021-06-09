@@ -56,7 +56,7 @@ Perform the following hypothesis test: H0 : f1 = f2 versus H1 : f1 differs from 
 See the paper presenting the IBM approach at the following HAL weblink: https://hal.archives-ouvertes.fr/hal-03201760
 }
 \examples{
-\dontrun{
+\donttest{
 ####### Under the null hypothesis H0 :
 ## Simulate data:
 list.comp <- list(f1 = "norm", g1 = "norm",

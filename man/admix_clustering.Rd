@@ -45,7 +45,7 @@ using Inversion - Best Matching (IBM) approach, see 'Details' below for further 
 See the paper presenting the IBM approach at the following HAL weblink: https://hal.archives-ouvertes.fr/hal-03201760
 }
 \examples{
-\dontrun{
+\donttest{
 ## Simulate data (chosen parameters indicate 2 clusters (populations (1,3), (2,4))!):
 list.comp <- list(f1 = "gamma", g1 = "exp",
                   f2 = "gamma", g2 = "exp",

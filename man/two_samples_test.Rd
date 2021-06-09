@@ -89,7 +89,7 @@ estimation technique (if the unknown component density is symmetric); ii) 'ICV' 
 which has no constraints except that we need to handle two samples.
 }
 \examples{
-\dontrun{
+\donttest{
 ##### Under the null hypothesis H0 :
 ## Simulate data:
 list.comp <- list(f1 = "norm", g1 = "norm",
@@ -112,7 +112,7 @@ two_samples_test(sample1=sample1, sample2=sample2, comp.dist=list.comp, comp.par
                  nb.ssEch = 2, var.explicit = TRUE)
 ## 2) Second, using Inversion-Best Matching and the associated Inner Convergence property:
 two_samples_test(sample1=sample1, sample2=sample2, comp.dist=list.comp, comp.param=list.param,
-                 method = 'ICV', n_sim_tab = 8, parallel = TRUE, n_cpu = 2)}
+                 method = 'ICV', n_sim_tab = 8, parallel = TRUE, n_cpu = 2) }
 
 }
 \author{

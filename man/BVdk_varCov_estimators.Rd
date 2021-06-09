@@ -39,11 +39,10 @@ See formulas pp.28--30 in Appendix of Bordes, L. and Vandekerkhove, P. (2010); S
 model when a component is known: an asymptotically normal estimator; Math. Meth. Stat.; 19, pp. 22--41.
 }
 \examples{
-\dontrun{
 ## Simulate data:
 list.comp <- list(f = 'norm', g = 'norm')
 list.param <- list(f = c(mean = 4, sd = 1), g = c(mean = 7, sd = 0.5))
-sim.data <- rsimmix(n=400, unknownComp_weight=0.85, comp.dist=list.comp, comp.param=list.param)
+sim.data <- rsimmix(n=300, unknownComp_weight=0.85, comp.dist=list.comp, comp.param=list.param)
 ## Estimate the location shift and mixture weight parameters in real-life setting:
 list.comp <- list(f = NULL, g = 'norm')
 list.param <- list(f = NULL, g = c(mean = 7, sd = 0.5))
@@ -51,7 +50,7 @@ estimators <- BVdk_estimParam(data = sim.data[['mixt.data']], method = "L-BFGS-B
                               comp.dist = list.comp, comp.param = list.param)
 ## Estimate the variance of the two estimators (first mixture weight, then location shift):
 BVdk_varCov_estimators(data = sim.data[['mixt.data']], loc = estimators[2], p = estimators[1],
-                       comp.dist = list.comp, comp.param = list.param)}
+                       comp.dist = list.comp, comp.param = list.param)
 
 }
 \author{

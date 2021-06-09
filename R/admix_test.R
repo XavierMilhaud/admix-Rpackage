@@ -40,12 +40,11 @@
 #' @return A list containing...
 #'
 #' @examples
-#' \dontrun{
-#' ##### On a simulated example to see whether the true parameters are well estimated. With 1 sample:
+#' ##### On a simulated example, with 1 sample (gaussianity test):
 #' list.comp <- list(f1 = "norm", g1 = "norm")
 #' list.param <- list(f1 = list(mean = 0, sd = 1), g1 = list(mean = 2, sd = 0.7))
 #' ## Simulate data:
-#' sim1 <- rsimmix(n = 600, unknownComp_weight = 0.8, comp.dist = list(list.comp$f1,list.comp$g1),
+#' sim1 <- rsimmix(n = 300, unknownComp_weight = 0.85, comp.dist = list(list.comp$f1,list.comp$g1),
 #'                 comp.param = list(list.param$f1, list.param$g1))$mixt.data
 #' ## Perform the test hypothesis:
 #' list.comp <- list(f1 = NULL, g1 = "norm")
@@ -53,26 +52,6 @@
 #' admix_test(samples = list(sim1), sym.f = TRUE, test.method = 'Poly', sim_U = NULL,
 #'            min_size = NULL, comp.dist = list.comp, comp.param = list.param, support = "Real",
 #'            parallel = TRUE, n_cpu = 2)
-#'
-#' ##### With two samples :
-#' list.comp <- list(f1 = "norm", g1 = "norm",
-#'                   f2 = "norm", g2 = "norm")
-#' list.param <- list(f1 = list(mean = 0, sd = 1), g1 = list(mean = 2, sd = 0.7),
-#'                    f2 = list(mean = 0, sd = 1), g2 = list(mean = -3, sd = 1.1))
-#' sim1 <- rsimmix(n = 700, unknownComp_weight = 0.8, comp.dist = list(list.comp$f1,list.comp$g1),
-#'                 comp.param = list(list.param$f1, list.param$g1))$mixt.data
-#' sim2 <- rsimmix(n= 800, unknownComp_weight = 0.65, comp.dist = list(list.comp$f2,list.comp$g2),
-#'                 comp.param = list(list.param$f2, list.param$g2))$mixt.data
-#' list.comp <- list(f1 = NULL, g1 = "norm",
-#'                   f2 = NULL, g2 = "norm")
-#' list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
-#'                    f2 = NULL, g2 = list(mean = -3, sd = 1.1))
-#' #admix_test(samples = list(sim1,sim2), sym.f = FALSE, test.method = 'ICV', sim_U = NULL,
-#' #           min_size = NULL, comp.dist = list.comp, comp.param = list.param, support = "Real",
-#' #           parallel = TRUE, n_cpu = 2)
-#' admix_test(samples = list(sim1,sim2), sym.f = TRUE, test.method = 'Poly', sim_U = NULL,
-#'            min_size = NULL, comp.dist = list.comp, comp.param = list.param, support = "Real",
-#'            parallel = FALSE, n_cpu = NULL)}
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export

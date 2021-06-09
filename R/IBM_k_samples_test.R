@@ -33,7 +33,7 @@
 #'         distribution; 9) the final terms of the statistic; and 10) the contrast matrix.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' ####### Under the alternative hypothesis H1 (with K=3 populations):
 #' list.comp <- list(f1 = "norm", g1 = "norm",
 #'                   f2 = "norm", g2 = "norm",
@@ -54,9 +54,10 @@
 #' list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
 #'                    f2 = NULL, g2 = list(mean = 4, sd = 1.1),
 #'                    f3 = NULL, g3 = list(mean = 3, sd = 0.8))
-#' obj <- IBM_k_samples_test(samples=list(sim1,sim2,sim3), sim_U=NULL, n_sim_tab=50, min_size=NULL,
+#' obj <- IBM_k_samples_test(samples=list(sim1,sim2,sim3), sim_U=NULL, n_sim_tab=6, min_size=NULL,
 #'                           comp.dist=list.comp, comp.param=list.param, parallel=TRUE, n_cpu=2)
-#' obj$rejection_rule}
+#' obj$rejection_rule
+#' }
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export

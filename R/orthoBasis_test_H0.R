@@ -41,7 +41,7 @@
 #'         variance-covariance matrix of the test statistic; 5) selected rank for testing, and 6) estimates of the two component weights.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' ###### Using Bordes and Vandekerkhove estimation (valid if symetric unknown component densities).
 #' #### First under the null hypothesis H0.
 #' ## Simulate data:
@@ -49,9 +49,9 @@
 #'                   f2 = "norm", g2 = "norm")
 #' list.param <- list(f1 = c(mean = 1, sd = 1), g1 = c(mean = 4, sd = 1),
 #'                    f2 = c(mean = 1, sd = 1), g2 = c(mean = 5, sd = 0.5))
-#' sim.X <- rsimmix(n = 2500, unknownComp_weight=0.7, comp.dist = list(list.comp$f1,list.comp$g1),
+#' sim.X <- rsimmix(n = 600, unknownComp_weight=0.8, comp.dist = list(list.comp$f1,list.comp$g1),
 #'                  comp.param = list(list.param$f1, list.param$g1))
-#' sim.Y <- rsimmix(n = 3000, unknownComp_weight=0.5, comp.dist = list(list.comp$f2,list.comp$g2),
+#' sim.Y <- rsimmix(n = 650, unknownComp_weight=0.75, comp.dist = list(list.comp$f2,list.comp$g2),
 #'                  comp.param = list(list.param$f2, list.param$g2))
 #' plot_admix(sim.X = sim.X[['mixt.data']], sim.Y = sim.Y[['mixt.data']], support = "continuous")
 #' ## Perform the hypothesis test in real-life conditions:
@@ -63,97 +63,7 @@
 #'              known.p=NULL, comp.dist = list.comp, comp.param = list.param, known.coef=NULL, K=3,
 #'              nb.ssEch = 2, s = 0.49, var.explicit=TRUE, nb.echBoot=NULL, support = 'Real',
 #'              bounds.supp = NULL, est.method = 'BVdk', uniformized.knownComp_data = NULL)
-#' test$decision
-#'
-#' #### Then under the alternative hypothesis H1.
-#' ## Simulate data:
-#' list.comp <- list(f1 = "norm", g1 = "norm",
-#'                   f2 = "norm", g2 = "norm")
-#' list.param <- list(f1 = c(mean = 1, sd = 1), g1 = c(mean = 4, sd = 1),
-#'                    f2 = c(mean = 2, sd = 0.8), g2 = c(mean = 5, sd = 0.5))
-#' sim.X <- rsimmix(n = 2500, unknownComp_weight=0.7, comp.dist = list(list.comp$f1,list.comp$g1),
-#'                  comp.param = list(list.param$f1, list.param$g1))
-#' sim.Y <- rsimmix(n = 3000, unknownComp_weight=0.5, comp.dist = list(list.comp$f2,list.comp$g2),
-#'                  comp.param = list(list.param$f2, list.param$g2))
-#' plot_admix(sim.X = sim.X[['mixt.data']], sim.Y = sim.Y[['mixt.data']], support = "continuous")
-#' ## Perform the hypothesis test in real-life setting:
-#' list.comp <- list(f1 = NULL, g1 = "norm",
-#'                   f2 = NULL, g2 = "norm")
-#' list.param <- list(f1 = NULL, g1 = c(mean = 4, sd = 1),
-#'                    f2 = NULL, g2 = c(mean = 5, sd = 0.5))
-#' test <- orthoBasis_test_H0(data.X = sim.X[['mixt.data']], data.Y = sim.Y[['mixt.data']],
-#'             known.p=NULL, comp.dist = list.comp, comp.param = list.param, known.coef=NULL, K=3,
-#'             nb.ssEch = 2, s = 1, var.explicit = TRUE, nb.echBoot =NULL, support = 'Real',
-#'             bounds.supp = NULL, est.method = 'BVdk', uniformized.knownComp_data = NULL)
-#' test$decision
-#' test$p1
-#' test$p2
-#'
-#' ###### Real-life data: using Patra and Sen estimation (although not n square-root consistent).
-#' ## Goal: compare heliocentric velocities of different satellites.
-#' data(allGalaxies)
-#' HV <- allGalaxies[ ,c('HV','Name')]
-#' HVcar <- HV[which(HV$Name == 'Carina'), ]
-#' HVcar <- HVcar[-which(is.na(HVcar)), ]
-#' HVcar <- as.numeric(HVcar$HV)
-#' HVsex <- HV[which(HV$Name == 'Sextans'), ]
-#' HVsex <- HVsex[-which(is.na(HVsex)), ]
-#' HVsex <- as.numeric(HVsex$HV)
-#' ## Retrieve heliocentric velocity of the Milky way:
-#' data(milkyWay)
-#' MW <- milkyWay$V1
-#' plot(density(MW), main = "Milky Way", xlab = "", xlim = c(-100,300))
-#' plot(density(HVcar), main = "Carina", xlab = "", xlim = c(-100,300))
-#' plot(density(HVsex), main = "Sextans", xlab = "", xlim = c(-100,300))
-#' ## Extraction of coef related to the Milky way HV density in the orthonormal basis expansion:
-#' ## Milky way is not a mixture, but is the known component in coming admixture distributions:
-#' donnees.voieLactee <- list(data.brute = MW, data.transform = NULL)
-#' summary(donnees.voieLactee[['data.brute']])
-#' moy.voieLactee <- mean(donnees.voieLactee[['data.brute']])
-#' var.voieLactee <- var(donnees.voieLactee[['data.brute']])
-#' ## Calcul de la fonction de repartition empirique:
-#' empiricalCDF.MW <- ecdf(donnees.voieLactee[['data.brute']])
-#' plot(empiricalCDF.MW)
-#' ## Calcul des coefficients dans la decomposition dans la base orthonormale:
-#' coefs.voieLactee <- orthoBasis_coef(data = donnees.voieLactee[['data.brute']], supp = 'Real',
-#'                                     degree = 3, m = 3, other = NULL)
-#' coefs.voieLactee <- sapply(coefs.voieLactee, mean)
-#' ## Test the unknown densities between Carina and Sextans:
-#' donnees.X <- HVcar
-#' donnees.Y <- HVsex
-#' ## Formating data: transformation to a mixture with one known uniform distribution:
-#' dat.X <- list(data.brute = donnees.X, data.transform = NULL)
-#' plot_admix(sim.X = dat.X[['data.brute']], sim.Y = NULL, user.bounds=NULL, support="continuous")
-#' ## Densite apres avoir rendu la composante connue uniforme:
-#' dat.X[['data.transform']] <- empiricalCDF.MW(dat.X[['data.brute']])
-#' mean(dat.X[['data.transform']])   # > 0.5 means that known component is on the left hand side
-#' plot_admix(sim.X=dat.X[['data.transform']], sim.Y=NULL, user.bounds=NULL, support="continuous")
-#' ## Same for the second sample:
-#' dat.Y <- list(data.brute = donnees.Y, data.transform = NULL)
-#' plot_admix(sim.X = dat.Y[['data.brute']], sim.Y=NULL, user.bounds=NULL, support="continuous")
-#' ## Densite apres avoir rendu la composante connue uniforme:
-#' dat.Y[['data.transform']] <- empiricalCDF.MW(dat.Y[['data.brute']])
-#' plot_admix(sim.X=dat.Y[['data.transform']], sim.Y=NULL, user.bounds=NULL, support="continuous")
-#' ## Cannot use 'BVdk' estimation since the known component does not look gaussian (no symmetry).
-#' ## The known component does not look like a known distribution, thus all distributions are NULL.
-#' orthoBasis_test_H0(data.X = dat.X[['data.brute']], data.Y = dat.Y[['data.brute']], known.p=NULL,
-#'                    comp.dist = list(NULL,NULL,NULL,NULL), comp.param = list(NULL,NULL,NULL,NULL),
-#'                    known.coef = list(g1 = coefs.voieLactee, g2 = coefs.voieLactee), K = 3,
-#'                    nb.ssEch=2, s = 0.49, var.explicit = FALSE, nb.echBoot=10, support = 'Real',
-#'                    bounds.supp = NULL, est.method = 'PS',
-#'                    uniformized.knownComp_data = list(dat.X[['data.transform']],
-#'                                                      dat.Y[['data.transform']]))
-#' ## Try to use 'BVdk' estimator considering the strong following assumption:
-#' list.comp <- list(f1 = NULL, g1 = 'norm',
-#'                   f2 = NULL, g2 = 'norm')
-#' list.param <- list(f1 = NULL, g1 = list(mean = moy.voieLactee, sd = sqrt(var.voieLactee)),
-#'                    f2 = NULL, g2 = list(mean = moy.voieLactee, sd = sqrt(var.voieLactee)))
-#' orthoBasis_test_H0(data.X = dat.X[['data.brute']], data.Y = dat.Y[['data.brute']], known.p=NULL,
-#'                    comp.dist = list.comp, comp.param = list.param,
-#'                    known.coef = list(g1=coefs.voieLactee, g2=coefs.voieLactee), K=3, nb.ssEch=2,
-#'                    s = 0.49, var.explicit = TRUE, nb.echBoot = NULL, support = 'Real',
-#'                    bounds.supp = NULL, est.method = 'BVdk', uniformized.knownComp_data = NULL)
-#' }
+#' test$decision}
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
