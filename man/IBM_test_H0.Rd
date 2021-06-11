@@ -66,32 +66,17 @@ list.comp <- list(f1 = "norm", g1 = "norm",
                   f2 = "norm", g2 = "norm")
 list.param <- list(f1 = list(mean = 1, sd = 1), g1 = list(mean = 2, sd = 0.7),
                    f2 = list(mean = 1, sd = 1), g2 = list(mean = 3, sd = 1.2))
-X.sim <- rsimmix(n = 1500, unknownComp_weight=0.6, comp.dist = list(list.comp$f1,list.comp$g1),
+X.sim <- rsimmix(n= 1100, unknownComp_weight=0.85, comp.dist = list(list.comp$f1,list.comp$g1),
                  comp.param = list(list.param$f1, list.param$g1))$mixt.data
-Y.sim <- rsimmix(n = 1400, unknownComp_weight=0.5, comp.dist = list(list.comp$f2,list.comp$g2),
-                 comp.param = list(list.param$f2, list.param$g2))$mixt.data
-## Tabulate the inner convergence part of the contrast distribution:
-list.comp <- list(f1 = NULL, g1 = "norm",
-                  f2 = NULL, g2 = "norm")
-list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
-                   f2 = NULL, g2 = list(mean = 3, sd = 1.2))
-U <- IBM_tabul_stochasticInteg(n.sim = 8, n.varCovMat = 100, sample1 = X.sim, sample2 = Y.sim,
-             min_size=NULL, comp.dist=list.comp, comp.param=list.param, parallel=TRUE, n_cpu=2)
-## Simulate new data that will allow to perform the test:
-list.comp <- list(f1 = "norm", g1 = "norm",
-                  f2 = "norm", g2 = "norm")
-list.param <- list(f1 = list(mean = 1, sd = 1), g1 = list(mean = 2, sd = 0.7),
-                   f2 = list(mean = 1, sd = 1), g2 = list(mean = 3, sd = 1.2))
-X.sim <- rsimmix(n = 1500, unknownComp_weight=0.6, comp.dist = list(list.comp$f1,list.comp$g1),
-                 comp.param = list(list.param$f1, list.param$g1))$mixt.data
-Y.sim <- rsimmix(n = 1400, unknownComp_weight=0.5, comp.dist = list(list.comp$f2,list.comp$g2),
+Y.sim <- rsimmix(n= 1200, unknownComp_weight=0.75, comp.dist = list(list.comp$f2,list.comp$g2),
                  comp.param = list(list.param$f2, list.param$g2))$mixt.data
 list.comp <- list(f1 = NULL, g1 = "norm",
                   f2 = NULL, g2 = "norm")
 list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
                    f2 = NULL, g2 = list(mean = 3, sd = 1.2))
 IBM_test_H0(sample1=X.sim,sample2=Y.sim,known.p=NULL, comp.dist=list.comp,comp.param=list.param,
-            sim_U = U[["U_sim"]], n_sim_tab = 30, min_size=NULL, parallel=FALSE, n_cpu=2)}
+            sim_U = NULL, n_sim_tab = 6, min_size=NULL, parallel=FALSE, n_cpu=2)
+}
 
 }
 \author{

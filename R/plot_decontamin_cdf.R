@@ -22,9 +22,9 @@
 #'                   f2 = 'norm', g2 = 'norm')
 #' list.param <- list(f1 = list(mean = 3, sd = 0.5), g1 = list(mean = 0, sd = 1),
 #'                    f2 = list(mean = 3, sd = 0.5), g2 = list(mean = 5, sd = 2))
-#' sample1 <- rsimmix(n=8000, unknownComp_weight=0.5, comp.dist = list(list.comp$f1,list.comp$g1),
+#' sample1 <- rsimmix(n=3000, unknownComp_weight=0.7, comp.dist = list(list.comp$f1,list.comp$g1),
 #'                                                    comp.param=list(list.param$f1,list.param$g1))
-#' sample2 <- rsimmix(n=7000, unknownComp_weight=0.7, comp.dist = list(list.comp$f2,list.comp$g2),
+#' sample2 <- rsimmix(n=2500, unknownComp_weight=0.8, comp.dist = list(list.comp$f2,list.comp$g2),
 #'                                                    comp.param=list(list.param$f2,list.param$g2))
 #' ## Estimate the mixture weight in each of the sample in real-life setting:
 #' list.comp <- list(f1 = NULL, g1 = 'norm',
@@ -49,9 +49,9 @@
 #'                   f2 = 'pois', g2 = 'pois')
 #' list.param <- list(f1 = list(lambda = 3), g1 = list(lambda = 2),
 #'                    f2 = list(lambda = 3), g2 = list(lambda = 4))
-#' sample1 <- rsimmix(n=6000, unknownComp_weight=0.6, comp.dist = list(list.comp$f1,list.comp$g1),
+#' sample1 <- rsimmix(n=4000, unknownComp_weight=0.7, comp.dist = list(list.comp$f1,list.comp$g1),
 #'                                                    comp.param=list(list.param$f1,list.param$g1))
-#' sample2 <- rsimmix(n=4500, unknownComp_weight=0.8, comp.dist = list(list.comp$f2,list.comp$g2),
+#' sample2 <- rsimmix(n=3000, unknownComp_weight=0.9, comp.dist = list(list.comp$f2,list.comp$g2),
 #'                                                    comp.param=list(list.param$f2,list.param$g2))
 #' ## Estimate the mixture weight in each of the sample in real-life setting:
 #' list.comp <- list(f1 = NULL, g1 = 'pois',
@@ -75,9 +75,9 @@
 #'                   f2 = 'multinom', g2 = 'multinom')
 #' list.param <- list(f1 = list(size=1, prob=c(0.3,0.4,0.3)), g1 = list(size=1, prob=c(0.6,0.3,0.1)),
 #'                    f2 = list(size=1, prob=c(0.3,0.4,0.3)), g2 = list(size=1, prob=c(0.2,0.6,0.2)))
-#' sample1 <- rsimmix(n=8000, unknownComp_weight=0.6, comp.dist = list(list.comp$f1,list.comp$g1),
+#' sample1 <- rsimmix(n=5000, unknownComp_weight=0.7, comp.dist = list(list.comp$f1,list.comp$g1),
 #'                                                    comp.param=list(list.param$f1,list.param$g1))
-#' sample2 <- rsimmix(n=6000, unknownComp_weight=0.8, comp.dist = list(list.comp$f2,list.comp$g2),
+#' sample2 <- rsimmix(n=4000, unknownComp_weight=0.9, comp.dist = list(list.comp$f2,list.comp$g2),
 #'                                                    comp.param=list(list.param$f2,list.param$g2))
 #' list.comp <- list(f1 = NULL, g1 = 'multinom',
 #'                   f2 = NULL, g2 = 'multinom')

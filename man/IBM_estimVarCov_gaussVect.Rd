@@ -70,9 +70,9 @@ list.comp <- list(f1 = "gamma", g1 = "exp",
                   f2 = "gamma", g2 = "exp")
 list.param <- list(f1 = list(shape = 2, scale = 3), g1 = list(rate = 1/3),
                    f2 = list(shape = 2, scale = 3), g2 = list(rate = 1/5))
-X.sim <- rsimmix(n=800, unknownComp_weight=0.7, comp.dist = list(list.comp$f1,list.comp$g1),
+X.sim <- rsimmix(n=400, unknownComp_weight=0.8, comp.dist = list(list.comp$f1,list.comp$g1),
                  comp.param = list(list.param$f1, list.param$g1))$mixt.data
-Y.sim <- rsimmix(n=700, unknownComp_weight=0.8, comp.dist = list(list.comp$f2,list.comp$g2),
+Y.sim <- rsimmix(n=350, unknownComp_weight=0.9, comp.dist = list(list.comp$f2,list.comp$g2),
                  comp.param = list(list.param$f2, list.param$g2))$mixt.data
 ## Real-life setting:
 list.comp <- list(f1 = NULL, g1 = "exp",

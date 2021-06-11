@@ -30,7 +30,7 @@
 #' list.param <- list(f = c(mean = 2, sd = 0.5),
 #'                    g = c(mean = 0, sd = 1))
 #' ## Simulate and plot the data at hand:
-#' obs.data <- rsimmix(n = 400, unknownComp_weight = 0.8, comp.dist = list.comp,
+#' obs.data <- rsimmix(n = 150, unknownComp_weight = 0.9, comp.dist = list.comp,
 #'                     comp.param = list.param)[['mixt.data']]
 #' plot(density(obs.data))
 #' ## Performs the test:

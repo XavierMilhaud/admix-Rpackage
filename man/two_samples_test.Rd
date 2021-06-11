@@ -96,9 +96,9 @@ list.comp <- list(f1 = "norm", g1 = "norm",
                   f2 = "norm", g2 = "norm")
 list.param <- list(f1 = list(mean = 3, sd = 0.5), g1 = list(mean = 0, sd = 1),
                    f2 = list(mean = 3, sd = 0.5), g2 = list(mean = 6, sd = 1.2))
-sample1 <- rsimmix(n=600, unknownComp_weight=0.8, comp.dist = list(list.comp$f1,list.comp$g1),
+sample1 <- rsimmix(n=250, unknownComp_weight=0.85, comp.dist = list(list.comp$f1,list.comp$g1),
                    comp.param = list(list.param$f1,list.param$g1))[['mixt.data']]
-sample2 <- rsimmix(n=700, unknownComp_weight=0.7, comp.dist = list(list.comp$f2,list.comp$g2),
+sample2 <- rsimmix(n=300, unknownComp_weight=0.8, comp.dist = list(list.comp$f2,list.comp$g2),
                    comp.param = list(list.param$f2,list.param$g2))[['mixt.data']]
 plot_admix(sample1, sample2, NULL, support='continuous')
 ##### Performs the test by the different methods :
@@ -106,13 +106,11 @@ list.comp <- list(f1 = NULL, g1 = "norm",
                   f2 = NULL, g2 = "norm")
 list.param <- list(f1 = NULL, g1 = list(mean = 0, sd = 1),
                    f2 = NULL, g2 = list(mean = 6, sd = 1.2))
-## 1) Using expansion coefficients in orthonormal polynomial basis:
+## Using expansion coefficients in orthonormal polynomial basis:
 two_samples_test(sample1=sample1, sample2=sample2, comp.dist=list.comp, comp.param=list.param,
                  method = 'Poly', K = 3, support = 'Real', est.method = 'BVdk', s = 0.4,
                  nb.ssEch = 2, var.explicit = TRUE)
-## 2) Second, using Inversion-Best Matching and the associated Inner Convergence property:
-two_samples_test(sample1=sample1, sample2=sample2, comp.dist=list.comp, comp.param=list.param,
-                 method = 'ICV', n_sim_tab = 8, parallel = TRUE, n_cpu = 2) }
+}
 
 }
 \author{

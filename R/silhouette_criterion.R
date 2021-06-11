@@ -42,9 +42,10 @@
 #'                    f4 = NULL, g4 = list(rate = 1/7),
 #'                    f5 = NULL, g5 = list(rate = 1/6))
 #' clusters <- admix_clustering(samples = list(A.sim,B.sim,C.sim,D.sim,E.sim), n_sim_tab = 8,
-#'                  comp.dist = list.comp, comp.param = list.param, parallel = TRUE, n_cpu = 2)
+#'                  comp.dist = list.comp, comp.param = list.param, parallel = FALSE, n_cpu = 2)
 #' clusters
-#' silhouette_criterion(clusters_obj = clusters) }
+#' silhouette_criterion(clusters_obj = clusters)
+#' }
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export

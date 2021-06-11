@@ -42,7 +42,7 @@ model when a component is known: an asymptotically normal estimator; Math. Meth.
 ## Simulate data:
 list.comp <- list(f = 'norm', g = 'norm')
 list.param <- list(f = c(mean = 4, sd = 1), g = c(mean = 7, sd = 0.5))
-sim.data <- rsimmix(n=300, unknownComp_weight=0.85, comp.dist=list.comp, comp.param=list.param)
+sim.data <- rsimmix(n=140, unknownComp_weight=0.9, comp.dist=list.comp, comp.param=list.param)
 ## Estimate the location shift and mixture weight parameters in real-life setting:
 list.comp <- list(f = NULL, g = 'norm')
 list.param <- list(f = NULL, g = c(mean = 7, sd = 0.5))

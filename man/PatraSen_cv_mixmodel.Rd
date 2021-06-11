@@ -50,12 +50,13 @@ JRSS Series B, 78, pp. 869--893.
 comp.dist <- list(f = 'norm', g = 'norm')
 comp.param <- list(f = list(mean = 3, sd = 0.5),
                    g = list(mean = 0, sd = 1))
-data1 <- rsimmix(n = 2000, unknownComp_weight = 0.85, comp.dist, comp.param)[['mixt.data']]
+data1 <- rsimmix(n = 2000, unknownComp_weight = 0.3, comp.dist, comp.param)[['mixt.data']]
 ## Transform the known component of the admixture model into a Uniform(0,1) distribution:
 comp.dist <- list(f = NULL, g = 'norm')
 comp.param <- list(f = NULL, g = list(mean = 0, sd = 1))
 data1_transfo <- knownComp_to_uniform(data = data1, comp.dist = list(comp.dist$f, comp.dist$g),
                                       comp.param = list(comp.param$f, comp.param$g))
+plot(density(data1_transfo))
 ## Estimate the proportion of the unknown component of the admixture model:
 PatraSen_cv_mixmodel(data = data1_transfo, folds = 3, reps = 1, cn.s = NULL,
                                cn.length = 3, gridsize = 100)$alp.hat

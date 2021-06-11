@@ -74,7 +74,8 @@ list.param <- list(f1 = NULL, g1 = list(rate = 1/3.5),
                    f4 = NULL, g4 = list(rate = 1/7))
 clusters <- admix_clustering(samples = list(A.sim,B.sim,C.sim,D.sim), n_sim_tab = 8,
                              comp.dist=list.comp, comp.param=list.param, parallel=FALSE, n_cpu=2)
-clusters$clustering}
+clusters$clustering
+}
 
 }
 \author{

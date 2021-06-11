@@ -43,15 +43,15 @@
 #' @examples
 #' \donttest{
 #' ###### Using Bordes and Vandekerkhove estimation (valid if symetric unknown component densities).
-#' #### First under the null hypothesis H0.
+#' #### Under the null hypothesis H0.
 #' ## Simulate data:
 #' list.comp <- list(f1 = "norm", g1 = "norm",
 #'                   f2 = "norm", g2 = "norm")
 #' list.param <- list(f1 = c(mean = 1, sd = 1), g1 = c(mean = 4, sd = 1),
 #'                    f2 = c(mean = 1, sd = 1), g2 = c(mean = 5, sd = 0.5))
-#' sim.X <- rsimmix(n = 600, unknownComp_weight=0.8, comp.dist = list(list.comp$f1,list.comp$g1),
+#' sim.X <- rsimmix(n = 250, unknownComp_weight=0.9, comp.dist = list(list.comp$f1,list.comp$g1),
 #'                  comp.param = list(list.param$f1, list.param$g1))
-#' sim.Y <- rsimmix(n = 650, unknownComp_weight=0.75, comp.dist = list(list.comp$f2,list.comp$g2),
+#' sim.Y <- rsimmix(n = 300, unknownComp_weight=0.8, comp.dist = list(list.comp$f2,list.comp$g2),
 #'                  comp.param = list(list.param$f2, list.param$g2))
 #' plot_admix(sim.X = sim.X[['mixt.data']], sim.Y = sim.Y[['mixt.data']], support = "continuous")
 #' ## Perform the hypothesis test in real-life conditions:
@@ -61,9 +61,10 @@
 #'                    f2 = NULL, g2 = c(mean = 5, sd = 0.5))
 #' test <- orthoBasis_test_H0(data.X = sim.X[['mixt.data']], data.Y = sim.Y[['mixt.data']],
 #'              known.p=NULL, comp.dist = list.comp, comp.param = list.param, known.coef=NULL, K=3,
-#'              nb.ssEch = 2, s = 0.49, var.explicit=TRUE, nb.echBoot=NULL, support = 'Real',
+#'              nb.ssEch = 2, s = 0.25, var.explicit=TRUE, nb.echBoot=NULL, support = 'Real',
 #'              bounds.supp = NULL, est.method = 'BVdk', uniformized.knownComp_data = NULL)
-#' test$decision}
+#' test$decision
+#' }
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export

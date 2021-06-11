@@ -42,10 +42,11 @@ matrix can be found in Bordes, L. and Vandekerkhove, P. (2010); Semiparametric t
 an asymptotically normal estimator; Math. Meth. Stat.; 19, pp. 22--41.
 }
 \examples{
+\donttest{
 ## Simulate data:
 list.comp <- list(f = "norm", g = "norm")
 list.param <- list(f = c(mean = 4, sd = 1), g = c(mean = 7, sd = 0.5))
-sim.data <- rsimmix(n = 500, unknownComp_weight = 0.8, list.comp, list.param)$mixt.data
+sim.data <- rsimmix(n = 400, unknownComp_weight = 0.9, list.comp, list.param)$mixt.data
 ## Estimate mixture weight and location shift parameters in real-life:
 list.comp <- list(f = NULL, g = "norm")
 list.param <- list(f = NULL, g = c(mean = 7, sd = 0.5))
@@ -57,6 +58,7 @@ hat_s2 <- (1/estim[1]) * (mean(sim.data^2) - ((1-estim[1])*m2_knownComp)) - esti
 ## Estimated variance of variance estimator related to the unknown symmetric component density:
 BVdk_ML_varCov_estimators(data = sim.data, hat_w = estim[1], hat_loc = estim[2],
                           hat_var = hat_s2, comp.dist = list.comp, comp.param = list.param)
+}
 
 }
 \author{
