@@ -100,27 +100,32 @@ IBM_estimProp <- function(sample1, sample2, known.prop = NULL, comp.dist = NULL,
     sol <- try(suppressWarnings(eval(expr1_NM)), silent = TRUE)
     count_error <- count_error + 1
   }
+  if (class(sol) == "try-error") { sol <- list(par = 100) }
 
   ## To deal with extreme values that can be found and that cause numerical issues afterwards:
-  if (any(abs(sol$par) > 5) | (class(sol) == "try-error")) {
+  if (any(abs(sol[['par']]) > 5)) {
     warning("In 'IBM_estimProp': optimization algorithm was changed (in 'optim') from 'Nelder-Mead' to 'BFGS' to avoid the solution to explose.")
     expr1_BFGS <- expression(stats::optim(par = par.init, fn = IBM_empirical_contrast, gr = NULL, fixed.p.X = fixed.p.X, sample1 = sample1,
                                           sample2 = sample2, G = G, comp.dist = comp.dist, comp.param = comp.param, method = "L-BFGS-B",
-                                          lower = c(0.001,0.001), upper = c(10,10), control = list(trace = 0, maxit = 10000)))
+                                          lower = c(0.001,0.001), upper = c(5,5), control = list(trace = 0, maxit = 10000)))
     sol <- try(suppressWarnings(eval(expr1_BFGS)), silent = TRUE)
     count_error <- 0
-    while ((class(sol) == "try-error") & (count_error < 3)) {
+    while ((class(sol) == "try-error") & (count_error < 7)) {
       sol <- NULL
       sol <- try(suppressWarnings(eval(expr1_BFGS)), silent = TRUE)
       count_error <- count_error + 1
     }
     if (class(sol) == "try-error") {
       warning("In 'IBM_estimProp': impossible to estimate the component weights with BFGS method. Switch back to Nelder-Mead algorithm to obtain a solution")
-      sol <- eval(expr1_NM)
+      sol <- try(suppressWarnings(eval(expr1_NM)), silent = TRUE)
     }
   }
 
-  estim.weights <- sol$par
+  if (class(sol) == "try-error") {
+    stop("In 'IBM_estimProp': whatever the optimization algorithm, the solution has not been found.")
+  } else {
+    estim.weights <- sol[['par']]
+  }
 
   ## In case the underlying theoretical model is known, the theoretical contrast can be computed. Here, we need to specify all the component weights
   ## and all the component distributions, but there is no need to provide any observations.
@@ -135,25 +140,31 @@ IBM_estimProp <- function(sample1, sample2, known.prop = NULL, comp.dist = NULL,
       sol.theo <- try(suppressWarnings(eval(expr2_NM)), silent = TRUE)
       count_error <- count_error + 1
     }
+    if (class(sol.theo) == "try-error") { sol.theo <- list(par = 100) }
 
-    if (any(abs(sol.theo$par) > 5) | (class(sol.theo) == "try-error")) {
+    ## To deal with extreme values that can be found and that cause numerical issues afterwards:
+    if (any(abs(sol.theo[['par']]) > 5)) {
       warning("In 'IBM_estimProp': optimization algorithm was changed (in 'optim') from 'Nelder-Mead' to 'BFGS' to avoid the solution to explose.")
       expr2_BFGS <- expression(stats::optim(par = par.init, fn = IBM_theoretical_contrast, gr = NULL, theo.par = known.prop, fixed.p.X = fixed.p.X,
                                             G = G, comp.dist = comp.dist, comp.param = comp.param, sample1 = sample1, sample2 = sample2,
-                                            method = "L-BFGS-B", lower = c(0.001,0.001), upper = c(10,10), control = list(trace = 0, maxit = 10000)))
+                                            method = "L-BFGS-B", lower = c(0.001,0.001), upper = c(5,5), control = list(trace = 0, maxit = 10000)))
       sol.theo <- try(suppressWarnings(eval(expr2_BFGS)), silent = TRUE)
       count_error <- 0
-      while ((class(sol) == "try-error") & (count_error < 3)) {
+      while ((class(sol) == "try-error") & (count_error < 7)) {
         sol.theo <- NULL
         sol.theo <- try(suppressWarnings(eval(expr2_BFGS)), silent = TRUE)
         count_error <- count_error + 1
       }
       if (class(sol.theo) == "try-error") {
         warning("In 'IBM_estimProp': impossible to estimate the component weights with BFGS method. Switch back to Nelder-Mead algorithm to obtain a solution")
-        sol.theo <- eval(expr2_NM)
+        sol.theo <- try(suppressWarnings(eval(expr2_NM)), silent = TRUE)
       }
     }
-    theo.weights <- sol.theo$par
+    if (class(sol.theo) == "try-error") {
+      stop("In 'IBM_estimProp': whatever the optimization algorithm, the theoretical solution has not been found.")
+    } else {
+      theo.weights <- sol.theo[['par']]
+    }
   } else {
     theo.weights <- NULL
   }
