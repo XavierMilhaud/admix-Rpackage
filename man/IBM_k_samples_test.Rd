@@ -16,14 +16,14 @@ IBM_k_samples_test(
 )
 }
 \arguments{
-\item{samples}{A list of the samples to be studied, all following admixture distributions.}
+\item{samples}{A list of the K samples to be studied, all following admixture distributions.}
 
-\item{sim_U}{Random draws of the inner convergence part of the contrast as defined in the IBM approach (see 'Details' below).}
+\item{sim_U}{(default to NULL) Random draws of the inner convergence part of the contrast as defined in the IBM approach (see 'Details' below).}
 
 \item{n_sim_tab}{Number of simulated gaussian processes when tabulating the inner convergence distribution in the IBM approach.}
 
-\item{min_size}{useful to provide the minimal size among all samples (needed to take into account the correction factor for the
-variance-covariance assessment). Otherwise, useless.}
+\item{min_size}{(default to NULL) Useful to provide the minimal size among all samples (needed to take into account the correction
+factor for the variance-covariance assessment). Automatically calculated if NULL.}
 
 \item{comp.dist}{A list with 2*K elements corresponding to the component distributions (specified with R native names for these distributions)
 involved in the K admixture models. Elements, grouped by 2, refer to the unknown and known components of each admixture model,
@@ -37,15 +37,16 @@ If there are unknown elements, they must be specified as 'NULL' objects. For ins
 be specified as follows (with K = 3):
 list(f1 = NULL, g1 = list(mean=0,sd=1), f2 = NULL, g2 = list(mean=3,sd=1.1), f3 = NULL, g3 = list(mean=-2,sd=0.6)).}
 
-\item{parallel}{(default to FALSE) Boolean indicating whether parallel computations are performed (speed-up the tabulation).}
+\item{parallel}{(default to FALSE) Boolean indicating whether parallel computations are performed.}
 
 \item{n_cpu}{(default to 2) Number of cores used when parallelizing.}
 }
 \value{
-A list of ten elements, containing: 1) the rejection decision; 2) the p-value of the test; 3) the terms involved in
+A list of ten elements, containing: 1) the rejection decision; 2) the test p-value; 3) the terms involved in
 the test statistic; 4) the test statistic value; 5) the selected rank (number of terms involved in the test statistic);
-6) the value of the penalized test statistic; 7) the sorted contrast values; 8) the 95th-quantile of the contrast
-distribution; 9) the final terms of the statistic; and 10) the contrast matrix.
+6) the value of the penalized test statistic; 7) a boolean indicating whether the applied penalty rule is that under
+the null H0; 8) the sorted contrast values; 9) the 95th-quantile of the contrast distribution; 10) the final terms of
+the statistic; and 11) the contrast matrix.
 }
 \description{
 Test hypothesis on the unknown component of K (K > 1) admixture models using Inversion - Best Matching method.
@@ -53,36 +54,60 @@ K-samples test of the unknown component distribution in admixture models using I
 (IBM) method. Recall that we have K populations following admixture models, each one with probability
 density functions (pdf) l_k = p_k*f_k + (1-p_k)*g_k, where g_k is the known pdf and l_k corresponds to the
 observed sample. Perform the following hypothesis test:
-H0 : f_1 = ... = f_K  against  H1 : f_i differs from f_j (i diff j, and i,j in 1,...,K).
+H0 : f_1 = ... = f_K  against  H1 : f_i differs from f_j (i different from j, and i,j in 1,...,K).
 }
 \details{
-See the paper presenting the IBM approach at the following HAL weblink: https://hal.archives-ouvertes.fr/hal-03201760
+See the paper at the following HAL weblink: https://hal.archives-ouvertes.fr/hal-03201760
 }
 \examples{
 \donttest{
-####### Under the alternative hypothesis H1 (with K=3 populations):
+####### Under the null hypothesis H0 (with K=3 populations):
+## Specify the parameters of the mixture models for simulation:
 list.comp <- list(f1 = "norm", g1 = "norm",
                   f2 = "norm", g2 = "norm",
                   f3 = "norm", g3 = "norm")
 list.param <- list(f1 = list(mean = 0, sd = 1), g1 = list(mean = 2, sd = 0.7),
-                   f2 = list(mean = 2, sd = 1), g2 = list(mean = 4, sd = 1.1),
-                   f3 = list(mean = 0, sd = 1), g3 = list(mean = 3, sd = 0.8))
-sim1 <- rsimmix(n = 5000, unknownComp_weight = 0.8, comp.dist = list(list.comp$f1,list.comp$g1),
+                   f2 = list(mean = 0, sd = 1), g2 = list(mean = 4, sd = 1.1),
+                   f3 = list(mean = 0, sd = 1), g3 = list(mean = -3, sd = 0.8))
+## Simulate the data:
+sim1 <- rsimmix(n = 1000, unknownComp_weight = 0.8, comp.dist = list(list.comp$f1,list.comp$g1),
                 comp.param = list(list.param$f1, list.param$g1))$mixt.data
-sim2 <- rsimmix(n= 5300, unknownComp_weight = 0.6, comp.dist = list(list.comp$f2,list.comp$g2),
+sim2 <- rsimmix(n= 1300, unknownComp_weight = 0.6, comp.dist = list(list.comp$f2,list.comp$g2),
                 comp.param = list(list.param$f2, list.param$g2))$mixt.data
-sim3 <- rsimmix(n = 5100, unknownComp_weight = 0.7, comp.dist = list(list.comp$f3,list.comp$g3),
+sim3 <- rsimmix(n = 1100, unknownComp_weight = 0.7, comp.dist = list(list.comp$f3,list.comp$g3),
                 comp.param = list(list.param$f3, list.param$g3))$mixt.data
-## Perform the 3-samples test in a real-life setting:
+## Back to the context of admixture models, where one mixture component is unknown:
+list.comp <- list(f1 = NULL, g1 = "norm",
+                  f2 = NULL, g2 = "norm",
+                  f3 = NULL, g3 = "norm")
+list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
+                   f2 = NULL, g2 = list(mean = 4, sd = 1.1),
+                   f3 = NULL, g3 = list(mean = -3, sd = 0.8))
+## Perform the 3-samples test:
+IBM_k_samples_test(samples = list(sim1,sim2,sim3), sim_U= NULL, n_sim_tab = 20, min_size = NULL,
+                   comp.dist = list.comp, comp.param = list.param, parallel = TRUE, n_cpu = 2)
+
+####### Now under the alternative H1:
+list.comp <- list(f1 = "norm", g1 = "norm",
+                  f2 = "norm", g2 = "norm",
+                  f3 = "norm", g3 = "norm")
+list.param <- list(f1 = list(mean = 0, sd = 1), g1 = list(mean = 2, sd = 0.7),
+                   f2 = list(mean = 0, sd = 1), g2 = list(mean = 4, sd = 1.1),
+                   f3 = list(mean = 2, sd = 0.7), g3 = list(mean = 3, sd = 0.8))
+sim1 <- rsimmix(n = 3000, unknownComp_weight = 0.8, comp.dist = list(list.comp$f1,list.comp$g1),
+                comp.param = list(list.param$f1, list.param$g1))$mixt.data
+sim2 <- rsimmix(n= 3300, unknownComp_weight = 0.6, comp.dist = list(list.comp$f2,list.comp$g2),
+                comp.param = list(list.param$f2, list.param$g2))$mixt.data
+sim3 <- rsimmix(n = 3100, unknownComp_weight = 0.7, comp.dist = list(list.comp$f3,list.comp$g3),
+                comp.param = list(list.param$f3, list.param$g3))$mixt.data
 list.comp <- list(f1 = NULL, g1 = "norm",
                   f2 = NULL, g2 = "norm",
                   f3 = NULL, g3 = "norm")
 list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
                    f2 = NULL, g2 = list(mean = 4, sd = 1.1),
                    f3 = NULL, g3 = list(mean = 3, sd = 0.8))
-obj <- IBM_k_samples_test(samples=list(sim1,sim2,sim3), sim_U=NULL, n_sim_tab=4, min_size=NULL,
-                          comp.dist=list.comp, comp.param=list.param, parallel=FALSE, n_cpu=2)
-obj$rejection_rule
+IBM_k_samples_test(samples = list(sim1,sim2,sim3), sim_U= NULL, n_sim_tab = 20, min_size = NULL,
+                   comp.dist = list.comp, comp.param = list.param, parallel = TRUE, n_cpu = 2)
 }
 
 }

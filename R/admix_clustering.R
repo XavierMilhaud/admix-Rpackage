@@ -18,7 +18,7 @@
 #' @param parallel (default to FALSE) Boolean to indicate whether parallel computations are performed (speed-up the tabulation).
 #' @param n_cpu (default to 2) Number of cores used when parallelizing.
 #'
-#' @details See the paper presenting the IBM approach at the following HAL weblink: https://hal.archives-ouvertes.fr/hal-03201760
+#' @details See the paper at the following HAL weblink: https://hal.archives-ouvertes.fr/hal-03201760
 #'
 #' @return A list with three elements: 1) the identified clusters; 2) the cluster affiliation; 3) the discrepancy matrix.
 #'
@@ -147,17 +147,18 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
       ## Tabulate the new U-distribution:
       if (new.n_clust == (n_clust+1)) {
         n_clust <- n_clust + 1
-        U <- IBM_tabul_stochasticInteg(n.sim = n_sim_tab, n.varCovMat = 100, sample1 = samples[[as.numeric(first_sample)]], sample2 = samples[[as.numeric(second_sample)]], min_size = minimal_size,
-                        comp.dist = couples.expr[[which((couples.list[ ,1] == as.numeric(first_sample)) & (couples.list[ ,2] == as.numeric(second_sample)))]],
-                        comp.param = couples.param[[which((couples.list[ ,1] == as.numeric(first_sample)) & (couples.list[ ,2] == as.numeric(second_sample)))]],
-                        parallel = parallel, n_cpu = n_cpu)
+        U <- IBM_tabul_stochasticInteg(n.sim = n_sim_tab, n.varCovMat = 100, sample1 = samples[[as.numeric(first_sample)]],
+                sample2 = samples[[as.numeric(second_sample)]], min_size = minimal_size,
+                comp.dist = couples.expr[[which((couples.list[ ,1] == as.numeric(first_sample)) & (couples.list[ ,2] == as.numeric(second_sample)))]],
+                comp.param = couples.param[[which((couples.list[ ,1] == as.numeric(first_sample)) & (couples.list[ ,2] == as.numeric(second_sample)))]],
+                parallel = parallel, n_cpu = n_cpu)
         q_H <- stats::quantile(U[["U_sim"]], 0.95)
       }
       if (any(indexesSamples_to_consider_new != indexesSamples_to_consider)) {
         ## Test K-sample :
         comp_indices <- sort( c(2*indexesSamples_to_consider_new-1, 2*indexesSamples_to_consider_new) )
         k_sample_test <- IBM_k_samples_test(samples = samples[indexesSamples_to_consider_new], sim_U = U[["U_sim"]],
-                                            min_size = minimal_size, comp.dist = comp.dist[comp_indices],
+                                            n_sim_tab = n_sim_tab, min_size = minimal_size, comp.dist = comp.dist[comp_indices],
                                             comp.param = comp.param[comp_indices], parallel = parallel, n_cpu = n_cpu)
       }
       if (!k_sample_test$rejection_rule) {
