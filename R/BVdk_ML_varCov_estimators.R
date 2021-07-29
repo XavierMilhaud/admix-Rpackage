@@ -56,7 +56,8 @@ BVdk_ML_varCov_estimators <- function(data, hat_w, hat_loc, hat_var, comp.dist, 
 
   ## Extracts the information on component distributions and stores in expressions:
   comp.dist.dens <- paste0("d", comp.dist)
-  comp_dens <- sapply(X = comp.dist.dens, FUN = get, pos = "package:stats", mode = "function")
+#  comp_dens <- sapply(X = comp.dist.dens, FUN = get, pos = "package:stats", mode = "function")
+  comp_dens <- sapply(X = comp.dist.dens, FUN = get, mode = "function")
   for (i in 1:length(comp_dens)) assign(x = names(comp_dens)[i], value = comp_dens[[i]])
   ## Creates the expression allowing further to compute the hessian (the first component is the unknown one 'f', whereas the second one is 'g') :
   expr1 <- paste(names(comp_dens)[1],"(y, hat_loc, sqrt(hat_var))", sep = "")

@@ -40,7 +40,8 @@ rsimmix <- function(n = 1000, unknownComp_weight = 0.5,
 
   ## Extracts the information on component distributions:
   comp.dist <- paste0("r", comp.dist)
-  comp_sim <- sapply(X = comp.dist, FUN = get, pos = "package:stats", mode = "function")
+  #comp_sim <- sapply(X = comp.dist, FUN = get, pos = "package:stats", mode = "function")
+  comp_sim <- sapply(X = comp.dist, FUN = get, mode = "function")
   for (i in 1:length(comp_sim)) assign(x = names(comp_sim)[i], value = comp_sim[[i]])
 
   ## Check if arguments of R core functions were correctly specified:

@@ -40,7 +40,8 @@ BVdk_contrast_gradient <- function(param, data, h, comp.dist, comp.param)
 
   ## Extracts the information on component distributions and stores in expressions:
   comp.dist.cdf <- paste0("p", comp.dist[[2]])
-  comp_cdf <- sapply(X = comp.dist.cdf, FUN = get, pos = "package:stats", mode = "function")
+#  comp_cdf <- sapply(X = comp.dist.cdf, FUN = get, pos = "package:stats", mode = "function")
+  comp_cdf <- sapply(X = comp.dist.cdf, FUN = get, mode = "function")
   assign(x = names(comp_cdf)[1], value = comp_cdf[[1]])
   ## Creates the expression allowing further to generate the right data:
   expr1.cdf <- paste(names(comp_cdf)[1],"(data[i] + mu,", paste(names(comp.param[[2]]), "=", comp.param[[2]], sep = "", collapse = ","), ")", sep="")
@@ -48,7 +49,8 @@ BVdk_contrast_gradient <- function(param, data, h, comp.dist, comp.param)
 
   ## Same with density functions :
   comp.dist.dens <- paste0("d", comp.dist[[2]])
-  comp_dens <- sapply(X = comp.dist.dens, FUN = get, pos = "package:stats", mode = "function")
+#  comp_dens <- sapply(X = comp.dist.dens, FUN = get, pos = "package:stats", mode = "function")
+  comp_dens <- sapply(X = comp.dist.dens, FUN = get, mode = "function")
   assign(x = names(comp_dens)[1], value = comp_dens[[1]])
   ## Creates the expression allowing further to generate the right data:
   expr1.dens <- paste(names(comp_dens)[1],"(data[i] + mu,", paste(names(comp.param[[2]]), "=", comp.param[[2]], sep = "", collapse = ","), ")", sep="")

@@ -45,7 +45,8 @@ BVdk_estimParam <- function(data, method = c("L-BFGS-B","Nelder-Mead"), comp.dis
   ## Initialization of the parameters: localization parameter is initialized depending on whether the global mean
   ## of the sample is lower than the mean of the known component (or not).
   comp.dist.sim <- paste0("r", comp.dist[[2]])
-  comp.sim <- sapply(X = comp.dist.sim, FUN = get, pos = "package:stats", mode = "function")
+#  comp.sim <- sapply(X = comp.dist.sim, FUN = get, pos = "package:stats", mode = "function")
+  comp.sim <- sapply(X = comp.dist.sim, FUN = get, mode = "function")
   assign(x = names(comp.sim)[1], value = comp.sim[[1]])
   expr.sim <- paste(names(comp.sim)[1],"(n=100000,", paste(names(comp.param[[2]]), "=", comp.param[[2]], sep = "", collapse = ","), ")", sep="")
   if (mean(data) > mean(eval(parse(text = expr.sim)))) {

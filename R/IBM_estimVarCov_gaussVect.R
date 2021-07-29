@@ -191,7 +191,8 @@ IBM_mat_L <- function(z, par, fixed.p1 = NULL, known.p = NULL, sample1, sample2,
   ## Extracts the information on component distributions:
   exp.comp.dist <- paste0("p", comp.dist)
   if (any(exp.comp.dist == "pmultinom")) { exp.comp.dist[which(exp.comp.dist == "pmultinom")] <- "stepfun" }
-  comp_L <- sapply(X = exp.comp.dist, FUN = get, pos = "package:stats", mode = "function")
+#  comp_L <- sapply(X = exp.comp.dist, FUN = get, pos = "package:stats", mode = "function")
+  comp_L <- sapply(X = exp.comp.dist, FUN = get, mode = "function")
   for (i in 1:length(comp_L)) assign(x = names(comp_L)[i], value = comp_L[[i]])
   ## Create the expression involved in future assessments of the CDF:
   make.expr.step <- function(i) paste(names(comp_L)[i],"(x = 1:", length(comp.param[[i]][[2]]), paste(", y = ", paste("cumsum(c(0,",
@@ -338,7 +339,8 @@ IBM_Sigma1 <- function(x, y, par, fixed.p1 = NULL, known.p = NULL, sample1, samp
   ## Extracts the information on component distributions:
   exp.comp.dist <- paste0("p", comp.dist)
   if (any(exp.comp.dist == "pmultinom")) { exp.comp.dist[which(exp.comp.dist == "pmultinom")] <- "stepfun" }
-  comp_sigma1 <- sapply(X = exp.comp.dist, FUN = get, pos = "package:stats", mode = "function")
+#  comp_sigma1 <- sapply(X = exp.comp.dist, FUN = get, pos = "package:stats", mode = "function")
+  comp_sigma1 <- sapply(X = exp.comp.dist, FUN = get, mode = "function")
   for (i in 1:length(comp_sigma1)) assign(x = names(comp_sigma1)[i], value = comp_sigma1[[i]])
   ## Create the expression involved in future assessments of the CDF:
   make.expr.step <- function(i) paste(names(comp_sigma1)[i],"(x = 1:", length(comp.param[[i]][[2]]), paste(", y = ", paste("cumsum(c(0,",
@@ -551,7 +553,8 @@ IBM_Sigma2 <- function(x, y, par, fixed.p1 = NULL, known.p = NULL, sample1, samp
   ## Extracts the information on component distributions:
   exp.comp.dist <- paste0("p", comp.dist)
   if (any(exp.comp.dist == "pmultinom")) { exp.comp.dist[which(exp.comp.dist == "pmultinom")] <- "stepfun" }
-  comp_sigma2 <- sapply(X = exp.comp.dist, FUN = get, pos = "package:stats", mode = "function")
+#  comp_sigma2 <- sapply(X = exp.comp.dist, FUN = get, pos = "package:stats", mode = "function")
+  comp_sigma2 <- sapply(X = exp.comp.dist, FUN = get, mode = "function")
   for (i in 1:length(comp_sigma2)) assign(x = names(comp_sigma2)[i], value = comp_sigma2[[i]])
   ## Create the expression involved in future assessments of the CDF:
   make.expr.step <- function(i) paste(names(comp_sigma2)[i],"(x = 1:", length(comp.param[[i]][[2]]), paste(", y = ", paste("cumsum(c(0,",

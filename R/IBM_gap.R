@@ -59,7 +59,8 @@ IBM_gap <- function(z, par, fixed.p1 = NULL, sample1, sample2, comp.dist, comp.p
   ## Extracts the information on component distributions:
   exp.comp.dist <- paste0("p", comp.dist)
   if (any(exp.comp.dist == "pmultinom")) { exp.comp.dist[which(exp.comp.dist == "pmultinom")] <- "stepfun" }
-  comp_IBM_gap <- sapply(X = exp.comp.dist, FUN = get, pos = "package:stats", mode = "function")
+#  comp_IBM_gap <- sapply(X = exp.comp.dist, FUN = get, pos = "package:stats", mode = "function")
+  comp_IBM_gap <- sapply(X = exp.comp.dist, FUN = get, mode = "function")
   for (i in 1:length(comp_IBM_gap)) assign(x = names(comp_IBM_gap)[i], value = comp_IBM_gap[[i]])
   ## Create the expression involved in future assessments of the CDF:
   make.expr.step <- function(i) paste(names(comp_IBM_gap)[i],"(x = 1:", length(comp.param[[i]][[2]]), paste(", y = ", paste("cumsum(c(0,",

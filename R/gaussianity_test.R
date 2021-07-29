@@ -51,9 +51,11 @@ gaussianity_test <- function(sample1, comp.dist, comp.param, K = 3, lambda = 0.2
     comp.param[which(sapply(comp.param, is.null) == TRUE)] <- NA
   }
   ## Extracts the information on component distributions and stores in expressions:
-  comp.dens <- sapply(X = paste0("d",comp.dist), FUN = get, pos = "package:stats", mode = "function")
+#  comp.dens <- sapply(X = paste0("d",comp.dist), FUN = get, pos = "package:stats", mode = "function")
+  comp.dens <- sapply(X = paste0("d",comp.dist), FUN = get, mode = "function")
   assign(x = names(comp.dens)[2], value = comp.dens[[2]])
-  comp.sim <- sapply(X = paste0("r",comp.dist), FUN = get, pos = "package:stats", mode = "function")
+#  comp.sim <- sapply(X = paste0("r",comp.dist), FUN = get, pos = "package:stats", mode = "function")
+  comp.sim <- sapply(X = paste0("r",comp.dist), FUN = get, mode = "function")
   assign(x = names(comp.sim)[2], value = comp.sim[[2]])
   ## Creates the expression allowing further to compute the theoretical 2nd-order moment of the known component:
   expr.dens <- paste(names(comp.dens)[2],"(x,", paste(names(comp.param[[2]]), "=", comp.param[[2]], sep = "", collapse = ","), ")", sep="")

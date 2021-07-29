@@ -46,7 +46,8 @@ estimVarCov_empProcess <- function(x, y, obs.data, known.p = NULL, comp.dist = N
     ## Extracts the information on component distributions:
     exp.comp.dist <- paste0("p", comp.dist)
     if (any(exp.comp.dist == "pmultinom")) { exp.comp.dist[which(exp.comp.dist == "pmultinom")] <- "stepfun" }
-    comp.ro <- sapply(X = exp.comp.dist, FUN = get, pos = "package:stats", mode = "function")
+#    comp.ro <- sapply(X = exp.comp.dist, FUN = get, pos = "package:stats", mode = "function")
+    comp.ro <- sapply(X = exp.comp.dist, FUN = get, mode = "function")
     for (i in 1:length(comp.ro)) assign(x = names(comp.ro)[i], value = comp.ro[[i]])
     ## Creates the expression involved in future assessments of the CDF:
     make.expr.step <- function(i) paste(names(comp.ro)[i], "(x = 1:", length(comp.param[[i]][[2]]), paste(", y = ", paste("cumsum(c(0,",

@@ -41,7 +41,8 @@ orthoBasis_coef <- function(data, comp.dist = NULL, comp.param = NULL, supp = c(
     if (is.null(comp.dist[[2]]) | is.null(comp.param[[2]])) stop("Known component of the admixture model must be specified.")
     ## Extracts the information on component distributions and stores in expressions:
     comp.dist.sim <- paste0("r", comp.dist[[2]])
-    comp_ortho <- sapply(X = comp.dist.sim, FUN = get, pos = "package:stats", mode = "function")
+#    comp_ortho <- sapply(X = comp.dist.sim, FUN = get, pos = "package:stats", mode = "function")
+    comp_ortho <- sapply(X = comp.dist.sim, FUN = get, mode = "function")
     assign(x = names(comp_ortho)[1], value = comp_ortho[[1]])
     expr.sim <- paste(names(comp_ortho)[1],"(n=1000000,", paste(names(comp.param[[2]]), "=", comp.param[[2]], sep = "", collapse = ","), ")", sep="")
     data <- eval(parse(text = expr.sim))

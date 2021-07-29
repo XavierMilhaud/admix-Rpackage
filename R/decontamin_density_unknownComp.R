@@ -101,7 +101,8 @@ decontamin_density_unknownComp <- function(sample1, comp.dist, comp.param, estim
   ## Extract the information on component distributions:
   exp.comp.dist <- paste0("d", comp.dist)
   if (any(exp.comp.dist == "dmultinom")) { exp.comp.dist[which(exp.comp.dist == "dmultinom")] <- "approxfun" }
-  comp_decontamin <- sapply(X = exp.comp.dist, FUN = get, pos = "package:stats", mode = "function")
+#  comp_decontamin <- sapply(X = exp.comp.dist, FUN = get, pos = "package:stats", mode = "function")
+  comp_decontamin <- sapply(X = exp.comp.dist, FUN = get, mode = "function")
   for (i in 1:length(comp_decontamin)) assign(x = names(comp_decontamin)[i], value = comp_decontamin[[i]])
 
   ## Create the expression involved in future assessments of the CDF:

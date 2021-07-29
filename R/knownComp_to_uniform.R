@@ -39,7 +39,8 @@ knownComp_to_uniform <- function(data, comp.dist, comp.param)
 
   ## Extracts the information on component distributions for inversion (transformation to uniform distribution of the known component):
   comp.dist.inv <- paste0("p", comp.dist[[2]])
-  comp.inv <- sapply(X = comp.dist.inv, FUN = get, pos = "package:stats", mode = "function")
+#  comp.inv <- sapply(X = comp.dist.inv, FUN = get, pos = "package:stats", mode = "function")
+  comp.inv <- sapply(X = comp.dist.inv, FUN = get, mode = "function")
   assign(x = names(comp.inv)[1], value = comp.inv[[1]])
 
   ## Check if arguments of R core functions were correctly specified:

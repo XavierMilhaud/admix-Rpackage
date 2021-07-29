@@ -41,7 +41,8 @@ BVdk_contrast <- function(param, data, h, comp.dist, comp.param)
 
   ## Extracts the information on component distributions and stores in expressions:
   exp.comp.dist <- paste0("p", comp.dist[[2]])
-  comp_BVdk <- sapply(X = exp.comp.dist, FUN = get, pos = "package:stats", mode = "function")
+#  comp_BVdk <- sapply(X = exp.comp.dist, FUN = get, pos = "package:stats", mode = "function")
+  comp_BVdk <- sapply(X = exp.comp.dist, FUN = get, mode = "function")
   #for (i in 1:length(comp_BVdk)) assign(x = names(comp_BVdk)[i], value = comp_BVdk[[i]])
   assign(x = names(comp_BVdk)[1], value = comp_BVdk[[1]])
 

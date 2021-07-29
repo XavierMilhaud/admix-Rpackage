@@ -53,7 +53,7 @@
 silhouette_criterion <- function(clusters_obj)
 {
   contrast_matrix <- clusters_obj$discrepancy_matrix
-  label_vect <- clusters_obj$clustering
+  label_vect <- clusters_obj$clusters[2, ]
   n_pop <- length(label_vect)
   n_clust <- length(unique(label_vect))
 
