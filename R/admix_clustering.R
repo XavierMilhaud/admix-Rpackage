@@ -82,7 +82,6 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
 
   ## Look for all possible couples on which the discrepancy will be computed :
   model.list <- lapply(X = seq.int(from = 1, to = length(comp.dist), by = 2), FUN = seq.int, length.out = 2)
-  print(model.list)
   ## K*(K-1)/2 combinations of populations under study:
   couples.list <- NULL
   for (i in 1:(length(samples)-1)) { for (j in (i+1):length(samples)) { couples.list <- rbind(couples.list,c(i,j)) } }
