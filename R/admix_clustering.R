@@ -97,12 +97,22 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
     ## Comparison between the two populations :
     XY <- IBM_estimProp(sample1 = samples[[couples.list[k, ][1]]], sample2 = samples[[couples.list[k, ][2]]], known.prop = NULL,
                         comp.dist = couples.expr[[k]], comp.param = couples.param[[k]], with.correction = FALSE, n.integ = 1000)
+    while (!exists("XY")) {
+      XY <- IBM_estimProp(sample1 = samples[[couples.list[k, ][1]]], sample2 = samples[[couples.list[k, ][2]]], known.prop = NULL,
+                          comp.dist = couples.expr[[k]], comp.param = couples.param[[k]], with.correction = FALSE, n.integ = 1000)
+    }
 #    empirical.contr[k] <- minimal_size * IBM_empirical_contrast(XY[["prop.estim"]], fixed.p.X = XY[["p.X.fixed"]], sample1 = samples[[couples.list[k, ][1]]],
 #                                                                sample2 = samples[[couples.list[k, ][2]]], G = XY[["integ.supp"]],
 #                                                                comp.dist = couples.expr[[k]], comp.param = couples.param[[k]])
     minimal_size * IBM_empirical_contrast(XY[["prop.estim"]], fixed.p.X = XY[["p.X.fixed"]], sample1 = samples[[couples.list[k, ][1]]],
                                           sample2 = samples[[couples.list[k, ][2]]], G = XY[["integ.supp"]],
                                           comp.dist = couples.expr[[k]], comp.param = couples.param[[k]])
+  }
+  ## Manage cases when the optimization algorithm could not find a solution:
+  if (length(which(lapply(X = empirical.contr, FUN = is.numeric) == FALSE)) != 0) {
+    for (k in 1:length(which(lapply(X = empirical.contr, FUN = is.numeric) == FALSE))) {
+      empirical.contr[[which(lapply(X = empirical.contr, FUN = is.numeric) == FALSE)[k]]] <- NA
+    }
   }
 
   ## Give a simple and useful representation of results for each couple:
