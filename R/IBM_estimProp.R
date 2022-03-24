@@ -95,12 +95,12 @@ IBM_estimProp <- function(sample1, sample2, known.prop = NULL, comp.dist = NULL,
                                       control = list(trace = 0, maxit = 10000)))
   sol <- try(suppressWarnings(eval(expr1_NM)), silent = TRUE)
   count_error <- 0
-  while ((class(sol) == "try-error") & (count_error < 3)) {
+  while ((inherits(x = sol, what = "try-error", which = FALSE)) & (count_error < 3)) {
     sol <- NULL
     sol <- try(suppressWarnings(eval(expr1_NM)), silent = TRUE)
     count_error <- count_error + 1
   }
-  if (class(sol) == "try-error") { sol <- list(par = 100) }
+  if (inherits(x = sol, what = "try-error", which = FALSE)) { sol <- list(par = 100) }
 
   ## To deal with extreme values that can be found and that cause numerical issues afterwards:
   if (any(abs(sol[['par']]) > 5)) {
@@ -110,18 +110,18 @@ IBM_estimProp <- function(sample1, sample2, known.prop = NULL, comp.dist = NULL,
                                           lower = c(0.001,0.001), upper = c(5,5), control = list(trace = 0, maxit = 10000)))
     sol <- try(suppressWarnings(eval(expr1_BFGS)), silent = TRUE)
     count_error <- 0
-    while ((class(sol) == "try-error") & (count_error < 7)) {
+    while (inherits(x = sol, what = "try-error", which = FALSE) & (count_error < 7)) {
       sol <- NULL
       sol <- try(suppressWarnings(eval(expr1_BFGS)), silent = TRUE)
       count_error <- count_error + 1
     }
-    if (class(sol) == "try-error") {
+    if (inherits(x = sol, what = "try-error", which = FALSE)) {
       warning("In 'IBM_estimProp': impossible to estimate the component weights with BFGS method. Switch back to Nelder-Mead algorithm to obtain a solution")
       sol <- try(suppressWarnings(eval(expr1_NM)), silent = TRUE)
     }
   }
 
-  if (class(sol) == "try-error") {
+  if (inherits(x = sol, what = "try-error", which = FALSE)) {
     stop("In 'IBM_estimProp': whatever the optimization algorithm, the solution has not been found.")
   } else {
     estim.weights <- sol[['par']]
@@ -135,12 +135,12 @@ IBM_estimProp <- function(sample1, sample2, known.prop = NULL, comp.dist = NULL,
                                         method = "Nelder-Mead", control = list(trace = 0, maxit = 10000)))
     sol.theo <- try(suppressWarnings(eval(expr2_NM)), silent = TRUE)
     count_error <- 0
-    while ((class(sol.theo) == "try-error") & (count_error < 3)) {
+    while (inherits(x = sol, what = "try-error", which = FALSE) & (count_error < 3)) {
       sol.theo <- NULL
       sol.theo <- try(suppressWarnings(eval(expr2_NM)), silent = TRUE)
       count_error <- count_error + 1
     }
-    if (class(sol.theo) == "try-error") { sol.theo <- list(par = 100) }
+    if (inherits(x = sol, what = "try-error", which = FALSE)) { sol.theo <- list(par = 100) }
 
     ## To deal with extreme values that can be found and that cause numerical issues afterwards:
     if (any(abs(sol.theo[['par']]) > 5)) {
@@ -150,17 +150,17 @@ IBM_estimProp <- function(sample1, sample2, known.prop = NULL, comp.dist = NULL,
                                             method = "L-BFGS-B", lower = c(0.001,0.001), upper = c(5,5), control = list(trace = 0, maxit = 10000)))
       sol.theo <- try(suppressWarnings(eval(expr2_BFGS)), silent = TRUE)
       count_error <- 0
-      while ((class(sol) == "try-error") & (count_error < 7)) {
+      while (inherits(x = sol, what = "try-error", which = FALSE) & (count_error < 7)) {
         sol.theo <- NULL
         sol.theo <- try(suppressWarnings(eval(expr2_BFGS)), silent = TRUE)
         count_error <- count_error + 1
       }
-      if (class(sol.theo) == "try-error") {
+      if (inherits(x = sol, what = "try-error", which = FALSE)) {
         warning("In 'IBM_estimProp': impossible to estimate the component weights with BFGS method. Switch back to Nelder-Mead algorithm to obtain a solution")
         sol.theo <- try(suppressWarnings(eval(expr2_NM)), silent = TRUE)
       }
     }
-    if (class(sol.theo) == "try-error") {
+    if (inherits(x = sol, what = "try-error", which = FALSE)) {
       stop("In 'IBM_estimProp': whatever the optimization algorithm, the theoretical solution has not been found.")
     } else {
       theo.weights <- sol.theo[['par']]
