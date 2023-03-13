@@ -14,6 +14,7 @@ admix_test(
   comp.dist = NULL,
   comp.param = NULL,
   support = c("Real", "Integer", "Positive", "Bounded.continuous"),
+  conf.level = 0.95,
   parallel = FALSE,
   n_cpu = 4
 )
@@ -50,6 +51,8 @@ list(f1 = NULL, g1 = list(mean=0,sd=1), f2 = NULL, g2 = list(mean=3,sd=1.1), f3 
 
 \item{support}{(Potentially used with 'Poly' testing method, otherwise useless) The support of the observations; one of "Real",
 "Integer", "Positive", or "Bounded.continuous".}
+
+\item{conf.level}{The confidence level of the K-sample test used in the clustering procedure.}
 
 \item{parallel}{(default to FALSE) Boolean indicating whether parallel computations are performed (speed-up the tabulation).}
 
