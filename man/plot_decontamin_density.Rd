@@ -4,7 +4,7 @@
 \alias{plot_decontamin_density}
 \title{Plot the decontaminated density of the unknown component for an estimated admixture model}
 \usage{
-plot_decontamin_density(x_val, decontamin_obj, add_plot = FALSE)
+plot_decontamin_density(x_val, decontamin_obj, add_plot = FALSE, ...)
 }
 \arguments{
 \item{x_val}{A vector of X-axis values at which to plot the decontaminated density f.}
@@ -14,6 +14,8 @@ the corresponding Y-axis values, and the support over which to plot the results.
 
 \item{add_plot}{(default to FALSE) A boolean specifying if one plots the decontaminated density over an existing plot. Used for visual
 comparison purpose.}
+
+\item{...}{Other classical arguments of functions plot (continous support) and barplot (discrete support).}
 }
 \value{
 The plot of the decontaminated density.
@@ -56,7 +58,7 @@ res2 <- decontamin_density_unknownComp(sample1 = sample2[['mixt.data']],
 plot_decontamin_density(x_val = seq(from=0, to=6, length.out=100), decontamin_obj = res1,
                         add_plot = FALSE)
 plot_decontamin_density(x_val = seq(from=0, to=6, length.out=100), decontamin_obj = res2,
-                        add_plot = TRUE)
+                        add_plot = TRUE, col = "red")
 ####### Countable discrete support:
 list.comp <- list(f1 = 'pois', g1 = 'pois',
                   f2 = 'pois', g2 = 'pois')
@@ -84,7 +86,7 @@ res2 <- decontamin_density_unknownComp(sample1 = sample2[['mixt.data']],
 plot_decontamin_density(x_val = seq(from=0, to=15, by=1), decontamin_obj = res1,
                         add_plot = FALSE)
 plot_decontamin_density(x_val = seq(from=0, to=15, by=1), decontamin_obj = res2,
-                        add_plot = TRUE)
+                        add_plot = TRUE, col = "red")
 ####### Finite discrete support:
 list.comp <- list(f1 = 'multinom', g1 = 'multinom',
                   f2 = 'multinom', g2 = 'multinom')
@@ -112,7 +114,7 @@ res2 <- decontamin_density_unknownComp(sample1 = sample2[['mixt.data']],
 plot_decontamin_density(x_val = seq(from=0, to=6, by=1), decontamin_obj = res1,
                         add_plot = FALSE)
 plot_decontamin_density(x_val = seq(from=0, to=6, by=1), decontamin_obj = res2,
-                        add_plot = TRUE)
+                        add_plot = TRUE, col = "red")
 
 }
 \author{

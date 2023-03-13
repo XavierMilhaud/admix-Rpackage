@@ -9,6 +9,7 @@ admix_clustering(
   n_sim_tab = 100,
   comp.dist = NULL,
   comp.param = NULL,
+  conf.level = 0.95,
   parallel = FALSE,
   n_cpu = 2
 )
@@ -30,12 +31,14 @@ If there are unknown elements, they must be specified as 'NULL' objects. For ins
 be specified as follows (with K = 3):
 list(f1 = NULL, g1 = list(mean=0,sd=1), f2 = NULL, g2 = list(mean=3,sd=1.1), f3 = NULL, g3 = list(mean=-2,sd=0.6)).}
 
+\item{conf.level}{The confidence level of the K-sample test used in the clustering procedure.}
+
 \item{parallel}{(default to FALSE) Boolean to indicate whether parallel computations are performed (speed-up the tabulation).}
 
 \item{n_cpu}{(default to 2) Number of cores used when parallelizing.}
 }
 \value{
-A list with three elements: 1) the identified clusters; 2) the cluster affiliation; 3) the discrepancy matrix.
+A list with three elements: 1) the number of identified clusters; 2) the cluster affiliation; 3) the discrepancy matrix.
 }
 \description{
 Create clusters on the unknown components related to the K populations following admixture models. Based on the K-sample test
@@ -73,8 +76,9 @@ list.param <- list(f1 = NULL, g1 = list(rate = 1/3.5),
                    f3 = NULL, g3 = list(shape = 12, rate = 2),
                    f4 = NULL, g4 = list(rate = 1/7))
 clusters <- admix_clustering(samples = list(A.sim,B.sim,C.sim,D.sim), n_sim_tab = 8,
-                             comp.dist=list.comp, comp.param=list.param, parallel=FALSE, n_cpu=2)
-clusters$clustering
+                             comp.dist=list.comp, comp.param=list.param, conf.level = 0.95,
+                             parallel=FALSE, n_cpu=2)
+clusters
 }
 
 }

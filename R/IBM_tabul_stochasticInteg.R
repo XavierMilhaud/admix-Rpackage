@@ -151,8 +151,16 @@ IBM_tabul_stochasticInteg <- function(n.sim = 200, n.varCovMat = 100, sample1 = 
     }
 
   ## Estimate the variance-covariance functions from the empirical processes:
-  cov_mat_L1 <- estimVarCov_empProcess_Rcpp(t = t_seq, obs_data = sample1)
-  cov_mat_L2 <- estimVarCov_empProcess_Rcpp(t = t_seq, obs_data = sample2)
+  cov_mat_L1 <- sapply(t_seq, function(s1) {
+                     sapply(t_seq, function(s2) {
+                       estimVarCov_empProcess(x = s1, y = s2, obs.data = sample1) })
+                     })
+  #cov_mat_L1 <- estimVarCov_empProcess_Rcpp(t = t_seq, obs_data = sample1)
+  cov_mat_L2 <- sapply(t_seq, function(s1) {
+                    sapply(t_seq, function(s2) {
+                      estimVarCov_empProcess(x = s1, y = s2, obs.data = sample2) })
+  })
+  #cov_mat_L2 <- estimVarCov_empProcess_Rcpp(t = t_seq, obs_data = sample2)
 
   ##------- Differentiates the cases where G1 = G2 or not --------##
   G1equalG2 <- is_equal_knownComp(comp.dist, comp.param)

@@ -26,7 +26,7 @@
 
 PatraSen_density_est <- function(input, dec.density = TRUE)
 {
-	if (class(input) == "cv.mixmodel" || class(input) == "mixmodel") {
+	if (inherits(input, "cv.mixmodel") || inherits(input, "mixmodel")) {
 		Fs.hat <- input$Fs.hat
 	} else {
 		stop("This function only works on objects of class 'cv.mixmodel' or 'mixmodel'. See functions 'est.mix.model' or 'cv.mixmodel'.")

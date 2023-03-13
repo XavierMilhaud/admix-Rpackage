@@ -86,6 +86,7 @@
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
+#decontamin_density_unknownComp <- function(sample1, comp.dist, comp.param, estim.p, n.points = 100)
 decontamin_density_unknownComp <- function(sample1, comp.dist, comp.param, estim.p)
 {
   stopifnot( (length(comp.dist) == 2) & (length(comp.param) == 2) )
@@ -135,6 +136,7 @@ decontamin_density_unknownComp <- function(sample1, comp.dist, comp.param, estim
   }
 
   f1_decontamin <- function(x) (1/estim.p) * (l1_emp(x) - (1-estim.p) * g1(x))
+  #f1_decontamin_val <- f1_decontamin(seq(from = min(sample1), to = max(sample1), length.out = n.points))
 
   return( list(decontamin_f = f1_decontamin, supp = support) )
 }

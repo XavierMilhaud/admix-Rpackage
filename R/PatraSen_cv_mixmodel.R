@@ -119,7 +119,7 @@ plot.cv.mixmodel <- function(x,...)
 
 cv.score <- function(tr.data, test.data, c.n)
 {
-	if(class(tr.data) != "dist.fun") stop("'tr.data' is of the wrong type.")
+	if(!inherits(tr.data, "dist.fun")) stop("'tr.data' is of the wrong type.")
 
 	alp.hat <- sum(tr.data$distance>c.n/sqrt(tr.data$n))/tr.data$gridsize
 	if (alp.hat > 0) {

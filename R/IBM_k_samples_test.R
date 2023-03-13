@@ -22,6 +22,7 @@
 #'                   If there are unknown elements, they must be specified as 'NULL' objects. For instance, 'comp.param' could
 #'                   be specified as follows (with K = 3):
 #'                   list(f1 = NULL, g1 = list(mean=0,sd=1), f2 = NULL, g2 = list(mean=3,sd=1.1), f3 = NULL, g3 = list(mean=-2,sd=0.6)).
+#' @param conf.level The confidence level of the K-sample test.
 #' @param parallel (default to FALSE) Boolean indicating whether parallel computations are performed.
 #' @param n_cpu (default to 2) Number of cores used when parallelizing.
 #'
@@ -81,14 +82,15 @@
 #'                    f2 = NULL, g2 = list(mean = 4, sd = 1.1),
 #'                    f3 = NULL, g3 = list(mean = 3, sd = 0.8))
 #' IBM_k_samples_test(samples = list(sim1,sim2,sim3), sim_U= NULL, n_sim_tab = 20, min_size = NULL,
-#'                    comp.dist = list.comp, comp.param = list.param, parallel = TRUE, n_cpu = 2)
+#'                    comp.dist = list.comp, comp.param = list.param, conf.level = 0.95,
+#'                    parallel = TRUE, n_cpu = 2)
 #' }
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
 IBM_k_samples_test <- function(samples = NULL, sim_U = NULL, n_sim_tab = 100, min_size = NULL, comp.dist = NULL,
-                               comp.param = NULL, parallel = FALSE, n_cpu = 2)
+                               comp.param = NULL, conf.level = 0.95, parallel = FALSE, n_cpu = 2)
 {
   ## Control whether parallel computations were asked for or not:
   if (parallel) {
@@ -286,7 +288,7 @@ IBM_k_samples_test <- function(samples = NULL, sim_U = NULL, n_sim_tab = 100, mi
                  penalized_stat = NA, ordered_contrasts = NA, quantiles = NA, stat_terms = NA,
                  contr_mat = contrast.matrix) )
   } else {
-    q_H <- stats::quantile(sim_U, 0.95)
+    q_H <- stats::quantile(sim_U, conf.level)
   }
 
   ##--------- Perform the hypothesis testing -----------##
@@ -310,7 +312,7 @@ IBM_k_samples_test <- function(samples = NULL, sim_U = NULL, n_sim_tab = 100, mi
   CDF_U <- stats::ecdf(sim_U)
   p_value <- 1 - CDF_U(finalStat_value)
 
-  return( list(rejection_rule = final_test, p_val = p_value, stat_name = finalStat_name, stat_value = finalStat_value,
-               stat_rank = selected.index, penalized_stat = penalized.stats, penalty_H0 = penalty_rule,
+  return( list(confidence_level = conf.level, rejection_rule = final_test, p_val = p_value, stat_name = finalStat_name,
+               stat_value = finalStat_value, stat_rank = selected.index, penalized_stat = penalized.stats, penalty_H0 = penalty_rule,
                ordered_contrasts = sorted_contrasts, quantiles = unique(q_H), stat_terms = stat.terms_final, contr_mat = contrast.matrix) )
 }

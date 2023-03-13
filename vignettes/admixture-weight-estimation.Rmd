@@ -163,7 +163,7 @@ res2 <- decontamin_density_unknownComp(sample1 = sample2[['mixt.data']],
                                        comp.dist = list.comp[3:4], comp.param = list.param[3:4],
                                        estim.p = estimate$prop.estim[2])
 plot_decontamin_density(x_val = seq(from=-1,to=6,length.out=40), decontamin_obj = res1, add_plot = FALSE)
-plot_decontamin_density(x_val = seq(from=-1,to=6,length.out=40), decontamin_obj = res2, add_plot = TRUE)
+plot_decontamin_density(x_val = seq(from=-1,to=6,length.out=40), decontamin_obj = res2, add_plot = TRUE, col = "red")
 ```
 
 # References

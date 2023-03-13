@@ -9,6 +9,7 @@
 #'                       the corresponding Y-axis values, and the support over which to plot the results.
 #' @param add_plot (default to FALSE) A boolean specifying if one plots the decontaminated density over an existing plot. Used for visual
 #'                 comparison purpose.
+#' @param ... Other classical arguments of functions plot (continous support) and barplot (discrete support).
 #'
 #' @details The decontaminated density is obtained by inverting the admixture density, given by l = p*f + (1-p)*g, to isolate the
 #'          unknown component f after having estimated p.
@@ -44,7 +45,7 @@
 #' plot_decontamin_density(x_val = seq(from=0, to=6, length.out=100), decontamin_obj = res1,
 #'                         add_plot = FALSE)
 #' plot_decontamin_density(x_val = seq(from=0, to=6, length.out=100), decontamin_obj = res2,
-#'                         add_plot = TRUE)
+#'                         add_plot = TRUE, col = "red")
 #' ####### Countable discrete support:
 #' list.comp <- list(f1 = 'pois', g1 = 'pois',
 #'                   f2 = 'pois', g2 = 'pois')
@@ -72,7 +73,7 @@
 #' plot_decontamin_density(x_val = seq(from=0, to=15, by=1), decontamin_obj = res1,
 #'                         add_plot = FALSE)
 #' plot_decontamin_density(x_val = seq(from=0, to=15, by=1), decontamin_obj = res2,
-#'                         add_plot = TRUE)
+#'                         add_plot = TRUE, col = "red")
 #' ####### Finite discrete support:
 #' list.comp <- list(f1 = 'multinom', g1 = 'multinom',
 #'                   f2 = 'multinom', g2 = 'multinom')
@@ -100,12 +101,12 @@
 #' plot_decontamin_density(x_val = seq(from=0, to=6, by=1), decontamin_obj = res1,
 #'                         add_plot = FALSE)
 #' plot_decontamin_density(x_val = seq(from=0, to=6, by=1), decontamin_obj = res2,
-#'                         add_plot = TRUE)
+#'                         add_plot = TRUE, col = "red")
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-plot_decontamin_density <- function(x_val, decontamin_obj, add_plot = FALSE)
+plot_decontamin_density <- function(x_val, decontamin_obj, add_plot = FALSE, ...)
 {
   support <- decontamin_obj$supp
   decontamin_dens_values <- decontamin_obj$decontamin_f(x_val)
@@ -117,22 +118,28 @@ plot_decontamin_density <- function(x_val, decontamin_obj, add_plot = FALSE)
   if (!add_plot) {
     if (support == "discrete") {
       graphics::barplot(height = decontamin_dens_values, names = as.character(x_val),
-                        xlim = x.range, ylim = y.range, col = "grey")
+                        xlim = x.range, ylim = y.range, col = "grey", ...)
     } else {
-      plot(x = x_val, y = decontamin_dens_values, xlim = x.range, ylim = y.range, type = "l")
+      plot(x = x_val, y = decontamin_dens_values, xlim = x.range, ylim = y.range, type = "l", ...)
     }
 
   } else {
 
-    old_par <- graphics::par()$new
+    old_par_new <- graphics::par()$new
+    #old_par_axis <- graphics::par()$usr
     graphics::par(new = TRUE)
+#    graphics::par(usr = c(old_par_axis[-4],y.range[2]))
+#    current_col <- par()$col
     if (support == "discrete") {
       graphics::barplot(height = decontamin_dens_values, names = as.character(x_val),
-                        add = TRUE, col = "blue")
+                        add = TRUE, ...)
+#      graphics::barplot(height = decontamin_dens_values, names = as.character(x_val),
+#                        add = TRUE, col = colors()[sample((1:length(colors()))[-which(current_col == colors())], 1)])
     } else {
-      graphics::lines(x = x_val, y = decontamin_dens_values, col = "blue")
+      graphics::lines(x = x_val, y = decontamin_dens_values, ...)
+#      graphics::lines(x = x_val, y = decontamin_dens_values, col = colors()[sample((1:length(colors()))[-which(current_col == colors())], 1)])
     }
-    on.exit(graphics::par(old_par))
+    on.exit(graphics::par(new = old_par_new))
   }
 
 }

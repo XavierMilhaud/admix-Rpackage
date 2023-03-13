@@ -15,12 +15,13 @@
 #'                   If there are unknown elements, they must be specified as 'NULL' objects. For instance, 'comp.param' could
 #'                   be specified as follows (with K = 3):
 #'                   list(f1 = NULL, g1 = list(mean=0,sd=1), f2 = NULL, g2 = list(mean=3,sd=1.1), f3 = NULL, g3 = list(mean=-2,sd=0.6)).
+#' @param conf.level The confidence level of the K-sample test used in the clustering procedure.
 #' @param parallel (default to FALSE) Boolean to indicate whether parallel computations are performed (speed-up the tabulation).
 #' @param n_cpu (default to 2) Number of cores used when parallelizing.
 #'
 #' @details See the paper at the following HAL weblink: https://hal.archives-ouvertes.fr/hal-03201760
 #'
-#' @return A list with three elements: 1) the identified clusters; 2) the cluster affiliation; 3) the discrepancy matrix.
+#' @return A list with three elements: 1) the number of identified clusters; 2) the cluster affiliation; 3) the discrepancy matrix.
 #'
 #' @examples
 #' \donttest{
@@ -51,14 +52,15 @@
 #'                    f3 = NULL, g3 = list(shape = 12, rate = 2),
 #'                    f4 = NULL, g4 = list(rate = 1/7))
 #' clusters <- admix_clustering(samples = list(A.sim,B.sim,C.sim,D.sim), n_sim_tab = 8,
-#'                              comp.dist=list.comp, comp.param=list.param, parallel=FALSE, n_cpu=2)
-#' clusters$clustering
+#'                              comp.dist=list.comp, comp.param=list.param, conf.level = 0.95,
+#'                              parallel=FALSE, n_cpu=2)
+#' clusters
 #' }
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, comp.param = NULL, parallel = FALSE, n_cpu = 2)
+admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, comp.param = NULL, conf.level = 0.95, parallel = FALSE, n_cpu = 2)
 {
   ## Control whether parallel computations were asked for or not:
   if (parallel) {
@@ -87,8 +89,6 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
   for (i in 1:(length(samples)-1)) { for (j in (i+1):length(samples)) { couples.list <- rbind(couples.list,c(i,j)) } }
 
   couples.expr <- couples.param <- vector(mode = "list", length = nrow(couples.list))
-  #q_H <- numeric(length = nrow(couples.list))
-  #for (k in 1:nrow(couples.list)) {
   empirical.contr <-
   foreach::foreach (k = 1:nrow(couples.list), .inorder = TRUE, .errorhandling = 'pass', .export = ls(globalenv())) %fun% {
     couples.expr[[k]] <- comp.dist[c(model.list[[couples.list[k, ][1]]], model.list[[couples.list[k, ][2]]])]
@@ -101,9 +101,7 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
       XY <- IBM_estimProp(sample1 = samples[[couples.list[k, ][1]]], sample2 = samples[[couples.list[k, ][2]]], known.prop = NULL,
                           comp.dist = couples.expr[[k]], comp.param = couples.param[[k]], with.correction = FALSE, n.integ = 1000)
     }
-#    empirical.contr[k] <- minimal_size * IBM_empirical_contrast(XY[["prop.estim"]], fixed.p.X = XY[["p.X.fixed"]], sample1 = samples[[couples.list[k, ][1]]],
-#                                                                sample2 = samples[[couples.list[k, ][2]]], G = XY[["integ.supp"]],
-#                                                                comp.dist = couples.expr[[k]], comp.param = couples.param[[k]])
+
     minimal_size * IBM_empirical_contrast(XY[["prop.estim"]], fixed.p.X = XY[["p.X.fixed"]], sample1 = samples[[couples.list[k, ][1]]],
                                           sample2 = samples[[couples.list[k, ][2]]], G = XY[["integ.supp"]],
                                           comp.dist = couples.expr[[k]], comp.param = couples.param[[k]])
@@ -116,17 +114,27 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
   }
 
   ## Give a simple and useful representation of results for each couple:
-  contrast.matrix <- discrepancy.id <- discrepancy.rank <- matrix(NA, nrow = length(model.list), ncol = length(model.list))
+  H0.test <- contrast.matrix <- discrepancy.id <- discrepancy.rank <- matrix(NA, nrow = length(model.list), ncol = length(model.list))
+  ## Store results of pairwise tests for equality between unknown components (fasten the future research of potential clusters):
   couples.expr <- couples.param <- vector(mode = "list", length = nrow(couples.list))
+  weights.list <- matrix(data = NA, nrow = nrow(couples.list), ncol = 2)
+#  tabulated_dist <-  <- vector(mode = "list", length = nrow(couples.list))
   for (k in 1:nrow(couples.list)) {
     couples.expr[[k]] <- comp.dist[c(model.list[[couples.list[k, ][1]]], model.list[[couples.list[k, ][2]]])]
     couples.param[[k]] <- comp.param[c(model.list[[couples.list[k, ][1]]], model.list[[couples.list[k, ][2]]])]
     names(couples.expr[[k]]) <- names(couples.param[[k]]) <- c("f1","g1","f2","g2")
-#    contrast.matrix[couples.list[k, ][1], couples.list[k, ][2]] <- empirical.contr[k]
     contrast.matrix[couples.list[k, ][1], couples.list[k, ][2]] <- empirical.contr[[k]]
     discrepancy.id[couples.list[k, ][1], couples.list[k, ][2]] <- paste(couples.list[k, ][1], couples.list[k, ][2], sep = "-")
-#    discrepancy.rank[couples.list[k, ][1], couples.list[k, ][2]] <- rank(empirical.contr)[k]
     discrepancy.rank[couples.list[k, ][1], couples.list[k, ][2]] <- rank(unlist(empirical.contr))[k]
+    ## Pairwise testing: test H0 between the two considered populations.
+    pairwise_H0test <- NULL
+    pairwise_H0test <- IBM_test_H0(sample1 = samples[[couples.list[k, ][1]]], sample2 = samples[[couples.list[k, ][2]]],
+                                   known.p = NULL, comp.dist = couples.expr[[k]], comp.param = couples.param[[k]],
+                                   sim_U = NULL, n_sim_tab = 20, min_size = NULL, conf.level = conf.level,
+                                   parallel = parallel, n_cpu = n_cpu)
+    weights.list[k, ] <- pairwise_H0test[["weights"]]
+    H0.test[couples.list[k, ][1], couples.list[k, ][2]] <- pairwise_H0test$decision
+#    tabulated_dist[[k]] <- pairwise_H0test$tabulated_dist
   }
 
   ## Start algorithm to create the clusters :
@@ -139,8 +147,9 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
                                  min_size = minimal_size, comp.dist = couples.expr[[which((couples.list[ ,1] == which_row) & (couples.list[ ,2] == which_col))]],
                                  comp.param = couples.param[[which((couples.list[ ,1] == which_row) & (couples.list[ ,2] == which_col))]],
                                  parallel = parallel, n_cpu = n_cpu)
-  q_H <- stats::quantile(U[["U_sim"]], 0.95)
+  q_H <- stats::quantile(U[["U_sim"]], conf.level)
   test.H0 <- contrast.matrix[which_row, which_col] > q_H
+#  test.H0 <- H0.test[which_row,which_col]
 
   if (!test.H0) {
     clusters[[1]] <- alreadyGrouped_samples <- as.character(c(which_row, which_col))
@@ -181,16 +190,35 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
                 comp.dist = couples.expr[[which((couples.list[ ,1] == as.numeric(first_sample)) & (couples.list[ ,2] == as.numeric(second_sample)))]],
                 comp.param = couples.param[[which((couples.list[ ,1] == as.numeric(first_sample)) & (couples.list[ ,2] == as.numeric(second_sample)))]],
                 parallel = parallel, n_cpu = n_cpu)
-        q_H <- stats::quantile(U[["U_sim"]], 0.95)
+        q_H <- stats::quantile(U[["U_sim"]], conf.level)
       }
       if (any(indexesSamples_to_consider_new != indexesSamples_to_consider)) {
-        ## K-sample test :
-        comp_indices <- sort( c(2*indexesSamples_to_consider_new-1, 2*indexesSamples_to_consider_new) )
-        k_sample_test <- IBM_k_samples_test(samples = samples[indexesSamples_to_consider_new], sim_U = U[["U_sim"]],
-                                            n_sim_tab = n_sim_tab, min_size = minimal_size, comp.dist = comp.dist[comp_indices],
-                                            comp.param = comp.param[comp_indices], parallel = parallel, n_cpu = n_cpu)
+        ## First check whether the new population could eventually be affected to the existing cluster by looking at results from pairwise equality tests:
+        which_to_test <- indexesSamples_to_consider_new[indexesSamples_to_consider_new %in% as.numeric(clusters[[length(clusters)]]) == FALSE]
+        #couples_to_test <- apply(apply(X = expand.grid(list(clusters[[length(clusters)]], which_to_test)), 1, as.numeric), 1, sort)
+        couples_to_test <- apply(X = t(expand.grid(list(as.numeric(clusters[[length(clusters)]]), which_to_test))), 1, sort)
+        if (!is.matrix(couples_to_test)) {
+          ## case of only one pair of two populations:
+          couples_to_test <- sort(couples_to_test)
+          if (H0.test[couples_to_test[1],couples_to_test[2]] == TRUE) { k_sample_decision <- TRUE
+          } else { k_sample_decision <- FALSE }
+        } else {
+          couples_to_test <- t(apply(X = couples_to_test, 1, sort))
+          ## Case of list of two populations:
+          if (all(H0.test[couples_to_test]) == TRUE) {
+            k_sample_decision <- TRUE
+          } else {
+            ## K-sample test :
+            comp_indices <- sort( c(2*indexesSamples_to_consider_new-1, 2*indexesSamples_to_consider_new) )
+            k_sample_test <- IBM_k_samples_test(samples = samples[indexesSamples_to_consider_new], sim_U = U[["U_sim"]],
+                                                n_sim_tab = n_sim_tab, min_size = minimal_size, comp.dist = comp.dist[comp_indices],
+                                                comp.param = comp.param[comp_indices], conf.level = conf.level,
+                                                parallel = parallel, n_cpu = n_cpu)
+            k_sample_decision <- k_sample_test$rejection_rule
+          }
+        }
       }
-      if (!k_sample_test$rejection_rule) {
+      if (!k_sample_decision) {
         alreadyGrouped_samples <- unique(c(alreadyGrouped_samples, first_sample, second_sample))
         clusters[[length(clusters)]] <- unique(append(clusters[[length(clusters)]], c(first_sample, second_sample) ))
         which_row <- which_col <- as.numeric(clusters[[length(clusters)]])
@@ -211,7 +239,7 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
 
   } # End of While
 
-  ## Define function that copies upper triangle to lower triangle to make the lmatrix become symmetric:
+  ## Define function that copies upper triangle to lower triangle to make the matrix become symmetric:
   f <- function(mat) {
     mat[lower.tri(mat)] <- t(mat)[lower.tri(mat)]
     mat
@@ -226,5 +254,18 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
   clusters_affiliation <- clusters_affiliation[ ,order(clusters_affiliation[1, ])]
   rownames(clusters_affiliation) <- c("Id_sample","Id_cluster")
 
-  return( list(n_clust = n_clust_final, clusters = clusters_affiliation, discrepancy_matrix = symmetric_dist_mat) )
+  clusters_components <- clusters_weights <- clusters_couples <- vector(mode = "list", length = n_clust_final)
+  for (k in 1:n_clust_final) { clusters_components[[k]] <- which(clusters_affiliation["Id_cluster", ] == k) }
+  order_clust <- order(sapply(X = clusters_components, FUN = min))
+  for (l in 1:n_clust_final) {
+    res <- vector(mode = "numeric", length = nrow(couples.list))
+    for (m in 1:nrow(couples.list)) {
+      res[m] <- all(couples.list[m, ] %in% clusters_components[[order_clust[l]]]) == TRUE
+    }
+    clusters_couples[[order_clust[l]]] <- couples.list[which(res == TRUE), ]
+    clusters_weights[[order_clust[l]]] <- weights.list[which(res == TRUE), ]
+  }
+
+  return( list(confidence_level = conf.level, n_clust = n_clust_final, clusters = clusters_affiliation, discrepancy_matrix = symmetric_dist_mat,
+               clust_pop = clusters_components, clust_couples = clusters_couples, clust_weights = clusters_weights) )
 }

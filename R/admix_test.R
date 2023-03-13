@@ -31,6 +31,7 @@
 #'                   list(f1 = NULL, g1 = list(mean=0,sd=1), f2 = NULL, g2 = list(mean=3,sd=1.1), f3 = NULL, g3 = list(mean=-2,sd=0.6)).
 #' @param support (Potentially used with 'Poly' testing method, otherwise useless) The support of the observations; one of "Real",
 #'                 "Integer", "Positive", or "Bounded.continuous".
+#' @param conf.level The confidence level of the K-sample test used in the clustering procedure.
 #' @param parallel (default to FALSE) Boolean indicating whether parallel computations are performed (speed-up the tabulation).
 #' @param n_cpu (default to 2) Number of cores used when parallelizing.
 #'
@@ -60,7 +61,7 @@
 
 admix_test <- function(samples = NULL, sym.f = FALSE, test.method = c("Poly","ICV"), sim_U = NULL, n_sim_tab = 50,
                        min_size = NULL, comp.dist = NULL, comp.param = NULL, support = c("Real","Integer","Positive","Bounded.continuous"),
-                       parallel = FALSE, n_cpu = 4)
+                       conf.level = 0.95, parallel = FALSE, n_cpu = 4)
 {
   stopifnot( length(comp.dist) == (2*length(samples)) )
   if ( any(sapply(comp.dist, is.null)) | any(sapply(comp.param, is.null)) ) {
@@ -82,12 +83,12 @@ admix_test <- function(samples = NULL, sym.f = FALSE, test.method = c("Poly","IC
     if (n_samples == 2) {
       U <- IBM_tabul_stochasticInteg(n.sim = n_sim_tab, n.varCovMat = 100, sample1 = samples[[1]], sample2 = samples[[2]], min_size = NULL,
                                      comp.dist = comp.dist, comp.param = comp.param, parallel = parallel, n_cpu = n_cpu)
-      test_res <- IBM_test_H0(sample1 = samples[[1]], sample2 = samples[[2]], known.p = NULL, comp.dist = comp.dist,
-                              comp.param = comp.param, sim_U = U[["U_sim"]], min_size=NULL, parallel=parallel, n_cpu=n_cpu)
+      test_res <- IBM_test_H0(sample1 = samples[[1]], sample2 = samples[[2]], known.p = NULL, comp.dist = comp.dist, comp.param = comp.param,
+                              sim_U = U[["U_sim"]], min_size=NULL, conf.level = conf.level, parallel = parallel, n_cpu = n_cpu)
     } else if (n_samples > 2) {
       test_res <- IBM_k_samples_test(samples = samples, sim_U = NULL, n_sim_tab = n_sim_tab,
                                      min_size = NULL, comp.dist = comp.dist, comp.param = comp.param,
-                                     parallel = parallel, n_cpu = n_cpu)
+                                     conf.level = conf.level, parallel = parallel, n_cpu = n_cpu)
     } else stop("Incorrect number of samples under study!")
 
   } else if (meth == "Poly") {

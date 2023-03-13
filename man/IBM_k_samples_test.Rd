@@ -11,6 +11,7 @@ IBM_k_samples_test(
   min_size = NULL,
   comp.dist = NULL,
   comp.param = NULL,
+  conf.level = 0.95,
   parallel = FALSE,
   n_cpu = 2
 )
@@ -36,6 +37,8 @@ Elements, grouped by 2, refer to the parameters of unknown and known components 
 If there are unknown elements, they must be specified as 'NULL' objects. For instance, 'comp.param' could
 be specified as follows (with K = 3):
 list(f1 = NULL, g1 = list(mean=0,sd=1), f2 = NULL, g2 = list(mean=3,sd=1.1), f3 = NULL, g3 = list(mean=-2,sd=0.6)).}
+
+\item{conf.level}{The confidence level of the K-sample test.}
 
 \item{parallel}{(default to FALSE) Boolean indicating whether parallel computations are performed.}
 
@@ -107,7 +110,8 @@ list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
                    f2 = NULL, g2 = list(mean = 4, sd = 1.1),
                    f3 = NULL, g3 = list(mean = 3, sd = 0.8))
 IBM_k_samples_test(samples = list(sim1,sim2,sim3), sim_U= NULL, n_sim_tab = 20, min_size = NULL,
-                   comp.dist = list.comp, comp.param = list.param, parallel = TRUE, n_cpu = 2)
+                   comp.dist = list.comp, comp.param = list.param, conf.level = 0.95,
+                   parallel = TRUE, n_cpu = 2)
 }
 
 }

@@ -58,7 +58,8 @@
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-IBM_estimProp <- function(sample1, sample2, known.prop = NULL, comp.dist = NULL, comp.param = NULL, with.correction = TRUE, n.integ = 1000)
+IBM_estimProp <- function(sample1, sample2, known.prop = NULL, comp.dist = NULL, comp.param = NULL,
+                          with.correction = TRUE, n.integ = 1000)
 {
   ##------- Differentiates the cases where G1 = G2 or not --------##
   G1equalG2 <- is_equal_knownComp(comp.dist, comp.param)
@@ -68,8 +69,23 @@ IBM_estimProp <- function(sample1, sample2, known.prop = NULL, comp.dist = NULL,
   ## Ideally, this distribution should put more weight to locations where differences between F1 and F2 are expected.
   support <- detect_support_type(sample1, sample2)
   if (support == "continuous") {
-    fit.allObs <- stats::density(c(sample1, sample2))
-    G <- stats::rnorm(n.integ, sample(c(sample1, sample2), size = n.integ, replace = TRUE), fit.allObs$bw)
+#    if (contrast.weighting.scheme == "uniform") {
+      G <- stats::runif(n.integ, min = min(c(sample1, sample2)), max = max(c(sample1, sample2)))
+#    } else if (contrast.weighting.scheme == "empirical") {
+#      fit.allObs <- stats::density(c(sample1, sample2))
+#      G <- stats::rnorm(n.integ, sample(c(sample1, sample2), size = n.integ, replace = TRUE), fit.allObs$bw)
+#    } else if (contrast.weighting.scheme == "unknown.comp")  {
+##      warning("Implemented only under H0 (F1=F2), with centered gaussian unknown distrib")
+#      G <- rnorm(n.integ, mean = 0, sd = 1)
+#    } else if (contrast.weighting.scheme == "instrumental") { # Instrumental parametric disitribution
+#      stopifnot(!is.null(param.instru))
+#      G <- rnorm(n.integ, mean = param.instru[1], sd = param.instru[2])
+#    } else {
+#      a.quantile <- qnorm(p = 0.025, mean = 0, sd = 1)
+#      b.quantile <- qnorm(p = 0.975, mean = 0, sd = 1)
+#      G <- stats::runif(n.integ, min = a.quantile, max = b.quantile)
+#    }
+
   } else {
     G <- unique(sort(c(unique(sample1), unique(sample2))))
   }
