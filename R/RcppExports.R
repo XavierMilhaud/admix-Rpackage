@@ -2,10 +2,10 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 Donsker_correl_cpp <- function(u, v, sorted_obs_data) {
-    .Call('_admix_Donsker_correl_cpp', PACKAGE = 'admix', u, v, sorted_obs_data)
+    .Call(`_admix_Donsker_correl_cpp`, u, v, sorted_obs_data)
 }
 
 estimVarCov_empProcess_Rcpp <- function(t, obs_data) {
-    .Call('_admix_estimVarCov_empProcess_Rcpp', PACKAGE = 'admix', t, obs_data)
+    .Call(`_admix_estimVarCov_empProcess_Rcpp`, t, obs_data)
 }
 
