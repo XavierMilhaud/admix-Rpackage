@@ -10,6 +10,7 @@ gaussianity_test(
   comp.param,
   K = 3,
   lambda = 0.2,
+  conf.level = 0.95,
   support = c("Real", "Integer", "Positive", "Bounded.continuous")
 )
 }
@@ -27,6 +28,8 @@ Unknown elements must be specified as 'NULL' objects (e.g. if 'f' is unknown: li
 
 \item{lambda}{Rate at which the normalization factor is set in the penalization rule for model selection (in ]0,1/2[). See 'Details' below.}
 
+\item{conf.level}{The confidence level, default to 95 percent. Equals 1-alpha, where alpha is the level of the test (type-I error).}
+
 \item{support}{Support of the densities under consideration, useful to choose the polynomial orthonormal basis. One of 'Real',
 'Integer', 'Positive', or 'Bounded.continuous'.}
 }
@@ -37,7 +40,7 @@ variance-covariance matrix of the test statistic; 5) the selected rank for testi
 }
 \description{
 Perform the hypothesis test to know whether the unknown mixture component is gaussian or not, knowing that the known one
-has support on the real line (R). However, the case of non-gaussian known component can be overcome thanks to the basic
+has support on the real line (R). The case of non-gaussian known component can be overcome thanks to the basic
 transformation by cdf. Recall that an admixture model has probability density function (pdf) l = p*f + (1-p)*g, where g is
 the known pdf and l is observed (others are unknown). Requires optimization (to estimate the unknown parameters) as defined
 by Bordes & Vandekerkhove (2010), which means that the unknown mixture component must have a symmetric density.
@@ -59,7 +62,7 @@ plot(density(obs.data))
 list.comp <- list(f = NULL, g = "norm")
 list.param <- list(f = NULL, g = c(mean = 0, sd = 1))
 gaussianity_test(sample1 = obs.data, comp.dist = list.comp, comp.param = list.param,
-                       K = 3, lambda = 0.1, support = 'Real')
+                 K = 3, lambda = 0.1, conf.level = 0.95, support = 'Real')
 
 }
 \author{

@@ -5,8 +5,7 @@
 \title{Equality test of unknown component distributions in two admixture models with IBM approach}
 \usage{
 IBM_test_H0(
-  sample1,
-  sample2,
+  samples,
   known.p = NULL,
   comp.dist = NULL,
   comp.param = NULL,
@@ -19,9 +18,8 @@ IBM_test_H0(
 )
 }
 \arguments{
-\item{sample1}{Observations of the first sample under study.}
-
-\item{sample2}{Observations of the second sample under study.}
+\item{samples}{A list of the two observed samples, where each sample follows the mixture distribution given by l = p*f + (1-p)*g,
+with f and p unknown and g known.}
 
 \item{known.p}{(default to NULL) Numeric vector with two elements, the known (true) mixture weights.}
 
@@ -78,7 +76,7 @@ list.comp <- list(f1 = NULL, g1 = "norm",
                   f2 = NULL, g2 = "norm")
 list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
                    f2 = NULL, g2 = list(mean = 3, sd = 1.2))
-IBM_test_H0(sample1=X.sim,sample2=Y.sim,known.p=NULL, comp.dist=list.comp,comp.param=list.param,
+IBM_test_H0(samples=list(X.sim,Y.sim), known.p=NULL, comp.dist=list.comp,comp.param=list.param,
             sim_U=NULL, n_sim_tab=6, min_size=NULL, conf.level = 0.95, parallel=FALSE, n_cpu=2)
 
 ####### Under the alternative H1 :
@@ -95,7 +93,7 @@ list.comp <- list(f1 = NULL, g1 = "norm",
                   f2 = NULL, g2 = "norm")
 list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
                    f2 = NULL, g2 = list(mean = 3, sd = 1.2))
-IBM_test_H0(sample1=X.sim,sample2=Y.sim,known.p=NULL, comp.dist=list.comp,comp.param=list.param,
+IBM_test_H0(samples=list(X.sim,Y.sim), known.p=NULL, comp.dist=list.comp,comp.param=list.param,
             sim_U=NULL, n_sim_tab=6, min_size=NULL, conf.level = 0.95, parallel=FALSE, n_cpu=2)
 }
 

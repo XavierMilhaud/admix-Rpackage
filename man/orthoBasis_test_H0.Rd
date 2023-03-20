@@ -5,8 +5,7 @@
 \title{Equality test of unknown components between two admixture models using polynomial basis expansions}
 \usage{
 orthoBasis_test_H0(
-  data.X,
-  data.Y,
+  samples,
   known.p = NULL,
   comp.dist = NULL,
   comp.param = NULL,
@@ -23,9 +22,8 @@ orthoBasis_test_H0(
 )
 }
 \arguments{
-\item{data.X}{First observed sample following mixture distribution given by l1.}
-
-\item{data.Y}{Second observed sample following mixture distribution given by l2.}
+\item{samples}{A list of the two observed samples, where each sample follows the mixture distribution given by l = p*f + (1-p)*g,
+with f and p unknown and g known.}
 
 \item{known.p}{(default to NULL) Numeric vector with two elements, respectively the component weight for the unknown component
 in the first and in the second samples.}
@@ -99,7 +97,7 @@ list.comp <- list(f1 = NULL, g1 = "norm",
                   f2 = NULL, g2 = "norm")
 list.param <- list(f1 = NULL, g1 = c(mean = 4, sd = 1),
                    f2 = NULL, g2 = c(mean = 5, sd = 0.5))
-test <- orthoBasis_test_H0(data.X = sim.X[['mixt.data']], data.Y = sim.Y[['mixt.data']],
+test <- orthoBasis_test_H0(samples = list(sim.X[['mixt.data']], sim.Y[['mixt.data']]),
              known.p=NULL, comp.dist = list.comp, comp.param = list.param, known.coef=NULL, K=3,
              nb.ssEch = 2, s = 0.25, var.explicit=TRUE, nb.echBoot=NULL, support = 'Real',
              bounds.supp = NULL, est.method = 'BVdk', uniformized.knownComp_data = NULL)

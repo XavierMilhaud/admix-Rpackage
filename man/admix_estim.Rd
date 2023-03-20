@@ -25,7 +25,7 @@ previously the test hypothesis between the pairs of samples. For further details
 \item{comp.dist}{A list with 2*K elements corresponding to the component distributions (specified with R native names for these distributions)
 involved in the K admixture models. Elements, grouped by 2, refer to the unknown and known components of each admixture model,
 If there are unknown elements, they must be specified as 'NULL' objects. For instance, 'comp.dist' could be specified
-as follows with K = 3: list(f1 = NULL, g1 = 'norm', f2 = NULL, g2 = 'norm', f3 = NULL, g3 = 'rnorm').}
+as follows with K = 3: list(f1 = NULL, g1 = 'norm', f2 = NULL, g2 = 'norm', f3 = NULL, g3 = 'norm').}
 
 \item{comp.param}{A list with 2*K elements corresponding to the parameters of the component distributions, each element being a list
 itself. The names used in this list must correspond to the native R argument names for these distributions.

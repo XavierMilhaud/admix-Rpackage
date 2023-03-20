@@ -5,8 +5,7 @@
 \title{Two-samples hypothesis test on the unknown component in admixture models}
 \usage{
 two_samples_test(
-  sample1,
-  sample2,
+  samples,
   known.p = NULL,
   comp.dist = NULL,
   comp.param = NULL,
@@ -25,9 +24,8 @@ two_samples_test(
 )
 }
 \arguments{
-\item{sample1}{First observed sample with mixture distribution given by l1 = p1*f1 + (1-p1)*g1, where f1 and p1 are unknown and g1 is known.}
-
-\item{sample2}{Second observed sample with mixture distribution given by l2 = p2*f2 + (1-p2)*g2, where f2 and p2 are unknown and g2 is known.}
+\item{samples}{A list of the two observed samples, where each sample follows the mixture distribution given by l = p*f + (1-p)*g,
+with f and p unknown and g known.}
 
 \item{known.p}{(default to NULL) The true component weights p1 and p2 if known, only useful in simulation studies.}
 
@@ -107,7 +105,7 @@ list.comp <- list(f1 = NULL, g1 = "norm",
 list.param <- list(f1 = NULL, g1 = list(mean = 0, sd = 1),
                    f2 = NULL, g2 = list(mean = 6, sd = 1.2))
 ## Using expansion coefficients in orthonormal polynomial basis:
-two_samples_test(sample1=sample1, sample2=sample2, comp.dist=list.comp, comp.param=list.param,
+two_samples_test(samples = list(sample1, sample2), comp.dist=list.comp, comp.param=list.param,
                  method = 'Poly', K = 3, support = 'Real', est.method = 'BVdk', s = 0.4,
                  nb.ssEch = 2, var.explicit = TRUE)
 }
