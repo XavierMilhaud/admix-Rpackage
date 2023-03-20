@@ -3,8 +3,8 @@
 #' Test hypothesis on the unknown component of admixture models using different estimation techniques, and different
 #' testing strategies.
 #'
-#' @param sample1 First observed sample with mixture distribution given by l1 = p1*f1 + (1-p1)*g1, where f1 and p1 are unknown and g1 is known.
-#' @param sample2 Second observed sample with mixture distribution given by l2 = p2*f2 + (1-p2)*g2, where f2 and p2 are unknown and g2 is known.
+#' @param samples A list of the two observed samples, where each sample follows the mixture distribution given by l = p*f + (1-p)*g,
+#'                with f and p unknown and g known.
 #' @param known.p (default to NULL) The true component weights p1 and p2 if known, only useful in simulation studies.
 #' @param comp.dist A list with four elements corresponding to the component distributions (specified with R native names for these distributions)
 #'                  involved in the two admixture models. The two first elements refer to the unknown and known components of the 1st admixture model,
@@ -63,7 +63,7 @@
 #' list.param <- list(f1 = NULL, g1 = list(mean = 0, sd = 1),
 #'                    f2 = NULL, g2 = list(mean = 6, sd = 1.2))
 #' ## Using expansion coefficients in orthonormal polynomial basis:
-#' two_samples_test(sample1=sample1, sample2=sample2, comp.dist=list.comp, comp.param=list.param,
+#' two_samples_test(samples = list(sample1, sample2), comp.dist=list.comp, comp.param=list.param,
 #'                  method = 'Poly', K = 3, support = 'Real', est.method = 'BVdk', s = 0.4,
 #'                  nb.ssEch = 2, var.explicit = TRUE)
 #' }
@@ -71,22 +71,24 @@
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-two_samples_test <- function(sample1, sample2, known.p = NULL, comp.dist = NULL, comp.param = NULL,
-                            method = c("ICV","Poly"), n_sim_tab = NULL, K = 3, support = c('Real','Positive','Integer','Bounded.continuous'),
-                            est.method = c("BVdk","PS"), s = 0.49, nb.ssEch = 2, var.explicit = F, nb.echBoot = NULL,
-                            bounds.supp = NULL, parallel = FALSE, n_cpu = 2)
+two_samples_test <- function(samples, known.p = NULL, comp.dist = NULL, comp.param = NULL, method = c("ICV","Poly"),
+                             n_sim_tab = NULL, K = 3, support = c('Real','Positive','Integer','Bounded.continuous'),
+                             est.method = c("BVdk","PS"), s = 0.49, nb.ssEch = 2, var.explicit = F, nb.echBoot = NULL,
+                             bounds.supp = NULL, parallel = FALSE, n_cpu = 2)
 {
+  if (length(samples) != 2) stop("Please consider TWO samples in the list of samples.")
+
   meth <- match.arg(method)
 
   if (meth == "ICV") {
-    U <- IBM_tabul_stochasticInteg(n.sim = n_sim_tab, n.varCovMat = 100, sample1 = sample1, sample2 = sample2, min_size = NULL,
+    U <- IBM_tabul_stochasticInteg(n.sim = n_sim_tab, n.varCovMat = 100, sample1 = samples[[1]], sample2 = samples[[2]], min_size = NULL,
                                    comp.dist = comp.dist, comp.param = comp.param, parallel = parallel, n_cpu = n_cpu)
-    test_res <- IBM_test_H0(sample1 = sample1, sample2 = sample2, known.p = known.p, comp.dist = comp.dist,
-                            comp.param = comp.param, sim_U = U[["U_sim"]], min_size = NULL, parallel = parallel, n_cpu = n_cpu)
+    test_res <- IBM_test_H0(samples = samples, known.p = known.p, comp.dist = comp.dist, comp.param = comp.param,
+                            sim_U = U[["U_sim"]], min_size = NULL, parallel = parallel, n_cpu = n_cpu)
 
   } else if (meth == "Poly") {
-    test_res <- orthoBasis_test_H0(data.X = sample1, data.Y = sample2, known.p = known.p, comp.dist = comp.dist, comp.param = comp.param,
-                                   known.coef = NULL, K=K, nb.ssEch = nb.ssEch, s=s, var.explicit = var.explicit, nb.echBoot = nb.echBoot,
+    test_res <- orthoBasis_test_H0(samples = samples, known.p = known.p, comp.dist = comp.dist, comp.param = comp.param, known.coef = NULL,
+                                   K=K, nb.ssEch = nb.ssEch, s=s, var.explicit = var.explicit, nb.echBoot = nb.echBoot,
                                    support = support, bounds.supp = bounds.supp, est.method = est.method)
 
   } else stop("Please specify an appropriate method to perform the test hypothesis.")

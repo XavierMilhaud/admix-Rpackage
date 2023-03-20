@@ -128,12 +128,12 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
     discrepancy.rank[couples.list[k, ][1], couples.list[k, ][2]] <- rank(unlist(empirical.contr))[k]
     ## Pairwise testing: test H0 between the two considered populations.
     pairwise_H0test <- NULL
-    pairwise_H0test <- IBM_test_H0(sample1 = samples[[couples.list[k, ][1]]], sample2 = samples[[couples.list[k, ][2]]],
+    pairwise_H0test <- IBM_test_H0(samples = list(samples[[couples.list[k, ][1]]], samples[[couples.list[k, ][2]]]),
                                    known.p = NULL, comp.dist = couples.expr[[k]], comp.param = couples.param[[k]],
                                    sim_U = NULL, n_sim_tab = 20, min_size = NULL, conf.level = conf.level,
                                    parallel = parallel, n_cpu = n_cpu)
     weights.list[k, ] <- pairwise_H0test[["weights"]]
-    H0.test[couples.list[k, ][1], couples.list[k, ][2]] <- pairwise_H0test$decision
+    H0.test[couples.list[k, ][1], couples.list[k, ][2]] <- pairwise_H0test$rejection_rule
 #    tabulated_dist[[k]] <- pairwise_H0test$tabulated_dist
   }
 

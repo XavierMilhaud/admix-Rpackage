@@ -120,199 +120,207 @@ IBM_k_samples_test <- function(samples = NULL, sim_U = NULL, n_sim_tab = 100, mi
     for (j in (i+1):length(samples)) { couples.list <- rbind(couples.list,c(i,j)) }
   }
 
-  ##------ Calibration of tuning parameter gamma --------##
-  ## Studying each population to tune parameters used in the selection rule:
-  couples.expr <- couples.param <- vector(mode = "list", length = length(samples))
-  ## Split each population 6 times in two subsamples:
-  S_ii <- matrix(NA, nrow = length(samples), ncol = 6)
-  for (k in 1:length(samples)) {
-    ## Retrieves the right components for distributions and corresponding parameters under study:
-    couples.expr[[k]] <- append(comp.dist[model.list[[k]]], comp.dist[model.list[[k]]])
-    couples.param[[k]] <- append(comp.param[model.list[[k]]], comp.param[model.list[[k]]])
-    names(couples.expr[[k]]) <- names(couples.param[[k]]) <- c("f1","g1","f2","g2")
-    ## Artificially create 6 times two subsamples from one given original sample (thus under the null H0):
-    subsample1_index <- matrix(NA, nrow = floor(length(samples[[k]])/2), ncol = 6)
-    subsample1_index <- replicate(n = 6, expr = sample(x = 1:length(samples[[k]]), size = floor(length(samples[[k]])/2), replace = FALSE, prob = NULL))
-    subsample2_index <- matrix(NA, nrow = (length(samples[[k]])-floor(length(samples[[k]])/2)), ncol = 6)
-    x_val <- seq(from = min(samples[[k]]), to = max(samples[[k]]), length.out = 1000)
-    ## Parallel (or not!) computations of the supremum of the difference b/w decontaminated cdf:
-    l <- NULL
-    S <-
-      foreach::foreach(l = 1:ncol(subsample2_index), .inorder = TRUE, .errorhandling = 'pass', .export = ls(globalenv())) %fun% {
-        subsample2_index[ ,l] <- c(1:length(samples[[k]]))[-subsample1_index[ ,l]]
-        ## Comparison between the two populations :
-        XY <- IBM_estimProp(sample1 = samples[[k]][subsample1_index[ ,l]], sample2 = samples[[k]][subsample2_index[ ,l]], known.prop = NULL,
-                            comp.dist = couples.expr[[k]], comp.param = couples.param[[k]], with.correction = FALSE, n.integ = 1000)
-        F_i1 <- decontamin_cdf_unknownComp(sample1 = samples[[k]][subsample1_index[ ,l]],
-                                           comp.dist = comp.dist[model.list[[k]]], comp.param = comp.param[model.list[[k]]],
-                                           estim.p = XY[["prop.estim"]][1])
-        F_i2 <- decontamin_cdf_unknownComp(sample1 = samples[[k]][subsample2_index[ ,l]],
-                                           comp.dist = comp.dist[model.list[[k]]], comp.param = comp.param[model.list[[k]]],
-                                           estim.p = XY[["prop.estim"]][1])
-        ## Assessment of the difference of interest at each specified x-value:
-        max( sqrt(length(samples[[k]])/2) * abs(F_i1(x_val) - F_i2(x_val)) )
+  if (length(samples) == 2) {
+    return(
+      IBM_test_H0(samples = samples, comp.dist = comp.dist, comp.param = comp.param, sim_U = sim_U, n_sim_tab = n_sim_tab,
+                  min_size = min_size, conf.level = conf.level, parallel = parallel, n_cpu = n_cpu)
+    )
+  } else {
+    ##------ Calibration of tuning parameter gamma --------##
+    ## Studying each population to tune parameters used in the selection rule:
+    couples.expr <- couples.param <- vector(mode = "list", length = length(samples))
+    ## Split each population 6 times in two subsamples:
+    S_ii <- matrix(NA, nrow = length(samples), ncol = 6)
+    for (k in 1:length(samples)) {
+      ## Retrieves the right components for distributions and corresponding parameters under study:
+      couples.expr[[k]] <- append(comp.dist[model.list[[k]]], comp.dist[model.list[[k]]])
+      couples.param[[k]] <- append(comp.param[model.list[[k]]], comp.param[model.list[[k]]])
+      names(couples.expr[[k]]) <- names(couples.param[[k]]) <- c("f1","g1","f2","g2")
+      ## Artificially create 6 times two subsamples from one given original sample (thus under the null H0):
+      subsample1_index <- matrix(NA, nrow = floor(length(samples[[k]])/2), ncol = 6)
+      subsample1_index <- replicate(n = 6, expr = sample(x = 1:length(samples[[k]]), size = floor(length(samples[[k]])/2), replace = FALSE, prob = NULL))
+      subsample2_index <- matrix(NA, nrow = (length(samples[[k]])-floor(length(samples[[k]])/2)), ncol = 6)
+      x_val <- seq(from = min(samples[[k]]), to = max(samples[[k]]), length.out = 1000)
+      ## Parallel (or not!) computations of the supremum of the difference b/w decontaminated cdf:
+      l <- NULL
+      S <-
+        foreach::foreach(l = 1:ncol(subsample2_index), .inorder = TRUE, .errorhandling = 'pass', .export = ls(globalenv())) %fun% {
+          subsample2_index[ ,l] <- c(1:length(samples[[k]]))[-subsample1_index[ ,l]]
+          ## Comparison between the two populations :
+          XY <- IBM_estimProp(sample1 = samples[[k]][subsample1_index[ ,l]], sample2 = samples[[k]][subsample2_index[ ,l]], known.prop = NULL,
+                              comp.dist = couples.expr[[k]], comp.param = couples.param[[k]], with.correction = FALSE, n.integ = 1000)
+          F_i1 <- decontamin_cdf_unknownComp(sample1 = samples[[k]][subsample1_index[ ,l]],
+                                             comp.dist = comp.dist[model.list[[k]]], comp.param = comp.param[model.list[[k]]],
+                                             estim.p = XY[["prop.estim"]][1])
+          F_i2 <- decontamin_cdf_unknownComp(sample1 = samples[[k]][subsample2_index[ ,l]],
+                                             comp.dist = comp.dist[model.list[[k]]], comp.param = comp.param[model.list[[k]]],
+                                             estim.p = XY[["prop.estim"]][1])
+          ## Assessment of the difference of interest at each specified x-value:
+          max( sqrt(length(samples[[k]])/2) * abs(F_i1(x_val) - F_i2(x_val)) )
+        }
+      S_ii[k, which(sapply(X = S, FUN = class) != "numeric")] <- NA
+      S_ii[k, which(sapply(X = S, FUN = class) == "numeric")] <- unlist(S[which(sapply(X = S, FUN = class) == "numeric")])
+    }
+    ## Extraction of the optimal gamma :
+    gamma_opt <- max( apply(S_ii, 1, max, na.rm = TRUE) / log(sapply(X = samples, FUN = length)/2) )
+
+    ##------ Calibration of tuning parameter C --------##
+    couples.expr <- couples.param <- vector(mode = "list", length = length(samples))
+    ## Split each population in three subsets (thus leading to be under the null):
+    U_k <- vector(mode = "list", length = length(samples))
+    ## Parallel (or not!) computations of the embedded test statistics for each original sample:
+    U_k <-
+      foreach::foreach (i = 1:length(samples), .inorder = TRUE, .errorhandling = 'pass', .export = ls(globalenv())) %fun% {
+        couples.expr[[i]] <- append(comp.dist[model.list[[i]]], comp.dist[model.list[[i]]])
+        couples.param[[i]] <- append(comp.param[model.list[[i]]], comp.param[model.list[[i]]])
+        names(couples.expr[[i]]) <- names(couples.param[[i]]) <- c("f1","g1","f2","g2")
+        ## Artificially create three subsamples from one given sample, thus under the null H0:
+        subsample1_index <- sample(x = 1:length(samples[[i]]), size = floor(length(samples[[i]])/3), replace = FALSE, prob = NULL)
+        subsample2_index <- sample(x = c(1:length(samples[[i]]))[-subsample1_index], size = length(subsample1_index), replace = FALSE, prob = NULL)
+        subsample3_index <- c(1:length(samples[[i]]))[-sort(c(subsample1_index, subsample2_index))]
+        ## Compute the test statistics for each combination of subsets :
+        XY <- IBM_estimProp(sample1 = samples[[i]][subsample1_index], sample2 = samples[[i]][subsample2_index], known.prop = NULL,
+                            comp.dist = couples.expr[[i]], comp.param = couples.param[[i]], with.correction = FALSE, n.integ = 1000)
+        if (is.numeric(XY[["prop.estim"]])) {
+          T_12 <- (length(samples[[i]])/3) *
+            IBM_empirical_contrast(par = XY[["prop.estim"]], fixed.p.X = XY[["p.X.fixed"]], sample1 = samples[[i]][subsample1_index],
+                                   sample2 = samples[[i]][subsample2_index], G = XY[["integ.supp"]],
+                                   comp.dist = couples.expr[[i]], comp.param = couples.param[[i]])
+        } else T_12 <- NA
+        XZ <- IBM_estimProp(sample1 = samples[[i]][subsample1_index], sample2 = samples[[i]][subsample3_index], known.prop = NULL,
+                            comp.dist = couples.expr[[i]], comp.param = couples.param[[i]], with.correction = FALSE, n.integ = 1000)
+        if (is.numeric(XZ[["prop.estim"]])) {
+          T_13 <- (length(samples[[i]])/3) *
+            IBM_empirical_contrast(par = XZ[["prop.estim"]], fixed.p.X = XZ[["p.X.fixed"]], sample1 = samples[[i]][subsample1_index],
+                                   sample2 = samples[[i]][subsample3_index], G = XZ[["integ.supp"]],
+                                   comp.dist = couples.expr[[i]], comp.param = couples.param[[i]])
+        } else T_13 <- NA
+        YZ <- IBM_estimProp(sample1 = samples[[i]][subsample2_index], sample2 = samples[[i]][subsample3_index], known.prop = NULL,
+                            comp.dist = couples.expr[[i]], comp.param = couples.param[[i]], with.correction = FALSE, n.integ = 1000)
+        if (is.numeric(YZ[["prop.estim"]])) {
+          T_23 <- (length(samples[[i]])/3) *
+            IBM_empirical_contrast(par = YZ[["prop.estim"]], fixed.p.X = YZ[["p.X.fixed"]], sample1 = samples[[i]][subsample2_index],
+                                   sample2 = samples[[i]][subsample3_index], G = YZ[["integ.supp"]],
+                                   comp.dist = couples.expr[[i]], comp.param = couples.param[[i]])
+        } else T_23 <- NA
+        cumsum(x = c(T_12, T_13, T_23))
       }
-    S_ii[k, which(sapply(X = S, FUN = class) != "numeric")] <- NA
-    S_ii[k, which(sapply(X = S, FUN = class) == "numeric")] <- unlist(S[which(sapply(X = S, FUN = class) == "numeric")])
-  }
-  ## Extraction of the optimal gamma :
-  gamma_opt <- max( apply(S_ii, 1, max, na.rm = TRUE) / log(sapply(X = samples, FUN = length)/2) )
-
-  ##------ Calibration of tuning parameter C --------##
-  couples.expr <- couples.param <- vector(mode = "list", length = length(samples))
-  ## Split each population in three subsets (thus leading to be under the null):
-  U_k <- vector(mode = "list", length = length(samples))
-  ## Parallel (or not!) computations of the embedded test statistics for each original sample:
-  U_k <-
-    foreach::foreach (i = 1:length(samples), .inorder = TRUE, .errorhandling = 'pass', .export = ls(globalenv())) %fun% {
-      couples.expr[[i]] <- append(comp.dist[model.list[[i]]], comp.dist[model.list[[i]]])
-      couples.param[[i]] <- append(comp.param[model.list[[i]]], comp.param[model.list[[i]]])
-      names(couples.expr[[i]]) <- names(couples.param[[i]]) <- c("f1","g1","f2","g2")
-      ## Artificially create three subsamples from one given sample, thus under the null H0:
-      subsample1_index <- sample(x = 1:length(samples[[i]]), size = floor(length(samples[[i]])/3), replace = FALSE, prob = NULL)
-      subsample2_index <- sample(x = c(1:length(samples[[i]]))[-subsample1_index], size = length(subsample1_index), replace = FALSE, prob = NULL)
-      subsample3_index <- c(1:length(samples[[i]]))[-sort(c(subsample1_index, subsample2_index))]
-      ## Compute the test statistics for each combination of subsets :
-      XY <- IBM_estimProp(sample1 = samples[[i]][subsample1_index], sample2 = samples[[i]][subsample2_index], known.prop = NULL,
-                          comp.dist = couples.expr[[i]], comp.param = couples.param[[i]], with.correction = FALSE, n.integ = 1000)
-      if (is.numeric(XY[["prop.estim"]])) {
-        T_12 <- (length(samples[[i]])/3) *
-          IBM_empirical_contrast(par = XY[["prop.estim"]], fixed.p.X = XY[["p.X.fixed"]], sample1 = samples[[i]][subsample1_index],
-                                 sample2 = samples[[i]][subsample2_index], G = XY[["integ.supp"]],
-                                 comp.dist = couples.expr[[i]], comp.param = couples.param[[i]])
-      } else T_12 <- NA
-      XZ <- IBM_estimProp(sample1 = samples[[i]][subsample1_index], sample2 = samples[[i]][subsample3_index], known.prop = NULL,
-                          comp.dist = couples.expr[[i]], comp.param = couples.param[[i]], with.correction = FALSE, n.integ = 1000)
-      if (is.numeric(XZ[["prop.estim"]])) {
-        T_13 <- (length(samples[[i]])/3) *
-          IBM_empirical_contrast(par = XZ[["prop.estim"]], fixed.p.X = XZ[["p.X.fixed"]], sample1 = samples[[i]][subsample1_index],
-                                 sample2 = samples[[i]][subsample3_index], G = XZ[["integ.supp"]],
-                                 comp.dist = couples.expr[[i]], comp.param = couples.param[[i]])
-      } else T_13 <- NA
-      YZ <- IBM_estimProp(sample1 = samples[[i]][subsample2_index], sample2 = samples[[i]][subsample3_index], known.prop = NULL,
-                          comp.dist = couples.expr[[i]], comp.param = couples.param[[i]], with.correction = FALSE, n.integ = 1000)
-      if (is.numeric(YZ[["prop.estim"]])) {
-        T_23 <- (length(samples[[i]])/3) *
-          IBM_empirical_contrast(par = YZ[["prop.estim"]], fixed.p.X = YZ[["p.X.fixed"]], sample1 = samples[[i]][subsample2_index],
-                                 sample2 = samples[[i]][subsample3_index], G = YZ[["integ.supp"]],
-                                 comp.dist = couples.expr[[i]], comp.param = couples.param[[i]])
-      } else T_23 <- NA
-      cumsum(x = c(T_12, T_13, T_23))
+    ## Remove elements of the list where an error was stored:
+    U_k[which(sapply(X = U_k, FUN = function(x) any(is.na(x))) == TRUE)] <- NULL
+    U_k[which(sapply(X = U_k, FUN = class) != "numeric")] <- NULL
+    if (length(U_k) == 0) stop("The calibration of tuning parameters in the k-sample test procedure has failed. Please try again.")
+    ## We are artificially under the null H0, thus fix epsilon close to 1:
+    epsilon_opt <- 0.99
+    ## Determine the optimal constant, applying the rule leading to select the first term of the embedded statistic under H0 :
+    constant_list <- vector(mode = "numeric", length = length(U_k))
+    for (i in 1:length(U_k)) {
+      constant_list[i] <- max( c( (U_k[[i]][2]-U_k[[i]][1])/((length(samples[[i]])/length(U_k[[i]]))^epsilon_opt),
+                                  (U_k[[i]][3]-U_k[[i]][1])/(2*(length(samples[[i]])/length(U_k[[i]]))^epsilon_opt) ) )
     }
-  ## Remove elements of the list where an error was stored:
-  U_k[which(sapply(X = U_k, FUN = function(x) any(is.na(x))) == TRUE)] <- NULL
-  U_k[which(sapply(X = U_k, FUN = class) != "numeric")] <- NULL
-  if (length(U_k) == 0) stop("The calibration of tuning parameters in the k-sample test procedure has failed. Please try again.")
-  ## We are artificially under the null H0, thus fix epsilon close to 1:
-  epsilon_opt <- 0.99
-  ## Determine the optimal constant, applying the rule leading to select the first term of the embedded statistic under H0 :
-  constant_list <- vector(mode = "numeric", length = length(U_k))
-  for (i in 1:length(U_k)) {
-    constant_list[i] <- max( c( (U_k[[i]][2]-U_k[[i]][1])/((length(samples[[i]])/length(U_k[[i]]))^epsilon_opt),
-                                (U_k[[i]][3]-U_k[[i]][1])/(2*(length(samples[[i]])/length(U_k[[i]]))^epsilon_opt) ) )
-  }
-  cst_selected <- max(constant_list)
+    cst_selected <- max(constant_list)
 
-  ##----------- Back to the general k-sample procedure ----------##
-  S_ij <- couples.expr <- couples.param <- vector(mode = "list", length = nrow(couples.list))
-  for (k in 1:nrow(couples.list)) {
-    couples.expr[[k]] <- comp.dist[c(model.list[[couples.list[k, ][1]]], model.list[[couples.list[k, ][2]]])]
-    couples.param[[k]] <- comp.param[c(model.list[[couples.list[k, ][1]]], model.list[[couples.list[k, ][2]]])]
-    names(couples.expr[[k]]) <- names(couples.param[[k]]) <- c("f1","g1","f2","g2")
-  }
-  ## Compute the supremum between decontaminated cdfs over the different couples of populations under study:
-  S_ij <-
-    foreach::foreach (k = 1:nrow(couples.list), .inorder = TRUE, .errorhandling = 'pass', .export = ls(globalenv())) %fun% {
-      ## Comparison between the two populations :
-      XY <- IBM_estimProp(sample1 = samples[[couples.list[k, ][1]]], sample2 = samples[[couples.list[k, ][2]]], known.prop = NULL,
-                          comp.dist = couples.expr[[k]], comp.param = couples.param[[k]], with.correction = F, n.integ = 1000)
-      emp.contr <- minimal_size * IBM_empirical_contrast(XY[["prop.estim"]], fixed.p.X = XY[["p.X.fixed"]],
-                                                         sample1 = samples[[couples.list[k, ][1]]], sample2 = samples[[couples.list[k, ][2]]],
-                                                         G = XY[["integ.supp"]], comp.dist = couples.expr[[k]], comp.param = couples.param[[k]])
-      x_val <- seq(from = min(samples[[couples.list[k, ][1]]], samples[[couples.list[k, ][2]]]),
-                   to = max(samples[[couples.list[k, ][1]]], samples[[couples.list[k, ][2]]]), length.out = 1000)
-      F_1 <- decontamin_cdf_unknownComp(sample1 = samples[[couples.list[k, ][1]]],
-                                        comp.dist = couples.expr[[k]][1:2], comp.param = couples.param[[k]][1:2],
-                                        estim.p = XY[["prop.estim"]][1])
-      F_2 <- decontamin_cdf_unknownComp(sample1 = samples[[couples.list[k, ][2]]],
-                                        comp.dist = couples.expr[[k]][3:4], comp.param = couples.param[[k]][3:4],
-                                        estim.p = XY[["prop.estim"]][2])
-      ## Assessment of the supremum:
-      list( sup = max( sqrt(minimal_size) * abs(F_1(x_val) - F_2(x_val)) ), contrast = emp.contr)
+    ##----------- Back to the general k-sample procedure ----------##
+    S_ij <- couples.expr <- couples.param <- vector(mode = "list", length = nrow(couples.list))
+    for (k in 1:nrow(couples.list)) {
+      couples.expr[[k]] <- comp.dist[c(model.list[[couples.list[k, ][1]]], model.list[[couples.list[k, ][2]]])]
+      couples.param[[k]] <- comp.param[c(model.list[[couples.list[k, ][1]]], model.list[[couples.list[k, ][2]]])]
+      names(couples.expr[[k]]) <- names(couples.param[[k]]) <- c("f1","g1","f2","g2")
     }
-  list_sup <- sapply(X = S_ij, "[[", "sup")
-  list_empirical.contr <- sapply(X = S_ij, "[[", "contrast")
-  ## Remove elements of the list where an error was stored:
-  to_remove <- which(sapply(X = list_sup, FUN = is.null))
-  list_empirical.contr[to_remove] <- list_sup[to_remove] <- NULL
-  if ((length(list_empirical.contr) == 0) | (length(list_sup) == 0)) {
-    stop("The calibration of tuning parameters in the k-sample test procedure has failed. Please try again.")
-  }
-  max.S_ij <- max(unlist(list_sup))
-  ## Define the two possible exponents to apply to the sample size :
-  epsilon_null <- 0.99
-  epsilon_alt <- 0.76
-  ## Choice of the penalty rule:
-  penalty_rule <- (max.S_ij <= (gamma_opt * log(minimal_size)))
-  ## Define the penalty function, depending on the penalty rule:
-  penalty <- penalty_rule * cst_selected * minimal_size^epsilon_null + (1-penalty_rule) * cst_selected * minimal_size^epsilon_alt
+    ## Compute the supremum between decontaminated cdfs over the different couples of populations under study:
+    S_ij <-
+      foreach::foreach (k = 1:nrow(couples.list), .inorder = TRUE, .errorhandling = 'pass', .export = ls(globalenv())) %fun% {
+        ## Comparison between the two populations :
+        XY <- IBM_estimProp(sample1 = samples[[couples.list[k, ][1]]], sample2 = samples[[couples.list[k, ][2]]], known.prop = NULL,
+                            comp.dist = couples.expr[[k]], comp.param = couples.param[[k]], with.correction = F, n.integ = 1000)
+        emp.contr <- minimal_size * IBM_empirical_contrast(XY[["prop.estim"]], fixed.p.X = XY[["p.X.fixed"]],
+                                                           sample1 = samples[[couples.list[k, ][1]]], sample2 = samples[[couples.list[k, ][2]]],
+                                                           G = XY[["integ.supp"]], comp.dist = couples.expr[[k]], comp.param = couples.param[[k]])
+        x_val <- seq(from = min(samples[[couples.list[k, ][1]]], samples[[couples.list[k, ][2]]]),
+                     to = max(samples[[couples.list[k, ][1]]], samples[[couples.list[k, ][2]]]), length.out = 1000)
+        F_1 <- decontamin_cdf_unknownComp(sample1 = samples[[couples.list[k, ][1]]],
+                                          comp.dist = couples.expr[[k]][1:2], comp.param = couples.param[[k]][1:2],
+                                          estim.p = XY[["prop.estim"]][1])
+        F_2 <- decontamin_cdf_unknownComp(sample1 = samples[[couples.list[k, ][2]]],
+                                          comp.dist = couples.expr[[k]][3:4], comp.param = couples.param[[k]][3:4],
+                                          estim.p = XY[["prop.estim"]][2])
+        ## Assessment of the supremum:
+        list( sup = max( sqrt(minimal_size) * abs(F_1(x_val) - F_2(x_val)) ), contrast = emp.contr)
+      }
+    list_sup <- sapply(X = S_ij, "[[", "sup")
+    list_empirical.contr <- sapply(X = S_ij, "[[", "contrast")
+    ## Remove elements of the list where an error was stored:
+    to_remove <- which(sapply(X = list_sup, FUN = is.null))
+    list_empirical.contr[to_remove] <- list_sup[to_remove] <- NULL
+    if ((length(list_empirical.contr) == 0) | (length(list_sup) == 0)) {
+      stop("The calibration of tuning parameters in the k-sample test procedure has failed. Please try again.")
+    }
+    max.S_ij <- max(unlist(list_sup))
+    ## Define the two possible exponents to apply to the sample size :
+    epsilon_null <- 0.99
+    epsilon_alt <- 0.76
+    ## Choice of the penalty rule:
+    penalty_rule <- (max.S_ij <= (gamma_opt * log(minimal_size)))
+    ## Define the penalty function, depending on the penalty rule:
+    penalty <- penalty_rule * cst_selected * minimal_size^epsilon_null + (1-penalty_rule) * cst_selected * minimal_size^epsilon_alt
 
-  ## Give a simple and useful representation of results for each couple:
-  contrast.matrix <- discrepancy.id <- discrepancy.rank <- matrix(NA, nrow = length(samples), ncol = length(samples))
-  ranks <- 1:nrow(couples.list)
-  if (length(to_remove) != 0) {
-    list.iterators <- c(1:nrow(couples.list))[-to_remove]
-    ranks[to_remove] <- NA
-  } else {
-    list.iterators <- 1:nrow(couples.list)
-  }
-  ranks[which(!is.na(ranks))] <- rank(unlist(list_empirical.contr))
-  for (k in list.iterators) {
-    contrast.matrix[couples.list[k, ][1], couples.list[k, ][2]] <- sapply(X = S_ij, "[[", "contrast")[[k]]
-    discrepancy.id[couples.list[k, ][1], couples.list[k, ][2]] <- paste(couples.list[k, ][1], couples.list[k, ][2], sep = "-")
-    discrepancy.rank[couples.list[k, ][1], couples.list[k, ][2]] <- ranks[k]
+    ## Give a simple and useful representation of results for each couple:
+    contrast.matrix <- discrepancy.id <- discrepancy.rank <- matrix(NA, nrow = length(samples), ncol = length(samples))
+    ranks <- 1:nrow(couples.list)
+    if (length(to_remove) != 0) {
+      list.iterators <- c(1:nrow(couples.list))[-to_remove]
+      ranks[to_remove] <- NA
+    } else {
+      list.iterators <- 1:nrow(couples.list)
+    }
+    ranks[which(!is.na(ranks))] <- rank(unlist(list_empirical.contr))
+    for (k in list.iterators) {
+      contrast.matrix[couples.list[k, ][1], couples.list[k, ][2]] <- sapply(X = S_ij, "[[", "contrast")[[k]]
+      discrepancy.id[couples.list[k, ][1], couples.list[k, ][2]] <- paste(couples.list[k, ][1], couples.list[k, ][2], sep = "-")
+      discrepancy.rank[couples.list[k, ][1], couples.list[k, ][2]] <- ranks[k]
+    }
+
+    ## Tabulate the contrast distribution to retrieve the quantile of interest, needed further to perform the test:
+    if (is.null(sim_U)) {
+      which_row <- unlist(apply(discrepancy.rank, 2, function(x) which(x == 1)))
+      which_col <- unlist(apply(discrepancy.rank, 1, function(x) which(x == 1)))
+      U <- IBM_tabul_stochasticInteg(n.sim = n_sim_tab, n.varCovMat = 80, sample1 = samples[[which_row]], sample2 = samples[[which_col]], min_size = minimal_size,
+                                     comp.dist = couples.expr[[which((couples.list[ ,1] == which_row) & (couples.list[ ,2] == which_col))]],
+                                     comp.param = couples.param[[which((couples.list[ ,1] == which_row) & (couples.list[ ,2] == which_col))]],
+                                     parallel = parallel, n_cpu = n_cpu)
+      sim_U <- U[["U_sim"]]
+    }
+    if (all(is.na(sim_U))) {
+      return( list(rejection_rule = TRUE, p_val = NA, stat_name = NA, stat_value = NA, stat_rank = NA,
+                   penalized_stat = NA, ordered_contrasts = NA, quantiles = NA, stat_terms = NA,
+                   contr_mat = contrast.matrix) )
+    } else {
+      q_H <- stats::quantile(sim_U, conf.level)
+    }
+
+    ##--------- Perform the hypothesis testing -----------##
+    ## Sort the discrepancies and corresponding information:
+    sorted_contrasts <- sort(unlist(list_empirical.contr))
+    penalized.stats <- numeric(length = (length(sorted_contrasts)+1))
+    stat.terms <- stat.terms_final <- character(length = (nrow(couples.list)-length(to_remove)))
+    for (k in 1:length(stat.terms)) {
+      stat.terms[k] <- paste("d_", discrepancy.id[which(discrepancy.rank == k)], sep = "")
+      stat.terms_final[k] <- paste(stat.terms[1:k], collapse = " + ", sep = "")
+      penalized.stats[k+1] <- penalized.stats[k] + sorted_contrasts[k] - penalty
+    }
+    penalized.stats <- round(penalized.stats[-1], 1)
+    ## Selection of the number of embedded terms in the statistic, and compute the statistic itself:
+    selected.index <- which.max(penalized.stats)
+    finalStat_name <- stat.terms_final[selected.index]
+    finalStat_value <- cumsum(sorted_contrasts)[selected.index]
+    ## Test decision:
+    final_test <- finalStat_value > q_H[1]
+    ## Corresponding p-value:
+    CDF_U <- stats::ecdf(sim_U)
+    p_value <- 1 - CDF_U(finalStat_value)
+
+    return( list(confidence_level = conf.level, rejection_rule = final_test, p_value = p_value, stat_name = finalStat_name,
+                 test.stat = finalStat_value, stat_rank = selected.index, penalized_stat = penalized.stats, penalty_H0 = penalty_rule,
+                 ordered_contrasts = sorted_contrasts, quantiles = unique(q_H), stat_terms = stat.terms_final, contr_mat = contrast.matrix) )
   }
 
-  ## Tabulate the contrast distribution to retrieve the quantile of interest, needed further to perform the test:
-  if (is.null(sim_U)) {
-    which_row <- unlist(apply(discrepancy.rank, 2, function(x) which(x == 1)))
-    which_col <- unlist(apply(discrepancy.rank, 1, function(x) which(x == 1)))
-    U <- IBM_tabul_stochasticInteg(n.sim = n_sim_tab, n.varCovMat = 80, sample1 = samples[[which_row]], sample2 = samples[[which_col]], min_size = minimal_size,
-                                   comp.dist = couples.expr[[which((couples.list[ ,1] == which_row) & (couples.list[ ,2] == which_col))]],
-                                   comp.param = couples.param[[which((couples.list[ ,1] == which_row) & (couples.list[ ,2] == which_col))]],
-                                   parallel = parallel, n_cpu = n_cpu)
-    sim_U <- U[["U_sim"]]
-  }
-  if (all(is.na(sim_U))) {
-    return( list(rejection_rule = TRUE, p_val = NA, stat_name = NA, stat_value = NA, stat_rank = NA,
-                 penalized_stat = NA, ordered_contrasts = NA, quantiles = NA, stat_terms = NA,
-                 contr_mat = contrast.matrix) )
-  } else {
-    q_H <- stats::quantile(sim_U, conf.level)
-  }
-
-  ##--------- Perform the hypothesis testing -----------##
-  ## Sort the discrepancies and corresponding information:
-  sorted_contrasts <- sort(unlist(list_empirical.contr))
-  penalized.stats <- numeric(length = (length(sorted_contrasts)+1))
-  stat.terms <- stat.terms_final <- character(length = (nrow(couples.list)-length(to_remove)))
-  for (k in 1:length(stat.terms)) {
-    stat.terms[k] <- paste("d_", discrepancy.id[which(discrepancy.rank == k)], sep = "")
-    stat.terms_final[k] <- paste(stat.terms[1:k], collapse = " + ", sep = "")
-    penalized.stats[k+1] <- penalized.stats[k] + sorted_contrasts[k] - penalty
-  }
-  penalized.stats <- round(penalized.stats[-1], 1)
-  ## Selection of the number of embedded terms in the statistic, and compute the statistic itself:
-  selected.index <- which.max(penalized.stats)
-  finalStat_name <- stat.terms_final[selected.index]
-  finalStat_value <- cumsum(sorted_contrasts)[selected.index]
-  ## Test decision:
-  final_test <- finalStat_value > q_H[1]
-  ## Corresponding p-value:
-  CDF_U <- stats::ecdf(sim_U)
-  p_value <- 1 - CDF_U(finalStat_value)
-
-  return( list(confidence_level = conf.level, rejection_rule = final_test, p_val = p_value, stat_name = finalStat_name,
-               stat_value = finalStat_value, stat_rank = selected.index, penalized_stat = penalized.stats, penalty_H0 = penalty_rule,
-               ordered_contrasts = sorted_contrasts, quantiles = unique(q_H), stat_terms = stat.terms_final, contr_mat = contrast.matrix) )
 }

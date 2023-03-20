@@ -1,7 +1,7 @@
 #' One-sample gaussianity test in admixture models using Bordes and Vandekerkhove estimation method
 #'
 #' Perform the hypothesis test to know whether the unknown mixture component is gaussian or not, knowing that the known one
-#' has support on the real line (R). However, the case of non-gaussian known component can be overcome thanks to the basic
+#' has support on the real line (R). The case of non-gaussian known component can be overcome thanks to the basic
 #' transformation by cdf. Recall that an admixture model has probability density function (pdf) l = p*f + (1-p)*g, where g is
 #' the known pdf and l is observed (others are unknown). Requires optimization (to estimate the unknown parameters) as defined
 #' by Bordes & Vandekerkhove (2010), which means that the unknown mixture component must have a symmetric density.
@@ -14,6 +14,7 @@
 #'                   Unknown elements must be specified as 'NULL' objects (e.g. if 'f' is unknown: list(f=NULL, g=list(mean=0,sd=1)).
 #' @param K Number of coefficients considered for the polynomial basis expansion.
 #' @param lambda Rate at which the normalization factor is set in the penalization rule for model selection (in ]0,1/2[). See 'Details' below.
+#' @param conf.level The confidence level, default to 95 percent. Equals 1-alpha, where alpha is the level of the test (type-I error).
 #' @param support Support of the densities under consideration, useful to choose the polynomial orthonormal basis. One of 'Real',
 #'                'Integer', 'Positive', or 'Bounded.continuous'.
 #'
@@ -37,12 +38,12 @@
 #' list.comp <- list(f = NULL, g = "norm")
 #' list.param <- list(f = NULL, g = c(mean = 0, sd = 1))
 #' gaussianity_test(sample1 = obs.data, comp.dist = list.comp, comp.param = list.param,
-#'                        K = 3, lambda = 0.1, support = 'Real')
+#'                  K = 3, lambda = 0.1, conf.level = 0.95, support = 'Real')
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-gaussianity_test <- function(sample1, comp.dist, comp.param, K = 3, lambda = 0.2,
+gaussianity_test <- function(sample1, comp.dist, comp.param, K = 3, lambda = 0.2, conf.level = 0.95,
                              support = c('Real','Integer','Positive','Bounded.continuous'))
 {
   if ( (length(comp.dist) != 2) | (length(comp.param) != 2) ) stop("Arguments 'comp.dist' and/or 'comp.param' were not correctly specified")
@@ -149,10 +150,10 @@ gaussianity_test <- function(sample1, comp.dist, comp.param, K = 3, lambda = 0.2
 	p.value <- 1 - stats::pchisq(final.stat, 1)
 
 	## If the test statistic is greater that the quantile of interest, reject the null hypothesis (otherwise do not reject):
-	rej <- 0
-  if (final.stat > stats::qchisq(0.95,1)) { rej <- rej+1 }
+	rej <- FALSE
+  if (final.stat > stats::qchisq(conf.level,1)) { rej <- TRUE }
 
-	list(decision = rej, p_value = p.value, test.stat = final.stat, var.stat = var.R, rank = selected.index,
-	     estimates = list(p = hat_p, mu = hat_loc, s = sqrt(hat_s2)))
+	list(confidence_level = conf.level, rejection_rule = rej, p_value = p.value, test.stat = final.stat,
+	     var.stat = var.R, rank = selected.index, estimates = list(p = hat_p, mu = hat_loc, s = sqrt(hat_s2)))
 }
 
