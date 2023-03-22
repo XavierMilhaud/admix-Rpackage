@@ -39,7 +39,7 @@ sim.X <- rsimmix(n = 2000, unknownComp_weight = 0.7, comp.dist = list(f = 'norm'
                  comp.param = list(f = list(mean = 3, sd = 0.5), g = list(mean = 0, sd = 1)))
 class(sim.X)
 attributes(sim.X)
-plot_admix(sim.X = sim.X$mixt.data, sim.Y = NULL, user.bounds = NULL, support = 'continuous')
+plot_mixt_density(samples = list(sim.X$mixt.data), user.bounds = NULL, support = 'continuous')
 
 }
 \author{

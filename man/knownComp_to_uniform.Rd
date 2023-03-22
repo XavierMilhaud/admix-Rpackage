@@ -32,13 +32,13 @@ list.param <- list(f1 = list(mean = 3, sd = 0.5),
                    g1 = list(mean = 0, sd = 1))
 sample1 <- rsimmix(n=1500, unknownComp_weight=0.5, comp.dist = list(list.comp$f1,list.comp$g1),
                                                    comp.param=list(list.param$f1,list.param$g1))
-plot_admix(sim.X = sample1[['mixt.data']], support = 'continuous')
+plot_mixt_density(samples = list(sample1[['mixt.data']]), support = 'continuous')
 ## Transform the known component into a Uniform(0,1) distribution:
 list.comp <- list(f1 = NULL, g1 = 'norm')
 list.param <- list(f1 = NULL, g1 = list(mean = 0, sd = 1))
 transformed_data <- knownComp_to_uniform(data = sample1[['mixt.data']],
                                          comp.dist = list.comp, comp.param = list.param)
-plot_admix(sim.X = transformed_data, support = 'continuous')
+plot_mixt_density(samples = list(transformed_data), support = 'continuous')
 
 }
 \author{
