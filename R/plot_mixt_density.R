@@ -71,5 +71,5 @@ plot_mixt_density <- function(samples, user.bounds = NULL, support = c("continuo
   graphics::title(main = main)
   graphics::legend("topright", legend = leg, lty = 1:n_pop, col = 1:n_pop, bty = "n")
 
-  on.exit(graphics::par(old_par))
+  on.exit(graphics::par(new = old_par))
 }
