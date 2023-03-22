@@ -59,13 +59,13 @@ PatraSen_dist_calc <- function(data, gridsize = 200)
 	            Freq = Freq,
 	            F.b = Fb,
 	            n = n)
-	class(ret) <- "dist.fun"
+	class(ret) <- "PS_dist_fun"
 	ret$call <- match.call()
 
 	return(ret)
 }
 
-print.dist.fun <- function(x,...){
+print.PS_dist_fun <- function(x,...){
 	cat("Call:\n")
 	print(x$call)
 	t.mat <- cbind(x$grid.pts , x$distance)
@@ -73,6 +73,6 @@ print.dist.fun <- function(x,...){
 	print(t(t.mat))
 }
 
-plot.dist.fun <- function(x,...){
+plot.PS_dist_fun <- function(x,...){
 	plot(x$grid.pts, x$distance, ylab = "distance", xlab = "gamma" , type = "l")
 }

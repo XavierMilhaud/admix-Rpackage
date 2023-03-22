@@ -59,7 +59,9 @@ list(f1 = NULL, g1 = list(mean=0,sd=1), f2 = NULL, g2 = list(mean=3,sd=1.1), f3 
 \item{n_cpu}{(default to 2) Number of cores used when parallelizing.}
 }
 \value{
-A list containing...
+A list containing the decision of the test (reject or not), the confidence level at which the test is performed,
+the p-value of the test, and the value of the test statistic (following a chi2 distribution with one degree of freedom
+under the null).
 }
 \description{
 Perform hypothesis test between unknown components of a list of admixture models, where we remind that the i-th admixture
@@ -86,9 +88,10 @@ sim1 <- rsimmix(n = 300, unknownComp_weight = 0.85, comp.dist = list(list.comp$f
 ## Perform the test hypothesis:
 list.comp <- list(f1 = NULL, g1 = "norm")
 list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7))
-admix_test(samples = list(sim1), sym.f = TRUE, test.method = 'Poly', sim_U = NULL, n_sim_tab=50,
-           min_size = NULL, comp.dist = list.comp, comp.param = list.param, support = "Real",
-           conf.level = 0.95, parallel = FALSE, n_cpu = 2)
+gaussTest <- admix_test(samples = list(sim1), sym.f = TRUE, test.method = 'Poly', sim_U = NULL,
+                        n_sim_tab = 50, min_size = NULL, comp.dist = list.comp,
+                        comp.param = list.param, support = "Real", conf.level = 0.95,
+                        parallel = FALSE, n_cpu = 2)
 
 }
 \author{

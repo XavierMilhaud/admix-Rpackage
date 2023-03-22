@@ -36,7 +36,7 @@
 
 BVdk_estimParam <- function(data, method = c("L-BFGS-B","Nelder-Mead"), comp.dist, comp.param)
 {
-  warning("Still needs to be implemented for cases where the unknown density mean is lower then the known density one!")
+  warning("Still needs to be implemented for cases where the unknown density mean is lower then the known density one!\n")
 
   stopifnot( (length(comp.dist) == 2) & (length(comp.param) == 2) )
   if (is.null(comp.dist[[2]]) | is.null(comp.param[[2]])) stop("Known component must be specified.")

@@ -40,7 +40,9 @@
 #'          Gaussianity test' (EJS, Pommeret & Vanderkerkhove, 2017), or 'Semiparametric two-sample admixture components comparison test:
 #'          the symmetric case' (JSPI, Milhaud & al., 2021).
 #'
-#' @return A list containing...
+#' @return A list containing the decision of the test (reject or not), the confidence level at which the test is performed,
+#'         the p-value of the test, and the value of the test statistic (following a chi2 distribution with one degree of freedom
+#'         under the null).
 #'
 #' @examples
 #' ##### On a simulated example, with 1 sample (gaussianity test):
@@ -52,9 +54,10 @@
 #' ## Perform the test hypothesis:
 #' list.comp <- list(f1 = NULL, g1 = "norm")
 #' list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7))
-#' admix_test(samples = list(sim1), sym.f = TRUE, test.method = 'Poly', sim_U = NULL, n_sim_tab=50,
-#'            min_size = NULL, comp.dist = list.comp, comp.param = list.param, support = "Real",
-#'            conf.level = 0.95, parallel = FALSE, n_cpu = 2)
+#' gaussTest <- admix_test(samples = list(sim1), sym.f = TRUE, test.method = 'Poly', sim_U = NULL,
+#'                         n_sim_tab = 50, min_size = NULL, comp.dist = list.comp,
+#'                         comp.param = list.param, support = "Real", conf.level = 0.95,
+#'                         parallel = FALSE, n_cpu = 2)
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
@@ -128,16 +131,3 @@ admix_test <- function(samples = NULL, sym.f = FALSE, test.method = c("Poly","IC
 
   return(obj_res)
 }
-
-
-print.admix_test <- function(x, ...)
-{
-  cat("Call:\n")
-  print(x$call)
-  cat("\nIs the null hypothesis rejected? ", x$Reject_decision, "\n", sep = "")
-  cat("The type-I error is fixed to ", (1-x$Confidence_level)*100, "%\n", sep = "")
-  cat("The p-value of the test equals ", x$P_value, "\n", sep = "")
-  cat("The value of the test statistics is ", x$Statistic_value, "\n\n", sep = "")
-}
-
-

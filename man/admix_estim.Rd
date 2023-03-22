@@ -68,7 +68,6 @@ list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
                    f2 = NULL, g2 = list(mean = -3, sd = 1.1))
 estim <- admix_estim(samples = list(sim1,sim2), sym.f = TRUE, est.method = 'IBM',
                      comp.dist = list.comp, comp.param = list.param)
-estim
 
 }
 \author{

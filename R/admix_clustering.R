@@ -266,6 +266,17 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
     clusters_weights[[order_clust[l]]] <- weights.list[which(res == TRUE), ]
   }
 
-  return( list(confidence_level = conf.level, n_clust = n_clust_final, clusters = clusters_affiliation, discrepancy_matrix = symmetric_dist_mat,
-               clust_pop = clusters_components, clust_couples = clusters_couples, clust_weights = clusters_weights) )
+  obj <- list(n_popu = length(samples),
+              n_clust = n_clust_final,
+              clusters = clusters_affiliation,
+              confidence_level = conf.level,
+              clust_pop = clusters_components,
+              clust_weights = clusters_weights,
+              discrepancy_matrix = symmetric_dist_mat)
+  class(obj) <- "admix_cluster"
+  obj$call <- match.call()
+
+  return(obj)
+  #return( list(confidence_level = conf.level, n_clust = n_clust_final, clusters = clusters_affiliation, discrepancy_matrix = symmetric_dist_mat,
+  #             clust_pop = clusters_components, clust_couples = clusters_couples, clust_weights = clusters_weights) )
 }
