@@ -56,7 +56,7 @@
 #'                    comp.param = list(list.param$f1,list.param$g1))[['mixt.data']]
 #' sample2 <- rsimmix(n=300, unknownComp_weight=0.8, comp.dist = list(list.comp$f2,list.comp$g2),
 #'                    comp.param = list(list.param$f2,list.param$g2))[['mixt.data']]
-#' plot_admix(sample1, sample2, NULL, support='continuous')
+#' plot_mixt_density(samples = list(sample1,sample2), user.bounds=NULL, support='continuous')
 #' ##### Performs the test by the different methods :
 #' list.comp <- list(f1 = NULL, g1 = "norm",
 #'                   f2 = NULL, g2 = "norm")
