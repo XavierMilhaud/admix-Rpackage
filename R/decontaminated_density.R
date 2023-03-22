@@ -1,4 +1,4 @@
-#' Provide the decontaminated density of the unknown component in an admixture model
+#' Provide the decontaminated density of the unknown component in an admixture model.
 #'
 #' Estimate the decontaminated density of the unknown component in the admixture model under study, after inversion of the admixture
 #' cumulative distribution function. Recall that an admixture model follows the cumulative distribution function (CDF) L, where
@@ -23,6 +23,8 @@
 #'
 #' @examples
 #' ## Simulate data:
+#'
+#' ####### Continuous support:
 #' list.comp <- list(f1 = 'norm', g1 = 'norm',
 #'                   f2 = 'norm', g2 = 'norm')
 #' list.param <- list(f1 = list(mean = 3, sd = 0.5), g1 = list(mean = 0, sd = 1),
@@ -39,9 +41,9 @@
 #' estimate <- IBM_estimProp(sample1[['mixt.data']], sample2[['mixt.data']], comp.dist = list.comp,
 #'                           comp.param = list.param, with.correction = FALSE, n.integ = 1000)
 #' ## Determine the decontaminated version of the unknown density by inversion:
-#' decontamin_density_unknownComp(sample1 = sample1[['mixt.data']],
-#'                                comp.dist = list.comp[1:2], comp.param = list.param[1:2],
-#'                                estim.p = estimate$prop.estim[1])
+#' decontaminated_density(sample1 = sample1[['mixt.data']], comp.dist = list.comp[1:2],
+#'                        comp.param = list.param[1:2], estim.p = estimate$prop.estim[1])
+#'
 #' ####### Discrete support:
 #' list.comp <- list(f1 = 'pois', g1 = 'pois',
 #'                   f2 = 'pois', g2 = 'pois')
@@ -59,9 +61,8 @@
 #' estimate <- IBM_estimProp(sample1[['mixt.data']], sample2[['mixt.data']], comp.dist = list.comp,
 #'                           comp.param = list.param, with.correction = FALSE, n.integ = 1000)
 #' ## Determine the decontaminated version of the unknown density by inversion:
-#' decontamin_density_unknownComp(sample1 = sample1[['mixt.data']],
-#'                                comp.dist = list.comp[1:2], comp.param = list.param[1:2],
-#'                                estim.p = estimate$prop.estim[1])
+#' decontaminated_density(sample1 = sample1[['mixt.data']], comp.dist = list.comp[1:2],
+#'                        comp.param = list.param[1:2], estim.p = estimate$prop.estim[1])
 #' ####### Finite discrete support:
 #' list.comp <- list(f1 = 'multinom', g1 = 'multinom',
 #'                   f2 = 'multinom', g2 = 'multinom')
@@ -79,15 +80,13 @@
 #' estimate <- IBM_estimProp(sample1[['mixt.data']], sample2[['mixt.data']], comp.dist = list.comp,
 #'                           comp.param = list.param, with.correction = FALSE, n.integ = 1000)
 #' ## Determine the decontaminated version of the unknown density by inversion:
-#' decontamin_density_unknownComp(sample1 = sample1[['mixt.data']],
-#'                                comp.dist = list.comp[1:2], comp.param = list.param[1:2],
-#'                                estim.p = estimate$prop.estim[1])
+#' decontaminated_density(sample1 = sample1[['mixt.data']], comp.dist = list.comp[1:2],
+#'                        comp.param = list.param[1:2], estim.p = estimate$prop.estim[1])
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-#decontamin_density_unknownComp <- function(sample1, comp.dist, comp.param, estim.p, n.points = 100)
-decontamin_density_unknownComp <- function(sample1, comp.dist, comp.param, estim.p)
+decontaminated_density <- function(sample1, comp.dist, comp.param, estim.p)
 {
   stopifnot( (length(comp.dist) == 2) & (length(comp.param) == 2) )
   if (is.null(comp.dist[[2]]) | is.null(comp.param[[2]])) {
@@ -138,5 +137,11 @@ decontamin_density_unknownComp <- function(sample1, comp.dist, comp.param, estim
   f1_decontamin <- function(x) (1/estim.p) * (l1_emp(x) - (1-estim.p) * g1(x))
   #f1_decontamin_val <- f1_decontamin(seq(from = min(sample1), to = max(sample1), length.out = n.points))
 
-  return( list(decontamin_f = f1_decontamin, supp = support) )
+  obj <- list(decontaminated_density_function = f1_decontamin,
+              support = support)
+  class(obj) <- "decontaminated_dens"
+  obj$call <- match.call()
+
+  return(obj)
+  #return( list(decontamin_f = f1_decontamin, supp = support) )
 }

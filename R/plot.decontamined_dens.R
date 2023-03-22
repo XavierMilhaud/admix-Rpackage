@@ -4,12 +4,11 @@
 #' cumulative distribution function. Recall that an admixture model follows the cumulative distribution function (CDF) L, where
 #' L = p*F + (1-p)*G, with g a known CDF and p and f unknown quantities.
 #'
+#' @param x An object of class 'decontamin_dens' (see ?decontaminated_density).
+#' @param ... Arguments to be passed to methods, such as graphical parameters (see par).
 #' @param x_val A vector of X-axis values at which to plot the decontaminated density f.
-#' @param decontamin_obj An object from function 'decontamin_density_unknownComp', containing the X-axis values and range for plotting,
-#'                       the corresponding Y-axis values, and the support over which to plot the results.
 #' @param add_plot (default to FALSE) A boolean specifying if one plots the decontaminated density over an existing plot. Used for visual
 #'                 comparison purpose.
-#' @param ... Other classical arguments of functions plot (continous support) and barplot (discrete support).
 #'
 #' @details The decontaminated density is obtained by inverting the admixture density, given by l = p*f + (1-p)*g, to isolate the
 #'          unknown component f after having estimated p.
@@ -35,17 +34,14 @@
 #' estimate <- IBM_estimProp(sample1[['mixt.data']], sample2[['mixt.data']], comp.dist = list.comp,
 #'                           comp.param = list.param, with.correction = FALSE, n.integ = 1000)
 #' ## Determine the decontaminated version of the unknown density by inversion:
-#' res1 <- decontamin_density_unknownComp(sample1 = sample1[['mixt.data']],
-#'                                       comp.dist = list.comp[1:2], comp.param = list.param[1:2],
-#'                                       estim.p = estimate$prop.estim[1])
-#' res2 <- decontamin_density_unknownComp(sample1 = sample2[['mixt.data']],
-#'                                        comp.dist = list.comp[3:4], comp.param = list.param[3:4],
-#'                                        estim.p = estimate$prop.estim[2])
+#' res1 <- decontaminated_density(sample1 = sample1[['mixt.data']], comp.dist = list.comp[1:2],
+#'                                comp.param = list.param[1:2], estim.p = estimate$prop.estim[1])
+#' res2 <- decontaminated_density(sample1 = sample2[['mixt.data']], comp.dist = list.comp[3:4],
+#'                                comp.param = list.param[3:4], estim.p = estimate$prop.estim[2])
 #' ## Use appropriate sequence of x values:
-#' plot_decontamin_density(x_val = seq(from=0, to=6, length.out=100), decontamin_obj = res1,
-#'                         add_plot = FALSE)
-#' plot_decontamin_density(x_val = seq(from=0, to=6, length.out=100), decontamin_obj = res2,
-#'                         add_plot = TRUE, col = "red")
+#' plot(x = res1, x_val = seq(from = 0, to = 6, length.out = 100), add_plot = FALSE)
+#' plot(x = res2, col = "red", x_val = seq(from = 0, to = 6, length.out = 100), add_plot = TRUE)
+#'
 #' ####### Countable discrete support:
 #' list.comp <- list(f1 = 'pois', g1 = 'pois',
 #'                   f2 = 'pois', g2 = 'pois')
@@ -63,17 +59,14 @@
 #' estimate <- IBM_estimProp(sample1[['mixt.data']], sample2[['mixt.data']], comp.dist = list.comp,
 #'                           comp.param = list.param, with.correction = FALSE, n.integ = 1000)
 #' ## Determine the decontaminated version of the unknown density by inversion:
-#' res1 <- decontamin_density_unknownComp(sample1 = sample1[['mixt.data']],
-#'                                       comp.dist = list.comp[1:2], comp.param = list.param[1:2],
-#'                                       estim.p = estimate$prop.estim[1])
-#' res2 <- decontamin_density_unknownComp(sample1 = sample2[['mixt.data']],
-#'                                        comp.dist = list.comp[3:4], comp.param = list.param[3:4],
-#'                                        estim.p = estimate$prop.estim[2])
+#' res1 <- decontaminated_density(sample1 = sample1[['mixt.data']], comp.dist = list.comp[1:2],
+#'                                comp.param = list.param[1:2], estim.p = estimate$prop.estim[1])
+#' res2 <- decontaminated_density(sample1 = sample2[['mixt.data']], comp.dist = list.comp[3:4],
+#'                                comp.param = list.param[3:4], estim.p = estimate$prop.estim[2])
 #' ## Use appropriate sequence of x values:
-#' plot_decontamin_density(x_val = seq(from=0, to=15, by=1), decontamin_obj = res1,
-#'                         add_plot = FALSE)
-#' plot_decontamin_density(x_val = seq(from=0, to=15, by=1), decontamin_obj = res2,
-#'                         add_plot = TRUE, col = "red")
+#' plot(x = res1, x_val = seq(from = 0, to = 15, by = 1), add_plot = FALSE)
+#' plot(x = res2, col = "red", x_val= seq(from=0,to=15,by=1), add_plot = TRUE)
+#'
 #' ####### Finite discrete support:
 #' list.comp <- list(f1 = 'multinom', g1 = 'multinom',
 #'                   f2 = 'multinom', g2 = 'multinom')
@@ -91,25 +84,21 @@
 #' estimate <- IBM_estimProp(sample1[['mixt.data']], sample2[['mixt.data']], comp.dist = list.comp,
 #'                           comp.param = list.param, with.correction = FALSE, n.integ = 1000)
 #' ## Determine the decontaminated version of the unknown density by inversion:
-#' res1 <- decontamin_density_unknownComp(sample1 = sample1[['mixt.data']],
-#'                                       comp.dist = list.comp[1:2], comp.param = list.param[1:2],
-#'                                       estim.p = estimate$prop.estim[1])
-#' res2 <- decontamin_density_unknownComp(sample1 = sample2[['mixt.data']],
-#'                                        comp.dist = list.comp[3:4], comp.param = list.param[3:4],
-#'                                        estim.p = estimate$prop.estim[2])
+#' res1 <- decontaminated_density(sample1 = sample1[['mixt.data']], comp.dist = list.comp[1:2],
+#'                                comp.param = list.param[1:2], estim.p = estimate$prop.estim[1])
+#' res2 <- decontaminated_density(sample1 = sample2[['mixt.data']], comp.dist = list.comp[3:4],
+#'                                comp.param = list.param[3:4], estim.p = estimate$prop.estim[2])
 #' ## Use appropriate sequence of x values:
-#' plot_decontamin_density(x_val = seq(from=0, to=6, by=1), decontamin_obj = res1,
-#'                         add_plot = FALSE)
-#' plot_decontamin_density(x_val = seq(from=0, to=6, by=1), decontamin_obj = res2,
-#'                         add_plot = TRUE, col = "red")
+#' plot(x = res1, x_val = seq(from = 0, to=6, by = 1), add_plot = FALSE)
+#' plot(x = res2, col = "red", x_val = seq(from = 0, to = 6, by = 1), add_plot = TRUE)
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-plot_decontamin_density <- function(x_val, decontamin_obj, add_plot = FALSE, ...)
+plot.decontaminated_dens <- function(x, ..., x_val, add_plot = FALSE)
 {
-  support <- decontamin_obj$supp
-  decontamin_dens_values <- decontamin_obj$decontamin_f(x_val)
+  support <- x$support
+  decontamin_dens_values <- x$decontaminated_density_function(x_val)
   decontamin_dens_values[which(is.na(decontamin_dens_values))] <- 0
   decontamin_dens_values <- pmax(decontamin_dens_values, 0)
   x.range <- c(min(x_val), max(x_val))
@@ -120,7 +109,7 @@ plot_decontamin_density <- function(x_val, decontamin_obj, add_plot = FALSE, ...
       graphics::barplot(height = decontamin_dens_values, names = as.character(x_val),
                         xlim = x.range, ylim = y.range, col = "grey", ...)
     } else {
-      plot(x = x_val, y = decontamin_dens_values, xlim = x.range, ylim = y.range, type = "l", ...)
+      plot(x = x_val, y = decontamin_dens_values, xlim = x.range, ylim = y.range, ...)
     }
 
   } else {
@@ -128,18 +117,16 @@ plot_decontamin_density <- function(x_val, decontamin_obj, add_plot = FALSE, ...
     old_par_new <- graphics::par()$new
     #old_par_axis <- graphics::par()$usr
     graphics::par(new = TRUE)
-#    graphics::par(usr = c(old_par_axis[-4],y.range[2]))
-#    current_col <- par()$col
+    #graphics::par(usr = c(old_par_axis[-4],y.range[2]))
+    #current_col <- par()$col
     if (support == "discrete") {
-      graphics::barplot(height = decontamin_dens_values, names = as.character(x_val),
-                        add = TRUE, ...)
-#      graphics::barplot(height = decontamin_dens_values, names = as.character(x_val),
-#                        add = TRUE, col = colors()[sample((1:length(colors()))[-which(current_col == colors())], 1)])
+      graphics::barplot(height = decontamin_dens_values, names = as.character(x_val), add = add_plot, ...)
+      #graphics::barplot(height = decontamin_dens_values, names = as.character(x_val),
+      #                  add = TRUE, col = colors()[sample((1:length(colors()))[-which(current_col == colors())], 1)])
     } else {
       graphics::lines(x = x_val, y = decontamin_dens_values, ...)
-#      graphics::lines(x = x_val, y = decontamin_dens_values, col = colors()[sample((1:length(colors()))[-which(current_col == colors())], 1)])
+      #graphics::lines(x = x_val, y = decontamin_dens_values, col = colors()[sample((1:length(colors()))[-which(current_col == colors())], 1)])
     }
     on.exit(graphics::par(new = old_par_new))
   }
-
 }
