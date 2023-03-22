@@ -88,7 +88,8 @@ list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
                    f3 = NULL, g3 = list(mean = -3, sd = 0.8))
 ## Perform the 3-samples test:
 IBM_k_samples_test(samples = list(sim1,sim2,sim3), sim_U= NULL, n_sim_tab = 20, min_size = NULL,
-                   comp.dist = list.comp, comp.param = list.param, parallel = TRUE, n_cpu = 2)
+                   comp.dist = list.comp, comp.param = list.param, conf.level = 0.95,
+                   parallel = FALSE, n_cpu = 2)
 
 ####### Now under the alternative H1:
 list.comp <- list(f1 = "norm", g1 = "norm",
@@ -111,7 +112,7 @@ list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
                    f3 = NULL, g3 = list(mean = 3, sd = 0.8))
 IBM_k_samples_test(samples = list(sim1,sim2,sim3), sim_U= NULL, n_sim_tab = 20, min_size = NULL,
                    comp.dist = list.comp, comp.param = list.param, conf.level = 0.95,
-                   parallel = TRUE, n_cpu = 2)
+                   parallel = FALSE, n_cpu = 2)
 }
 
 }
