@@ -4,8 +4,10 @@
 # Welcome to R package admix
 
 <!-- badges: start -->
-
-[![test-coverage](https://github.com/XavierMilhaud/admix/actions/workflows/test-coverage/badge.svg)](https://github.com/XavierMilhaud/admix/actions)
+[![R-CMD-check](https://github.com/XavierMilhaud/admix/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/XavierMilhaud/admix/actions/workflows/R-CMD-check.yaml)
+[![test-coverage](https://github.com/XavierMilhaud/admix/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/XavierMilhaud/admix/actions/workflows/test-coverage.yaml)
+[![pkgdown](https://github.com/XavierMilhaud/admix/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/XavierMilhaud/admix/actions/workflows/pkgdown.yaml)
+[![pages-build-deployment](https://github.com/XavierMilhaud/admix/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/XavierMilhaud/admix/actions/workflows/pages/pages-build-deployment)
 
 The goal of admix is to provide code for estimation, hypothesis testing
 and clustering methods in admixture models.
