@@ -2,7 +2,7 @@
 % Please edit documentation in R/BVdk_varCov_estimators.R
 \name{BVdk_varCov_estimators}
 \alias{BVdk_varCov_estimators}
-\title{Estimation of the variance of the estimators in admixture models with symmetric unknown density}
+\title{Estimation of the variance of the estimators in admixture models with symmetric unknown density.}
 \usage{
 BVdk_varCov_estimators(data, loc, p, comp.dist, comp.param)
 }

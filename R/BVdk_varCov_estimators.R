@@ -1,4 +1,4 @@
-#' Estimation of the variance of the estimators in admixture models with symmetric unknown density
+#' Estimation of the variance of the estimators in admixture models with symmetric unknown density.
 #'
 #' Semiparametric estimation of the variance of the estimators, i.e. the mixture weight p and the location shift parameter mu
 #' considering the admixture model with probability density function l:
