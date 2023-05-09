@@ -21,7 +21,11 @@
 #'
 #' @details See the paper at the following HAL weblink: https://hal.archives-ouvertes.fr/hal-03201760
 #'
-#' @return A list with three elements: 1) the number of identified clusters; 2) the cluster affiliation; 3) the discrepancy matrix.
+#' @return A list with eight elements: 1) the number of populations under consideration; 2) the number of detected clusters;
+#'         3) the list of p-values for each test performed; 4) the cluster affiliation for each population; 5) the chosen confidence
+#'         level of statistical tests; 6) the cluster components; 7) the estimated weights of the unknown component distributions inside
+#'         each cluster (remind that estimated weights are consistent only under the null); 8) the matrix of pairwise discrepancies
+#'         among all populations.
 #'
 #' @examples
 #' \donttest{
@@ -149,14 +153,18 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
                                  parallel = parallel, n_cpu = n_cpu)
   q_H <- stats::quantile(U[["U_sim"]], conf.level)
   test.H0 <- contrast.matrix[which_row, which_col] > q_H
-#  test.H0 <- H0.test[which_row,which_col]
-
+  ## Numerical vector storing the p-values associated to each test: each cluster is closed once the p-value lies below the H0-rejection
+  ## threshold (1-conf.level). This enables to see whether we were close to terminate the cluster or not each time we add a new population.
+  p_value <- numeric(length = 0L)
   if (!test.H0) {
     clusters[[1]] <- alreadyGrouped_samples <- as.character(c(which_row, which_col))
     neighboors <- c(discrepancy.id[which_row, ], discrepancy.id[which_col, ], discrepancy.id[ ,which_row], discrepancy.id[ ,which_col])
     new.n_clust <- n_clust <- 1
     ## Look for a another member to integrate the newly built cluster:
     indexesSamples_to_consider <- c(0,0,0)
+    CDF_U <- stats::ecdf(U[["U_sim"]])
+    p_value <- c(p_value, 1 - CDF_U(contrast.matrix[which_row, which_col]))
+    CDF_U <- NULL
   } else {
     clusters[[1]] <- as.character(which_row)
     clusters[[2]] <- as.character(which_col)
@@ -191,6 +199,9 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
                 comp.param = couples.param[[which((couples.list[ ,1] == as.numeric(first_sample)) & (couples.list[ ,2] == as.numeric(second_sample)))]],
                 parallel = parallel, n_cpu = n_cpu)
         q_H <- stats::quantile(U[["U_sim"]], conf.level)
+        CDF_U <- stats::ecdf(U[["U_sim"]])
+        p_val <- 1 - CDF_U(contrast.matrix[as.numeric(first_sample), as.numeric(second_sample)])
+        CDF_U <- NULL
       }
       if (any(indexesSamples_to_consider_new != indexesSamples_to_consider)) {
         ## First check whether the new population could eventually be affected to the existing cluster by looking at results from pairwise equality tests:
@@ -201,7 +212,10 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
           ## case of only one pair of two populations:
           couples_to_test <- sort(couples_to_test)
           if (H0.test[couples_to_test[1],couples_to_test[2]] == TRUE) { k_sample_decision <- TRUE
-          } else { k_sample_decision <- FALSE }
+          } else {
+            k_sample_decision <- FALSE
+            k_sample_pval <- p_val
+          }
         } else {
           couples_to_test <- t(apply(X = couples_to_test, 1, sort))
           ## Case of list of two populations:
@@ -215,6 +229,7 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
                                                 comp.param = comp.param[comp_indices], conf.level = conf.level,
                                                 parallel = parallel, n_cpu = n_cpu)
             k_sample_decision <- k_sample_test$rejection_rule
+            k_sample_pval <- k_sample_test$p_value
           }
         }
       }
@@ -224,6 +239,7 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
         which_row <- which_col <- as.numeric(clusters[[length(clusters)]])
         neighboors <- c(discrepancy.id[which_row, ], discrepancy.id[ ,which_col])
         new.n_clust <- n_clust
+        p_value <- c(p_value, k_sample_pval)
       } else {
         alreadyGrouped_samples <- unique(c(alreadyGrouped_samples, first_sample, second_sample))
         clusters <- list(clusters,
@@ -232,9 +248,9 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
         neighboors <- c(discrepancy.id[which_row, ], discrepancy.id[ ,which_col])
         new.n_clust <- n_clust + 1
         indexesSamples_to_consider_new <- as.numeric(clusters[[length(clusters)]])
+        p_value <- c(p_value, 2e-16)
       }
     }
-#    print(clusters)
     indexesSamples_to_consider <- indexesSamples_to_consider_new
 
   } # End of While
@@ -268,6 +284,7 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
 
   obj <- list(n_popu = length(samples),
               n_clust = n_clust_final,
+              pval_clust = round(p_value, 3),
               clusters = clusters_affiliation,
               confidence_level = conf.level,
               clust_pop = clusters_components,

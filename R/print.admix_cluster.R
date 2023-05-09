@@ -1,8 +1,8 @@
 #' Results of the clustering algorithm performed over the K populations following admixture models.
 #'
 #' Print the detected clusters among the populations under study. This method also prints the number of clusters,
-#' the estimated weights of the unknown component distributions inside each cluster, and the discrepancy matrix.
-#' The latter represents some kind of distance between the populations.
+#' the p-values of statistical tests performed when building the clusters, the estimated weights of the unknown component
+#' distributions inside each cluster, and the discrepancy matrix. The latter represents some kind of distance between the populations.
 #'
 #' @param x An object of class 'admix_cluster' (see ?admix_clustering).
 #' @param ... further arguments passed to or from other methods.
@@ -51,6 +51,7 @@ print.admix_cluster <- function(x, ...)
   cat("\nThe number of populations/samples under study is ", x$n_popu, ".", sep = "")
   cat("\nThe level of the underlying k-sample testing procedure is set to ", (1-x$confidence_level)*100, "%.", sep = "")
   cat("\n\nThe number of detected clusters in these populations equals ", x$n_clust, ".", sep = "")
+  cat("\nLast p-values before closing the clusters equal: ", paste(x$pval_clust, collapse = ", "), ".", sep = "")
   cat("\n\nThe list of clusters with populations belonging to them (in numeric format, i.e. inside c()) :\n",
       paste("  - Cluster id. ", 1:length(x$clust_pop), ": ", x$clust_pop, collapse="\n", sep = ""))
   cat("\n\nThe list of estimated weights for the unknown component distributions in each detected cluster
