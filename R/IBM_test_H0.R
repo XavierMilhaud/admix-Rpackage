@@ -134,6 +134,6 @@ IBM_test_H0 <- function(samples, known.p = NULL, comp.dist = NULL, comp.param = 
   }
 
   return( list(confidence_level = conf.level, rejection_rule = reject.decision, p_value = p_value,
-               test.stat = contrast_val, weights = estim.weights, tabulated_dist = sim_U) )
+               test.stat = contrast_val, weights = estim.weights, sim_U = sim_U) )
 }
 
