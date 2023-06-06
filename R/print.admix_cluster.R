@@ -51,12 +51,24 @@ print.admix_cluster <- function(x, ...)
   cat("\nThe number of populations/samples under study is ", x$n_popu, ".", sep = "")
   cat("\nThe level of the underlying k-sample testing procedure is set to ", (1-x$confidence_level)*100, "%.", sep = "")
   cat("\n\nThe number of detected clusters in these populations equals ", x$n_clust, ".", sep = "")
-  cat("\nLast p-values before closing the clusters equal: ", paste(x$pval_clust, collapse = ", "), ".", sep = "")
+  cat("\nThe p-values of the k-sample tests (showing when to close the clusters (i.e. p-value < ", (1-x$confidence_level), ") equal: ",
+      paste(x$pval_clust, collapse=", "), ".", sep="")
   cat("\n\nThe list of clusters with populations belonging to them (in numeric format, i.e. inside c()) :\n",
-      paste("  - Cluster id. ", 1:length(x$clust_pop), ": ", x$clust_pop, collapse="\n", sep = ""))
+      paste("  - Cluster #", 1:length(x$clust_pop), ": vector of populations ", x$clust_pop, collapse="\n", sep = ""))
+  weights.list <- vector(mode = "list", length = length(x$clust_weights))
+#  for (i in 1:length(x$clust_weights)) {
+#    weights.list[[i]] <- x$clust_weights[[i]][seq(from=1, to=length(x$clust_weights[[i]]), by = x$clust_sizes[i]-1)]
+#  }
+  for (i in 1:length(x$clust_weights)) {
+    if (x$clust_sizes[i] > 2) {
+      weights.list[[i]] <- c(x$clust_weights[[i]][cumsum(c(1,(x$clust_sizes[i]-1):2)),1], x$clust_weights[[i]][nrow(x$clust_weights[[i]]),2])
+    } else {
+      weights.list[[i]] <- c(x$clust_weights[[i]])
+    }
+  }
   cat("\n\nThe list of estimated weights for the unknown component distributions in each detected cluster
       (in the same format and order as listed populations for clusters just above) :\n",
-      paste("  - estimated weights of the unknown component distributions for cluster ", 1:length(x$clust_pop), ": ", x$clust_weights, collapse="\n"))
+      paste("  - estimated weights of the unknown component distributions for cluster ", 1:length(x$clust_pop), ": ", weights.list, collapse="\n"))
   cat("\n\nThe matrix giving the distances between populations, used in the clustering procedure through the k-sample tests:\n")
   print(x$discrepancy_matrix)
 }
