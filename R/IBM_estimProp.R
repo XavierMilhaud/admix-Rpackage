@@ -95,7 +95,8 @@ IBM_estimProp <- function(sample1, sample2, known.prop = NULL, comp.dist = NULL,
     if (!is.null(known.prop)) {
       fixed.p.X <- known.prop[1]
     } else {
-      fixed.p.X <- 0.3
+      ## set arbitrary the proportion to 1/2, could be any other value belonging to ]0,1[:
+      fixed.p.X <- 0.5
     }
     par.init <- 0.5
   } else {
