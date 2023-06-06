@@ -38,7 +38,7 @@ Larger values are more computationally intensive but also lead to more accurate 
 }
 \value{
 A list containing 'alp.hat' (estimate of the unknown component weight), 'Fs.hat' (list with elements 'x' and 'y' values for the function estimate
-of the unknown cumultaive distribution function), 'dist.out' which is an object of the class 'dist.fun'
+of the unknown cumulative distribution function), 'dist.out' which is an object of the class 'dist.fun'
 using the complete data.gen, 'c.n' the value of the tuning parameter used to compute the final estimate,
 and finally 'cv.out' which is an object of class 'cv.mixmodel'. The object is NULL if method is "fixed".
 }
