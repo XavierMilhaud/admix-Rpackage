@@ -12,6 +12,7 @@ IBM_k_samples_test(
   comp.dist = NULL,
   comp.param = NULL,
   conf.level = 0.95,
+  tune.penalty = TRUE,
   parallel = FALSE,
   n_cpu = 2
 )
@@ -39,6 +40,9 @@ be specified as follows (with K = 3):
 list(f1 = NULL, g1 = list(mean=0,sd=1), f2 = NULL, g2 = list(mean=3,sd=1.1), f3 = NULL, g3 = list(mean=-2,sd=0.6)).}
 
 \item{conf.level}{The confidence level of the K-sample test.}
+
+\item{tune.penalty}{A boolean that allows to choose between a classical penalty term or an optimized penalty embedding some tuning parameters
+(automatically optimized). Optimized penalty is particularly useful for low sample size.}
 
 \item{parallel}{(default to FALSE) Boolean indicating whether parallel computations are performed.}
 
@@ -89,7 +93,7 @@ list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
 ## Perform the 3-samples test:
 IBM_k_samples_test(samples = list(sim1,sim2,sim3), sim_U= NULL, n_sim_tab = 20, min_size = NULL,
                    comp.dist = list.comp, comp.param = list.param, conf.level = 0.95,
-                   parallel = FALSE, n_cpu = 2)
+                   tune.penalty = FALSE, parallel = FALSE, n_cpu = 2)
 
 ####### Now under the alternative H1:
 list.comp <- list(f1 = "norm", g1 = "norm",
@@ -112,7 +116,7 @@ list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
                    f3 = NULL, g3 = list(mean = 3, sd = 0.8))
 IBM_k_samples_test(samples = list(sim1,sim2,sim3), sim_U= NULL, n_sim_tab = 20, min_size = NULL,
                    comp.dist = list.comp, comp.param = list.param, conf.level = 0.95,
-                   parallel = FALSE, n_cpu = 2)
+                   tune.penalty = FALSE, parallel = FALSE, n_cpu = 2)
 }
 
 }
