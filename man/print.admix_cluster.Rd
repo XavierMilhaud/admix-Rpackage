@@ -13,8 +13,8 @@
 }
 \description{
 Print the detected clusters among the populations under study. This method also prints the number of clusters,
-the estimated weights of the unknown component distributions inside each cluster, and the discrepancy matrix.
-The latter represents some kind of distance between the populations.
+the p-values of statistical tests performed when building the clusters, the estimated weights of the unknown component
+distributions inside each cluster, and the discrepancy matrix. The latter represents some kind of distance between the populations.
 }
 \examples{
 \donttest{
