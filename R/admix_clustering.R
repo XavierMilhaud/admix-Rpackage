@@ -15,6 +15,8 @@
 #'                   If there are unknown elements, they must be specified as 'NULL' objects. For instance, 'comp.param' could
 #'                   be specified as follows (with K = 3):
 #'                   list(f1 = NULL, g1 = list(mean=0,sd=1), f2 = NULL, g2 = list(mean=3,sd=1.1), f3 = NULL, g3 = list(mean=-2,sd=0.6)).
+#' @param tabul.dist Only useful for comparisons of detected clusters at different confidence levels. Is a list of the tabulated distributions
+#'                   of the stochastic integral for each cluster previously detected.
 #' @param conf.level The confidence level of the K-sample test used in the clustering procedure.
 #' @param parallel (default to FALSE) Boolean to indicate whether parallel computations are performed (speed-up the tabulation).
 #' @param n_cpu (default to 2) Number of cores used when parallelizing.
@@ -29,7 +31,7 @@
 #'
 #' @examples
 #' \donttest{
-#' ## Simulate data (chosen parameters indicate 2 clusters (populations (1,3), (2,4))!):
+#' ## Simulate data (chosen parameters indicate 2 clusters (populations (1,3), and (2,4)):
 #' list.comp <- list(f1 = "gamma", g1 = "exp",
 #'                   f2 = "gamma", g2 = "exp",
 #'                   f3 = "gamma", g3 = "gamma",
@@ -57,14 +59,15 @@
 #'                    f4 = NULL, g4 = list(rate = 1/7))
 #' clusters <- admix_clustering(samples = list(A.sim,B.sim,C.sim,D.sim), n_sim_tab = 8,
 #'                              comp.dist=list.comp, comp.param=list.param, conf.level = 0.95,
-#'                              parallel=FALSE, n_cpu=2)
+#'                              parallel = FALSE, n_cpu = 2)
 #' clusters
 #' }
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, comp.param = NULL, conf.level = 0.95, parallel = FALSE, n_cpu = 2)
+admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, comp.param = NULL,
+                             tabul.dist = NULL, conf.level = 0.95, parallel = FALSE, n_cpu = 2)
 {
   ## Control whether parallel computations were asked for or not:
   if (parallel) {
@@ -132,26 +135,36 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
     discrepancy.rank[couples.list[k, ][1], couples.list[k, ][2]] <- rank(unlist(empirical.contr))[k]
     ## Pairwise testing: test H0 between the two considered populations.
     pairwise_H0test <- NULL
-    pairwise_H0test <- IBM_test_H0(samples = list(samples[[couples.list[k, ][1]]], samples[[couples.list[k, ][2]]]),
-                                   known.p = NULL, comp.dist = couples.expr[[k]], comp.param = couples.param[[k]],
-                                   sim_U = NULL, n_sim_tab = 20, min_size = NULL, conf.level = conf.level,
-                                   parallel = parallel, n_cpu = n_cpu)
+    pairwise_H0test <- IBM_2samples_test(samples = list(samples[[couples.list[k, ][1]]], samples[[couples.list[k, ][2]]]),
+                                         known.p = NULL, comp.dist = couples.expr[[k]], comp.param = couples.param[[k]],
+                                         sim_U = NULL, n_sim_tab = 30, min_size = NULL, conf.level = conf.level,
+                                         parallel = parallel, n_cpu = n_cpu)
     weights.list[k, ] <- pairwise_H0test[["weights"]]
     H0.test[couples.list[k, ][1], couples.list[k, ][2]] <- pairwise_H0test$rejection_rule
 #    tabulated_dist[[k]] <- pairwise_H0test$tabulated_dist
   }
 
   ## Start algorithm to create the clusters :
-  clusters <- vector(mode = "list")
+  clusters <- tab_distrib <- vector(mode = "list")
   which_row <- unlist(apply(discrepancy.rank, 2, function(x) which(x == 1)))
   which_col <- unlist(apply(discrepancy.rank, 1, function(x) which(x == 1)))
   neighboors_index_init <- which.min(contrast.matrix)
   first.group <- discrepancy.id[which_row, which_col]
-  U <- IBM_tabul_stochasticInteg(n.sim = n_sim_tab, n.varCovMat = 80, sample1 = samples[[which_row]], sample2 = samples[[which_col]],
-                                 min_size = minimal_size, comp.dist = couples.expr[[which((couples.list[ ,1] == which_row) & (couples.list[ ,2] == which_col))]],
-                                 comp.param = couples.param[[which((couples.list[ ,1] == which_row) & (couples.list[ ,2] == which_col))]],
-                                 parallel = parallel, n_cpu = n_cpu)
-  q_H <- stats::quantile(U[["U_sim"]], conf.level)
+  if (is.null(tabul.dist)) {
+    U <- IBM_tabul_stochasticInteg(n.sim = n_sim_tab, n.varCovMat = 80, sample1 = samples[[which_row]], sample2 = samples[[which_col]],
+                                   min_size = minimal_size, comp.dist = couples.expr[[which((couples.list[ ,1] == which_row) & (couples.list[ ,2] == which_col))]],
+                                   comp.param = couples.param[[which((couples.list[ ,1] == which_row) & (couples.list[ ,2] == which_col))]],
+                                   parallel = parallel, n_cpu = n_cpu)
+    tab_distrib[[1]] <- U[["U_sim"]]
+    Usim <- U[["U_sim"]]
+    CDF_U <- stats::ecdf(U[["U_sim"]])
+    q_H <- stats::quantile(U[["U_sim"]], conf.level)
+  } else {
+    Usim <- tabul.dist[[1]]
+    tab_distrib[[1]] <- tabul.dist[[1]]
+    CDF_U <- stats::ecdf(tabul.dist[[1]])
+    q_H <- stats::quantile(tabul.dist[[1]], conf.level)
+  }
   test.H0 <- contrast.matrix[which_row, which_col] > q_H
   ## Numerical vector storing the p-values associated to each test: each cluster is closed once the p-value lies below the H0-rejection
   ## threshold (1-conf.level). This enables to see whether we were close to terminate the cluster or not each time we add a new population.
@@ -162,9 +175,11 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
     new.n_clust <- n_clust <- 1
     ## Look for a another member to integrate the newly built cluster:
     indexesSamples_to_consider <- c(0,0,0)
-    CDF_U <- stats::ecdf(U[["U_sim"]])
+    #CDF_U <- stats::ecdf(U[["U_sim"]])
     p_value <- c(p_value, 1 - CDF_U(contrast.matrix[which_row, which_col]))
     CDF_U <- NULL
+    prog_bar <- utils::txtProgressBar(min = 0, max = length(samples), style = 3, width = 50, char = "=")
+    utils::setTxtProgressBar(prog_bar, 2/length(samples))
   } else {
     clusters[[1]] <- as.character(which_row)
     clusters[[2]] <- as.character(which_col)
@@ -174,9 +189,12 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
     new.n_clust <- 2
     ## Look for a second member to integrate the newly second built cluster:
     indexesSamples_to_consider <- c(0,0)
-  }
+    prog_bar <- utils::txtProgressBar(min = 0, max = length(samples), style = 3,  width = 50, char = "=")
+    utils::setTxtProgressBar(prog_bar, 1/length(samples))
+    }
 
   while (length(alreadyGrouped_samples) < length(samples)) {
+    ## Detect which are the neighboors of the current population under study:
     neighboors_index <- sort(unique(match(x = neighboors[-which(is.na(neighboors))], table = c(discrepancy.id))))
     ## Remove already studied couples:
     neighboors_index <- neighboors_index[-which(!is.na(match(x = neighboors_index, table = neighboors_index_init)))]
@@ -193,17 +211,29 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
       ## Tabulate the new inner convergence distribution:
       if (new.n_clust == (n_clust+1)) {
         n_clust <- n_clust + 1
-        U <- IBM_tabul_stochasticInteg(n.sim = n_sim_tab, n.varCovMat = 80, sample1 = samples[[as.numeric(first_sample)]],
-                sample2 = samples[[as.numeric(second_sample)]], min_size = minimal_size,
-                comp.dist = couples.expr[[which((couples.list[ ,1] == as.numeric(first_sample)) & (couples.list[ ,2] == as.numeric(second_sample)))]],
-                comp.param = couples.param[[which((couples.list[ ,1] == as.numeric(first_sample)) & (couples.list[ ,2] == as.numeric(second_sample)))]],
-                parallel = parallel, n_cpu = n_cpu)
-        q_H <- stats::quantile(U[["U_sim"]], conf.level)
-        CDF_U <- stats::ecdf(U[["U_sim"]])
-        p_val <- 1 - CDF_U(contrast.matrix[as.numeric(first_sample), as.numeric(second_sample)])
-        CDF_U <- NULL
+        if ( is.null(tabul.dist) | (new.n_clust > length(tabul.dist)) ) {
+          U <- IBM_tabul_stochasticInteg(n.sim = n_sim_tab, n.varCovMat = 80, sample1 = samples[[as.numeric(first_sample)]],
+                                         sample2 = samples[[as.numeric(second_sample)]], min_size = minimal_size,
+                                         comp.dist = couples.expr[[which((couples.list[ ,1] == as.numeric(first_sample)) & (couples.list[ ,2] == as.numeric(second_sample)))]],
+                                         comp.param = couples.param[[which((couples.list[ ,1] == as.numeric(first_sample)) & (couples.list[ ,2] == as.numeric(second_sample)))]],
+                                         parallel = parallel, n_cpu = n_cpu)
+          ## Store the simulated tabulated distribution:
+          Usim <- U[["U_sim"]]
+          tab_distrib <- append(tab_distrib, list(Usim))
+          q_H <- stats::quantile(U[["U_sim"]], conf.level)
+          CDF_U <- stats::ecdf(U[["U_sim"]])
+          p_val <- 1 - CDF_U(contrast.matrix[as.numeric(first_sample), as.numeric(second_sample)])
+          CDF_U <- NULL
+        } else {
+          Usim <- tabul.dist[[new.n_clust]]
+          q_H <- stats::quantile(tabul.dist[[new.n_clust]], conf.level)
+          CDF_U <- stats::ecdf(tabul.dist[[new.n_clust]])
+          p_val <- 1 - CDF_U(contrast.matrix[as.numeric(first_sample), as.numeric(second_sample)])
+          CDF_U <- NULL
+        }
       }
-      if (any(indexesSamples_to_consider_new != indexesSamples_to_consider)) {
+#      if (any(indexesSamples_to_consider_new != indexesSamples_to_consider)) {
+      if (length(setdiff(indexesSamples_to_consider_new, indexesSamples_to_consider)) > 0) {
         ## First check whether the new population could eventually be affected to the existing cluster by looking at results from pairwise equality tests:
         which_to_test <- indexesSamples_to_consider_new[indexesSamples_to_consider_new %in% as.numeric(clusters[[length(clusters)]]) == FALSE]
         #couples_to_test <- apply(apply(X = expand.grid(list(clusters[[length(clusters)]], which_to_test)), 1, as.numeric), 1, sort)
@@ -224,10 +254,15 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
           } else {
             ## K-sample test :
             comp_indices <- sort( c(2*indexesSamples_to_consider_new-1, 2*indexesSamples_to_consider_new) )
-            k_sample_test <- IBM_k_samples_test(samples = samples[indexesSamples_to_consider_new], sim_U = U[["U_sim"]],
+            #k_sample_test <- IBM_k_samples_test(samples = samples[indexesSamples_to_consider_new], sim_U = U[["U_sim"]],
+            #                                    n_sim_tab = n_sim_tab, min_size = minimal_size, comp.dist = comp.dist[comp_indices],
+            #                                    comp.param = comp.param[comp_indices], conf.level = conf.level,
+            #                                    tune.penalty = TRUE, parallel = parallel, n_cpu = n_cpu)
+            k_sample_test <- IBM_k_samples_test(samples = samples[indexesSamples_to_consider_new], sim_U = Usim,
                                                 n_sim_tab = n_sim_tab, min_size = minimal_size, comp.dist = comp.dist[comp_indices],
                                                 comp.param = comp.param[comp_indices], conf.level = conf.level,
-                                                parallel = parallel, n_cpu = n_cpu)
+                                                tune.penalty = TRUE, parallel = parallel, n_cpu = n_cpu)
+            tab_distrib <- append(tab_distrib, list(k_sample_test[["sim_U"]]))
             k_sample_decision <- k_sample_test$rejection_rule
             k_sample_pval <- k_sample_test$p_value
           }
@@ -252,8 +287,9 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
       }
     }
     indexesSamples_to_consider <- indexesSamples_to_consider_new
-
+    utils::setTxtProgressBar(prog_bar, length(alreadyGrouped_samples))
   } # End of While
+  base::close(prog_bar)
 
   ## Define function that copies upper triangle to lower triangle to make the matrix become symmetric:
   f <- function(mat) {
@@ -288,8 +324,10 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
               clusters = clusters_affiliation,
               confidence_level = conf.level,
               clust_pop = clusters_components,
+              clust_sizes = sapply(X = clusters_components, length),
               clust_weights = clusters_weights,
-              discrepancy_matrix = symmetric_dist_mat)
+              discrepancy_matrix = symmetric_dist_mat,
+              tab_distributions = unique(tab_distrib))
   class(obj) <- "admix_cluster"
   obj$call <- match.call()
 

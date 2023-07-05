@@ -9,6 +9,7 @@ admix_clustering(
   n_sim_tab = 100,
   comp.dist = NULL,
   comp.param = NULL,
+  tabul.dist = NULL,
   conf.level = 0.95,
   parallel = FALSE,
   n_cpu = 2
@@ -31,6 +32,9 @@ If there are unknown elements, they must be specified as 'NULL' objects. For ins
 be specified as follows (with K = 3):
 list(f1 = NULL, g1 = list(mean=0,sd=1), f2 = NULL, g2 = list(mean=3,sd=1.1), f3 = NULL, g3 = list(mean=-2,sd=0.6)).}
 
+\item{tabul.dist}{Only useful for comparisons of detected clusters at different confidence levels. Is a list of the tabulated distributions
+of the stochastic integral for each cluster previously detected.}
+
 \item{conf.level}{The confidence level of the K-sample test used in the clustering procedure.}
 
 \item{parallel}{(default to FALSE) Boolean to indicate whether parallel computations are performed (speed-up the tabulation).}
@@ -38,7 +42,11 @@ list(f1 = NULL, g1 = list(mean=0,sd=1), f2 = NULL, g2 = list(mean=3,sd=1.1), f3 
 \item{n_cpu}{(default to 2) Number of cores used when parallelizing.}
 }
 \value{
-A list with three elements: 1) the number of identified clusters; 2) the cluster affiliation; 3) the discrepancy matrix.
+A list with eight elements: 1) the number of populations under consideration; 2) the number of detected clusters;
+3) the list of p-values for each test performed; 4) the cluster affiliation for each population; 5) the chosen confidence
+level of statistical tests; 6) the cluster components; 7) the estimated weights of the unknown component distributions inside
+each cluster (remind that estimated weights are consistent only under the null); 8) the matrix of pairwise discrepancies
+among all populations.
 }
 \description{
 Create clusters on the unknown components related to the K populations following admixture models. Based on the K-sample test
@@ -49,7 +57,7 @@ See the paper at the following HAL weblink: https://hal.archives-ouvertes.fr/hal
 }
 \examples{
 \donttest{
-## Simulate data (chosen parameters indicate 2 clusters (populations (1,3), (2,4))!):
+## Simulate data (chosen parameters indicate 2 clusters (populations (1,3), and (2,4)):
 list.comp <- list(f1 = "gamma", g1 = "exp",
                   f2 = "gamma", g2 = "exp",
                   f3 = "gamma", g3 = "gamma",
@@ -77,7 +85,7 @@ list.param <- list(f1 = NULL, g1 = list(rate = 1/3.5),
                    f4 = NULL, g4 = list(rate = 1/7))
 clusters <- admix_clustering(samples = list(A.sim,B.sim,C.sim,D.sim), n_sim_tab = 8,
                              comp.dist=list.comp, comp.param=list.param, conf.level = 0.95,
-                             parallel=FALSE, n_cpu=2)
+                             parallel = FALSE, n_cpu = 2)
 clusters
 }
 
