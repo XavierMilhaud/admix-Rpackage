@@ -40,6 +40,9 @@
     <loc>/reference/BVdk_varCov_estimators.html</loc>
   </url>
   <url>
+    <loc>/reference/IBM_2samples_test.html</loc>
+  </url>
+  <url>
     <loc>/reference/IBM_empirical_contrast.html</loc>
   </url>
   <url>
@@ -62,9 +65,6 @@
   </url>
   <url>
     <loc>/reference/IBM_tabul_stochasticInteg.html</loc>
-  </url>
-  <url>
-    <loc>/reference/IBM_test_H0.html</loc>
   </url>
   <url>
     <loc>/reference/IBM_theoretical_contrast.html</loc>
@@ -100,7 +100,7 @@
     <loc>/reference/allGalaxies.html</loc>
   </url>
   <url>
-    <loc>/reference/decontamin_cdf_unknownComp.html</loc>
+    <loc>/reference/decontaminated_cdf.html</loc>
   </url>
   <url>
     <loc>/reference/decontaminated_density.html</loc>
@@ -139,10 +139,7 @@
     <loc>/reference/orthoBasis_test_H0.html</loc>
   </url>
   <url>
-    <loc>/reference/plot.decontaminated_dens.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot_decontamin_cdf.html</loc>
+    <loc>/reference/plot.decontaminated_density.html</loc>
   </url>
   <url>
     <loc>/reference/plot_mixt_density.html</loc>
