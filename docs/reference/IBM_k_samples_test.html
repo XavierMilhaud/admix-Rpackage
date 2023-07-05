@@ -20,7 +20,7 @@ H0 : f_1 = ... = f_K  against  H1 : f_i differs from f_j (i different from j, an
     
     <a class="navbar-brand me-2" href="../index.html">admix</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1-0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1-1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,6 +79,7 @@ H0 : f_1 = ... = f_K  against  H1 : f_i differs from f_j (i different from j, an
 <span>  comp.dist <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  comp.param <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  conf.level <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  tune.penalty <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  n_cpu <span class="op">=</span> <span class="fl">2</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -121,6 +122,11 @@ list(f1 = NULL, g1 = list(mean=0,sd=1), f2 = NULL, g2 = list(mean=3,sd=1.1), f3 
 
 <dt>conf.level</dt>
 <dd><p>The confidence level of the K-sample test.</p></dd>
+
+
+<dt>tune.penalty</dt>
+<dd><p>A boolean that allows to choose between a classical penalty term or an optimized penalty embedding some tuning parameters
+(automatically optimized). Optimized penalty is particularly useful for low sample size.</p></dd>
 
 
 <dt>parallel</dt>
@@ -178,7 +184,7 @@ the statistic; and 11) the contrast matrix.</p>
 <span class="r-in"><span><span class="co">## Perform the 3-samples test:</span></span></span>
 <span class="r-in"><span><span class="fu">IBM_k_samples_test</span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">sim1</span>,<span class="va">sim2</span>,<span class="va">sim3</span><span class="op">)</span>, sim_U<span class="op">=</span> <span class="cn">NULL</span>, n_sim_tab <span class="op">=</span> <span class="fl">20</span>, min_size <span class="op">=</span> <span class="cn">NULL</span>,</span></span>
 <span class="r-in"><span>                   comp.dist <span class="op">=</span> <span class="va">list.comp</span>, comp.param <span class="op">=</span> <span class="va">list.param</span>, conf.level <span class="op">=</span> <span class="fl">0.95</span>,</span></span>
-<span class="r-in"><span>                   parallel <span class="op">=</span> <span class="cn">FALSE</span>, n_cpu <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                   tune.penalty <span class="op">=</span> <span class="cn">FALSE</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span>, n_cpu <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $confidence_level</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.95</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -187,37 +193,48 @@ the statistic; and 11) the contrast matrix.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> FALSE </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $p_value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.55</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $stat_name</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "d_1-2"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "d_1-3"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $test.stat</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.094456</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.04996091</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $stat_rank</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $penalized_stat</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  -6.6 -13.0 -19.4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  -407.3  -814.6 -1221.9</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $penalty_H0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $gamma</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $tuning_constant</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ordered_contrasts</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0944560 0.1994205 0.3298271</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.04996091 0.08702500 0.11870116</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $quantiles</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.236011</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.176531</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $sim_U</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.10784512 0.07004654 0.08796691 0.07462950 0.06022986 0.08564641</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.11281859 0.07433392 0.05075625 0.09028672 0.17136820 0.09361933</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.11651095 0.19718208 0.11535407 0.10087259 0.11503409</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $stat_terms</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "d_1-2"                 "d_1-2 + d_2-3"         "d_1-2 + d_2-3 + d_1-3"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "d_1-3"                 "d_1-3 + d_2-3"         "d_1-3 + d_2-3 + d_1-2"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $contr_mat</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1]     [,2]      [,3]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]   NA 0.094456 0.3298271</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]   NA       NA 0.1994205</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]   NA       NA        NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1]      [,2]       [,3]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]   NA 0.1187012 0.04996091</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]   NA        NA 0.08702500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]   NA        NA         NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">####### Now under the alternative H1:</span></span></span>
@@ -241,47 +258,59 @@ the statistic; and 11) the contrast matrix.</p>
 <span class="r-in"><span>                   f3 <span class="op">=</span> <span class="cn">NULL</span>, g3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">3</span>, sd <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">IBM_k_samples_test</span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">sim1</span>,<span class="va">sim2</span>,<span class="va">sim3</span><span class="op">)</span>, sim_U<span class="op">=</span> <span class="cn">NULL</span>, n_sim_tab <span class="op">=</span> <span class="fl">20</span>, min_size <span class="op">=</span> <span class="cn">NULL</span>,</span></span>
 <span class="r-in"><span>                   comp.dist <span class="op">=</span> <span class="va">list.comp</span>, comp.param <span class="op">=</span> <span class="va">list.param</span>, conf.level <span class="op">=</span> <span class="fl">0.95</span>,</span></span>
-<span class="r-in"><span>                   parallel <span class="op">=</span> <span class="cn">FALSE</span>, n_cpu <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                   tune.penalty <span class="op">=</span> <span class="cn">FALSE</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span>, n_cpu <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>In 'IBM_estimProp': optimization algorithm was changed (in 'optim') from 'Nelder-Mead' to 'BFGS' to avoid the solution to explose.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>In 'IBM_estimProp': optimization algorithm was changed (in 'optim') from 'Nelder-Mead' to 'BFGS' to avoid the solution to explose.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $confidence_level</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.95</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $rejection_rule</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  95% </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> TRUE </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   95% </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FALSE </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $p_value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2105263</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $stat_name</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "d_1-2 + d_1-3 + d_2-3"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "d_1-2"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $test.stat</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 67.92703</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1516114</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $stat_rank</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $penalized_stat</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.8  7.7 65.2</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -1059.3 -2111.1 -3118.2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $penalty_H0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $gamma</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $tuning_constant</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ordered_contrasts</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  0.1313266  9.4117360 58.3839691</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  0.1516114  7.7078429 52.3692558</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $quantiles</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2208184</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2814568</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> $sim_U</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.12153778 0.07374267 0.09183293 0.17054615 0.23347381 0.05629785</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.04772914 0.10930744 0.05913094 0.09285298 0.36763159 0.04744034</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.12244800 0.04355878 0.10784960 0.04495853 0.05235867 0.27188184</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.10905437</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $stat_terms</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "d_1-2"                 "d_1-2 + d_1-3"         "d_1-2 + d_1-3 + d_2-3"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $contr_mat</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>      [,1]      [,2]      [,3]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]   NA 0.1313266  9.411736</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]   NA        NA 58.383969</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]   NA 0.1516114  7.707843</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]   NA        NA 52.369256</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [3,]   NA        NA        NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
