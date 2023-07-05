@@ -83,8 +83,8 @@ two_samples_test <- function(samples, known.p = NULL, comp.dist = NULL, comp.par
   if (meth == "ICV") {
     U <- IBM_tabul_stochasticInteg(n.sim = n_sim_tab, n.varCovMat = 100, sample1 = samples[[1]], sample2 = samples[[2]], min_size = NULL,
                                    comp.dist = comp.dist, comp.param = comp.param, parallel = parallel, n_cpu = n_cpu)
-    test_res <- IBM_test_H0(samples = samples, known.p = known.p, comp.dist = comp.dist, comp.param = comp.param,
-                            sim_U = U[["U_sim"]], min_size = NULL, parallel = parallel, n_cpu = n_cpu)
+    test_res <- IBM_2samples_test(samples = samples, known.p = known.p, comp.dist = comp.dist, comp.param = comp.param,
+                                  sim_U = U[["U_sim"]], min_size = NULL, parallel = parallel, n_cpu = n_cpu)
 
   } else if (meth == "Poly") {
     test_res <- orthoBasis_test_H0(samples = samples, known.p = known.p, comp.dist = comp.dist, comp.param = comp.param, known.coef = NULL,

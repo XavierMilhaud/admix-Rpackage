@@ -139,7 +139,7 @@ decontaminated_density <- function(sample1, comp.dist, comp.param, estim.p)
 
   obj <- list(decontaminated_density_function = f1_decontamin,
               support = support)
-  class(obj) <- "decontaminated_dens"
+  class(obj) <- "decontaminated_density"
   obj$call <- match.call()
 
   return(obj)

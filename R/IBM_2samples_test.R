@@ -46,8 +46,9 @@
 #'                   f2 = NULL, g2 = "norm")
 #' list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
 #'                    f2 = NULL, g2 = list(mean = 3, sd = 1.2))
-#' IBM_test_H0(samples=list(X.sim,Y.sim), known.p=NULL, comp.dist=list.comp,comp.param=list.param,
-#'             sim_U=NULL, n_sim_tab=6, min_size=NULL, conf.level = 0.95, parallel=FALSE, n_cpu=2)
+#' IBM_2samples_test(samples = list(X.sim, Y.sim), known.p = NULL, comp.dist = list.comp,
+#'                   comp.param = list.param, sim_U = NULL, n_sim_tab = 6, min_size = NULL,
+#'                   conf.level = 0.95, parallel = FALSE, n_cpu = 2)
 #'
 #' ####### Under the alternative H1 :
 #' ## Simulate data:
@@ -63,15 +64,16 @@
 #'                   f2 = NULL, g2 = "norm")
 #' list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
 #'                    f2 = NULL, g2 = list(mean = 3, sd = 1.2))
-#' IBM_test_H0(samples=list(X.sim,Y.sim), known.p=NULL, comp.dist=list.comp,comp.param=list.param,
-#'             sim_U=NULL, n_sim_tab=6, min_size=NULL, conf.level = 0.95, parallel=FALSE, n_cpu=2)
+#' IBM_2samples_test(samples = list(X.sim, Y.sim), known.p = NULL, comp.dist = list.comp,
+#'                   comp.param = list.param, sim_U = NULL, n_sim_tab = 6, min_size = NULL,
+#'                   conf.level = 0.95, parallel = FALSE, n_cpu = 2)
 #' }
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-IBM_test_H0 <- function(samples, known.p = NULL, comp.dist = NULL, comp.param = NULL, sim_U = NULL,
-                        n_sim_tab = 50, min_size = NULL, conf.level = 0.95, parallel = FALSE, n_cpu = 2)
+IBM_2samples_test <- function(samples, known.p = NULL, comp.dist = NULL, comp.param = NULL, sim_U = NULL,
+                              n_sim_tab = 50, min_size = NULL, conf.level = 0.95, parallel = FALSE, n_cpu = 2)
 {
   ## Estimate the proportions of the mixtures:
   estim <- try(suppressWarnings(IBM_estimProp(sample1 = samples[[1]], sample2 = samples[[2]], known.prop = known.p, comp.dist = comp.dist,

@@ -125,8 +125,8 @@ IBM_k_samples_test <- function(samples = NULL, sim_U = NULL, n_sim_tab = 100, mi
 
   if (length(samples) == 2) {
 
-    return(IBM_test_H0(samples = samples, comp.dist = comp.dist, comp.param = comp.param, sim_U = sim_U, n_sim_tab = n_sim_tab,
-                       min_size = minimal_size, conf.level = conf.level, parallel = parallel, n_cpu = n_cpu))
+    return(IBM_2samples_test(samples = samples, comp.dist = comp.dist, comp.param = comp.param, sim_U = sim_U, n_sim_tab = n_sim_tab,
+                             min_size = minimal_size, conf.level = conf.level, parallel = parallel, n_cpu = n_cpu))
 
   } else {
 
@@ -155,12 +155,10 @@ IBM_k_samples_test <- function(samples = NULL, sim_U = NULL, n_sim_tab = 100, mi
             ## Comparison between the two populations :
             XY <- IBM_estimProp(sample1 = samples[[k]][subsample1_index[ ,l]], sample2 = samples[[k]][subsample2_index[ ,l]], known.prop = NULL,
                                 comp.dist = couples.expr[[k]], comp.param = couples.param[[k]], with.correction = FALSE, n.integ = 1000)
-            F_i1 <- decontamin_cdf_unknownComp(sample1 = samples[[k]][subsample1_index[ ,l]],
-                                               comp.dist = comp.dist[model.list[[k]]], comp.param = comp.param[model.list[[k]]],
-                                               estim.p = XY[["prop.estim"]][1])
-            F_i2 <- decontamin_cdf_unknownComp(sample1 = samples[[k]][subsample2_index[ ,l]],
-                                               comp.dist = comp.dist[model.list[[k]]], comp.param = comp.param[model.list[[k]]],
-                                               estim.p = XY[["prop.estim"]][1])
+            F_i1 <- decontaminated_cdf(sample1 = samples[[k]][subsample1_index[ ,l]], comp.dist = comp.dist[model.list[[k]]],
+                                       comp.param = comp.param[model.list[[k]]], estim.p = XY[["prop.estim"]][1])
+            F_i2 <- decontaminated_cdf(sample1 = samples[[k]][subsample2_index[ ,l]], comp.dist = comp.dist[model.list[[k]]],
+                                       comp.param = comp.param[model.list[[k]]], estim.p = XY[["prop.estim"]][1])
             ## Assessment of the difference of interest at each specified x-value:
             max( sqrt(length(samples[[k]])/2) * abs(F_i1(x_val) - F_i2(x_val)) )
           }
@@ -250,12 +248,10 @@ IBM_k_samples_test <- function(samples = NULL, sim_U = NULL, n_sim_tab = 100, mi
                                                            G = XY[["integ.supp"]], comp.dist = couples.expr[[k]], comp.param = couples.param[[k]])
         x_val <- seq(from = min(samples[[couples.list[k, ][1]]], samples[[couples.list[k, ][2]]]),
                      to = max(samples[[couples.list[k, ][1]]], samples[[couples.list[k, ][2]]]), length.out = 1000)
-        F_1 <- decontamin_cdf_unknownComp(sample1 = samples[[couples.list[k, ][1]]],
-                                          comp.dist = couples.expr[[k]][1:2], comp.param = couples.param[[k]][1:2],
-                                          estim.p = XY[["prop.estim"]][1])
-        F_2 <- decontamin_cdf_unknownComp(sample1 = samples[[couples.list[k, ][2]]],
-                                          comp.dist = couples.expr[[k]][3:4], comp.param = couples.param[[k]][3:4],
-                                          estim.p = XY[["prop.estim"]][2])
+        F_1 <- decontaminated_cdf(sample1 = samples[[couples.list[k, ][1]]], comp.dist = couples.expr[[k]][1:2],
+                                  comp.param = couples.param[[k]][1:2], estim.p = XY[["prop.estim"]][1])
+        F_2 <- decontaminated_cdf(sample1 = samples[[couples.list[k, ][2]]], comp.dist = couples.expr[[k]][3:4],
+                                  comp.param = couples.param[[k]][3:4], estim.p = XY[["prop.estim"]][2])
         ## Assessment of the supremum:
         list( sup = max( sqrt(minimal_size) * abs(F_1(x_val) - F_2(x_val)) ), contrast = emp.contr)
       }

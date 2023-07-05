@@ -95,7 +95,7 @@
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-plot.decontaminated_dens <- function(x, ..., x_val, add_plot = FALSE)
+plot.decontaminated_density <- function(x, ..., x_val, add_plot = FALSE)
 {
   support <- x$support
   decontamin_dens_values <- x$decontaminated_density_function(x_val)

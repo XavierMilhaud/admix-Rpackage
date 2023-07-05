@@ -39,9 +39,8 @@
 #' estimate <- IBM_estimProp(sample1[['mixt.data']], sample2[['mixt.data']], comp.dist = list.comp,
 #'                           comp.param = list.param, with.correction = FALSE, n.integ = 1000)
 #' ## Determine the decontaminated version of the unknown CDF by inversion:
-#' decontamin_cdf_unknownComp(sample1 = sample1[['mixt.data']],
-#'                            comp.dist = list.comp[1:2], comp.param = list.param[1:2],
-#'                            estim.p = estimate$prop.estim[1])
+#' decontaminated_cdf(sample1 = sample1[['mixt.data']], comp.dist = list.comp[1:2],
+#'                     comp.param = list.param[1:2], estim.p = estimate$prop.estim[1])
 #' ####### Countable discrete support:
 #' list.comp <- list(f1 = 'pois', g1 = 'pois',
 #'                   f2 = 'pois', g2 = 'pois')
@@ -58,9 +57,8 @@
 #'                    f2 = NULL, g2 = list(lambda = 4))
 #' estimate <- IBM_estimProp(sample1[['mixt.data']], sample2[['mixt.data']], comp.dist = list.comp,
 #'                           comp.param = list.param, with.correction = FALSE, n.integ = 1000)
-#' decontamin_cdf_unknownComp(sample1 = sample1[['mixt.data']],
-#'                            comp.dist = list.comp[1:2], comp.param = list.param[1:2],
-#'                            estim.p = estimate$prop.estim[1])
+#' decontaminated_cdf(sample1 = sample1[['mixt.data']], comp.dist = list.comp[1:2],
+#'                    comp.param = list.param[1:2], estim.p = estimate$prop.estim[1])
 #' ####### Finite discrete support:
 #' list.comp <- list(f1 = 'multinom', g1 = 'multinom',
 #'                   f2 = 'multinom', g2 = 'multinom')
@@ -76,14 +74,13 @@
 #'                    f2 = NULL, g2 = list(size=1, prob=c(0.2,0.6,0.2)))
 #' estimate <- IBM_estimProp(sample1[['mixt.data']], sample2[['mixt.data']], comp.dist = list.comp,
 #'                           comp.param = list.param, with.correction = FALSE, n.integ = 1000)
-#' decontamin_cdf_unknownComp(sample1 = sample1[['mixt.data']],
-#'                            comp.dist = list.comp[1:2], comp.param = list.param[1:2],
-#'                            estim.p = estimate$prop.estim[1])
+#' decontaminated_cdf(sample1 = sample1[['mixt.data']], comp.dist = list.comp[1:2],
+#'                     comp.param = list.param[1:2], estim.p = estimate$prop.estim[1])
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-decontamin_cdf_unknownComp <- function(sample1, comp.dist, comp.param, estim.p)
+decontaminated_cdf <- function(sample1, comp.dist, comp.param, estim.p)
 {
   stopifnot( (length(comp.dist) == 2) & (length(comp.param) == 2) )
   if (is.null(comp.dist[[2]]) | is.null(comp.param[[2]])) {
