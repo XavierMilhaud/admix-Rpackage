@@ -23,7 +23,7 @@ library(admix)
 ```
 
 
-The clustering of populations following admixture models is, for now, based on the K-sample test theory. Consider $K$ samples. For $i=1,...,K$, sample $X^{(i)} = (X_1^{(i)}, ..., X_{n_i}^{(i)})$ follows
+The clustering of populations following admixture models is, for now, based on the K-sample test theory (see [@MilhaudCluster23]. Consider $K$ samples. For $i=1,...,K$, sample $X^{(i)} = (X_1^{(i)}, ..., X_{n_i}^{(i)})$ follows
 $$L_i(x) = p_i F_i(x) + (1-p_i) G_i, \qquad x \in \mathbb{R}.$$
 
 We still use IBM approach to perform pairwise hypothesis testing. The idea is to adapt the K-sample test procedure to obtain a data-driven method that cluster the $K$ populations into $N$ subgroups, characterized by a common unknown mixture component. The advantages of such an approach is twofold:

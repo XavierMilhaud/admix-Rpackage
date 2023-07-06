@@ -42,7 +42,7 @@ D(z,L1,L2,p1,p2) = F1(z,L1,p1) - F2(z,L2,p2)
 This measure should be integrated over some domain to compute the global discrepancy, see further information in 'Details' below.
 }
 \details{
-See the paper presenting the IBM approach at the following HAL weblink: https://hal.archives-ouvertes.fr/hal-03201760
+See the paper presenting the IBM approach at the following HAL weblink: https://hal.science/hal-03201760
 }
 \examples{
 list.comp <- list(f1 = 'norm', g1 = 'norm',

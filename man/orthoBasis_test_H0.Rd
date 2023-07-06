@@ -76,7 +76,7 @@ functions (pdf) l1 = p1*f1 + (1-p1)\emph{g1 and l2 = p2}f2 + (1-p2)*g2, where g1
 The admixture weights p1 and p2 thus have to be estimated. For further information on this method, see 'Details' below.
 }
 \details{
-See the paper on HAL website: https://hal.archives-ouvertes.fr/hal-02491127
+See the paper on HAL website: https://hal.science/hal-03692868
 }
 \examples{
 \donttest{

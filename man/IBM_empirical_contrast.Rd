@@ -47,7 +47,7 @@ Defines the empirical version of the contrast in the IBM method, to be minimized
 about the contrast definition, see 'Details' below.
 }
 \details{
-See the paper presenting the IBM approach at the following HAL weblink: https://hal.archives-ouvertes.fr/hal-03201760
+See the paper presenting the IBM approach at the following HAL weblink: https://hal.science/hal-03201760
 }
 \examples{
 ## Simulate data:

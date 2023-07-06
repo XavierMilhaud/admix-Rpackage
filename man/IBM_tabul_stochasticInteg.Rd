@@ -54,7 +54,7 @@ processes and applying some transformations. Useful to perform the test hypothes
 of interest. See 'Details' below and the cited paper therein for further information.
 }
 \details{
-See the paper presenting the IBM approach at the following HAL weblink: https://hal.archives-ouvertes.fr/hal-03201760
+See the paper presenting the IBM approach at the following HAL weblink: https://hal.science/hal-03201760
 }
 \examples{
 \donttest{

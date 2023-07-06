@@ -53,7 +53,7 @@ Create clusters on the unknown components related to the K populations following
 using Inversion - Best Matching (IBM) approach, see 'Details' below for further information.
 }
 \details{
-See the paper at the following HAL weblink: https://hal.archives-ouvertes.fr/hal-03201760
+See the paper at the following HAL weblink: https://hal.science/hal-04129130
 }
 \examples{
 \donttest{

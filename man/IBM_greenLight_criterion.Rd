@@ -48,7 +48,7 @@ Indicate whether there is need to perform the statistical test of equality betwe
 components of two samples following admixture models. Based on the IBM approach, see more in 'Details' below.
 }
 \details{
-See the paper presenting the IBM approach at the following HAL weblink: https://hal.archives-ouvertes.fr/hal-03201760
+See the paper presenting the IBM approach at the following HAL weblink: https://hal.science/hal-03201760
 }
 \examples{
 \donttest{

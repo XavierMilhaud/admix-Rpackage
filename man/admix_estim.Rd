@@ -45,7 +45,7 @@ l_i = p_i * f_i + (1-p_i) * g_i, where g_i is the known component density.
 The unknown quantities p_i and f_i then have to be estimated.
 }
 \details{
-For further details on the different estimation techniques, see i) IBM approach at https://hal.archives-ouvertes.fr/hal-03201760 ;
+For further details on the different estimation techniques, see i) IBM approach at https://hal.science/hal-03201760 ;
 ii) Patra and Sen estimator: Patra, R.K. and Sen, B. (2016); Estimation of a Two-component Mixture Model with Applications to
 Multiple Testing; JRSS Series B, 78, pp. 869--893. ; iii) BVdk estimator: Bordes, L. and Vandekerkhove, P. (2010);
 Semiparametric two-component mixture model when a component is known: an asymptotically normal estimator; Math. Meth. Stat.; 19, pp. 22--41.

@@ -64,7 +64,7 @@ observed sample. Perform the following hypothesis test:
 H0 : f_1 = ... = f_K  against  H1 : f_i differs from f_j (i different from j, and i,j in 1,...,K).
 }
 \details{
-See the paper at the following HAL weblink: https://hal.archives-ouvertes.fr/hal-03201760
+See the paper at the following HAL weblink: https://hal.science/hal-04129130
 }
 \examples{
 \donttest{

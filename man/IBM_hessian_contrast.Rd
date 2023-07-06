@@ -51,7 +51,7 @@ two samples following admixture models, where we recall that admixture models ha
 See 'Details' below for further information about the definition of the contrast.
 }
 \details{
-See the paper presenting the IBM approach at the following HAL weblink: https://hal.archives-ouvertes.fr/hal-03201760
+See the paper presenting the IBM approach at the following HAL weblink: https://hal.science/hal-03201760
 }
 \examples{
 ## Simulate data:
