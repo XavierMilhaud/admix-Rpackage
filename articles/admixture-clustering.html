@@ -84,7 +84,8 @@ Milhaud</h4>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/XavierMilhaud/admix" class="external-link">admix</a></span><span class="op">)</span></span></code></pre></div>
 <p>The clustering of populations following admixture models is, for now,
-based on the K-sample test theory. Consider <span class="math inline">\(K\)</span> samples. For <span class="math inline">\(i=1,...,K\)</span>, sample <span class="math inline">\(X^{(i)} = (X_1^{(i)}, ..., X_{n_i}^{(i)})\)</span>
+based on the K-sample test theory (see <span class="citation">(Milhaud
+and Vandekerkhove 2023)</span>. Consider <span class="math inline">\(K\)</span> samples. For <span class="math inline">\(i=1,...,K\)</span>, sample <span class="math inline">\(X^{(i)} = (X_1^{(i)}, ..., X_{n_i}^{(i)})\)</span>
 follows <span class="math display">\[L_i(x) = p_i F_i(x) + (1-p_i) G_i,
 \qquad x \in \mathbb{R}.\]</span></p>
 <p>We still use IBM approach to perform pairwise hypothesis testing. The
@@ -186,7 +187,7 @@ Gamma-Gamma mixtures.</p>
 <span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The level of the underlying k-sample testing procedure is set to 5%.</span></span>
 <span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The number of detected clusters in these populations equals 3.</span></span>
-<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The p-values of the k-sample tests (showing when to close the clusters (i.e. p-value &lt; 0.05) equal: 0.4, 0, 0, 1.</span></span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The p-values of the k-sample tests (showing when to close the clusters (i.e. p-value &lt; 0.05) equal: 0.375, 0, 0, 0.2.</span></span>
 <span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The list of clusters with populations belonging to them (in numeric format, i.e. inside c()) :</span></span>
 <span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    - Cluster #1: vector of populations c(1, 3)</span></span>
@@ -195,17 +196,23 @@ Gamma-Gamma mixtures.</p>
 <span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The list of estimated weights for the unknown component distributions in each detected cluster</span></span>
 <span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;       (in the same format and order as listed populations for clusters just above) :</span></span>
-<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    - estimated weights of the unknown component distributions for cluster  1 :  c(0.797444921629916, 0.627957586203222)</span></span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;    - estimated weights of the unknown component distributions for cluster  1 :  c(0.794544639927533, 0.657943193432447)</span></span>
 <span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   - estimated weights of the unknown component distributions for cluster  2 :  numeric(0)</span></span>
-<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   - estimated weights of the unknown component distributions for cluster  3 :  c(0.533829579177942, 0.557537792874192)</span></span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;   - estimated weights of the unknown component distributions for cluster  3 :  c(0.48202614466818, 0.5343625377232)</span></span>
 <span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
 <span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; The matrix giving the distances between populations, used in the clustering procedure through the k-sample tests:</span></span>
-<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             [,1]        [,2]        [,3]      [,4]        [,5]</span></span>
-<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,]  0.00000000 28.68097492  0.04294658  6.374764 45.23755458</span></span>
-<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] 28.68097492  0.00000000 24.38086886  4.112636  0.06557235</span></span>
-<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,]  0.04294658 24.38086886  0.00000000 70.226296 20.88818653</span></span>
-<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,]  6.37476381  4.11263585 70.22629553  0.000000  3.04046890</span></span>
-<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5,] 45.23755458  0.06557235 20.88818653  3.040469  0.00000000</span></span></code></pre></div>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             [,1]      [,2]        [,3]      [,4]      [,5]</span></span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1,]  0.00000000 30.384564  0.03011158  5.788022 48.281801</span></span>
+<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [2,] 30.38456383  0.000000 21.91118290  3.605112  0.106322</span></span>
+<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [3,]  0.03011158 21.911183  0.00000000 52.758034 20.180943</span></span>
+<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [4,]  5.78802248  3.605112 52.75803371  0.000000  2.263009</span></span>
+<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [5,] 48.28180146  0.106322 20.18094283  2.263009  0.000000</span></span></code></pre></div>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-MilhaudCluster23" class="csl-entry">
+Milhaud, Pommeret, X., and P. Vandekerkhove. 2023.
+<span>“Contamination-Source Based k-Sample Clustering.”</span> <a href="https://hal.science/hal-04129130" class="external-link">https://hal.science/hal-04129130</a>.
+</div>
+</div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
