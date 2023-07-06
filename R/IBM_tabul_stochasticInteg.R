@@ -21,7 +21,7 @@
 #' @param parallel (default to FALSE) Boolean to indicate whether parallel computations are performed (speed-up the tabulation).
 #' @param n_cpu (default to 2) Number of cores used for computations when parallelizing.
 #'
-#' @details See the paper presenting the IBM approach at the following HAL weblink: https://hal.archives-ouvertes.fr/hal-03201760
+#' @details See the paper presenting the IBM approach at the following HAL weblink: https://hal.science/hal-03201760
 #'
 #' @return A list with four elements, containing: 1) random draws of the quantity 'sample size times the empirical contrast',
 #'         as defined in the IBM approach (see 'Details' above); 2) the estimated unknown component weights for the two admixture

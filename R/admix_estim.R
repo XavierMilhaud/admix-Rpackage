@@ -23,7 +23,7 @@
 #'                   be specified as follows (with K = 3):
 #'                   list(f1 = NULL, g1 = list(mean=0,sd=1), f2 = NULL, g2 = list(mean=3,sd=1.1), f3 = NULL, g3 = list(mean=-2,sd=0.6)).
 #'
-#' @details For further details on the different estimation techniques, see i) IBM approach at https://hal.archives-ouvertes.fr/hal-03201760 ;
+#' @details For further details on the different estimation techniques, see i) IBM approach at https://hal.science/hal-03201760 ;
 #'          ii) Patra and Sen estimator: Patra, R.K. and Sen, B. (2016); Estimation of a Two-component Mixture Model with Applications to
 #'          Multiple Testing; JRSS Series B, 78, pp. 869--893. ; iii) BVdk estimator: Bordes, L. and Vandekerkhove, P. (2010);
 #'          Semiparametric two-component mixture model when a component is known: an asymptotically normal estimator; Math. Meth. Stat.; 19, pp. 22--41.

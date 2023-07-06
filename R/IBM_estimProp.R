@@ -21,7 +21,7 @@
 #'                       (with the constant determined thanks to the exact proportion, usually unknown except in case of simulations).
 #' @param n.integ Number of data points generated for the distribution on which to integrate.
 #'
-#' @details See the paper presenting the IBM approach at the following HAL weblink: https://hal.archives-ouvertes.fr/hal-03201760
+#' @details See the paper presenting the IBM approach at the following HAL weblink: https://hal.science/hal-03201760
 #'
 #'
 #' @return A list with the two estimates of the component weights for each of the admixture model, plus that of the theoretical model if specified.

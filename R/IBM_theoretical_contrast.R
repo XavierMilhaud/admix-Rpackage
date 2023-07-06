@@ -22,7 +22,7 @@
 #' @param sample1 Observations of the first sample under study.
 #' @param sample2 Observations of the second sample under study.
 #'
-#' @details See the paper presenting the IBM approach at the following HAL weblink: https://hal.archives-ouvertes.fr/hal-03201760
+#' @details See the paper presenting the IBM approach at the following HAL weblink: https://hal.science/hal-03201760
 #'
 #' @return The theoretical contrast value evaluated at parameter values.
 #'

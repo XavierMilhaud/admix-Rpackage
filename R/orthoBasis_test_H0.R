@@ -35,7 +35,7 @@
 #'                                   cumulative distribution of the known component function on the data. This means that
 #'                                   all 'comp.dist' and 'comp.param' must be set to NULL.
 #'
-#' @details See the paper on HAL website: https://hal.archives-ouvertes.fr/hal-02491127
+#' @details See the paper on HAL website: https://hal.science/hal-03692868
 #'
 #' @return A list with six elements containing: 1) the rejection decision; 2) the p-value of the test; 3) the test statistic; 4) the
 #'         variance-covariance matrix of the test statistic; 5) selected rank for testing, and 6) estimates of the two component weights.

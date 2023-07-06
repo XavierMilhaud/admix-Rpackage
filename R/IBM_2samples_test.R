@@ -24,7 +24,7 @@
 #' @param parallel (default to FALSE) Boolean to indicate whether parallel computations are performed (speed-up the tabulation).
 #' @param n_cpu (default to 2) Number of cores used when parallelizing.
 #'
-#' @details See the paper presenting the IBM approach at the following HAL weblink: https://hal.archives-ouvertes.fr/hal-03201760
+#' @details See the paper presenting the IBM approach at the following HAL weblink: https://hal.science/hal-03201760
 #'
 #' @return A list of five elements, containing : 1) the test statistic value; 2) the rejection decision; 3) the p-value of the
 #'         test, 4) the estimated weights of the unknown component for each of the two admixture models, 5) the simulated distribution

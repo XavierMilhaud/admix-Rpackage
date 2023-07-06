@@ -28,7 +28,7 @@
 #' @param parallel (default to FALSE) Boolean indicating whether parallel computations are performed.
 #' @param n_cpu (default to 2) Number of cores used when parallelizing.
 #'
-#' @details See the paper at the following HAL weblink: https://hal.archives-ouvertes.fr/hal-03201760
+#' @details See the paper at the following HAL weblink: https://hal.science/hal-04129130
 #'
 #' @return A list of ten elements, containing: 1) the rejection decision; 2) the test p-value; 3) the terms involved in
 #'         the test statistic; 4) the test statistic value; 5) the selected rank (number of terms involved in the test statistic);

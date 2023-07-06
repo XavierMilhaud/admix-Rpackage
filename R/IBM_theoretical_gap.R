@@ -20,7 +20,7 @@
 #'                   two ones to those of the second admixture model. No unknown elements permitted. For instance, 'comp.param' could be specified
 #'                   as follows: : list(f1 = list(mean=2,sd=0.3), g1 = list(mean=0,sd=1), f2 = list(mean=2,sd=0.3), g2 = list(mean=3,sd=1.1)).
 #'
-#' @details See the paper presenting the IBM approach at the following HAL weblink: https://hal.archives-ouvertes.fr/hal-03201760
+#' @details See the paper presenting the IBM approach at the following HAL weblink: https://hal.science/hal-03201760
 #'
 #' @return The gap between F1 and F2 (unknown components of the two admixture models), evaluated at the specified point.
 #'

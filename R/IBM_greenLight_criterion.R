@@ -21,7 +21,7 @@
 #' @param alpha Confidence level at which the criterion is assessed (used to compute the confidence bands of the estimators
 #'              of the unknown component weights).
 #'
-#' @details See the paper presenting the IBM approach at the following HAL weblink: https://hal.archives-ouvertes.fr/hal-03201760
+#' @details See the paper presenting the IBM approach at the following HAL weblink: https://hal.science/hal-03201760
 #'
 #' @return A boolean indicating whether it is useful or useless to tabulate the contrast distribution in order to answer
 #'         the testing problem (f1 = f2).

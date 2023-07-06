@@ -21,7 +21,7 @@
 #' @param parallel (default to FALSE) Boolean to indicate whether parallel computations are performed (speed-up the tabulation).
 #' @param n_cpu (default to 2) Number of cores used when parallelizing.
 #'
-#' @details See the paper at the following HAL weblink: https://hal.archives-ouvertes.fr/hal-03201760
+#' @details See the paper at the following HAL weblink: https://hal.science/hal-04129130
 #'
 #' @return A list with eight elements: 1) the number of populations under consideration; 2) the number of detected clusters;
 #'         3) the list of p-values for each test performed; 4) the cluster affiliation for each population; 5) the chosen confidence

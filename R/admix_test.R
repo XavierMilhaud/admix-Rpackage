@@ -36,7 +36,7 @@
 #' @param n_cpu (default to 2) Number of cores used when parallelizing.
 #'
 #' @details For further details on hypothesis techniques, see i) Inner convergence through IBM approach at
-#'          https://hal.archives-ouvertes.fr/hal-03201760 ; ii) Polynomial expansions at 'False Discovery Rate model
+#'          https://hal.science/hal-03201760 ; ii) Polynomial expansions at 'False Discovery Rate model
 #'          Gaussianity test' (EJS, Pommeret & Vanderkerkhove, 2017), or 'Semiparametric two-sample admixture components comparison test:
 #'          the symmetric case' (JSPI, Milhaud & al., 2021).
 #'
