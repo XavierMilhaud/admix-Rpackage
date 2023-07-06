@@ -131,7 +131,7 @@ weight.</p>
 <span><span class="va">list.comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>f <span class="op">=</span> <span class="cn">NULL</span>, g <span class="op">=</span> <span class="st">'norm'</span><span class="op">)</span></span>
 <span><span class="va">list.param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>f <span class="op">=</span> <span class="cn">NULL</span>, g <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/BVdk_estimParam.html">BVdk_estimParam</a></span><span class="op">(</span><span class="va">data1</span>, method <span class="op">=</span> <span class="st">'L-BFGS-B'</span>, <span class="va">list.comp</span>, <span class="va">list.param</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.7100174 3.0133610</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.7150681 2.9937291</span></span></code></pre></div>
 <p>Here we look at the first listed parameter, which corresponds to the
 estimate of the unknown component weight.</p>
 </div>
@@ -150,7 +150,7 @@ estimate of the unknown component weight.</p>
 <span><span class="va">data1_transfo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/knownComp_to_uniform.html">knownComp_to_uniform</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data1</span>, comp.dist<span class="op">=</span><span class="va">list.comp</span>, comp.param<span class="op">=</span><span class="va">list.param</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/PatraSen_est_mix_model.html">PatraSen_est_mix_model</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data1_transfo</span>, method <span class="op">=</span> <span class="st">'fixed'</span>,</span>
 <span>                        c.n <span class="op">=</span> <span class="fl">0.1</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">data1_transfo</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, gridsize <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span><span class="op">$</span><span class="va">alp.hat</span></span>
-<span><span class="co">#&gt; [1] 0.594</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.591</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -193,7 +193,7 @@ towards the true parameter values.</p>
 <span>                       known.prop <span class="op">=</span> <span class="cn">NULL</span>, comp.dist <span class="op">=</span> <span class="va">list.comp</span>, comp.param <span class="op">=</span> <span class="va">list.param</span>,</span>
 <span>                       with.correction <span class="op">=</span> <span class="cn">FALSE</span>, n.integ <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="va">estim</span><span class="op">[[</span><span class="st">'prop.estim'</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="co">#&gt; [1] 0.5009321 0.7104116</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.4763564 0.7057906</span></span></code></pre></div>
 <p>Indeed, the two unknown proportions were consistently estimated.</p>
 </div>
 <div class="section level4">
@@ -222,7 +222,7 @@ biased as compared to their true values.</p>
 <span>                       known.prop <span class="op">=</span> <span class="cn">NULL</span>, comp.dist <span class="op">=</span> <span class="va">list.comp</span>, comp.param <span class="op">=</span> <span class="va">list.param</span>,</span>
 <span>                       with.correction <span class="op">=</span> <span class="cn">FALSE</span>, n.integ <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="va">estim</span><span class="op">[[</span><span class="st">'prop.estim'</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="co">#&gt; [1] 0.3511111 0.6085255</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.3414945 0.6244083</span></span></code></pre></div>
 </div>
 </div>
 </div>
