@@ -103,7 +103,7 @@ sequel:</p>
 <ul>
 <li>the estimator provided by Bordes and Vandekerkhove, see <span class="citation">(L. Bordes and Vandekerkhove 2010)</span>;</li>
 <li>the estimator provided by Patra and Sen, <span class="citation">(Patra and Sen 2016)</span>;</li>
-<li>the estimator provided by Inversion - Best Matching method, <span class="citation">(Milhaud and Vandekerkhove 2021)</span>.</li>
+<li>the estimator provided by Inversion - Best Matching method, <span class="citation">(Milhaud and Vandekerkhove 2022)</span>.</li>
 </ul>
 <p>All the estimation methods presented hereafter can be performed using
 one single generic function for estimation with appropriate arguments,
@@ -131,7 +131,7 @@ weight.</p>
 <span><span class="va">list.comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>f <span class="op">=</span> <span class="cn">NULL</span>, g <span class="op">=</span> <span class="st">'norm'</span><span class="op">)</span></span>
 <span><span class="va">list.param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>f <span class="op">=</span> <span class="cn">NULL</span>, g <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/BVdk_estimParam.html">BVdk_estimParam</a></span><span class="op">(</span><span class="va">data1</span>, method <span class="op">=</span> <span class="st">'L-BFGS-B'</span>, <span class="va">list.comp</span>, <span class="va">list.param</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] 0.7150681 2.9937291</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.681023 3.008007</span></span></code></pre></div>
 <p>Here we look at the first listed parameter, which corresponds to the
 estimate of the unknown component weight.</p>
 </div>
@@ -150,7 +150,7 @@ estimate of the unknown component weight.</p>
 <span><span class="va">data1_transfo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/knownComp_to_uniform.html">knownComp_to_uniform</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data1</span>, comp.dist<span class="op">=</span><span class="va">list.comp</span>, comp.param<span class="op">=</span><span class="va">list.param</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/PatraSen_est_mix_model.html">PatraSen_est_mix_model</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data1_transfo</span>, method <span class="op">=</span> <span class="st">'fixed'</span>,</span>
 <span>                        c.n <span class="op">=</span> <span class="fl">0.1</span><span class="op">*</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">data1_transfo</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, gridsize <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span><span class="op">$</span><span class="va">alp.hat</span></span>
-<span><span class="co">#&gt; [1] 0.591</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.603</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -171,7 +171,7 @@ samples under study.</p>
 F_2\)</span><a class="anchor" aria-label="anchor" href="#under-the-null-hypothesis-h_0-f_1-f_2"></a>
 </h4>
 <p>When we are under the null, <span class="citation">Milhaud and
-Vandekerkhove (2021)</span> show that the estimatorsis consistent
+Vandekerkhove (2022)</span> show that the estimatorsis consistent
 towards the true parameter values.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Simulate data:</span></span>
@@ -193,7 +193,7 @@ towards the true parameter values.</p>
 <span>                       known.prop <span class="op">=</span> <span class="cn">NULL</span>, comp.dist <span class="op">=</span> <span class="va">list.comp</span>, comp.param <span class="op">=</span> <span class="va">list.param</span>,</span>
 <span>                       with.correction <span class="op">=</span> <span class="cn">FALSE</span>, n.integ <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="va">estim</span><span class="op">[[</span><span class="st">'prop.estim'</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="co">#&gt; [1] 0.4763564 0.7057906</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.4934900 0.7240223</span></span></code></pre></div>
 <p>Indeed, the two unknown proportions were consistently estimated.</p>
 </div>
 <div class="section level4">
@@ -222,7 +222,7 @@ biased as compared to their true values.</p>
 <span>                       known.prop <span class="op">=</span> <span class="cn">NULL</span>, comp.dist <span class="op">=</span> <span class="va">list.comp</span>, comp.param <span class="op">=</span> <span class="va">list.param</span>,</span>
 <span>                       with.correction <span class="op">=</span> <span class="cn">FALSE</span>, n.integ <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
 <span><span class="va">estim</span><span class="op">[[</span><span class="st">'prop.estim'</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="co">#&gt; [1] 0.3414945 0.6244083</span></span></code></pre></div>
+<span><span class="co">#&gt; [1] 0.3294868 0.6246784</span></span></code></pre></div>
 </div>
 </div>
 </div>
@@ -286,8 +286,8 @@ Bordes, S., L. Mottelet, and P. Vandekerkhove. 2006.
 Model.”</span> <em>Annals of Statistics</em> 34: 1204–32.
 </div>
 <div id="ref-MilhaudIBM21" class="csl-entry">
-Milhaud, Pommeret, X., and P. Vandekerkhove. 2021. <span>“Shape
-Constraint Free Two-Sample Contamination Model Testing.”</span> <a href="https://hal.archives-ouvertes.fr/hal-03201760" class="external-link">https://hal.archives-ouvertes.fr/hal-03201760</a>.
+Milhaud, Pommeret, X., and P. Vandekerkhove. 2022. <span>“Shape
+Constraint Free Two-Sample Contamination Model Testing.”</span> <a href="https://hal.science/hal-03201760" class="external-link">https://hal.science/hal-03201760</a>.
 </div>
 <div id="ref-Patra" class="csl-entry">
 Patra, R. K., and B. Sen. 2016. <span>“Estimation of a Two-Component
