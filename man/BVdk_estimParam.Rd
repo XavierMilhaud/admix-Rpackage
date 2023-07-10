@@ -41,9 +41,9 @@ an asymptotically normal estimator; Math. Meth. Stat.; 19, pp. 22--41.
 \examples{
 ## Simulate data:
 list.comp <- list(f = 'norm', g = 'norm')
-list.param <- list(f = list(mean = 3, sd = 0.5),
+list.param <- list(f = list(mean = -2, sd = 0.5),
                    g = list(mean = 0, sd = 1))
-data1 <- rsimmix(n = 150, unknownComp_weight = 0.9, list.comp, list.param)[['mixt.data']]
+data1 <- rsimmix(n = 200, unknownComp_weight = 0.4, list.comp, list.param)[['mixt.data']]
 ## Perform the estimation of parameters in real-life:
 list.comp <- list(f = NULL, g = 'norm')
 list.param <- list(f = NULL, g = list(mean = 0, sd = 1))
