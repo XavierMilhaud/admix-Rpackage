@@ -127,24 +127,23 @@ model when a component is known: an asymptotically normal estimator; Math. Meth.
 <span class="r-in"><span><span class="va">list.param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>f <span class="op">=</span> <span class="cn">NULL</span>, g <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">7</span>, sd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">estimators</span> <span class="op">&lt;-</span> <span class="fu"><a href="BVdk_estimParam.html">BVdk_estimParam</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">sim.data</span><span class="op">[[</span><span class="st">'mixt.data'</span><span class="op">]</span><span class="op">]</span>, method <span class="op">=</span> <span class="st">"L-BFGS-B"</span>,</span></span>
 <span class="r-in"><span>                              comp.dist <span class="op">=</span> <span class="va">list.comp</span>, comp.param <span class="op">=</span> <span class="va">list.param</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Still needs to be implemented for cases where the unknown density mean is lower then the known density one!</span>
 <span class="r-in"><span><span class="co">## Estimate the variance of the two estimators (first mixture weight, then location shift):</span></span></span>
 <span class="r-in"><span><span class="fu">BVdk_varCov_estimators</span><span class="op">(</span>data <span class="op">=</span> <span class="va">sim.data</span><span class="op">[[</span><span class="st">'mixt.data'</span><span class="op">]</span><span class="op">]</span>, loc <span class="op">=</span> <span class="va">estimators</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, p <span class="op">=</span> <span class="va">estimators</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>                       comp.dist <span class="op">=</span> <span class="va">list.comp</span>, comp.param <span class="op">=</span> <span class="va">list.param</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $varCov.mat</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>               [,1]          [,2]          [,3]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  7.423538e-04 -5.627421e-05 -1.324188e-05</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] -5.627421e-05 -1.088024e-02  1.003802e-06</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] -1.324188e-05  1.003802e-06  2.362045e-07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>              [,1]          [,2]          [,3]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,] 6.137022e-04  0.0003879562  4.883889e-05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 3.879562e-04  0.0067053627 -2.548513e-04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] 4.883889e-05 -0.0002548513  5.393918e-05</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $var_pEstim</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0007423538</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.0006137022</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $var_muEstim</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -0.01088024</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.006705363</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $var_FEstim</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 2.362045e-07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 5.393918e-05</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
