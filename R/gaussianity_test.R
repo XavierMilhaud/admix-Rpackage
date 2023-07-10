@@ -90,13 +90,29 @@ gaussianity_test <- function(sample1, comp.dist, comp.param, K = 3, lambda = 0.2
 	  w <- (1/hat_p) * stats::approxfun(kernelDensity_est_obs)(x) - ((1-hat_p)/hat_p) * eval(parse(text = expr.dens))
 	  return( w * (w > 0) )
 	}
-	total_weight <- stats::integrate(integrand_totweight, lower = min(kernelDensity_est_obs$x), upper = max(kernelDensity_est_obs$x))
 	integrand_unknownComp <- function(x) {
 	  w <- (1/hat_p) * stats::approxfun(kernelDensity_est_obs)(x) - ((1-hat_p)/hat_p) * eval(parse(text = expr.dens))
-	  return( (x-hat_loc)^2 * (w * (w > 0)) / total_weight$value )
+	  return( (x-hat_loc)^2 * (w * (w > 0)) / total_weight )
 	}
-	hat_s2 <- stats::integrate(integrand_unknownComp, lower = min(kernelDensity_est_obs$x), upper = max(kernelDensity_est_obs$x))$value
-	#hat_s2 <- (1/hat_p) * ( mean(sample1^2) - ((1-hat_p) * m2_knownComp) ) - (1/hat_p^2) * (mean(sample1)-(1-hat_p)*m1_knownComp)^2
+	#total_weight <- stats::integrate(integrand_totweight, lower = min(kernelDensity_est_obs$x), upper = max(kernelDensity_est_obs$x))$value
+	#hat_s2 <- stats::integrate(integrand_unknownComp, lower = min(kernelDensity_est_obs$x), upper = max(kernelDensity_est_obs$x))$value
+	total_weight <- try(stats::integrate(integrand_totweight, lower = min(kernelDensity_est_obs$x), upper = max(kernelDensity_est_obs$x))$value, silent = TRUE)
+	hat_s2 <- try(stats::integrate(integrand_unknownComp, lower = min(kernelDensity_est_obs$x), upper = max(kernelDensity_est_obs$x))$value, silent = TRUE)
+
+	if (inherits(x = total_weight, what = "try-error", which = FALSE)) {
+	  total_weight <- cubature::cubintegrate(integrand_totweight,
+	                                         lower = min(kernelDensity_est_obs$x),
+	                                         upper = max(kernelDensity_est_obs$x),
+	                                         method = "pcubature")$integral
+	}
+	if (inherits(x = hat_s2, what = "try-error", which = FALSE)) {
+	  hat_s2 <- cubature::cubintegrate(integrand_unknownComp,
+	                                   lower = min(kernelDensity_est_obs$x),
+	                                   upper = max(kernelDensity_est_obs$x),
+	                                   method = "pcubature")$integral
+	}
+  #hat_s2 <- (1/hat_p) * ( mean(sample1^2) - ((1-hat_p) * m2_knownComp) ) - (1/hat_p^2) * (mean(sample1)-(1-hat_p)*m1_knownComp)^2
+
 	## Then on the variances of the estimators: semiparametric estimation (time-consuming), based on results by Bordes & Vandekerkhove (2010)
 	varCov <- BVdk_varCov_estimators(data = sample1, loc = hat_loc, p = hat_p, comp.dist = comp.dist, comp.param = comp.param)
 	var.hat_p <- varCov[["var_pEstim"]]
