@@ -237,8 +237,8 @@ orthoBasis_test_H0 <- function(samples, known.p = NULL, comp.dist = NULL, comp.p
   stat.test.final <- T.stat[indice.opt]
 
   ##---- Decision to reject the null hypothesis (or not) ----##
-  rej <- 0
-  if (stat.test.final > stats::qchisq(0.95,1)) rej <- rej + 1
+  rej <- FALSE
+  if (stat.test.final > stats::qchisq(0.95,1)) rej <- TRUE
   ## P-value of the test:
   pvalu <- 1 - stats::pchisq(stat.test.final, 1)
 
