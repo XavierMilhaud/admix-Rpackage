@@ -19,7 +19,8 @@
 #'                   For instance, 'comp.param' could be specified as follows: : list(f1=NULL, g1=list(mean=0,sd=1), f2=NULL, g2=list(mean=3,sd=1.1)).
 #' @param sim_U Random draws of the inner convergence part of the contrast as defined in the IBM approach (see 'Details' below).
 #' @param n_sim_tab Number of simulated gaussian processes used in the tabulation of the inner convergence distribution in the IBM approach.
-#' @param min_size (default to NULL) In the k-sample case, useful to provide the minimal size among all samples. Otherwise, useless.
+#' @param min_size (default to NULL, only used with 'ICV' testing method in the k-sample case, otherwise useless) Minimal size among all samples (needed
+#'                  to take into account the correction factor for the variance-covariance assessment).
 #' @param conf.level The confidence level of the 2-samples test, i.e. the quantile level to which the test statistic is compared.
 #' @param parallel (default to FALSE) Boolean to indicate whether parallel computations are performed (speed-up the tabulation).
 #' @param n_cpu (default to 2) Number of cores used when parallelizing.

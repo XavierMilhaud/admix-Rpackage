@@ -258,10 +258,9 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
             #                                    n_sim_tab = n_sim_tab, min_size = minimal_size, comp.dist = comp.dist[comp_indices],
             #                                    comp.param = comp.param[comp_indices], conf.level = conf.level,
             #                                    tune.penalty = TRUE, parallel = parallel, n_cpu = n_cpu)
-            k_sample_test <- IBM_k_samples_test(samples = samples[indexesSamples_to_consider_new], sim_U = Usim,
-                                                n_sim_tab = n_sim_tab, min_size = minimal_size, comp.dist = comp.dist[comp_indices],
-                                                comp.param = comp.param[comp_indices], conf.level = conf.level,
-                                                tune.penalty = TRUE, parallel = parallel, n_cpu = n_cpu)
+            k_sample_test <- IBM_k_samples_test(samples = samples[indexesSamples_to_consider_new], sim_U = Usim, n_sim_tab = n_sim_tab,
+                                                comp.dist = comp.dist[comp_indices], comp.param = comp.param[comp_indices],
+                                                conf.level = conf.level, tune.penalty = TRUE, parallel = parallel, n_cpu = n_cpu)
             tab_distrib <- append(tab_distrib, list(k_sample_test[["sim_U"]]))
             k_sample_decision <- k_sample_test$rejection_rule
             k_sample_pval <- k_sample_test$p_value

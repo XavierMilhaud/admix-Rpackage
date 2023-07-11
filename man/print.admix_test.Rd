@@ -28,9 +28,8 @@ sim1 <- rsimmix(n = 300, unknownComp_weight = 0.85, comp.dist = list(list.comp$f
 list.comp <- list(f1 = NULL, g1 = "norm")
 list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7))
 gaussTest <- admix_test(samples = list(sim1), sym.f = TRUE, test.method = 'Poly', sim_U = NULL,
-                        n_sim_tab = 50, min_size = NULL, comp.dist = list.comp,
-                        comp.param = list.param, support = "Real", conf.level = 0.95,
-                        parallel = FALSE, n_cpu = 2)
+                        n_sim_tab = 50, comp.dist = list.comp, comp.param = list.param,
+                        support = "Real", conf.level = 0.95, parallel = FALSE, n_cpu = 2)
 print(gaussTest)
 
 }

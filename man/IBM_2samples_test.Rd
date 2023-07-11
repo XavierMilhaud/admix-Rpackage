@@ -38,7 +38,8 @@ For instance, 'comp.param' could be specified as follows: : list(f1=NULL, g1=lis
 
 \item{n_sim_tab}{Number of simulated gaussian processes used in the tabulation of the inner convergence distribution in the IBM approach.}
 
-\item{min_size}{(default to NULL) In the k-sample case, useful to provide the minimal size among all samples. Otherwise, useless.}
+\item{min_size}{(default to NULL, only used with 'ICV' testing method in the k-sample case, otherwise useless) Minimal size among all samples (needed
+to take into account the correction factor for the variance-covariance assessment).}
 
 \item{conf.level}{The confidence level of the 2-samples test, i.e. the quantile level to which the test statistic is compared.}
 

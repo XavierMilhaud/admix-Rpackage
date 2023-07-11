@@ -8,7 +8,6 @@ IBM_k_samples_test(
   samples = NULL,
   sim_U = NULL,
   n_sim_tab = 100,
-  min_size = NULL,
   comp.dist = NULL,
   comp.param = NULL,
   conf.level = 0.95,
@@ -23,9 +22,6 @@ IBM_k_samples_test(
 \item{sim_U}{(default to NULL) Random draws of the inner convergence part of the contrast as defined in the IBM approach (see 'Details' below).}
 
 \item{n_sim_tab}{Number of simulated gaussian processes when tabulating the inner convergence distribution in the IBM approach.}
-
-\item{min_size}{(default to NULL) Useful to provide the minimal size among all samples (needed to take into account the correction
-factor for the variance-covariance assessment). Automatically calculated if NULL.}
 
 \item{comp.dist}{A list with 2*K elements corresponding to the component distributions (specified with R native names for these distributions)
 involved in the K admixture models. Elements, grouped by 2, refer to the unknown and known components of each admixture model,
@@ -91,7 +87,7 @@ list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
                    f2 = NULL, g2 = list(mean = 4, sd = 1.1),
                    f3 = NULL, g3 = list(mean = -3, sd = 0.8))
 ## Perform the 3-samples test:
-IBM_k_samples_test(samples = list(sim1,sim2,sim3), sim_U= NULL, n_sim_tab = 20, min_size = NULL,
+IBM_k_samples_test(samples = list(sim1,sim2,sim3), sim_U= NULL, n_sim_tab = 20,
                    comp.dist = list.comp, comp.param = list.param, conf.level = 0.95,
                    tune.penalty = FALSE, parallel = FALSE, n_cpu = 2)
 
@@ -114,7 +110,7 @@ list.comp <- list(f1 = NULL, g1 = "norm",
 list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
                    f2 = NULL, g2 = list(mean = 4, sd = 1.1),
                    f3 = NULL, g3 = list(mean = 3, sd = 0.8))
-IBM_k_samples_test(samples = list(sim1,sim2,sim3), sim_U= NULL, n_sim_tab = 20, min_size = NULL,
+IBM_k_samples_test(samples = list(sim1,sim2,sim3), sim_U= NULL, n_sim_tab = 20,
                    comp.dist = list.comp, comp.param = list.param, conf.level = 0.95,
                    tune.penalty = FALSE, parallel = FALSE, n_cpu = 2)
 }

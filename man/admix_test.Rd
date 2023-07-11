@@ -10,7 +10,6 @@ admix_test(
   test.method = c("Poly", "ICV"),
   sim_U = NULL,
   n_sim_tab = 50,
-  min_size = NULL,
   comp.dist = NULL,
   comp.param = NULL,
   support = c("Real", "Integer", "Positive", "Bounded.continuous"),
@@ -33,9 +32,6 @@ as defined in the IBM approach (see 'Details' below).}
 
 \item{n_sim_tab}{(Used only with 'ICV' testing method, otherwise useless) Number of simulated gaussian processes used in the
 tabulation of the inner convergence distribution in the IBM approach.}
-
-\item{min_size}{(Potentially used with 'ICV' testing method, otherwise useless) Minimal size among all samples (needed to take
-into account the correction factor for the variance-covariance assessment).}
 
 \item{comp.dist}{A list with 2*K elements corresponding to the component distributions (specified with R native names for these distributions)
 involved in the K admixture models. Elements, grouped by 2, refer to the unknown and known components of each admixture model,
@@ -89,9 +85,8 @@ sim1 <- rsimmix(n = 300, unknownComp_weight = 0.85, comp.dist = list(list.comp$f
 list.comp <- list(f1 = NULL, g1 = "norm")
 list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7))
 gaussTest <- admix_test(samples = list(sim1), sym.f = TRUE, test.method = 'Poly', sim_U = NULL,
-                        n_sim_tab = 50, min_size = NULL, comp.dist = list.comp,
-                        comp.param = list.param, support = "Real", conf.level = 0.95,
-                        parallel = FALSE, n_cpu = 2)
+                        n_sim_tab = 50, comp.dist = list.comp, comp.param = list.param,
+                        support = "Real", conf.level = 0.95, parallel = FALSE, n_cpu = 2)
 
 }
 \author{
