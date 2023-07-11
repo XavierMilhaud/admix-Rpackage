@@ -16,7 +16,7 @@ Perform the following hypothesis test: H0 : f1 = f2 versus H1 : f1 differs from 
     
     <a class="navbar-brand me-2" href="../index.html">admix</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1-1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1-2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -114,7 +114,8 @@ For instance, 'comp.param' could be specified as follows: : list(f1=NULL, g1=lis
 
 
 <dt>min_size</dt>
-<dd><p>(default to NULL) In the k-sample case, useful to provide the minimal size among all samples. Otherwise, useless.</p></dd>
+<dd><p>(default to NULL, only used with 'ICV' testing method in the k-sample case, otherwise useless) Minimal size among all samples (needed
+to take into account the correction factor for the variance-covariance assessment).</p></dd>
 
 
 <dt>conf.level</dt>
@@ -170,20 +171,20 @@ of the inner convergence regime (useful to perform the test when comparing to th
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.95</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $rejection_rule</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  95% </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> TRUE </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   95% </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> FALSE </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $p_value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $test.stat</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1188723</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.06328552</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $weights</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.8745271 0.7466063</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.8681278 0.7434041</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $sim_U</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.02447547 0.11532770 0.04172086 0.05280862 0.03849815 0.07561056</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.05840531 0.05160782 0.13251857 0.05260272 0.08767210 0.09186721</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">####### Under the alternative H1 :</span></span></span>
@@ -213,10 +214,10 @@ of the inner convergence regime (useful to perform the test when comparing to th
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1e-16</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $test.stat</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.2148901</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1304922</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $weights</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 3.3372750 0.5973457</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 4.5161152 0.6064079</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $sim_U</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>

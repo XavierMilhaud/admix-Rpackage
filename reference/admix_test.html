@@ -22,7 +22,7 @@ of the component densities, or by the inner-convergence property obtained using 
     
     <a class="navbar-brand me-2" href="../index.html">admix</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1-1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1-2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,7 +80,6 @@ of the component densities, or by the inner-convergence property obtained using 
 <span>  test.method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Poly"</span>, <span class="st">"ICV"</span><span class="op">)</span>,</span>
 <span>  sim_U <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  n_sim_tab <span class="op">=</span> <span class="fl">50</span>,</span>
-<span>  min_size <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  comp.dist <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  comp.param <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  support <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Real"</span>, <span class="st">"Integer"</span>, <span class="st">"Positive"</span>, <span class="st">"Bounded.continuous"</span><span class="op">)</span>,</span>
@@ -114,11 +113,6 @@ as defined in the IBM approach (see 'Details' below).</p></dd>
 <dt>n_sim_tab</dt>
 <dd><p>(Used only with 'ICV' testing method, otherwise useless) Number of simulated gaussian processes used in the
 tabulation of the inner convergence distribution in the IBM approach.</p></dd>
-
-
-<dt>min_size</dt>
-<dd><p>(Potentially used with 'ICV' testing method, otherwise useless) Minimal size among all samples (needed to take
-into account the correction factor for the variance-covariance assessment).</p></dd>
 
 
 <dt>comp.dist</dt>
@@ -186,9 +180,8 @@ the symmetric case' (JSPI, Milhaud &amp; al., 2021).</p>
 <span class="r-in"><span><span class="va">list.comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>f1 <span class="op">=</span> <span class="cn">NULL</span>, g1 <span class="op">=</span> <span class="st">"norm"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">list.param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>f1 <span class="op">=</span> <span class="cn">NULL</span>, g1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">2</span>, sd <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">gaussTest</span> <span class="op">&lt;-</span> <span class="fu">admix_test</span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">sim1</span><span class="op">)</span>, sym.f <span class="op">=</span> <span class="cn">TRUE</span>, test.method <span class="op">=</span> <span class="st">'Poly'</span>, sim_U <span class="op">=</span> <span class="cn">NULL</span>,</span></span>
-<span class="r-in"><span>                        n_sim_tab <span class="op">=</span> <span class="fl">50</span>, min_size <span class="op">=</span> <span class="cn">NULL</span>, comp.dist <span class="op">=</span> <span class="va">list.comp</span>,</span></span>
-<span class="r-in"><span>                        comp.param <span class="op">=</span> <span class="va">list.param</span>, support <span class="op">=</span> <span class="st">"Real"</span>, conf.level <span class="op">=</span> <span class="fl">0.95</span>,</span></span>
-<span class="r-in"><span>                        parallel <span class="op">=</span> <span class="cn">FALSE</span>, n_cpu <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                        n_sim_tab <span class="op">=</span> <span class="fl">50</span>, comp.dist <span class="op">=</span> <span class="va">list.comp</span>, comp.param <span class="op">=</span> <span class="va">list.param</span>,</span></span>
+<span class="r-in"><span>                        support <span class="op">=</span> <span class="st">"Real"</span>, conf.level <span class="op">=</span> <span class="fl">0.95</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span>, n_cpu <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
