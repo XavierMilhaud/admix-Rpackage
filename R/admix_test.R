@@ -17,8 +17,6 @@
 #'               as defined in the IBM approach (see 'Details' below).
 #' @param n_sim_tab (Used only with 'ICV' testing method, otherwise useless) Number of simulated gaussian processes used in the
 #'                   tabulation of the inner convergence distribution in the IBM approach.
-#' @param min_size (Potentially used with 'ICV' testing method, otherwise useless) Minimal size among all samples (needed to take
-#'                  into account the correction factor for the variance-covariance assessment).
 #' @param comp.dist A list with 2*K elements corresponding to the component distributions (specified with R native names for these distributions)
 #'                  involved in the K admixture models. Elements, grouped by 2, refer to the unknown and known components of each admixture model,
 #'                  If there are unknown elements, they must be specified as 'NULL' objects. For instance, 'comp.dist' could be specified
@@ -55,15 +53,14 @@
 #' list.comp <- list(f1 = NULL, g1 = "norm")
 #' list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7))
 #' gaussTest <- admix_test(samples = list(sim1), sym.f = TRUE, test.method = 'Poly', sim_U = NULL,
-#'                         n_sim_tab = 50, min_size = NULL, comp.dist = list.comp,
-#'                         comp.param = list.param, support = "Real", conf.level = 0.95,
-#'                         parallel = FALSE, n_cpu = 2)
+#'                         n_sim_tab = 50, comp.dist = list.comp, comp.param = list.param,
+#'                         support = "Real", conf.level = 0.95, parallel = FALSE, n_cpu = 2)
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
 admix_test <- function(samples = NULL, sym.f = FALSE, test.method = c("Poly","ICV"), sim_U = NULL, n_sim_tab = 50,
-                       min_size = NULL, comp.dist = NULL, comp.param = NULL, support = c("Real","Integer","Positive","Bounded.continuous"),
+                       comp.dist = NULL, comp.param = NULL, support = c("Real","Integer","Positive","Bounded.continuous"),
                        conf.level = 0.95, parallel = FALSE, n_cpu = 2)
 {
   stopifnot( length(comp.dist) == (2*length(samples)) )
@@ -88,9 +85,9 @@ admix_test <- function(samples = NULL, sym.f = FALSE, test.method = c("Poly","IC
       U <- IBM_tabul_stochasticInteg(n.sim = n_sim_tab, n.varCovMat = 100, sample1 = samples[[1]], sample2 = samples[[2]], min_size = NULL,
                                      comp.dist = comp.dist, comp.param = comp.param, parallel = parallel, n_cpu = n_cpu)
       test_res <- IBM_2samples_test(samples = samples, known.p = NULL, comp.dist = comp.dist, comp.param = comp.param, sim_U = U[["U_sim"]],
-                                    min_size=NULL, conf.level = conf.level, parallel = parallel, n_cpu = n_cpu)
+                                    min_size = NULL, conf.level = conf.level, parallel = parallel, n_cpu = n_cpu)
     } else if (n_samples > 2) {
-      test_res <- IBM_k_samples_test(samples = samples, sim_U = NULL, n_sim_tab = n_sim_tab, min_size = NULL,
+      test_res <- IBM_k_samples_test(samples = samples, sim_U = NULL, n_sim_tab = n_sim_tab,
                                      comp.dist = comp.dist, comp.param = comp.param, conf.level = conf.level,
                                      tune.penalty = TRUE, parallel = parallel, n_cpu = n_cpu)
     } else stop("Incorrect number of samples under study!")
