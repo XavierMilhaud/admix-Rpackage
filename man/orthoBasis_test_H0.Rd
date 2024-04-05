@@ -13,7 +13,7 @@ orthoBasis_test_H0(
   K = 3,
   nb.ssEch = 2,
   s = 0.49,
-  var.explicit = FALSE,
+  var.explicit = TRUE,
   nb.echBoot = NULL,
   support = c("Real", "Integer", "Positive", "Bounded.continuous", "Bounded.discrete"),
   bounds.supp = NULL,
@@ -80,7 +80,7 @@ See the paper on HAL website: https://hal.science/hal-03692868
 }
 \examples{
 \donttest{
-###### Using Bordes and Vandekerkhove estimation (valid if symetric unknown component densities).
+###### Using Bordes and Vandekerkhove estimation (valid if symmetric unknown component densities).
 #### Under the null hypothesis H0.
 ## Simulate data:
 list.comp <- list(f1 = "norm", g1 = "norm",
@@ -101,7 +101,7 @@ test <- orthoBasis_test_H0(samples = list(sim.X, sim.Y),
              known.p=NULL, comp.dist = list.comp, comp.param = list.param, known.coef=NULL, K=3,
              nb.ssEch = 2, s = 0.25, var.explicit=TRUE, nb.echBoot=NULL, support = 'Real',
              bounds.supp = NULL, est.method = 'BVdk', uniformized.knownComp_data = NULL)
-test$decision
+test$rejection_rule
 }
 
 }

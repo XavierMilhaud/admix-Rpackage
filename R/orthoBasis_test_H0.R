@@ -42,7 +42,7 @@
 #'
 #' @examples
 #' \donttest{
-#' ###### Using Bordes and Vandekerkhove estimation (valid if symetric unknown component densities).
+#' ###### Using Bordes and Vandekerkhove estimation (valid if symmetric unknown component densities).
 #' #### Under the null hypothesis H0.
 #' ## Simulate data:
 #' list.comp <- list(f1 = "norm", g1 = "norm",
@@ -63,14 +63,14 @@
 #'              known.p=NULL, comp.dist = list.comp, comp.param = list.param, known.coef=NULL, K=3,
 #'              nb.ssEch = 2, s = 0.25, var.explicit=TRUE, nb.echBoot=NULL, support = 'Real',
 #'              bounds.supp = NULL, est.method = 'BVdk', uniformized.knownComp_data = NULL)
-#' test$decision
+#' test$rejection_rule
 #' }
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
 orthoBasis_test_H0 <- function(samples, known.p = NULL, comp.dist = NULL, comp.param = NULL, known.coef = NULL,
-                                K = 3, nb.ssEch = 2, s = 0.49, var.explicit = FALSE, nb.echBoot = NULL,
+                                K = 3, nb.ssEch = 2, s = 0.49, var.explicit = TRUE, nb.echBoot = NULL,
                                 support = c("Real","Integer","Positive","Bounded.continuous","Bounded.discrete"), bounds.supp = NULL,
                                 est.method = c("BVdk","PS"), uniformized.knownComp_data = NULL)
 {
@@ -78,7 +78,7 @@ orthoBasis_test_H0 <- function(samples, known.p = NULL, comp.dist = NULL, comp.p
   stopifnot( (length(comp.dist) == 4) & (length(comp.param) == 4) )
 
   if (all(sapply(comp.dist, is.null)) & all(sapply(comp.param, is.null))) {
-    stopifnot(meth == 'PS')
+    stopifnot(est.method == 'PS')
   } else {
     if (is.null(comp.dist[[2]]) | is.null(comp.dist[[4]]) | is.null(comp.param[[2]]) | is.null(comp.param[[4]])) {
       stop("Known components must be specified in the two admixture models.")
