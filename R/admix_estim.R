@@ -54,6 +54,8 @@
 
 admix_estim <- function(samples = NULL, sym.f = FALSE, est.method = c("PS","BVdk","IBM"), comp.dist = NULL, comp.param = NULL)
 {
+  message("If the unknown component distributions of the admixture models under study are identical, then the unknown proportions are not
+  exactly estimated, but the ratio of the estimated proportions equals the ratio of the actual ones.")
   stopifnot( length(comp.dist) == (2*length(samples)) )
   if ( any(sapply(comp.dist, is.null)) | any(sapply(comp.param, is.null)) ) {
     if ( (!all(sapply(comp.param, is.null)[seq.int(from = 2, to = length(comp.dist), by = 2)] == FALSE)) |
@@ -92,7 +94,11 @@ admix_estim <- function(samples = NULL, sym.f = FALSE, est.method = c("PS","BVdk
                                      comp.param = list(comp.param[[1]],comp.param[[2]],comp.param[[2*k-1]],comp.param[[2*k]]),
                                      with.correction = F, n.integ = 1000)
     }
-    estim_weight <- c(estimate[[k]]$prop.estim[1], unlist(sapply(X = lapply(X = estimate, "[[", "prop.estim"), FUN = "[[", 2)))
+    if (length(estimate[[k]]$prop.estim) == 2) {
+      estim_weight <- c(estimate[[k]]$prop.estim[1], unlist(sapply(X = lapply(X = estimate, "[[", "prop.estim"), FUN = "[[", 2)))
+    } else if (length(estimate[[k]]$prop.estim) == 1) {
+      estim_weight <- c(estimate[[k]]$p.X.fixed, unlist(sapply(X = lapply(X = estimate, "[[", "prop.estim"), FUN = "[[", 1)))
+    } else stop("Error in function admix_estim")
     estim_loc <- NA
   } else stop("Please choose appropriately the arguments of the function.")
 

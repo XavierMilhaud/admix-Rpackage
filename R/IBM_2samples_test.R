@@ -92,7 +92,11 @@ IBM_2samples_test <- function(samples, known.p = NULL, comp.dist = NULL, comp.pa
     estim.weights <- 100
     contrast_val <- NA
   } else {
-    estim.weights <- estim[["prop.estim"]]
+  #  if (length(estim[["prop.estim"]] == 2)) {
+      estim.weights <- estim[["prop.estim"]]
+  #  } else {
+  #    estim.weights <- c(estim[["p.X.fixed"]], estim[["prop.estim"]])
+  #  }
     if (is.null(min_size)) {
       sample.size <- min(length(samples[[1]]), length(samples[[2]]))
     } else {

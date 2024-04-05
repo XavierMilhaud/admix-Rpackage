@@ -131,7 +131,7 @@ IBM_tabul_stochasticInteg <- function(n.sim = 200, n.varCovMat = 100, sample1 = 
   }
   contrast_val <- sample.size *
     IBM_empirical_contrast(par = estim[["prop.estim"]], fixed.p.X = estim[["p.X.fixed"]], sample1 = sample1,
-                          sample2 = sample2, G = estim[["integ.supp"]], comp.dist = comp.dist, comp.param = comp.param)
+                           sample2 = sample2, G = estim[["integ.supp"]], comp.dist = comp.dist, comp.param = comp.param)
   ## Integration support:
   support <- detect_support_type(sample1, sample2)
   if (support == "continuous") {
