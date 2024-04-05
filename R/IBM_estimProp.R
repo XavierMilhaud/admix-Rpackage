@@ -121,7 +121,7 @@ IBM_estimProp <- function(sample1, sample2, known.prop = NULL, comp.dist = NULL,
 
   ## To deal with extreme values that can be found and that cause numerical issues afterwards:
   if (any(abs(sol[['par']]) > 5)) {
-    message("In 'IBM_estimProp': optimization algorithm was changed (in 'optim') from 'Nelder-Mead' to 'BFGS' to avoid the solution to explose.")
+    #message("In 'IBM_estimProp': optimization algorithm was changed (in 'optim') from 'Nelder-Mead' to 'BFGS' to avoid the solution to explose.")
     expr1_BFGS <- expression(stats::optim(par = par.init, fn = IBM_empirical_contrast, gr = NULL, fixed.p.X = fixed.p.X, sample1 = sample1,
                                           sample2 = sample2, G = G, comp.dist = comp.dist, comp.param = comp.param, method = "L-BFGS-B",
                                           lower = c(0.001,0.001), upper = c(5,5), control = list(trace = 0, maxit = 10000)))
@@ -133,7 +133,7 @@ IBM_estimProp <- function(sample1, sample2, known.prop = NULL, comp.dist = NULL,
       count_error <- count_error + 1
     }
     if (inherits(x = sol, what = "try-error", which = FALSE)) {
-      message("In 'IBM_estimProp': impossible to estimate the component weights with BFGS method. Switch back to Nelder-Mead algorithm to obtain a solution")
+      #message("In 'IBM_estimProp': impossible to estimate the component weights with BFGS method. Switch back to Nelder-Mead algorithm to obtain a solution")
       sol <- try(suppressWarnings(eval(expr1_NM)), silent = TRUE)
     }
   }
@@ -161,7 +161,7 @@ IBM_estimProp <- function(sample1, sample2, known.prop = NULL, comp.dist = NULL,
 
     ## To deal with extreme values that can be found and that cause numerical issues afterwards:
     if (any(abs(sol.theo[['par']]) > 5)) {
-      message("In 'IBM_estimProp': optimization algorithm was changed (in 'optim') from 'Nelder-Mead' to 'BFGS' to avoid the solution to explose.")
+      #message("In 'IBM_estimProp': optimization algorithm was changed (in 'optim') from 'Nelder-Mead' to 'BFGS' to avoid the solution to explose.")
       expr2_BFGS <- expression(stats::optim(par = par.init, fn = IBM_theoretical_contrast, gr = NULL, theo.par = known.prop, fixed.p.X = fixed.p.X,
                                             G = G, comp.dist = comp.dist, comp.param = comp.param, sample1 = sample1, sample2 = sample2,
                                             method = "L-BFGS-B", lower = c(0.001,0.001), upper = c(5,5), control = list(trace = 0, maxit = 10000)))
@@ -173,7 +173,7 @@ IBM_estimProp <- function(sample1, sample2, known.prop = NULL, comp.dist = NULL,
         count_error <- count_error + 1
       }
       if (inherits(x = sol, what = "try-error", which = FALSE)) {
-        message("In 'IBM_estimProp': impossible to estimate the component weights with BFGS method. Switch back to Nelder-Mead algorithm to obtain a solution")
+        #message("In 'IBM_estimProp': impossible to estimate the component weights with BFGS method. Switch back to Nelder-Mead algorithm to obtain a solution")
         sol.theo <- try(suppressWarnings(eval(expr2_NM)), silent = TRUE)
       }
     }
