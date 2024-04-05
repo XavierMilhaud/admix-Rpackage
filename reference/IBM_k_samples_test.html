@@ -4,7 +4,7 @@ K-samples test of the unknown component distribution in admixture models using I
 (IBM) method. Recall that we have K populations following admixture models, each one with probability
 density functions (pdf) l_k = p_k*f_k + (1-p_k)*g_k, where g_k is the known pdf and l_k corresponds to the
 observed sample. Perform the following hypothesis test:
-H0 : f_1 = ... = f_K  against  H1 : f_i differs from f_j (i different from j, and i,j in 1,...,K)."><title>Equality test of unknown component distributions in K admixture models, with IBM approach — IBM_k_samples_test • admix</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Equality test of unknown component distributions in K admixture models, with IBM approach — IBM_k_samples_test"><meta property="og:description" content="Test hypothesis on the unknown component of K (K &amp;gt; 1) admixture models using Inversion - Best Matching method.
+H0 : f_1 = ... = f_K  against  H1 : f_i differs from f_j (i different from j, and i,j in 1,...,K)."><title>Equality test of unknown component distributions in K admixture models, with IBM approach — IBM_k_samples_test • admix</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Equality test of unknown component distributions in K admixture models, with IBM approach — IBM_k_samples_test"><meta property="og:description" content="Test hypothesis on the unknown component of K (K &amp;gt; 1) admixture models using Inversion - Best Matching method.
 K-samples test of the unknown component distribution in admixture models using Inversion - Best Matching
 (IBM) method. Recall that we have K populations following admixture models, each one with probability
 density functions (pdf) l_k = p_k*f_k + (1-p_k)*g_k, where g_k is the known pdf and l_k corresponds to the
@@ -187,19 +187,19 @@ the statistic; and 11) the contrast matrix.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> FALSE </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $p_value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.3684211</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.9444444</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $stat_name</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "d_1-3"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "d_1-2"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $test.stat</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.09692437</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.04927202</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $stat_rank</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $penalized_stat</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  -407.3  -814.6 -1221.7</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  -407.3  -814.6 -1222.0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $penalty_H0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
@@ -211,25 +211,24 @@ the statistic; and 11) the contrast matrix.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ordered_contrasts</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.09692437 0.09706270 0.19939537</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.04927202 0.06390910 0.06518253</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $quantiles</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1558069</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1627083</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $sim_U</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.09011591 0.07374960 0.10256153 0.04101746 0.14805625 0.09588846</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.04169045 0.02511721 0.07165677 0.11035712 0.08010013 0.16413163</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.11895956 0.09350398 0.05080338 0.03147076 0.12512352 0.09091427</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [19] 0.15488191</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.22211347 0.07907071 0.04577874 0.05666042 0.07941410 0.11764892</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.12745123 0.11190441 0.06718305 0.11889229 0.04969935 0.09891145</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.06584701 0.12892848 0.15163186 0.06505926 0.15222498 0.09758417</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $stat_terms</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "d_1-3"                 "d_1-3 + d_1-2"         "d_1-3 + d_1-2 + d_2-3"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "d_1-2"                 "d_1-2 + d_1-3"         "d_1-2 + d_1-3 + d_2-3"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $contr_mat</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1]      [,2]       [,3]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]   NA 0.0970627 0.09692437</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]   NA        NA 0.19939537</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]   NA        NA         NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1]       [,2]       [,3]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]   NA 0.04927202 0.06390910</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]   NA         NA 0.06518253</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]   NA         NA         NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">####### Now under the alternative H1:</span></span></span>
@@ -254,8 +253,6 @@ the statistic; and 11) the contrast matrix.</p>
 <span class="r-in"><span><span class="fu">IBM_k_samples_test</span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">sim1</span>,<span class="va">sim2</span>,<span class="va">sim3</span><span class="op">)</span>, sim_U<span class="op">=</span> <span class="cn">NULL</span>, n_sim_tab <span class="op">=</span> <span class="fl">20</span>,</span></span>
 <span class="r-in"><span>                   comp.dist <span class="op">=</span> <span class="va">list.comp</span>, comp.param <span class="op">=</span> <span class="va">list.param</span>, conf.level <span class="op">=</span> <span class="fl">0.95</span>,</span></span>
 <span class="r-in"><span>                   tune.penalty <span class="op">=</span> <span class="cn">FALSE</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span>, n_cpu <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> In 'IBM_estimProp': optimization algorithm was changed (in 'optim') from 'Nelder-Mead' to 'BFGS' to avoid the solution to explose.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> In 'IBM_estimProp': optimization algorithm was changed (in 'optim') from 'Nelder-Mead' to 'BFGS' to avoid the solution to explose.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $confidence_level</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.95</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -264,19 +261,19 @@ the statistic; and 11) the contrast matrix.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> FALSE </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $p_value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.4117647</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1666667</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $stat_name</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "d_1-2"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $test.stat</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.113183</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1578571</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $stat_rank</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $penalized_stat</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -1059.4 -2111.8 -3114.0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] -1059.3 -2110.9 -3121.1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $penalty_H0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
@@ -288,24 +285,24 @@ the statistic; and 11) the contrast matrix.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $ordered_contrasts</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  0.113183  7.094807 57.208722</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1]  0.1578571  7.9092233 49.3351165</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $quantiles</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1933966</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.1726824</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $sim_U</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.19109434 0.10894790 0.10405654 0.12344107 0.06263081 0.11447128</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.20260546 0.09658697 0.08371000 0.11197591 0.16950807 0.08946238</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.14573982 0.11639398 0.07693133 0.06717326 0.10075217</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0.08992965 0.08201230 0.16281738 0.11088146 0.10200102 0.15231766</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [7] 0.11413073 0.06323251 0.13957180 0.10048591 0.10851826 0.09667932</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [13] 0.12146412 0.22858434 0.09589025 0.15519970 0.15806188 0.04675893</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $stat_terms</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "d_1-2"                 "d_1-2 + d_1-3"         "d_1-2 + d_1-3 + d_2-3"</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $contr_mat</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1]     [,2]      [,3]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]   NA 0.113183  7.094807</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]   NA       NA 57.208722</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]   NA       NA        NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      [,1]      [,2]      [,3]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]   NA 0.1578571  7.909223</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,]   NA        NA 49.335116</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]   NA        NA        NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
