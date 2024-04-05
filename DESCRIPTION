@@ -1,7 +1,7 @@
 Package: admix
 Title: Package Admix for Admixture (aka Contamination) Models
-Version: 2.1-2
-Date: 2023-07-11
+Version: 2.1-3
+Date: 2024-04-05
 Authors@R: c(
     person(given = "Xavier",
            family = "Milhaud",

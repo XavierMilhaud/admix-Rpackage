@@ -37,7 +37,8 @@ list(f1 = NULL, g1 = list(mean=0,sd=1), f2 = NULL, g2 = list(mean=3,sd=1.1), f3 
 of the stochastic integral for each cluster previously detected.}
 
 \item{tune.penalty}{A boolean that allows to choose between a classical penalty term or an optimized penalty embedding some tuning parameters
-(automatically optimized). Optimized penalty is particularly useful for low sample size.}
+(automatically optimized) for k-sample tests used within the clustering procedure.
+Optimized penalty is particularly useful for low sample size.}
 
 \item{conf.level}{The confidence level of the K-sample test used in the clustering procedure.}
 
@@ -89,8 +90,8 @@ list.param <- list(f1 = NULL, g1 = list(rate = 1/3.5),
                    f3 = NULL, g3 = list(shape = 12, rate = 2),
                    f4 = NULL, g4 = list(rate = 1/7))
 clusters <- admix_clustering(samples = list(A.sim,B.sim,C.sim,D.sim), n_sim_tab = 8,
-                             comp.dist=list.comp, comp.param=list.param, tune.penalty=FALSE,
-                             conf.level = 0.95, parallel = FALSE, n_cpu = 2)
+                             comp.dist=list.comp, comp.param=list.param, tune.penalty=TRUE,
+                             conf.level = 0.95, parallel = TRUE, n_cpu = 2)
 clusters
 }
 
