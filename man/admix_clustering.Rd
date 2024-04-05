@@ -10,6 +10,7 @@ admix_clustering(
   comp.dist = NULL,
   comp.param = NULL,
   tabul.dist = NULL,
+  tune.penalty = FALSE,
   conf.level = 0.95,
   parallel = FALSE,
   n_cpu = 2
@@ -35,6 +36,9 @@ list(f1 = NULL, g1 = list(mean=0,sd=1), f2 = NULL, g2 = list(mean=3,sd=1.1), f3 
 \item{tabul.dist}{Only useful for comparisons of detected clusters at different confidence levels. Is a list of the tabulated distributions
 of the stochastic integral for each cluster previously detected.}
 
+\item{tune.penalty}{A boolean that allows to choose between a classical penalty term or an optimized penalty embedding some tuning parameters
+(automatically optimized). Optimized penalty is particularly useful for low sample size.}
+
 \item{conf.level}{The confidence level of the K-sample test used in the clustering procedure.}
 
 \item{parallel}{(default to FALSE) Boolean to indicate whether parallel computations are performed (speed-up the tabulation).}
@@ -42,11 +46,12 @@ of the stochastic integral for each cluster previously detected.}
 \item{n_cpu}{(default to 2) Number of cores used when parallelizing.}
 }
 \value{
-A list with eight elements: 1) the number of populations under consideration; 2) the number of detected clusters;
+A list with eleven elements: 1) the number of populations studied; 2) the number of detected clusters;
 3) the list of p-values for each test performed; 4) the cluster affiliation for each population; 5) the chosen confidence
-level of statistical tests; 6) the cluster components; 7) the estimated weights of the unknown component distributions inside
-each cluster (remind that estimated weights are consistent only under the null); 8) the matrix of pairwise discrepancies
-among all populations.
+level of statistical tests; 6) the cluster components; 7) the size of clusters; 8) the estimated weights of the unknown
+component distributions inside each cluster (remind that estimated weights are consistent only if unknown components are tested
+to be identical); 9) the matrix of pairwise discrepancies across populations; 10) the tabulated distributions used for
+statistical tests; 11) the initial call.
 }
 \description{
 Create clusters on the unknown components related to the K populations following admixture models. Based on the K-sample test
@@ -84,8 +89,8 @@ list.param <- list(f1 = NULL, g1 = list(rate = 1/3.5),
                    f3 = NULL, g3 = list(shape = 12, rate = 2),
                    f4 = NULL, g4 = list(rate = 1/7))
 clusters <- admix_clustering(samples = list(A.sim,B.sim,C.sim,D.sim), n_sim_tab = 8,
-                             comp.dist=list.comp, comp.param=list.param, conf.level = 0.95,
-                             parallel = FALSE, n_cpu = 2)
+                             comp.dist=list.comp, comp.param=list.param, tune.penalty=FALSE,
+                             conf.level = 0.95, parallel = FALSE, n_cpu = 2)
 clusters
 }
 
