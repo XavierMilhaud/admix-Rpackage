@@ -8,7 +8,7 @@ using Inversion - Best Matching (IBM) approach, see 'Details' below for further 
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
     
 
-    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light"><div class="container">
+    <nav class="navbar fixed-top navbar-light navbar-expand-lg bg-light" data-bs-theme="light"><div class="container">
     
     <a class="navbar-brand me-2" href="../index.html">admix</a>
 
@@ -68,7 +68,8 @@ using Inversion - Best Matching (IBM) approach, see 'Details' below for further 
 <span>  tune.penalty <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  conf.level <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  n_cpu <span class="op">=</span> <span class="fl">2</span></span>
+<span>  n_cpu <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  echo <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -119,6 +120,10 @@ Optimized penalty is particularly useful for low sample size.</p></dd>
 
 <dt>n_cpu</dt>
 <dd><p>(default to 2) Number of cores used when parallelizing.</p></dd>
+
+
+<dt>echo</dt>
+<dd><p>(default to TRUE) Display the remaining computation time.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -172,20 +177,19 @@ statistical tests; 11) the initial call.</p>
 <span class="r-in"><span>                   f4 <span class="op">=</span> <span class="cn">NULL</span>, g4 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">7</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">clusters</span> <span class="op">&lt;-</span> <span class="fu">admix_clustering</span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">A.sim</span>,<span class="va">B.sim</span>,<span class="va">C.sim</span>,<span class="va">D.sim</span><span class="op">)</span>, n_sim_tab <span class="op">=</span> <span class="fl">8</span>,</span></span>
 <span class="r-in"><span>                             comp.dist<span class="op">=</span><span class="va">list.comp</span>, comp.param<span class="op">=</span><span class="va">list.param</span>, tune.penalty<span class="op">=</span><span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>                             conf.level <span class="op">=</span> <span class="fl">0.95</span>, parallel <span class="op">=</span> <span class="cn">TRUE</span>, n_cpu <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   |                                                          |                                                  |   0%  |                                                          |======                                            |  12%  |                                                          |======================================            |  75%  |                                                          |==================================================| 100%</span>
+<span class="r-in"><span>                             conf.level <span class="op">=</span> <span class="fl">0.95</span>, parallel <span class="op">=</span> <span class="cn">TRUE</span>, n_cpu <span class="op">=</span> <span class="fl">2</span>, echo <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">clusters</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> admix_clustering(samples = list(A.sim, B.sim, C.sim, D.sim), </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     n_sim_tab = 8, comp.dist = list.comp, comp.param = list.param, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     tune.penalty = TRUE, conf.level = 0.95, parallel = TRUE, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     n_cpu = 2)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     n_cpu = 2, echo = FALSE)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> The number of populations/samples under study is 4.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> The level of the underlying k-sample testing procedure is set to 5%.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> The number of detected clusters in these populations equals 2.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> The p-values of the k-sample tests (showing when to close the clusters (i.e. p-value &lt; 0.05) equal: 1, 0, 0.333.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The p-values of the k-sample tests (showing when to close the clusters (i.e. p-value &lt; 0.05) equal: 1, 0, 0.571.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> The list of clusters with populations belonging to them (in numeric format, i.e. inside c()) :</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    - Cluster #1: vector of populations c(1, 3)</span>
@@ -198,10 +202,10 @@ statistical tests; 11) the initial call.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> The matrix giving the distances between populations, used in the clustering procedure through the k-sample tests:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             [,1]        [,2]       [,3]        [,4]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  0.00000000 13.99846892 0.01972404 31.20025428</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 13.99846892  0.00000000 8.27060484  0.05551389</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]  0.01972404  8.27060484 0.00000000  8.14654859</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [4,] 31.20025428  0.05551389 8.14654859  0.00000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  0.00000000 14.23300694 0.02451745 30.29373618</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 14.23300694  0.00000000 9.00516352  0.04903379</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,]  0.02451745  9.00516352 0.00000000  7.28158045</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [4,] 30.29373618  0.04903379 7.28158045  0.00000000</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
@@ -215,7 +219,7 @@ statistical tests; 11) the initial call.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.8.</p>
 </div>
 
     </footer></div>
