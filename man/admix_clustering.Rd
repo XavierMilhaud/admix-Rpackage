@@ -13,7 +13,8 @@ admix_clustering(
   tune.penalty = FALSE,
   conf.level = 0.95,
   parallel = FALSE,
-  n_cpu = 2
+  n_cpu = 2,
+  echo = TRUE
 )
 }
 \arguments{
@@ -45,6 +46,8 @@ Optimized penalty is particularly useful for low sample size.}
 \item{parallel}{(default to FALSE) Boolean to indicate whether parallel computations are performed (speed-up the tabulation).}
 
 \item{n_cpu}{(default to 2) Number of cores used when parallelizing.}
+
+\item{echo}{(default to TRUE) Display the remaining computation time.}
 }
 \value{
 A list with eleven elements: 1) the number of populations studied; 2) the number of detected clusters;
@@ -91,7 +94,7 @@ list.param <- list(f1 = NULL, g1 = list(rate = 1/3.5),
                    f4 = NULL, g4 = list(rate = 1/7))
 clusters <- admix_clustering(samples = list(A.sim,B.sim,C.sim,D.sim), n_sim_tab = 8,
                              comp.dist=list.comp, comp.param=list.param, tune.penalty=TRUE,
-                             conf.level = 0.95, parallel = TRUE, n_cpu = 2)
+                             conf.level = 0.95, parallel = TRUE, n_cpu = 2, echo = FALSE)
 clusters
 }
 

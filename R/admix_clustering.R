@@ -23,6 +23,7 @@
 #' @param conf.level The confidence level of the K-sample test used in the clustering procedure.
 #' @param parallel (default to FALSE) Boolean to indicate whether parallel computations are performed (speed-up the tabulation).
 #' @param n_cpu (default to 2) Number of cores used when parallelizing.
+#' @param echo (default to TRUE) Display the remaining computation time.
 #'
 #' @details See the paper at the following HAL weblink: https://hal.science/hal-04129130
 #'
@@ -63,7 +64,7 @@
 #'                    f4 = NULL, g4 = list(rate = 1/7))
 #' clusters <- admix_clustering(samples = list(A.sim,B.sim,C.sim,D.sim), n_sim_tab = 8,
 #'                              comp.dist=list.comp, comp.param=list.param, tune.penalty=TRUE,
-#'                              conf.level = 0.95, parallel = TRUE, n_cpu = 2)
+#'                              conf.level = 0.95, parallel = TRUE, n_cpu = 2, echo = FALSE)
 #' clusters
 #' }
 #'
@@ -71,7 +72,8 @@
 #' @export
 
 admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, comp.param = NULL,
-                             tabul.dist = NULL, tune.penalty = FALSE, conf.level = 0.95, parallel = FALSE, n_cpu = 2)
+                             tabul.dist = NULL, tune.penalty = FALSE, conf.level = 0.95,
+                             parallel = FALSE, n_cpu = 2, echo = TRUE)
 {
   ## Control whether parallel computations were asked for or not:
   if (parallel) {
@@ -182,8 +184,10 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
     #CDF_U <- stats::ecdf(U[["U_sim"]])
     p_value <- c(p_value, 1 - CDF_U(contrast.matrix[which_row, which_col]))
     CDF_U <- NULL
-    prog_bar <- utils::txtProgressBar(min = 0, max = length(samples), style = 3, width = 50, char = "=")
-    utils::setTxtProgressBar(prog_bar, 2/length(samples))
+    if (echo) {
+      prog_bar <- utils::txtProgressBar(min = 0, max = length(samples), style = 3, width = 50, char = "=")
+      utils::setTxtProgressBar(prog_bar, 2/length(samples))
+    }
   } else {
     clusters[[1]] <- as.character(which_row)
     clusters[[2]] <- as.character(which_col)
@@ -193,9 +197,11 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
     new.n_clust <- 2
     ## Look for a second member to integrate the newly second built cluster:
     indexesSamples_to_consider <- c(0,0)
-    prog_bar <- utils::txtProgressBar(min = 0, max = length(samples), style = 3,  width = 50, char = "=")
-    utils::setTxtProgressBar(prog_bar, 1/length(samples))
+    if (echo) {
+      prog_bar <- utils::txtProgressBar(min = 0, max = length(samples), style = 3,  width = 50, char = "=")
+      utils::setTxtProgressBar(prog_bar, 1/length(samples))
     }
+  }
 
   while (length(alreadyGrouped_samples) < length(samples)) {
     ## Detect which are the neighboors of the current population under study:
@@ -286,9 +292,9 @@ admix_clustering <- function(samples = NULL, n_sim_tab = 100, comp.dist = NULL, 
       }
     }
     indexesSamples_to_consider <- indexesSamples_to_consider_new
-    utils::setTxtProgressBar(prog_bar, length(alreadyGrouped_samples))
+    if (echo) utils::setTxtProgressBar(prog_bar, length(alreadyGrouped_samples))
   } # End of While
-  base::close(prog_bar)
+  if (echo) base::close(prog_bar)
 
   ## Define function that copies upper triangle to lower triangle to make the matrix become symmetric:
   f <- function(mat) {
