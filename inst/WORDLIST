@@ -2,6 +2,7 @@ BVdk
 Bordes
 CLT
 CMD
+ConVergence
 Dn
 Donsker
 EJS
@@ -14,7 +15,9 @@ Gi
 Github
 Gnedin
 Gridsize
+HMD
 ICV
+Italia
 JRSS
 JSPI
 Mateo
@@ -51,6 +54,7 @@ emptyset
 eqnarray
 estim
 estimatorsis
+european
 forall
 functionnalities
 gaussianity
@@ -76,7 +80,6 @@ neq
 notin
 optim
 orthonormal
-ouvertes
 pF
 parallelizing
 param
@@ -94,7 +97,6 @@ stepfun
 th
 uncorrelate
 unidimensional
-unknownComp
 vdots
 weblink
 xavier
