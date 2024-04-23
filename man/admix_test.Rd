@@ -13,6 +13,7 @@ admix_test(
   comp.dist = NULL,
   comp.param = NULL,
   support = c("Real", "Integer", "Positive", "Bounded.continuous"),
+  ICV_tunePenalty = TRUE,
   conf.level = 0.95,
   parallel = FALSE,
   n_cpu = 2
@@ -47,6 +48,10 @@ list(f1 = NULL, g1 = list(mean=0,sd=1), f2 = NULL, g2 = list(mean=3,sd=1.1), f3 
 
 \item{support}{(Potentially used with 'Poly' testing method, otherwise useless) The support of the observations; one of "Real",
 "Integer", "Positive", or "Bounded.continuous".}
+
+\item{ICV_tunePenalty}{(default to TRUE) Boolean used to tune the penalty term in the k-sample test (k=2,3,...,K) when using Inversion
+Best Matching (IBM) approach coupled to Inner ConVergence (ICV) property. Particularly useful when studying
+unbalanced samples (in terms of sample size) or small-sized samples.}
 
 \item{conf.level}{The confidence level of the K-sample test.}
 

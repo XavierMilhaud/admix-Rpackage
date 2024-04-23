@@ -29,6 +29,9 @@
 #'                   list(f1 = NULL, g1 = list(mean=0,sd=1), f2 = NULL, g2 = list(mean=3,sd=1.1), f3 = NULL, g3 = list(mean=-2,sd=0.6)).
 #' @param support (Potentially used with 'Poly' testing method, otherwise useless) The support of the observations; one of "Real",
 #'                 "Integer", "Positive", or "Bounded.continuous".
+#' @param ICV_tunePenalty (default to TRUE) Boolean used to tune the penalty term in the k-sample test (k=2,3,...,K) when using Inversion
+#'                        Best Matching (IBM) approach coupled to Inner ConVergence (ICV) property. Particularly useful when studying
+#'                        unbalanced samples (in terms of sample size) or small-sized samples.
 #' @param conf.level The confidence level of the K-sample test.
 #' @param parallel (default to FALSE) Boolean indicating whether parallel computations are performed (speed-up the tabulation).
 #' @param n_cpu (default to 2) Number of cores used when parallelizing.
@@ -61,7 +64,7 @@
 
 admix_test <- function(samples = NULL, sym.f = FALSE, test.method = c("Poly","ICV"), sim_U = NULL, n_sim_tab = 50,
                        comp.dist = NULL, comp.param = NULL, support = c("Real","Integer","Positive","Bounded.continuous"),
-                       conf.level = 0.95, parallel = FALSE, n_cpu = 2)
+                       ICV_tunePenalty = TRUE, conf.level = 0.95, parallel = FALSE, n_cpu = 2)
 {
   stopifnot( length(comp.dist) == (2*length(samples)) )
   if ( any(sapply(comp.dist, is.null)) | any(sapply(comp.param, is.null)) ) {
@@ -89,7 +92,7 @@ admix_test <- function(samples = NULL, sym.f = FALSE, test.method = c("Poly","IC
     } else if (n_samples > 2) {
       test_res <- IBM_k_samples_test(samples = samples, sim_U = NULL, n_sim_tab = n_sim_tab,
                                      comp.dist = comp.dist, comp.param = comp.param, conf.level = conf.level,
-                                     tune.penalty = TRUE, parallel = parallel, n_cpu = n_cpu)
+                                     tune.penalty = ICV_tunePenalty, parallel = parallel, n_cpu = n_cpu)
     } else stop("Incorrect number of samples under study!")
 
   } else if (meth == "Poly") {
