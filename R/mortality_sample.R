@@ -14,5 +14,5 @@
 #'                 (ages 30-85) and 113 columns (period 1908-2020)}
 #'   \item{names}{A list of eleven elements giving the names of the countries, in the same order as the elements in other lists}
 #' }
-#' @source \url{www.mortality.org}
+#' @source \url{https://www.mortality.org}
 "mortality_sample"

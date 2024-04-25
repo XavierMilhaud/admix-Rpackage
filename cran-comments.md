@@ -4,20 +4,17 @@ output: html_document
 ---
 
 ## R Test environments
-* Windows Server 2022, R-release, 32/64 bit
-* Debian Linux, R-release, GCC
-* Ubuntu Linux 20.04.1 LTS, R-release, GCC
-* Fedora Linux, R-devel, GCC
-* Windows Server 2022 x64 (build 20348) (windows-latest)
-* macOS Monterey 12.6.7 (macos-latest)
-* Windows Server x64 (build 20348) (windows-latest 4.1)
-* Ubuntu 22.04.2 LTS (ubuntu-latest devel)
-* Ubuntu 22.04.2 LTS (ubuntu-latest release)
-
+* Windows Server 2022 x64, R devel, platform x86_64-w64-mingw32 (64-bit)
+* Windows Server 2022 x64, R release, platform x86_64-w64-mingw32
+* macOS 12.7.4, R devel
+* macOS arm64 14.4.1, R devel
+* atlas
+* clang-asan
+* Linux, R devel
 
 ## R CMD check results
-There were no ERRORs, WARNINGs or NOTEs in these environments.
-
+- There were no ERRORs, WARNINGs or NOTEs in most of these environments.
+- Errors on Linux and Fedora OS when building vignettes (pandoc issue, seems to disappear in CRAN checks according to users)
 
 ## Downstream dependencies
 There are currently no downstream dependencies for this package.

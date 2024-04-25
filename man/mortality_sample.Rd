@@ -21,7 +21,7 @@ each element having 56 rows (ages 30-85) and 113 columns (period 1908-2020)}
 }
 }
 \source{
-\url{www.mortality.org}
+\url{https://www.mortality.org}
 }
 \usage{
 mortality_sample
