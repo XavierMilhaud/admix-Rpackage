@@ -7,5 +7,6 @@
 #' @useDynLib admix, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
 #' @importFrom utils packageVersion
+#' @importFrom Rdpack reprompt
 ## usethis namespace: end
 NULL
