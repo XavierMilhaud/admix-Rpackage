@@ -1,4 +1,4 @@
-#' Estimate the unknown parameters of the admixture model(s) under study
+#' Estimate the unknown parameters of the admixture model(s)
 #'
 #' Estimate the component weights, the location shift parameter (in case of a symmetric unknown component density),
 #' and the unknown component distribution using different estimation techniques. We remind that the i-th admixture
@@ -23,10 +23,14 @@
 #'                   be specified as follows (with K = 3):
 #'                   list(f1 = NULL, g1 = list(mean=0,sd=1), f2 = NULL, g2 = list(mean=3,sd=1.1), f3 = NULL, g3 = list(mean=-2,sd=0.6)).
 #'
-#' @details For further details on the different estimation techniques, see i) IBM approach at https://hal.science/hal-03201760 ;
-#'          ii) Patra and Sen estimator: Patra, R.K. and Sen, B. (2016); Estimation of a Two-component Mixture Model with Applications to
-#'          Multiple Testing; JRSS Series B, 78, pp. 869--893. ; iii) BVdk estimator: Bordes, L. and Vandekerkhove, P. (2010);
-#'          Semiparametric two-component mixture model when a component is known: an asymptotically normal estimator; Math. Meth. Stat.; 19, pp. 22--41.
+#' @details For further details on the different estimation techniques, see references below i) Patra and Sen estimator ;
+#'          ii) BVdk estimator ; iii) IBM approach.
+#'
+#' @references
+#' \insertRef{PatraSen2016}{admix}
+#' \insertRef{BordesDelmasVandekerkhove2006}{admix}
+#' \insertRef{BordesVandekerkhove2010}{admix}
+#' \insertRef{MilhaudPommeretSalhiVandekerkhove2024a}{admix}
 #'
 #' @return A list containing the estimated weight of every unknown component distribution among admixture samples.
 #'
@@ -54,8 +58,6 @@
 
 admix_estim <- function(samples = NULL, sym.f = FALSE, est.method = c("PS","BVdk","IBM"), comp.dist = NULL, comp.param = NULL)
 {
-  message("If the unknown component distributions of the admixture models under study are identical, then the unknown proportions are not
-  exactly estimated, but the ratio of the estimated proportions equals the ratio of the actual ones.")
   stopifnot( length(comp.dist) == (2*length(samples)) )
   if ( any(sapply(comp.dist, is.null)) | any(sapply(comp.param, is.null)) ) {
     if ( (!all(sapply(comp.param, is.null)[seq.int(from = 2, to = length(comp.dist), by = 2)] == FALSE)) |
@@ -87,7 +89,10 @@ admix_estim <- function(samples = NULL, sym.f = FALSE, est.method = c("PS","BVdk
     estim_weight <- sapply(X = estimate, "[[", "alp.hat")
     estim_loc <- NA
   } else if (meth == "IBM") {
-    warning("Do not forget that estimators of proportions are reliable only if unknown component distributions are tested equal!")
+    message("When both the known and the unknown component distributions of the admixture models are the same, the IBM approach provides
+    a good estimation of the ratio of the actual mixing proportions rather than an estimation of the unknown proportions themselves.\n")
+    warning("Do not forget that estimators of two unknown proportions are reliable only if the two corresponding unknown component
+            distributions are tested equal!")
     for (k in 2:n_samples) {
       estimate[[k]] <- IBM_estimProp(sample1 = samples[[1]], sample2 = samples[[k]], known.prop = NULL,
                                      comp.dist = list(comp.dist[[1]],comp.dist[[2]],comp.dist[[2*k-1]],comp.dist[[2*k]]),

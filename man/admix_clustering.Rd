@@ -61,9 +61,6 @@ statistical tests; 11) the initial call.
 Create clusters on the unknown components related to the K populations following admixture models. Based on the K-sample test
 using Inversion - Best Matching (IBM) approach, see 'Details' below for further information.
 }
-\details{
-See the paper at the following HAL weblink: https://hal.science/hal-04129130
-}
 \examples{
 \donttest{
 ## Simulate data (chosen parameters indicate 2 clusters (populations (1,3), and (2,4)):
@@ -99,6 +96,9 @@ clusters <- admix_clustering(samples = list(A.sim,B.sim,C.sim,D.sim), n_sim_tab 
 clusters
 }
 
+}
+\references{
+\insertRef{MilhaudPommeretSalhiVandekerkhove2024b}{admix}
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

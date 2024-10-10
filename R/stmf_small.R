@@ -1,7 +1,8 @@
-#' Short-term Mortality Fluctuations (STMF) data series, restricted to 6 countries (Belgium, France, Italy, Netherlands, Spain, Germany).
+#' Short-term Mortality Fluctuations (STMF) data
 #'
-#' Weekly death counts provide the most objective and comparable way of assessing the scale of short-term mortality
-#' elevations across countries (32 countries) and time. Extraction date: 09/21/2020.
+#' Restricted to 6 countries: Belgium, France, Italy, Netherlands, Spain, Germany. Weekly death counts provide the
+#' most objective and comparable way of assessing the scale of short-term mortality elevations across countries and time.
+#' Extraction date from the Human Mortality Database (HMD): 09/21/2020.
 #'
 #' @format A data frame with 88146 rows and 19 variables:
 #' \describe{

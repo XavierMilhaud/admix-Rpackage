@@ -1,9 +1,9 @@
-#' Equality test of unknown components between two admixture models using polynomial basis expansions
+#' Equality test of two unknown component distributions using polynomial expansions
 #'
-#' Test the null hypothesis (H0: f1=f2) using the decomposition of unknown densities of the two admixture distributions in
+#' Tests the null hypothesis (H0: f1=f2) using the decomposition of unknown component densities of two admixture distributions in
 #' an adequate orthonormal polynomial basis. Recall that we have two admixture models with respective probability density
-#' functions (pdf) l1 = p1*f1 + (1-p1)*g1 and l2 = p2*f2 + (1-p2)*g2, where g1 and g2 are the only known elements.
-#' The admixture weights p1 and p2 thus have to be estimated. For further information on this method, see 'Details' below.
+#' functions (pdf) l1 = p1*f1 + (1-p1)*g1 and l2 = p2*f2 + (1-p2)*g2, where g1 and g2 are the only known elements and l1 and l2
+#' are observed. The admixture weights p1 and p2 thus have to be estimated. For further information on this method, see 'Details' below.
 #'
 #' @param samples A list of the two observed samples, where each sample follows the mixture distribution given by l = p*f + (1-p)*g,
 #'                with f and p unknown and g known.
@@ -35,7 +35,8 @@
 #'                                   cumulative distribution of the known component function on the data. This means that
 #'                                   all 'comp.dist' and 'comp.param' must be set to NULL.
 #'
-#' @details See the paper on HAL website: https://hal.science/hal-03692868
+#' @references
+#' \insertRef{MilhaudPommeretSalhiVandekerkhove2022}{admix}
 #'
 #' @return A list with six elements containing: 1) the rejection decision; 2) the p-value of the test; 3) the test statistic; 4) the
 #'         variance-covariance matrix of the test statistic; 5) selected rank for testing, and 6) estimates of the two component weights.
@@ -53,7 +54,7 @@
 #'                  comp.param = list(list.param$f1, list.param$g1))$mixt.data
 #' sim.Y <- rsimmix(n = 300, unknownComp_weight=0.8, comp.dist = list(list.comp$f2,list.comp$g2),
 #'                  comp.param = list(list.param$f2, list.param$g2))$mixt.data
-#' plot_mixt_density(samples = list(sim.X, sim.Y), support = "continuous")
+#' plot.2comp_mixt(samples = list(sim.X, sim.Y), support = "continuous")
 #' ## Perform the hypothesis test in real-life conditions:
 #' list.comp <- list(f1 = NULL, g1 = "norm",
 #'                   f2 = NULL, g2 = "norm")
@@ -250,3 +251,84 @@ orthoBasis_test_H0 <- function(samples, known.p = NULL, comp.dist = NULL, comp.p
        rank = indice.opt, p1 = hat.p1, p2 = hat.p2)
 }
 
+
+#' Expansion coefficients for some given orthonormal polynomial basis.
+#'
+#' Compute the coefficients of the decomposition of some density in a given orthonormal polynomial basis.
+#'
+#' @param data Observed sample from which the coefficients are calculated. Can be NULL if 'comp.dist' and 'comp.param' are specified.
+#' @param comp.dist (default to NULL) A list with two elements corresponding to component distributions (specified with
+#'                  R native names for these distributions) involved in the admixture model.
+#'                  Unknown elements must be specified as 'NULL' objects (for instance unknown 'f': list(f=NULL, g='norm')).
+#' @param comp.param (default to NULL) A list with two elements corresponding to the parameters of the component distributions, each
+#'                   element being a list itself. The names used in this list must correspond to the native R argument names
+#'                   for these distributions. Unknown elements must be specified as 'NULL' objects.
+#'                   For instance if 'f' is unknown: list(f = NULL, g = list(mean=0,sd=1)).
+#' @param supp Support of the density considered.
+#' @param degree Degree up to which the polynomial basis is built.
+#' @param m (default to 3) Only used when support is 'Integer'. Corresponds to the mean of the reference measure, i.e. Poisson(m).
+#' @param other (default to NULL) A list to precise bounds when the support is bounded, where the second and fourth elements give bounds.
+#'
+#' @return The list composed of 'degree' elements, each element being a numeric vector (with sample size) where each value represents
+#'         the k-th order coefficient found when decomposing the density in the orthonormal polynomial basis.
+#'
+#' @examples
+#' ## Simulate data:
+#' sample1 <- rnorm(n = 7000, mean = 3, sd = 1)
+#' ## Compute the expansion coefficients in the orthonormal polynomial basis:
+#' coeff <- orthoBasis_coef(data = sample1, comp.dist = NULL, comp.param = NULL, supp = 'Real',
+#'                          degree = 3, m = 3, other = NULL)
+#' sapply(coeff, mean)
+#' ## No observed data and decomposition of the known component of the admixture model:
+#' coeff <- orthoBasis_coef(data = NULL, comp.dist = list(NULL, 'norm'),
+#'             comp.param=list(NULL,list(mean=3,sd=1)), supp = 'Real', degree=3, m=3, other = NULL)
+#' sapply(coeff, mean)
+#'
+#' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
+#' @export
+#' @noRd
+
+orthoBasis_coef <- function(data, comp.dist = NULL, comp.param = NULL, supp = c('Real','Integer','Positive','Bounded.continuous'),
+                            degree, m = 3, other = NULL)
+{
+  if (is.null(data)) {
+    stopifnot( (length(comp.dist) == 2) & (length(comp.param) == 2) )
+    if (is.null(comp.dist[[2]]) | is.null(comp.param[[2]])) stop("Known component of the admixture model must be specified.")
+    ## Extracts the information on component distributions and stores in expressions:
+    comp.dist.sim <- paste0("r", comp.dist[[2]])
+    #    comp_ortho <- sapply(X = comp.dist.sim, FUN = get, pos = "package:stats", mode = "function")
+    comp_ortho <- sapply(X = comp.dist.sim, FUN = get, mode = "function")
+    assign(x = names(comp_ortho)[1], value = comp_ortho[[1]])
+    expr.sim <- paste(names(comp_ortho)[1],"(n=1000000,", paste(names(comp.param[[2]]), "=", comp.param[[2]], sep = "", collapse = ","), ")", sep="")
+    data <- eval(parse(text = expr.sim))
+  }
+
+  ## Builds the orthonormal polynomial basis:
+  poly_basis <- poly_orthonormal_basis(support = supp, deg = degree, x = data, m = m)
+
+  ## Store the coefficients to be computed :
+  coef.list <- vector(mode = "list", length = degree)
+
+  ## Depending on the support :
+  if (supp == "Real") {
+    ## Reference measure N(0,1)
+    for (i in 1:degree) coef.list[[i]] <- orthopolynom::polynomial.values(poly_basis, data)[[i+1]] / sqrt(factorial(i))
+
+  } else if (supp == "Integer") {
+    ## Reference measure P(3)
+    for (i in 1:degree) coef.list[[i]] <- poly_basis[ ,i]
+
+  } else if (supp == "Positive") {
+    ## Reference measure Exp(1)
+    for (i in 1:degree) coef.list[[i]] <- orthopolynom::polynomial.values(poly_basis, data)[[i+1]]
+
+  } else if (supp == "Bounded.continuous") {
+    ## Reference measure Unif(a,b)
+    if (is.null(other)) { bounds <- c(min(data), max(data))
+    } else { bounds <- other[[2]] }
+    for (i in 1:degree) coef.list[[i]] <- (orthopolynom::polynomial.values(poly_basis, (2*data-bounds[1]-bounds[2])/(bounds[2]-bounds[1]))[[i+1]]) / sqrt(2*i+1)
+
+  } else stop("Change the support since the choosen one is not considered!")
+
+  return(coef.poly = coef.list)
+}

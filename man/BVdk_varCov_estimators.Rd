@@ -2,7 +2,7 @@
 % Please edit documentation in R/BVdk_varCov_estimators.R
 \name{BVdk_varCov_estimators}
 \alias{BVdk_varCov_estimators}
-\title{Estimation of the variance of the estimators in admixture models with symmetric unknown density.}
+\title{Variance of estimators in an admixture model with symmetric unknown density.}
 \usage{
 BVdk_varCov_estimators(data, loc, p, comp.dist, comp.param)
 }
@@ -28,15 +28,14 @@ function at points 'u' and 'v' (useless for most of applications, explaining why
 are set equal to mean(data) by default, with no corresponding arguments here).
 }
 \description{
-Semiparametric estimation of the variance of the estimators, i.e. the mixture weight p and the location shift parameter mu
+Semiparametric estimation of the variance of the estimators related to the mixture weight p and the location shift parameter mu,
 considering the admixture model with probability density function l:
 l(x) = p*f(x-mu) + (1-p)*g(x), x in R,
 where g is the known component of the two-component mixture, p is the unknown proportion, f is the unknown component density and
 mu is the location shift. See 'Details' below for more information.
 }
 \details{
-See formulas pp.28--30 in Appendix of Bordes, L. and Vandekerkhove, P. (2010); Semiparametric two-component mixture
-model when a component is known: an asymptotically normal estimator; Math. Meth. Stat.; 19, pp. 22--41.
+See formulas pp.28--30 in Appendix of Bordes, L. and Vandekerkhove, P. (2010).
 }
 \examples{
 ## Simulate data:
@@ -52,6 +51,9 @@ estimators <- BVdk_estimParam(data = sim.data[['mixt.data']], method = "L-BFGS-B
 BVdk_varCov_estimators(data = sim.data[['mixt.data']], loc = estimators[2], p = estimators[1],
                        comp.dist = list.comp, comp.param = list.param)
 
+}
+\references{
+\insertRef{BordesVandekerkhove2010}{admix}
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

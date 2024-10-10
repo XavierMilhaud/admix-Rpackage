@@ -2,7 +2,7 @@
 % Please edit documentation in R/decontaminated_density.R
 \name{decontaminated_density}
 \alias{decontaminated_density}
-\title{Provide the decontaminated density of the unknown component in an admixture model.}
+\title{Estimates the decontaminated density of the unknown component in an admixture}
 \usage{
 decontaminated_density(sample1, comp.dist, comp.param, estim.p)
 }

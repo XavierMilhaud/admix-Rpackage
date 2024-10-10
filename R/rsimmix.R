@@ -22,7 +22,6 @@
 #'                  comp.param = list(f = list(mean = 3, sd = 0.5), g = list(mean = 0, sd = 1)))
 #' class(sim.X)
 #' attributes(sim.X)
-#' plot_mixt_density(samples = list(sim.X$mixt.data), user.bounds = NULL, support = 'continuous')
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
@@ -83,13 +82,22 @@ rsimmix <- function(n = 1000, unknownComp_weight = 0.5,
   f.obs <- res[z == 1]           # observations corresponding to the unknown component f
   g.obs <- res[z == 2]           # observations corresponding to the known component g
 
-  return( list(mixt.data = res, unknown.data = f.obs, known.data = g.obs) )
+  obj_res <- list(n = n,
+                  mixt.data = res,
+                  comp.dist = comp.dist,
+                  comp.param = comp.param,
+                  unknown.data = f.obs,
+                  known.data = g.obs)
+  class(obj_res) <- "2comp_mixt"
+  obj_res$call <- match.call()
+
+  return(obj_res)
 }
 
 
-#' Simulation of a two-component gaussian mixture with one component following a two-component gaussian mixture
+#' Simulate a 3-component gaussian mixture model
 #'
-#' Simulate a two-component gaussian admixture model, where the first component is a gaussian mixture itself
+#' Simulate a 2-component gaussian mixture with one component being a two-component gaussian mixture itself
 #'
 #' @param n is the number of observations to be drawn
 #' @param a the shift of the mean for the two distributions that are embedded in the unknown component
@@ -106,7 +114,7 @@ rsimmix <- function(n = 1000, unknownComp_weight = 0.5,
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
-#'
+
 rsimmix_mix <- function(n, m, s, p, a) {
   z <- stats::rbinom(n, 1, p)
   xx <- stats::rnorm(n, 0, 1)
@@ -115,5 +123,6 @@ rsimmix_mix <- function(n, m, s, p, a) {
   w <- (1-z2) * (x2+a) + z2 * (x2-a)
   simul <- (1-z) * xx + z * (w)
   data.transformees <- stats::pnorm(simul, mean = 0, sd = 1)
+
   return( list(mixt.data = simul, data.transform = data.transformees, known.data = xx) )
 }

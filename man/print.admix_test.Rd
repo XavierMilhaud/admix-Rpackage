@@ -2,7 +2,7 @@
 % Please edit documentation in R/print.admix_test.R
 \name{print.admix_test}
 \alias{print.admix_test}
-\title{Print the results of statistical test for equality of unknown component distributions in admixture models}
+\title{Results of the equality test of unknown component distributions}
 \usage{
 \method{print}{admix_test}(x, ...)
 }

@@ -1,8 +1,9 @@
-#' Plot the decontaminated density of the unknown component for an estimated admixture model
+#' Plot the decontaminated densities from admixtures
 #'
-#' Plot the decontaminated density of the unknown component in the admixture model under study, after inversion of the admixture
-#' cumulative distribution function. Recall that an admixture model follows the cumulative distribution function (CDF) L, where
-#' L = p*F + (1-p)*G, with g a known CDF and p and f unknown quantities.
+#' Plot the decontaminated densities of the unknown components from some admixture models, after inversion of the admixture
+#' cumulative distribution functions. Recall that an admixture model follows the cumulative distribution function (CDF) L, where
+#' L = p*F + (1-p)*G, with G a known CDF and p and F unknown quantities.
+#' It is possible to plot several decontaminated densities on the same graph, for ease of comparison.
 #'
 #' @param x An object of class 'decontamin_dens' (see ?decontaminated_density).
 #' @param ... Arguments to be passed to methods, such as graphical parameters (see par).
@@ -11,7 +12,7 @@
 #'                 comparison purpose.
 #'
 #' @details The decontaminated density is obtained by inverting the admixture density, given by l = p*f + (1-p)*g, to isolate the
-#'          unknown component f after having estimated p.
+#'          unknown component f after having estimated p and l.
 #'
 #' @return The plot of the decontaminated density.
 #'

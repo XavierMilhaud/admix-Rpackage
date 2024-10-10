@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot.decontaminated_density.R
 \name{plot.decontaminated_density}
 \alias{plot.decontaminated_density}
-\title{Plot the decontaminated density of the unknown component for an estimated admixture model}
+\title{Plot the decontaminated densities from admixtures}
 \usage{
 \method{plot}{decontaminated_density}(x, ..., x_val, add_plot = FALSE)
 }
@@ -20,13 +20,14 @@ comparison purpose.}
 The plot of the decontaminated density.
 }
 \description{
-Plot the decontaminated density of the unknown component in the admixture model under study, after inversion of the admixture
-cumulative distribution function. Recall that an admixture model follows the cumulative distribution function (CDF) L, where
-L = p*F + (1-p)*G, with g a known CDF and p and f unknown quantities.
+Plot the decontaminated densities of the unknown components from some admixture models, after inversion of the admixture
+cumulative distribution functions. Recall that an admixture model follows the cumulative distribution function (CDF) L, where
+L = p*F + (1-p)*G, with G a known CDF and p and F unknown quantities.
+It is possible to plot several decontaminated densities on the same graph, for ease of comparison.
 }
 \details{
 The decontaminated density is obtained by inverting the admixture density, given by l = p*f + (1-p)*g, to isolate the
-unknown component f after having estimated p.
+unknown component f after having estimated p and l.
 }
 \examples{
 ####### Continuous support:

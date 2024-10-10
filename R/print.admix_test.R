@@ -1,4 +1,4 @@
-#' Print the results of statistical test for equality of unknown component distributions in admixture models
+#' Results of the equality test of unknown component distributions
 #'
 #' Print the decision (as well as other useful information) of the statistical test with null hypothesis corresponding to
 #' the equality of unknown component distributions in admixture models. More precisely, given two (or more) admixture models

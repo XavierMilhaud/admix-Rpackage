@@ -2,7 +2,7 @@
 % Please edit documentation in R/IBM_estimVarCov_gaussVect.R
 \name{IBM_estimVarCov_gaussVect}
 \alias{IBM_estimVarCov_gaussVect}
-\title{Nonparametric estimation of the variance-covariance matrix of the gaussian vector in IBM approach}
+\title{Estimates the covariance matrix of the gaussian vector (IBM)}
 \usage{
 IBM_estimVarCov_gaussVect(
   x,
@@ -53,14 +53,11 @@ For instance, 'comp.param' could be specified as follows: : list(f1=NULL, g1=lis
 The estimated variance-covariance matrix of the gaussian vector Z = (hat(p1),(hat(p2),Dn(z)), at location '(x,y)'.
 }
 \description{
-Estimate the variance-covariance matrix of the gaussian vector at point 'z', considering the use of Inversion - Best
+Nonparametric estimation of the covariance matrix of the gaussian vector at point 'z', considering the use of Inversion - Best
 Matching (IBM) method to estimate the model parameters in two-sample admixture models.
 Recall that the two admixture models have respective probability density functions (pdf) l1 and l2, such that:
 l1 = p1*f1 + (1-p1)\emph{g1 and l2 = p2}f2 + (1-p2)*g2, where g1 and g2 are the known component densities.
 Further information for the IBM approach are given in 'Details' below.
-}
-\details{
-See the paper presenting the IBM approach at the following HAL weblink: https://hal.science/hal-03201760
 }
 \examples{
 \donttest{
@@ -88,6 +85,9 @@ IBM_estimVarCov_gaussVect(x = mean(X.sim), y = mean(Y.sim), estim.obj = estim,
                           comp.dist = list.comp, comp.param = list.param)
 }
 
+}
+\references{
+\insertRef{MilhaudPommeretSalhiVandekerkhove2024a}{admix}
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

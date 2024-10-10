@@ -2,7 +2,7 @@
 % Please edit documentation in R/print.admix_estim.R
 \name{print.admix_estim}
 \alias{print.admix_estim}
-\title{Print the results of estimated parameters from K admixture models}
+\title{Results of estimated parameters from K admixture models}
 \usage{
 \method{print}{admix_estim}(x, ...)
 }
@@ -12,8 +12,9 @@
 \item{...}{further arguments passed to or from other methods.}
 }
 \description{
-Print the estimated weight p of the unknown component in the admixture model under study Recall that an admixture model
-follows the cumulative distribution function (CDF) L, where L = p*F + (1-p)*G, with g a known CDF and p and f unknown quantities.
+Print the estimated weight(s) of the unknown component(s) in the admixture model(s) under study.
+Recall that an admixture model follows the cumulative distribution function (CDF) L, where
+L = p*F + (1-p)*G, with G a known CDF, and p and F unknown quantities.
 }
 \examples{
 ##### On a simulated example to see whether the true parameters are well estimated.

@@ -1,6 +1,6 @@
-#' Nonparametric estimation of the variance-covariance matrix of the gaussian vector in IBM approach
+#' Estimates the covariance matrix of the gaussian vector (IBM)
 #'
-#' Estimate the variance-covariance matrix of the gaussian vector at point 'z', considering the use of Inversion - Best
+#' Nonparametric estimation of the covariance matrix of the gaussian vector at point 'z', considering the use of Inversion - Best
 #' Matching (IBM) method to estimate the model parameters in two-sample admixture models.
 #' Recall that the two admixture models have respective probability density functions (pdf) l1 and l2, such that:
 #'   l1 = p1*f1 + (1-p1)*g1 and l2 = p2*f2 + (1-p2)*g2, where g1 and g2 are the known component densities.
@@ -28,7 +28,8 @@
 #'                   two ones to those of the second admixture model. If there are unknown elements, they must be specified as 'NULL' objects.
 #'                   For instance, 'comp.param' could be specified as follows: : list(f1=NULL, g1=list(mean=0,sd=1), f2=NULL, g2=list(mean=3,sd=1.1)).
 #'
-#' @details See the paper presenting the IBM approach at the following HAL weblink: https://hal.science/hal-03201760
+#' @references
+#' \insertRef{MilhaudPommeretSalhiVandekerkhove2024a}{admix}
 #'
 #' @return The estimated variance-covariance matrix of the gaussian vector Z = (hat(p1),(hat(p2),Dn(z)), at location '(x,y)'.
 #'

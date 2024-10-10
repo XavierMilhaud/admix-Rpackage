@@ -2,7 +2,7 @@
 % Please edit documentation in R/IBM_k_samples_test.R
 \name{IBM_k_samples_test}
 \alias{IBM_k_samples_test}
-\title{Equality test of unknown component distributions in K admixture models, with IBM approach}
+\title{Equality test of K unknown component distributions}
 \usage{
 IBM_k_samples_test(
   samples = NULL,
@@ -52,15 +52,11 @@ the null H0; 8) the sorted contrast values; 9) the 95th-quantile of the contrast
 the statistic; and 11) the contrast matrix.
 }
 \description{
-Test hypothesis on the unknown component of K (K > 1) admixture models using Inversion - Best Matching method.
-K-samples test of the unknown component distribution in admixture models using Inversion - Best Matching
-(IBM) method. Recall that we have K populations following admixture models, each one with probability
+Equality test of the unknown component distributions coming from K (K > 1) admixture models, based on the Inversion - Best
+Matching (IBM) approach. Recall that we have K populations following admixture models, each one with probability
 density functions (pdf) l_k = p_k*f_k + (1-p_k)*g_k, where g_k is the known pdf and l_k corresponds to the
 observed sample. Perform the following hypothesis test:
 H0 : f_1 = ... = f_K  against  H1 : f_i differs from f_j (i different from j, and i,j in 1,...,K).
-}
-\details{
-See the paper at the following HAL weblink: https://hal.science/hal-04129130
 }
 \examples{
 \donttest{
@@ -115,6 +111,9 @@ IBM_k_samples_test(samples = list(sim1,sim2,sim3), sim_U= NULL, n_sim_tab = 20,
                    tune.penalty = FALSE, parallel = FALSE, n_cpu = 2)
 }
 
+}
+\references{
+\insertRef{MilhaudPommeretSalhiVandekerkhove2024b}{admix}
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

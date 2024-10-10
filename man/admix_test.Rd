@@ -2,7 +2,7 @@
 % Please edit documentation in R/admix_test.R
 \name{admix_test}
 \alias{admix_test}
-\title{Hypothesis test between unknown components of the admixture models under study}
+\title{Equality test for the unknown components of admixture models}
 \usage{
 admix_test(
   samples = NULL,
@@ -74,10 +74,8 @@ The test can be performed using two methods, either the comparison of coefficien
 of the component densities, or by the inner-convergence property obtained using the IBM approach. See 'Details' below for further information.
 }
 \details{
-For further details on hypothesis techniques, see i) Inner convergence through IBM approach at
-https://hal.science/hal-03201760 ; ii) Polynomial expansions at 'False Discovery Rate model
-Gaussianity test' (EJS, Pommeret & Vanderkerkhove, 2017), or 'Semiparametric two-sample admixture components comparison test:
-the symmetric case' (JSPI, Milhaud & al., 2021).
+For further details on hypothesis tests, see i) Inner convergence through IBM approach ; ii) Polynomial expansions.
+.
 }
 \examples{
 ##### On a simulated example, with 1 sample (gaussianity test):
@@ -93,6 +91,11 @@ gaussTest <- admix_test(samples = list(sim1), sym.f = TRUE, test.method = 'Poly'
                         n_sim_tab = 50, comp.dist = list.comp, comp.param = list.param,
                         support = "Real", conf.level = 0.95, parallel = FALSE, n_cpu = 2)
 
+}
+\references{
+\insertRef{MilhaudPommeretSalhiVandekerkhove2024a}{admix}
+\insertRef{MilhaudPommeretSalhiVandekerkhove2022}{admix}
+\insertRef{PommeretVandekerkhove2019}{admix}
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/rsimmix.R
 \name{rsimmix_mix}
 \alias{rsimmix_mix}
-\title{Simulation of a two-component gaussian mixture with one component following a two-component gaussian mixture}
+\title{Simulate a 3-component gaussian mixture model}
 \usage{
 rsimmix_mix(n, m, s, p, a)
 }
@@ -22,7 +22,7 @@ a list containing the data generated from a mixture of mixture distribution, the
 been made uniform(0,1), and the known data (corresponding to the part of data generated from the known component density).
 }
 \description{
-Simulate a two-component gaussian admixture model, where the first component is a gaussian mixture itself
+Simulate a 2-component gaussian mixture with one component being a two-component gaussian mixture itself
 }
 \examples{
 sample1 <- rsimmix_mix(n = 3000, m = 5, s = 0.5, p = 0.3, a = 2)[['mixt.data']]

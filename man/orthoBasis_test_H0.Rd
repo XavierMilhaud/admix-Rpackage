@@ -2,7 +2,7 @@
 % Please edit documentation in R/orthoBasis_test_H0.R
 \name{orthoBasis_test_H0}
 \alias{orthoBasis_test_H0}
-\title{Equality test of unknown components between two admixture models using polynomial basis expansions}
+\title{Equality test of two unknown component distributions using polynomial expansions}
 \usage{
 orthoBasis_test_H0(
   samples,
@@ -70,13 +70,10 @@ A list with six elements containing: 1) the rejection decision; 2) the p-value o
 variance-covariance matrix of the test statistic; 5) selected rank for testing, and 6) estimates of the two component weights.
 }
 \description{
-Test the null hypothesis (H0: f1=f2) using the decomposition of unknown densities of the two admixture distributions in
+Tests the null hypothesis (H0: f1=f2) using the decomposition of unknown component densities of two admixture distributions in
 an adequate orthonormal polynomial basis. Recall that we have two admixture models with respective probability density
-functions (pdf) l1 = p1*f1 + (1-p1)\emph{g1 and l2 = p2}f2 + (1-p2)*g2, where g1 and g2 are the only known elements.
-The admixture weights p1 and p2 thus have to be estimated. For further information on this method, see 'Details' below.
-}
-\details{
-See the paper on HAL website: https://hal.science/hal-03692868
+functions (pdf) l1 = p1*f1 + (1-p1)\emph{g1 and l2 = p2}f2 + (1-p2)*g2, where g1 and g2 are the only known elements and l1 and l2
+are observed. The admixture weights p1 and p2 thus have to be estimated. For further information on this method, see 'Details' below.
 }
 \examples{
 \donttest{
@@ -91,7 +88,7 @@ sim.X <- rsimmix(n = 250, unknownComp_weight=0.9, comp.dist = list(list.comp$f1,
                  comp.param = list(list.param$f1, list.param$g1))$mixt.data
 sim.Y <- rsimmix(n = 300, unknownComp_weight=0.8, comp.dist = list(list.comp$f2,list.comp$g2),
                  comp.param = list(list.param$f2, list.param$g2))$mixt.data
-plot_mixt_density(samples = list(sim.X, sim.Y), support = "continuous")
+plot.2comp_mixt(samples = list(sim.X, sim.Y), support = "continuous")
 ## Perform the hypothesis test in real-life conditions:
 list.comp <- list(f1 = NULL, g1 = "norm",
                   f2 = NULL, g2 = "norm")
@@ -104,6 +101,9 @@ test <- orthoBasis_test_H0(samples = list(sim.X, sim.Y),
 test$rejection_rule
 }
 
+}
+\references{
+\insertRef{MilhaudPommeretSalhiVandekerkhove2022}{admix}
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

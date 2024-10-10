@@ -2,7 +2,7 @@
 % Please edit documentation in R/BVdk_estimParam.R
 \name{BVdk_estimParam}
 \alias{BVdk_estimParam}
-\title{Estimation of the parameters in a two-component admixture model with symmetric unknown density}
+\title{Estimation of the admixture parameters by Bordes & Vandekerkhove (2010)}
 \usage{
 BVdk_estimParam(
   data,
@@ -27,16 +27,12 @@ Unknown elements must be specified as 'NULL' objects, e.g. if 'f' is unknown: li
 A numeric vector with the two estimated parameters (proportion first, and then location shift).
 }
 \description{
-Estimation of the two parameters (mixture weight as well as location shift) in the admixture model with pdf:
+Estimates parameters in an admixture model where the unknown component is assumed to have a symmetric density.
+More precisely, estimates the two parameters (mixture weight and location shift) in the admixture model with pdf:
 l(x) = p*f(x-mu) + (1-p)*g(x), x in R,
 where g is the known component, p is the proportion and f is the unknown component with symmetric density.
-The localization shift parameter is thus denoted mu, and the component weight p.
+The localization shift parameter is denoted mu, and the component weight p.
 See 'Details' below for further information.
-}
-\details{
-Parameters are estimated by minimization of the contrast function, where the contrast is defined in
-Bordes, L. and Vandekerkhove, P. (2010); Semiparametric two-component mixture model when a component is known:
-an asymptotically normal estimator; Math. Meth. Stat.; 19, pp. 22--41.
 }
 \examples{
 ## Simulate data:
@@ -49,6 +45,9 @@ list.comp <- list(f = NULL, g = 'norm')
 list.param <- list(f = NULL, g = list(mean = 0, sd = 1))
 BVdk_estimParam(data1, method = 'L-BFGS-B', list.comp, list.param)
 
+}
+\references{
+\insertRef{BordesVandekerkhove2010}{admix}
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

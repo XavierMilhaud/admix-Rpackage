@@ -1,4 +1,4 @@
-#' Hypothesis test between unknown components of the admixture models under study
+#' Equality test for the unknown components of admixture models
 #'
 #' Perform hypothesis test between unknown components of a list of admixture models, where we remind that the i-th admixture
 #' model has probability density function (pdf) l_i such that:
@@ -36,10 +36,12 @@
 #' @param parallel (default to FALSE) Boolean indicating whether parallel computations are performed (speed-up the tabulation).
 #' @param n_cpu (default to 2) Number of cores used when parallelizing.
 #'
-#' @details For further details on hypothesis techniques, see i) Inner convergence through IBM approach at
-#'          https://hal.science/hal-03201760 ; ii) Polynomial expansions at 'False Discovery Rate model
-#'          Gaussianity test' (EJS, Pommeret & Vanderkerkhove, 2017), or 'Semiparametric two-sample admixture components comparison test:
-#'          the symmetric case' (JSPI, Milhaud & al., 2021).
+#' @details For further details on hypothesis tests, see i) Inner convergence through IBM approach ; ii) Polynomial expansions.
+#'          .
+#' @references
+#' \insertRef{MilhaudPommeretSalhiVandekerkhove2024a}{admix}
+#' \insertRef{MilhaudPommeretSalhiVandekerkhove2022}{admix}
+#' \insertRef{PommeretVandekerkhove2019}{admix}
 #'
 #' @return A list containing the decision of the test (reject or not), the confidence level at which the test is performed,
 #'         the p-value of the test, and the value of the test statistic (following a chi2 distribution with one degree of freedom

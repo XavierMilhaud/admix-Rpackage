@@ -2,7 +2,7 @@
 % Please edit documentation in R/IBM_estimProp.R
 \name{IBM_estimProp}
 \alias{IBM_estimProp}
-\title{Estimate the weights related to the proportions of the unknown components of the two admixture models}
+\title{Estimates weights of unknown components from 2 admixtures using IBM}
 \usage{
 IBM_estimProp(
   sample1,
@@ -41,13 +41,10 @@ For instance, 'comp.param' could be specified as follows: : list(f1=NULL, g1=lis
 A list with the two estimates of the component weights for each of the admixture model, plus that of the theoretical model if specified.
 }
 \description{
-Estimate the component weights from the Inversion - Best Matching (IBM) method, related to the two admixture models
+Estimation of the component weights from the Inversion - Best Matching (IBM) method, related to two admixture models
 with respective probability density function (pdf) l1 and l2, such that:
 l1 = p1*f1 + (1-p1)\emph{g1 and l2 = p2}f2 + (1-p2)*g2, where g1 and g2 are the known component densities.
 For further details about IBM approach, see 'Details' below.
-}
-\details{
-See the paper presenting the IBM approach at the following HAL weblink: https://hal.science/hal-03201760
 }
 \examples{
 ##### On a simulated example to see whether the true parameters are well estimated.
@@ -78,6 +75,9 @@ estim <- IBM_estimProp(sample1 = sample1[['mixt.data']], sample2 = sample2[['mix
 estim[['prop.estim']]
 estim[['theo.prop.estim']]
 
+}
+\references{
+\insertRef{MilhaudPommeretSalhiVandekerkhove2024a}{admix}
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

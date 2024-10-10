@@ -1,8 +1,7 @@
-#' One-sample gaussianity test in admixture models using Bordes and Vandekerkhove estimation method
+#' Gaussianity test in an admixture model
 #'
-#' Perform the hypothesis test to know whether the unknown mixture component is gaussian or not, knowing that the known one
-#' has support on the real line (R). The case of non-gaussian known component can be overcome thanks to the basic
-#' transformation by cdf. Recall that an admixture model has probability density function (pdf) l = p*f + (1-p)*g, where g is
+#' Performs an hypothesis test to check for the gaussianity of the unknown mixture component, given that the known component
+#' has support on the real line. Recall that an admixture model has probability density function (pdf) l = p*f + (1-p)*g, where g is
 #' the known pdf and l is observed (others are unknown). Requires optimization (to estimate the unknown parameters) as defined
 #' by Bordes & Vandekerkhove (2010), which means that the unknown mixture component must have a symmetric density.
 #'
@@ -18,7 +17,10 @@
 #' @param support Support of the densities under consideration, useful to choose the polynomial orthonormal basis. One of 'Real',
 #'                'Integer', 'Positive', or 'Bounded.continuous'.
 #'
-#' @details See the paper 'False Discovery Rate model Gaussianity test' (Pommeret & Vanderkerkhove, 2017).
+#' @details Extensions to the case of non-gaussian known components can be overcome thanks to basic transformations using cdf.
+#'
+#' @references
+#' \insertRef{PommeretVandekerkhove2019}{admix}
 #'
 #' @return A list of 6 elements, containing: 1) the rejection decision; 2) the p-value of the test; 3) the test statistic; 4) the
 #'         variance-covariance matrix of the test statistic; 5) the selected rank for testing; and 6) a list of the estimates

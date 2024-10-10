@@ -25,7 +25,8 @@
 #' @param n_cpu (default to 2) Number of cores used when parallelizing.
 #' @param echo (default to TRUE) Display the remaining computation time.
 #'
-#' @details See the paper at the following HAL weblink: https://hal.science/hal-04129130
+#' @references
+#' \insertRef{MilhaudPommeretSalhiVandekerkhove2024b}{admix}
 #'
 #' @return A list with eleven elements: 1) the number of populations studied; 2) the number of detected clusters;
 #'         3) the list of p-values for each test performed; 4) the cluster affiliation for each population; 5) the chosen confidence

@@ -2,7 +2,7 @@
 % Please edit documentation in R/gaussianity_test.R
 \name{gaussianity_test}
 \alias{gaussianity_test}
-\title{One-sample gaussianity test in admixture models using Bordes and Vandekerkhove estimation method}
+\title{Gaussianity test in an admixture model}
 \usage{
 gaussianity_test(
   sample1,
@@ -39,14 +39,13 @@ variance-covariance matrix of the test statistic; 5) the selected rank for testi
 (unknown component weight 'p', shift location parameter 'mu' and standard deviation 's' of the symmetric unknown distribution).
 }
 \description{
-Perform the hypothesis test to know whether the unknown mixture component is gaussian or not, knowing that the known one
-has support on the real line (R). The case of non-gaussian known component can be overcome thanks to the basic
-transformation by cdf. Recall that an admixture model has probability density function (pdf) l = p*f + (1-p)*g, where g is
+Performs an hypothesis test to check for the gaussianity of the unknown mixture component, given that the known component
+has support on the real line. Recall that an admixture model has probability density function (pdf) l = p*f + (1-p)*g, where g is
 the known pdf and l is observed (others are unknown). Requires optimization (to estimate the unknown parameters) as defined
 by Bordes & Vandekerkhove (2010), which means that the unknown mixture component must have a symmetric density.
 }
 \details{
-See the paper 'False Discovery Rate model Gaussianity test' (Pommeret & Vanderkerkhove, 2017).
+Extensions to the case of non-gaussian known components can be overcome thanks to basic transformations using cdf.
 }
 \examples{
 ####### Under the null hypothesis H0.
@@ -64,6 +63,9 @@ list.param <- list(f = NULL, g = c(mean = 0, sd = 1))
 gaussianity_test(sample1 = obs.data, comp.dist = list.comp, comp.param = list.param,
                  K = 3, lambda = 0.1, conf.level = 0.95, support = 'Real')
 
+}
+\references{
+\insertRef{PommeretVandekerkhove2019}{admix}
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

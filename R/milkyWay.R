@@ -1,5 +1,7 @@
-#' Heliocentric velocity measured for the Milky Way (from Walker, M. G., M. Mateo, E. W. Olszewski, O. Y. Gnedin, X. Wang,
-#' B. Sen, and M. Woodroofe (2007). Velocity dispersion profiles of seven dwarf spheroidal galaxies. Astrophysical J. 667(1), L53–L56).
+#' Heliocentric velocity for the Milky Way
+#'
+#' @references
+#' \insertRef{Walker2007}{admix}
 #'
 #' @format A data frame with 170,601 rows and 1 column:
 #' \describe{

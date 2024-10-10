@@ -3,12 +3,12 @@
 \docType{data}
 \name{mortality_sample}
 \alias{mortality_sample}
-\title{Dataset giving exposure-to-death (population size) and number of deaths for males in eleven european countries,
-with ages ranging from 30 years old to 85 years old.}
+\title{Deaths statistics in 11 european countries}
 \format{
-Two different lists related to the reduced (subsample) population size and reduced number of deaths in
-eleven european countries, for male people aged 30 years old to 85 years old between 1908 and 2020.
-The data were exported from the Human Mortality Database (HMD).
+Dataset providing the exposure-to-death (population size) and number of deaths for males in 11 european countries,
+between 1908 and 2020, with ages ranging from 30 years old to 85 years old. Exported from the Human Mortality Database (HMD).
+The two first lists relate to some subsample of the population size and number of deaths in those countries, with
+random sampling from the original dataset.
 
 An evolving data frame of exposure-to-death and number of deaths in Belgium, Switzerland, Denmark, Spain, Finland,
 France, United Kingdom, Italia, The Netherlands, Norway and Sweden.
@@ -27,7 +27,6 @@ each element having 56 rows (ages 30-85) and 113 columns (period 1908-2020)}
 mortality_sample
 }
 \description{
-Dataset giving exposure-to-death (population size) and number of deaths for males in eleven european countries,
-with ages ranging from 30 years old to 85 years old.
+Deaths statistics in 11 european countries
 }
 \keyword{datasets}

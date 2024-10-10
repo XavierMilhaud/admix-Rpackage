@@ -2,7 +2,7 @@
 % Please edit documentation in R/PatraSen_est_mix_model.R
 \name{PatraSen_est_mix_model}
 \alias{PatraSen_est_mix_model}
-\title{Estimate by Patra and Sen the unknown component weight as well as the unknown distribution in admixture models}
+\title{Estimates in an admixture using Patra and Sen approach}
 \usage{
 PatraSen_est_mix_model(
   data,
@@ -43,14 +43,11 @@ using the complete data.gen, 'c.n' the value of the tuning parameter used to com
 and finally 'cv.out' which is an object of class 'cv.mixmodel'. The object is NULL if method is "fixed".
 }
 \description{
-Estimation of unknown elements (by Patra and Sen method) under the admixture model with probability density function l:
+Estimation of both the weight and the distribution of the unknown component in an admixture model, by Patra and Sen approach.
+Remind that the admixture probability density function (pdf) l is given by
 l = p*f + (1-p)*g,
 where g is the known component of the two-component mixture, p is the unknown proportion of the unknown component distribution f.
 More information in 'Details' below concerning the estimation method.
-}
-\details{
-See Patra, R.K. and Sen, B. (2016); Estimation of a Two-component Mixture Model with Applications to Multiple Testing;
-JRSS Series B, 78, pp. 869--893.
 }
 \examples{
 ## Simulate data:
@@ -65,6 +62,9 @@ data1_transfo <- knownComp_to_uniform(data = data1, comp.dist=list.comp, comp.pa
 PatraSen_est_mix_model(data = data1_transfo, method = 'fixed',
                        c.n = 0.1*log(log(length(data1_transfo))), gridsize = 1000)$alp.hat
 
+}
+\references{
+\insertRef{PatraSen2016}{admix}
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/admix_estim.R
 \name{admix_estim}
 \alias{admix_estim}
-\title{Estimate the unknown parameters of the admixture model(s) under study}
+\title{Estimate the unknown parameters of the admixture model(s)}
 \usage{
 admix_estim(
   samples = NULL,
@@ -45,10 +45,8 @@ l_i = p_i * f_i + (1-p_i) * g_i, where g_i is the known component density.
 The unknown quantities p_i and f_i then have to be estimated.
 }
 \details{
-For further details on the different estimation techniques, see i) IBM approach at https://hal.science/hal-03201760 ;
-ii) Patra and Sen estimator: Patra, R.K. and Sen, B. (2016); Estimation of a Two-component Mixture Model with Applications to
-Multiple Testing; JRSS Series B, 78, pp. 869--893. ; iii) BVdk estimator: Bordes, L. and Vandekerkhove, P. (2010);
-Semiparametric two-component mixture model when a component is known: an asymptotically normal estimator; Math. Meth. Stat.; 19, pp. 22--41.
+For further details on the different estimation techniques, see references below i) Patra and Sen estimator ;
+ii) BVdk estimator ; iii) IBM approach.
 }
 \examples{
 ##### On a simulated example to see whether the true parameters are well estimated.
@@ -69,6 +67,12 @@ list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
 estim <- admix_estim(samples = list(sim1,sim2), sym.f = TRUE, est.method = 'IBM',
                      comp.dist = list.comp, comp.param = list.param)
 
+}
+\references{
+\insertRef{PatraSen2016}{admix}
+\insertRef{BordesDelmasVandekerkhove2006}{admix}
+\insertRef{BordesVandekerkhove2010}{admix}
+\insertRef{MilhaudPommeretSalhiVandekerkhove2024a}{admix}
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

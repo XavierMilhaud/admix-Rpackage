@@ -3,7 +3,7 @@
 \docType{data}
 \name{stmf_small}
 \alias{stmf_small}
-\title{Short-term Mortality Fluctuations (STMF) data series, restricted to 6 countries (Belgium, France, Italy, Netherlands, Spain, Germany).}
+\title{Short-term Mortality Fluctuations (STMF) data}
 \format{
 A data frame with 88146 rows and 19 variables:
 \describe{
@@ -36,7 +36,8 @@ For example, if the original age scale was 0-4, 5-29, 30-65, 65+, then split wil
 stmf_small
 }
 \description{
-Weekly death counts provide the most objective and comparable way of assessing the scale of short-term mortality
-elevations across countries (32 countries) and time. Extraction date: 09/21/2020.
+Restricted to 6 countries: Belgium, France, Italy, Netherlands, Spain, Germany. Weekly death counts provide the
+most objective and comparable way of assessing the scale of short-term mortality elevations across countries and time.
+Extraction date from the Human Mortality Database (HMD): 09/21/2020.
 }
 \keyword{datasets}

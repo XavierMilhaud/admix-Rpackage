@@ -3,9 +3,8 @@
 \docType{data}
 \name{allGalaxies}
 \alias{allGalaxies}
-\title{Four galaxies (Carina, Sextans, Sculptor, Fornax) measurements of heliocentric velocities from SIMBAD astronomical database}
+\title{Measurements of heliocentric velocities in four galaxies}
 \format{
-An evolving data frame of velocities for 4 dSph galaxies; namely Carina, Sextans, Sculptor and Fornax.
 Currently contains 8,862 rows and 3 columns, with information on:
 \describe{
 \item{Target}{Target identification; Galaxy-ID number}
@@ -20,6 +19,7 @@ Currently contains 8,862 rows and 3 columns, with information on:
 allGalaxies
 }
 \description{
-Four galaxies (Carina, Sextans, Sculptor, Fornax) measurements of heliocentric velocities from SIMBAD astronomical database
+An evolving data frame of velocities for 4 dSph galaxies (namely Carina, Sextans, Sculptor and Fornax),
+from SIMBAD astronomical database.
 }
 \keyword{datasets}

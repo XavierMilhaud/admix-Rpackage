@@ -57,8 +57,8 @@ obs.data <- rsimmix(n = 700, unknownComp_weight = 0.8, comp.dist = list.comp,
 ## Performs the test:
 list.comp <- list(f = NULL, g = 'norm')
 list.param <- list(f = NULL, g = c(mean = 0, sd = 1))
-gaussianity_test(sample1 = obs.data, comp.dist = list.comp, comp.param = list.param,
-                 K = 3, lambda = 0.1, support = 'Real')$rejection_rule
+#gaussianity_test(sample1 = obs.data, comp.dist = list.comp, comp.param = list.param,
+#                 K = 3, lambda = 0.1, support = 'Real')$rejection_rule
 ```
 The result of the test is that we cannot reject the null hypothesis $H_0$, which is in line with the specified parameters of the unknown components. Indeed, simulated data have a normally-distributed unknown component, i.e. $F \sim \mathcal{N}(\mu,\sigma)$ where $\mu=3$ and $\sigma=0.5$.
 
@@ -95,16 +95,16 @@ sample1 <- rsimmix(n=1000, unknownComp_weight=0.8, comp.dist = list(list.comp$f1
                    comp.param = list(list.param$f1,list.param$g1))[['mixt.data']]
 sample2 <- rsimmix(n=1100, unknownComp_weight=0.7, comp.dist = list(list.comp$f2,list.comp$g2),
                    comp.param = list(list.param$f2,list.param$g2))[['mixt.data']]
-plot_mixt_density(samples = list(sample1,sample2), user.bounds = NULL, support='continuous')
+#plot.2comp_mixt(samples = list(sample1,sample2), user.bounds = NULL, support='continuous')
 ##### Performs the test:
 list.comp <- list(f1 = NULL, g1 = 'norm',
                   f2 = NULL, g2 = 'norm')
 list.param <- list(f1 = NULL, g1 = list(mean = 0, sd = 1),
                    f2 = NULL, g2 = list(mean = 6, sd = 1.2))
 ## Using expansion coefficients in orthonormal polynomial basis:
-two_samples_test(samples = list(sample1,sample2), comp.dist = list.comp,
-                 comp.param = list.param, method = 'Poly', K = 3, support = 'Real',
-                 est.method = 'BVdk', s = 0.3, nb.ssEch=2, var.explicit = TRUE)$rejection_rule
+#admix_test(samples = list(sample1,sample2), comp.dist = list.comp,
+#           comp.param=list.param, test.method='Poly', support='Real')$Reject_decision
+
 ```
 
 The hypothesis test conclude that the null hypothesis cannot be rejected, once again in line with what was expected given the specified parameters when simulating the data.
