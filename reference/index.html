@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admix</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2-1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,6 +20,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/admixture-clustering.html">Clustering of unknown subpopulations in admixture models</a></li>
     <li><a class="dropdown-item" href="../articles/admixture-weight-estimation.html">Estimation of unknown elements in admixture models</a></li>
+    <li><a class="dropdown-item" href="../articles/covid19-example-pairwiseTesting.html">covid19-pairwise-testing</a></li>
     <li><a class="dropdown-item" href="../articles/test-hypothesis.html">Hypothesis test in admixture models</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -49,28 +50,10 @@
 
       <dl><dt>
 
-          <code><a href="BVdk_estimParam.html">BVdk_estimParam()</a></code>
-
-        </dt>
-        <dd>Estimation of the admixture parameters by Bordes &amp; Vandekerkhove (2010)</dd>
-      </dl><dl><dt>
-
           <code><a href="BVdk_varCov_estimators.html">BVdk_varCov_estimators()</a></code>
 
         </dt>
         <dd>Variance of estimators in an admixture model with symmetric unknown density.</dd>
-      </dl><dl><dt>
-
-          <code><a href="IBM_2samples_test.html">IBM_2samples_test()</a></code>
-
-        </dt>
-        <dd>Test equality of 2 unknown component distributions using IBM</dd>
-      </dl><dl><dt>
-
-          <code><a href="IBM_estimProp.html">IBM_estimProp()</a></code>
-
-        </dt>
-        <dd>Estimates weights of unknown components from 2 admixtures using IBM</dd>
       </dl><dl><dt>
 
           <code><a href="IBM_estimVarCov_gaussVect.html">IBM_estimVarCov_gaussVect()</a></code>
@@ -85,13 +68,13 @@
         <dd>Equality test of K unknown component distributions</dd>
       </dl><dl><dt>
 
-          <code><a href="PatraSen_est_mix_model.html">PatraSen_est_mix_model()</a></code>
+          <code><a href="IBM_tabul_stochasticInteg.html">IBM_tabul_stochasticInteg()</a></code>
 
         </dt>
-        <dd>Estimates in an admixture using Patra and Sen approach</dd>
+        <dd>Simulated distribution of the contrast using IBM</dd>
       </dl><dl><dt>
 
-          <code><a href="admix_clustering.html">admix_clustering()</a></code>
+          <code><a href="admix_cluster.html">admix_cluster()</a></code>
 
         </dt>
         <dd>Clustering of K populations following admixture models</dd>
@@ -101,6 +84,12 @@
 
         </dt>
         <dd>Estimate the unknown parameters of the admixture model(s)</dd>
+      </dl><dl><dt>
+
+          <code><a href="admix_model.html">admix_model()</a></code>
+
+        </dt>
+        <dd>Create an object of class 'admix_model'</dd>
       </dl><dl><dt>
 
           <code><a href="admix_test.html">admix_test()</a></code>
@@ -121,10 +110,34 @@
         <dd>Estimates the decontaminated density of the unknown component in an admixture</dd>
       </dl><dl><dt>
 
+          <code><a href="estim_BVdk.html">estim_BVdk()</a></code>
+
+        </dt>
+        <dd>Estimation of the admixture parameters by Bordes &amp; Vandekerkhove (2010)</dd>
+      </dl><dl><dt>
+
+          <code><a href="estim_IBM.html">estim_IBM()</a></code>
+
+        </dt>
+        <dd>Estimates weights of unknown components from 2 admixtures using IBM</dd>
+      </dl><dl><dt>
+
+          <code><a href="estim_PS.html">estim_PS()</a></code>
+
+        </dt>
+        <dd>Estimates in an admixture using Patra and Sen approach</dd>
+      </dl><dl><dt>
+
           <code><a href="gaussianity_test.html">gaussianity_test()</a></code>
 
         </dt>
         <dd>Gaussianity test in an admixture model</dd>
+      </dl><dl><dt>
+
+          <code><a href="getmixtData.html">getmixtData()</a></code>
+
+        </dt>
+        <dd>Extractor for object 'twoComp_mixt'</dd>
       </dl><dl><dt>
 
           <code><a href="milkyWay.html">milkyWay</a></code>
@@ -139,40 +152,40 @@
         <dd>Deaths statistics in 11 european countries</dd>
       </dl><dl><dt>
 
-          <code><a href="orthoBasis_test_H0.html">orthoBasis_test_H0()</a></code>
+          <code><a href="orthobasis_test.html">orthobasis_test()</a></code>
 
         </dt>
         <dd>Equality test of two unknown component distributions using polynomial expansions</dd>
       </dl><dl><dt>
 
-          <code><a href="plot.2comp_mixt.html">plot(<i>&lt;2comp_mixt&gt;</i>)</a></code>
-
-        </dt>
-        <dd>Plots several densities on the same graph</dd>
-      </dl><dl><dt>
-
-          <code><a href="plot.PS_dist_fun.html">plot(<i>&lt;PS_dist_fun&gt;</i>)</a></code>
-
-        </dt>
-        <dd>Results of the computation of the contrast using Patra and Sen approach</dd>
-      </dl><dl><dt>
-
           <code><a href="plot.decontaminated_density.html">plot(<i>&lt;decontaminated_density&gt;</i>)</a></code>
 
         </dt>
-        <dd>Plot the decontaminated densities from admixtures</dd>
+        <dd>Plot method for class 'decontaminated_density'</dd>
       </dl><dl><dt>
 
-          <code><a href="print.PS_dist_fun.html">print(<i>&lt;PS_dist_fun&gt;</i>)</a></code>
+          <code><a href="plot.estim_PS.html">plot(<i>&lt;estim_PS&gt;</i>)</a></code>
 
         </dt>
-        <dd>Results of the computation of the contrast using Patra and Sen approach</dd>
+        <dd>Plots</dd>
+      </dl><dl><dt>
+
+          <code><a href="plot.twoComp_mixt.html">plot(<i>&lt;twoComp_mixt&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Plots several mixture densities on the same graph</dd>
+      </dl><dl><dt>
+
+          <code><a href="print.IBM_test.html">print(<i>&lt;IBM_test&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for objects 'IBM_test'</dd>
       </dl><dl><dt>
 
           <code><a href="print.admix_estim.html">print(<i>&lt;admix_estim&gt;</i>)</a></code>
 
         </dt>
-        <dd>Results of estimated parameters from K admixture models</dd>
+        <dd>Print the estimated parameters from K admixture models</dd>
       </dl><dl><dt>
 
           <code><a href="print.admix_model.html">print(<i>&lt;admix_model&gt;</i>)</a></code>
@@ -184,19 +197,43 @@
           <code><a href="print.admix_test.html">print(<i>&lt;admix_test&gt;</i>)</a></code>
 
         </dt>
-        <dd>Results of the equality test of unknown component distributions</dd>
+        <dd>Print method for objects 'admix_test'</dd>
       </dl><dl><dt>
 
-          <code><a href="rsimmix.html">rsimmix()</a></code>
+          <code><a href="print.estim_BVdk.html">print(<i>&lt;estim_BVdk&gt;</i>)</a></code>
 
         </dt>
-        <dd>Simulation of a two-component mixture model</dd>
+        <dd>Print method for objects 'estim_BVdk'</dd>
       </dl><dl><dt>
 
-          <code><a href="rsimmix_mix.html">rsimmix_mix()</a></code>
+          <code><a href="print.estim_IBM.html">print(<i>&lt;estim_IBM&gt;</i>)</a></code>
 
         </dt>
-        <dd>Simulate a 3-component gaussian mixture model</dd>
+        <dd>Print method for objects 'estim_IBM'</dd>
+      </dl><dl><dt>
+
+          <code><a href="print.estim_PS.html">print(<i>&lt;estim_PS&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Results of estimated quantities in an admixture using Patra and Sen approach</dd>
+      </dl><dl><dt>
+
+          <code><a href="print.gaussianity_test.html">print(<i>&lt;gaussianity_test&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for objects 'gaussianity_test'</dd>
+      </dl><dl><dt>
+
+          <code><a href="print.orthobasis_test.html">print(<i>&lt;orthobasis_test&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for objects 'orthobasis_test'</dd>
+      </dl><dl><dt>
+
+          <code><a href="print.twoComp_mixt.html">print(<i>&lt;twoComp_mixt&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for objects 'twoComp_mixt'</dd>
       </dl><dl><dt>
 
           <code><a href="stmf_small.html">stmf_small</a></code>
@@ -209,6 +246,30 @@
 
         </dt>
         <dd>Results of clustering performed over K populations</dd>
+      </dl><dl><dt>
+
+          <code><a href="summary.admix_estim.html">summary(<i>&lt;admix_estim&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Results of estimated parameters from K admixture models</dd>
+      </dl><dl><dt>
+
+          <code><a href="summary.admix_test.html">summary(<i>&lt;admix_test&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Summary method for 'admix_test' objects</dd>
+      </dl><dl><dt>
+
+          <code><a href="summary.gaussianity_test.html">summary(<i>&lt;gaussianity_test&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Summary method for objects 'gaussianity_test'</dd>
+      </dl><dl><dt>
+
+          <code><a href="twoComp_mixt.html">twoComp_mixt()</a></code>
+
+        </dt>
+        <dd>Simulation of a two-component mixture model</dd>
       </dl></div>
   </main></div>
 

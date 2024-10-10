@@ -4,5 +4,6 @@ pkgdown_sha: ~
 articles:
   admixture-clustering: admixture-clustering.html
   admixture-weight-estimation: admixture-weight-estimation.html
+  covid19-example-pairwiseTesting: covid19-example-pairwiseTesting.html
   test-hypothesis: test-hypothesis.html
-last_built: 2024-10-10T08:57Z
+last_built: 2024-10-10T10:17Z

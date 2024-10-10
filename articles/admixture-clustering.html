@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admix</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2-1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,6 +35,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/admixture-clustering.html">Clustering of unknown subpopulations in admixture models</a></li>
     <li><a class="dropdown-item" href="../articles/admixture-weight-estimation.html">Estimation of unknown elements in admixture models</a></li>
+    <li><a class="dropdown-item" href="../articles/covid19-example-pairwiseTesting.html">covid19-pairwise-testing</a></li>
     <li><a class="dropdown-item" href="../articles/test-hypothesis.html">Hypothesis test in admixture models</a></li>
   </ul>
 </li>
@@ -72,7 +73,7 @@ Milhaud</h4>
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/XavierMilhaud/admix" class="external-link">admix</a></span><span class="op">)</span></span></code></pre></div>
 <p>The clustering of populations following admixture models is, for now,
 based on the K-sample test theory (see <span class="citation">(Milhaud
-and Vandekerkhove 2023)</span>. Consider
+et al. 2024)</span>. Consider
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math>
 samples. For
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>i</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>.</mi><mi>.</mi><mi>.</mi><mo>,</mo><mi>K</mi></mrow><annotation encoding="application/x-tex">i=1,...,K</annotation></semantics></math>,
@@ -137,44 +138,50 @@ Test $H_0$ the simultaneous equality of all the $f_j$, $j\in S_c$ :\\
 </h3>
 <p>We present a case study with 5 populations to cluster on
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>ℝ</mi><mo>+</mo></msup><annotation encoding="application/x-tex">\mathbb{R}^+</annotation></semantics></math>,
-with Gamma-Exponential and Gamma-Gamma mixtures.</p>
+with Gamma-Exponential, Exponential-Exponential and Gamma-Gamma
+mixtures.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## Simulate data (chosen parameters indicate 3 clusters (populations (1,3), (2,5) and 4)!):</span></span>
-<span><span class="va">list.comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>f1 <span class="op">=</span> <span class="st">"gamma"</span>, g1 <span class="op">=</span> <span class="st">"exp"</span>,</span>
-<span>                  f2 <span class="op">=</span> <span class="st">"gamma"</span>, g2 <span class="op">=</span> <span class="st">"exp"</span>,</span>
-<span>                  f3 <span class="op">=</span> <span class="st">"gamma"</span>, g3 <span class="op">=</span> <span class="st">"gamma"</span>,</span>
-<span>                  f4 <span class="op">=</span> <span class="st">"exp"</span>, g4 <span class="op">=</span> <span class="st">"exp"</span>,</span>
-<span>                  f5 <span class="op">=</span> <span class="st">"gamma"</span>, g5 <span class="op">=</span> <span class="st">"exp"</span><span class="op">)</span></span>
-<span><span class="va">list.param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>f1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">16</span>, rate <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>, g1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3.5</span><span class="op">)</span>,</span>
-<span>                   f2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">14</span>, rate <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, g2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">5</span><span class="op">)</span>,</span>
-<span>                   f3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">16</span>, rate <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>, g3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">12</span>, rate <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
-<span>                   f4 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span>, g4 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">7</span><span class="op">)</span>,</span>
-<span>                   f5 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">14</span>, rate <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>, g5 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">A.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rsimmix.html">rsimmix</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">6000</span>, unknownComp_weight<span class="op">=</span><span class="fl">0.8</span>, comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">list.comp</span><span class="op">$</span><span class="va">f1</span>,<span class="va">list.comp</span><span class="op">$</span><span class="va">g1</span><span class="op">)</span>,</span>
-<span>                 comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">list.param</span><span class="op">$</span><span class="va">f1</span>, <span class="va">list.param</span><span class="op">$</span><span class="va">g1</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">mixt.data</span></span>
-<span><span class="va">B.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rsimmix.html">rsimmix</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">6000</span>, unknownComp_weight<span class="op">=</span><span class="fl">0.5</span>, comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">list.comp</span><span class="op">$</span><span class="va">f2</span>,<span class="va">list.comp</span><span class="op">$</span><span class="va">g2</span><span class="op">)</span>,</span>
-<span>                 comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">list.param</span><span class="op">$</span><span class="va">f2</span>, <span class="va">list.param</span><span class="op">$</span><span class="va">g2</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">mixt.data</span></span>
-<span><span class="va">C.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rsimmix.html">rsimmix</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">6000</span>, unknownComp_weight<span class="op">=</span><span class="fl">0.65</span>, comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">list.comp</span><span class="op">$</span><span class="va">f3</span>,<span class="va">list.comp</span><span class="op">$</span><span class="va">g3</span><span class="op">)</span>,</span>
-<span>                 comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">list.param</span><span class="op">$</span><span class="va">f3</span>, <span class="va">list.param</span><span class="op">$</span><span class="va">g3</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">mixt.data</span></span>
-<span><span class="va">D.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rsimmix.html">rsimmix</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">6000</span>, unknownComp_weight<span class="op">=</span><span class="fl">0.75</span>, comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">list.comp</span><span class="op">$</span><span class="va">f4</span>,<span class="va">list.comp</span><span class="op">$</span><span class="va">g4</span><span class="op">)</span>,</span>
-<span>                 comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">list.param</span><span class="op">$</span><span class="va">f4</span>, <span class="va">list.param</span><span class="op">$</span><span class="va">g4</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">mixt.data</span></span>
-<span><span class="va">E.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rsimmix.html">rsimmix</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">6000</span>, unknownComp_weight<span class="op">=</span><span class="fl">0.55</span>, comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">list.comp</span><span class="op">$</span><span class="va">f5</span>,<span class="va">list.comp</span><span class="op">$</span><span class="va">g5</span><span class="op">)</span>,</span>
-<span>                 comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">list.param</span><span class="op">$</span><span class="va">f5</span>, <span class="va">list.param</span><span class="op">$</span><span class="va">g5</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">mixt.data</span></span>
+<code class="sourceCode R"><span><span class="co">## Simulate mixture data:</span></span>
+<span><span class="va">mixt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">6000</span>, weight <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"gamma"</span>, <span class="st">"exp"</span><span class="op">)</span>,</span>
+<span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"shape"</span> <span class="op">=</span> <span class="fl">16</span>, <span class="st">"scale"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span>,</span>
+<span>                                        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"rate"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3.5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">mixt2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">6000</span>, weight <span class="op">=</span> <span class="fl">0.7</span>,</span>
+<span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"gamma"</span>, <span class="st">"exp"</span><span class="op">)</span>,</span>
+<span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"shape"</span> <span class="op">=</span> <span class="fl">14</span>, <span class="st">"scale"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span>,</span>
+<span>                                        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"rate"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">mixt3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">6000</span>, weight <span class="op">=</span> <span class="fl">0.6</span>,</span>
+<span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"gamma"</span>, <span class="st">"gamma"</span><span class="op">)</span>,</span>
+<span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"shape"</span> <span class="op">=</span> <span class="fl">16</span>, <span class="st">"scale"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span>,</span>
+<span>                                        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"shape"</span> <span class="op">=</span> <span class="fl">12</span>, <span class="st">"scale"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">mixt4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">6000</span>, weight <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"exp"</span>, <span class="st">"exp"</span><span class="op">)</span>,</span>
+<span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"rate"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span>,</span>
+<span>                                        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"rate"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">7</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">mixt5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">6000</span>, weight <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"gamma"</span>, <span class="st">"exp"</span><span class="op">)</span>,</span>
+<span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"shape"</span> <span class="op">=</span> <span class="fl">14</span>, <span class="st">"scale"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span>,</span>
+<span>                                        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"rate"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">data1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getmixtData.html">getmixtData</a></span><span class="op">(</span><span class="va">mixt1</span><span class="op">)</span></span>
+<span><span class="va">data2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getmixtData.html">getmixtData</a></span><span class="op">(</span><span class="va">mixt2</span><span class="op">)</span></span>
+<span><span class="va">data3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getmixtData.html">getmixtData</a></span><span class="op">(</span><span class="va">mixt3</span><span class="op">)</span></span>
+<span><span class="va">data4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getmixtData.html">getmixtData</a></span><span class="op">(</span><span class="va">mixt4</span><span class="op">)</span></span>
+<span><span class="va">data5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getmixtData.html">getmixtData</a></span><span class="op">(</span><span class="va">mixt5</span><span class="op">)</span></span>
+<span><span class="va">admixMod1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt1</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>                         knownComp_param <span class="op">=</span> <span class="va">mixt1</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">admixMod2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt2</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>                         knownComp_param <span class="op">=</span> <span class="va">mixt2</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">admixMod3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt3</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>                         knownComp_param <span class="op">=</span> <span class="va">mixt3</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">admixMod4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt4</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>                         knownComp_param <span class="op">=</span> <span class="va">mixt4</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">admixMod5</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt5</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>                         knownComp_param <span class="op">=</span> <span class="va">mixt5</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">## Look for the clusters:</span></span>
-<span><span class="va">list.comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>f1 <span class="op">=</span> <span class="cn">NULL</span>, g1 <span class="op">=</span> <span class="st">"exp"</span>,</span>
-<span>                  f2 <span class="op">=</span> <span class="cn">NULL</span>, g2 <span class="op">=</span> <span class="st">"exp"</span>,</span>
-<span>                  f3 <span class="op">=</span> <span class="cn">NULL</span>, g3 <span class="op">=</span> <span class="st">"gamma"</span>,</span>
-<span>                  f4 <span class="op">=</span> <span class="cn">NULL</span>, g4 <span class="op">=</span> <span class="st">"exp"</span>,</span>
-<span>                  f5 <span class="op">=</span> <span class="cn">NULL</span>, g5 <span class="op">=</span> <span class="st">"exp"</span><span class="op">)</span></span>
-<span><span class="va">list.param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>f1 <span class="op">=</span> <span class="cn">NULL</span>, g1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3.5</span><span class="op">)</span>,</span>
-<span>                   f2 <span class="op">=</span> <span class="cn">NULL</span>, g2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">5</span><span class="op">)</span>,</span>
-<span>                   f3 <span class="op">=</span> <span class="cn">NULL</span>, g3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">12</span>, rate <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
-<span>                   f4 <span class="op">=</span> <span class="cn">NULL</span>, g4 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">7</span><span class="op">)</span>,</span>
-<span>                   f5 <span class="op">=</span> <span class="cn">NULL</span>, g5 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">6</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/admix_clustering.html">admix_clustering</a></span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">A.sim</span>,<span class="va">B.sim</span>,<span class="va">C.sim</span>,<span class="va">D.sim</span>,<span class="va">E.sim</span><span class="op">)</span>, n_sim_tab <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>                             comp.dist<span class="op">=</span><span class="va">list.comp</span>, comp.param<span class="op">=</span><span class="va">list.param</span>, parallel<span class="op">=</span><span class="cn">FALSE</span>, n_cpu<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   |                                                          |                                                  |   0%  |                                                          |====                                              |   8%  |                                                          |==============================                    |  60%  |                                                          |========================================          |  80%  |                                                          |==================================================| 100%</span></span>
-<span><span class="va">clusters</span></span>
+<span><span class="fu"><a href="../reference/admix_cluster.html">admix_cluster</a></span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>,<span class="va">data2</span>,<span class="va">data3</span>,<span class="va">data4</span>,<span class="va">data5</span><span class="op">)</span>, </span>
+<span>              admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>,<span class="va">admixMod2</span>,<span class="va">admixMod3</span>,<span class="va">admixMod4</span>,<span class="va">admixMod5</span><span class="op">)</span>,</span>
+<span>              conf_level <span class="op">=</span> <span class="fl">0.95</span>, n_sim_tab <span class="op">=</span> <span class="fl">10</span>, tune_penalty <span class="op">=</span> <span class="cn">FALSE</span>, tabul_dist <span class="op">=</span> <span class="cn">NULL</span>, </span>
+<span>              echo <span class="op">=</span> <span class="cn">FALSE</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span>, n_cpu <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $n_popu</span></span>
 <span><span class="co">#&gt; [1] 5</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -182,25 +189,25 @@ with Gamma-Exponential and Gamma-Gamma mixtures.</p>
 <span><span class="co">#&gt; [1] 3</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $pval_clust</span></span>
-<span><span class="co">#&gt; [1] 0.571 0.000 0.000 0.556</span></span>
+<span><span class="co">#&gt; [1] 1.000 0.000 0.000 0.667</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $clusters</span></span>
 <span><span class="co">#&gt;            [,1] [,2] [,3] [,4] [,5]</span></span>
 <span><span class="co">#&gt; Id_sample     1    2    3    4    5</span></span>
-<span><span class="co">#&gt; Id_cluster    1    3    1    2    3</span></span>
+<span><span class="co">#&gt; Id_cluster    3    1    3    2    1</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $confidence_level</span></span>
 <span><span class="co">#&gt; [1] 0.95</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $clust_pop</span></span>
 <span><span class="co">#&gt; $clust_pop[[1]]</span></span>
-<span><span class="co">#&gt; [1] 1 3</span></span>
+<span><span class="co">#&gt; [1] 2 5</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $clust_pop[[2]]</span></span>
 <span><span class="co">#&gt; [1] 4</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $clust_pop[[3]]</span></span>
-<span><span class="co">#&gt; [1] 2 5</span></span>
+<span><span class="co">#&gt; [1] 1 3</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $clust_sizes</span></span>
@@ -208,47 +215,48 @@ with Gamma-Exponential and Gamma-Gamma mixtures.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $clust_weights</span></span>
 <span><span class="co">#&gt; $clust_weights[[1]]</span></span>
-<span><span class="co">#&gt; [1] 0.8099981 0.6488891</span></span>
+<span><span class="co">#&gt; [1] 0.7273134 0.5179727</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $clust_weights[[2]]</span></span>
 <span><span class="co">#&gt;      [,1] [,2]</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $clust_weights[[3]]</span></span>
-<span><span class="co">#&gt; [1] 0.4771685 0.5564158</span></span>
+<span><span class="co">#&gt; [1] 0.8070509 0.6040910</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $discrepancy_matrix</span></span>
-<span><span class="co">#&gt;             [,1]       [,2]        [,3]      [,4]       [,5]</span></span>
-<span><span class="co">#&gt; [1,]  0.00000000 22.5740563  0.03448008  6.437556 45.0935109</span></span>
-<span><span class="co">#&gt; [2,] 22.57405633  0.0000000 15.19195868  3.660639  0.1121644</span></span>
-<span><span class="co">#&gt; [3,]  0.03448008 15.1919587  0.00000000 54.675529 18.6386627</span></span>
-<span><span class="co">#&gt; [4,]  6.43755616  3.6606386 54.67552926  0.000000  2.8940480</span></span>
-<span><span class="co">#&gt; [5,] 45.09351092  0.1121644 18.63866272  2.894048  0.0000000</span></span>
+<span><span class="co">#&gt;             [,1]        [,2]        [,3]      [,4]        [,5]</span></span>
+<span><span class="co">#&gt; [1,]  0.00000000 31.05860201  0.04366317  5.202081 37.94408551</span></span>
+<span><span class="co">#&gt; [2,] 31.05860201  0.00000000 18.97089302  4.415301  0.02697453</span></span>
+<span><span class="co">#&gt; [3,]  0.04366317 18.97089302  0.00000000 50.992468 15.74051014</span></span>
+<span><span class="co">#&gt; [4,]  5.20208119  4.41530090 50.99246759  0.000000  1.85390471</span></span>
+<span><span class="co">#&gt; [5,] 37.94408551  0.02697453 15.74051014  1.853905  0.00000000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $tab_distributions</span></span>
 <span><span class="co">#&gt; $tab_distributions[[1]]</span></span>
-<span><span class="co">#&gt; [1] 0.03476194 0.04677623 0.02449650 0.08880261 0.02843692 0.03091199 0.04394699</span></span>
+<span><span class="co">#&gt; [1] 0.04468873 0.56797479 0.15966214 0.46704754 0.04971749 0.30537236 0.05157651</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $tab_distributions[[2]]</span></span>
-<span><span class="co">#&gt;  [1] 0.0023143285 0.0044126074 0.0057655649 0.0008835188 0.0072075690</span></span>
-<span><span class="co">#&gt;  [6] 0.0011279778 0.0022952077 0.0014713771 0.0039754577 0.0012170416</span></span>
+<span><span class="co">#&gt; [1] 0.05921097 0.04662899 0.01939682 0.07601329 0.15919160 0.01423468 0.03171122</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $tab_distributions[[3]]</span></span>
-<span><span class="co">#&gt; [1] 0.12956281 0.14271024 0.07571366 0.02791683 0.12146840 0.17552917 0.14712198</span></span>
-<span><span class="co">#&gt; [8] 0.10542916 0.08355976</span></span>
+<span><span class="co">#&gt; [1] 0.11368082 0.03339458 0.06283459 0.03970826 0.09181576 0.08095526</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $call</span></span>
-<span><span class="co">#&gt; admix_clustering(samples = list(A.sim, B.sim, C.sim, D.sim, E.sim), </span></span>
-<span><span class="co">#&gt;     n_sim_tab = 10, comp.dist = list.comp, comp.param = list.param, </span></span>
-<span><span class="co">#&gt;     parallel = FALSE, n_cpu = 2)</span></span>
+<span><span class="co">#&gt; admix_cluster(samples = list(data1, data2, data3, data4, data5), </span></span>
+<span><span class="co">#&gt;     admixMod = list(admixMod1, admixMod2, admixMod3, admixMod4, </span></span>
+<span><span class="co">#&gt;         admixMod5), conf_level = 0.95, n_sim_tab = 10, tune_penalty = FALSE, </span></span>
+<span><span class="co">#&gt;     tabul_dist = NULL, echo = FALSE, parallel = FALSE, n_cpu = 2)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; attr(,"class")</span></span>
 <span><span class="co">#&gt; [1] "admix_cluster"</span></span></code></pre></div>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
-<div id="ref-MilhaudCluster23" class="csl-entry">
-Milhaud, Pommeret, X., and P. Vandekerkhove. 2023.
-<span>“Contamination-Source Based k-Sample Clustering.”</span> <a href="https://hal.science/hal-04129130" class="external-link">https://hal.science/hal-04129130</a>.
+<div id="ref-MilhaudPommeretSalhiVandekerkhove2024b" class="csl-entry">
+Milhaud, Xavier, Denys Pommeret, Yahia Salhi, and Pierre Vandekerkhove.
+2024. <span>“<span class="nocase">Clustering of K
+admixture</span>.”</span> <em>Journal of Machine Learning Research</em>
+0 (0): 0–0.
 </div>
 </div>
 </div>

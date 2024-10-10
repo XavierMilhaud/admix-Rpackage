@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admix</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2-1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,6 +35,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/admixture-clustering.html">Clustering of unknown subpopulations in admixture models</a></li>
     <li><a class="dropdown-item" href="../articles/admixture-weight-estimation.html">Estimation of unknown elements in admixture models</a></li>
+    <li><a class="dropdown-item" href="../articles/covid19-example-pairwiseTesting.html">covid19-pairwise-testing</a></li>
     <li><a class="dropdown-item" href="../articles/test-hypothesis.html">Hypothesis test in admixture models</a></li>
   </ul>
 </li>
@@ -150,17 +151,29 @@ unknown component is tested belongs to Gaussian distributions. Below is
 an example of hypothesis testing in the one-sample case:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">####### Under the null hypothesis H0.</span></span>
-<span><span class="co">## Parameters of the gaussian distribution to be tested:</span></span>
-<span><span class="va">list.comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>f <span class="op">=</span> <span class="st">'norm'</span>, g <span class="op">=</span> <span class="st">'norm'</span><span class="op">)</span></span>
-<span><span class="va">list.param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>f <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">2</span>, sd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>, g <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">## Simulate data:</span></span>
-<span><span class="va">obs.data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rsimmix.html">rsimmix</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">700</span>, unknownComp_weight <span class="op">=</span> <span class="fl">0.8</span>, comp.dist <span class="op">=</span> <span class="va">list.comp</span>,</span>
-<span>                    comp.param <span class="op">=</span> <span class="va">list.param</span><span class="op">)</span><span class="op">[[</span><span class="st">'mixt.data'</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="co">## Performs the test:</span></span>
-<span><span class="va">list.comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>f <span class="op">=</span> <span class="cn">NULL</span>, g <span class="op">=</span> <span class="st">'norm'</span><span class="op">)</span></span>
-<span><span class="va">list.param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>f <span class="op">=</span> <span class="cn">NULL</span>, g <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#gaussianity_test(sample1 = obs.data, comp.dist = list.comp, comp.param = list.param,</span></span>
-<span><span class="co">#                 K = 3, lambda = 0.1, support = 'Real')$rejection_rule</span></span></code></pre></div>
+<span><span class="co">## Simulate mixture data:</span></span>
+<span><span class="va">mixt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">700</span>, weight <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"norm"</span><span class="op">)</span>,</span>
+<span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">2</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span>
+<span>                                        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">0</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">data1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getmixtData.html">getmixtData</a></span><span class="op">(</span><span class="va">mixt1</span><span class="op">)</span></span>
+<span><span class="co">## Define the admixture model:</span></span>
+<span><span class="va">admixMod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt1</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>                        knownComp_param <span class="op">=</span> <span class="va">mixt1</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/admix_test.html">admix_test</a></span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span><span class="op">)</span>, admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod</span><span class="op">)</span>,</span>
+<span>           test_method <span class="op">=</span> <span class="st">"poly"</span>, ask_poly_param <span class="op">=</span> <span class="cn">FALSE</span>, support <span class="op">=</span> <span class="st">"Real"</span>,</span>
+<span>           conf_level <span class="op">=</span> <span class="fl">0.95</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span>, n_cpu <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $reject_decision</span></span>
+<span><span class="co">#&gt; [1] FALSE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $p_value</span></span>
+<span><span class="co">#&gt; [1] 0.9456055</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $confidence_level</span></span>
+<span><span class="co">#&gt; [1] 0.95</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $test_statistic_value</span></span>
+<span><span class="co">#&gt; [1] 0.004654834</span></span></code></pre></div>
 <p>The result of the test is that we cannot reject the null hypothesis
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>0</mn></msub><annotation encoding="application/x-tex">H_0</annotation></semantics></math>,
 which is in line with the specified parameters of the unknown
@@ -204,43 +217,55 @@ and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>p</mi><mn>2</mn></msub><annotation encoding="application/x-tex">p_2</annotation></semantics></math>,
 proposed in <span class="citation">(Bordes and Vandekerkhove
 2010)</span>, can be used together with the testing strategy suggested
-in <span class="citation">(Milhaud and Vandekerkhove 2022a)</span>. This
-testing strategy is closely connected to <span class="citation">(Pommeret and Vandekerkhove 2019)</span>, where the
-computation of the expansion coefficients is duplicated on each of the
-two samples under study.</p>
+in <span class="citation">(Milhaud et al. 2022)</span>. This testing
+strategy is closely connected to <span class="citation">(Pommeret and
+Vandekerkhove 2019)</span>, where the computation of the expansion
+coefficients is duplicated on each of the two samples under study.</p>
 <p>In what follows, we simulate two samples under the null and check
 whether the test provides satisfactory results.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">##### Under the null hypothesis H0.</span></span>
-<span><span class="co">## Simulate data:</span></span>
-<span><span class="va">list.comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>f1 <span class="op">=</span> <span class="st">'norm'</span>, g1 <span class="op">=</span> <span class="st">'norm'</span>,</span>
-<span>                  f2 <span class="op">=</span> <span class="st">'norm'</span>, g2 <span class="op">=</span> <span class="st">'norm'</span><span class="op">)</span></span>
-<span><span class="va">list.param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>f1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">3</span>, sd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>, g1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
-<span>                   f2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">3</span>, sd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>, g2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">6</span>, sd <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">sample1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rsimmix.html">rsimmix</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">1000</span>, unknownComp_weight<span class="op">=</span><span class="fl">0.8</span>, comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">list.comp</span><span class="op">$</span><span class="va">f1</span>,<span class="va">list.comp</span><span class="op">$</span><span class="va">g1</span><span class="op">)</span>,</span>
-<span>                   comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">list.param</span><span class="op">$</span><span class="va">f1</span>,<span class="va">list.param</span><span class="op">$</span><span class="va">g1</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="st">'mixt.data'</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="va">sample2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rsimmix.html">rsimmix</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">1100</span>, unknownComp_weight<span class="op">=</span><span class="fl">0.7</span>, comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">list.comp</span><span class="op">$</span><span class="va">f2</span>,<span class="va">list.comp</span><span class="op">$</span><span class="va">g2</span><span class="op">)</span>,</span>
-<span>                   comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">list.param</span><span class="op">$</span><span class="va">f2</span>,<span class="va">list.param</span><span class="op">$</span><span class="va">g2</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="st">'mixt.data'</span><span class="op">]</span><span class="op">]</span></span>
-<span><span class="co">#plot.2comp_mixt(samples = list(sample1,sample2), user.bounds = NULL, support='continuous')</span></span>
-<span><span class="co">##### Performs the test:</span></span>
-<span><span class="va">list.comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>f1 <span class="op">=</span> <span class="cn">NULL</span>, g1 <span class="op">=</span> <span class="st">'norm'</span>,</span>
-<span>                  f2 <span class="op">=</span> <span class="cn">NULL</span>, g2 <span class="op">=</span> <span class="st">'norm'</span><span class="op">)</span></span>
-<span><span class="va">list.param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>f1 <span class="op">=</span> <span class="cn">NULL</span>, g1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span>
-<span>                   f2 <span class="op">=</span> <span class="cn">NULL</span>, g2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">6</span>, sd <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">## Simulate mixture data:</span></span>
+<span><span class="va">mixt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1000</span>, weight <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"norm"</span><span class="op">)</span>,</span>
+<span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">3</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span>
+<span>                                        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">0</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">mixt2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1100</span>, weight <span class="op">=</span> <span class="fl">0.7</span>,</span>
+<span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"norm"</span><span class="op">)</span>,</span>
+<span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">3</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span>
+<span>                                        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">6</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">data1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getmixtData.html">getmixtData</a></span><span class="op">(</span><span class="va">mixt1</span><span class="op">)</span></span>
+<span><span class="va">data2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getmixtData.html">getmixtData</a></span><span class="op">(</span><span class="va">mixt2</span><span class="op">)</span></span>
+<span><span class="co">## Define the admixture models:</span></span>
+<span><span class="va">admixMod1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt1</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>                         knownComp_param <span class="op">=</span> <span class="va">mixt1</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">admixMod2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt2</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>                         knownComp_param <span class="op">=</span> <span class="va">mixt2</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">## Using expansion coefficients in orthonormal polynomial basis:</span></span>
-<span><span class="co">#admix_test(samples = list(sample1,sample2), comp.dist = list.comp,</span></span>
-<span><span class="co">#           comp.param=list.param, test.method='Poly', support='Real')$Reject_decision</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/admix_test.html">admix_test</a></span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>,<span class="va">data2</span><span class="op">)</span>, admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>,<span class="va">admixMod2</span><span class="op">)</span>,</span>
+<span>           test_method <span class="op">=</span> <span class="st">"poly"</span>, ask_poly_param <span class="op">=</span> <span class="cn">FALSE</span>, support <span class="op">=</span> <span class="st">"Real"</span>,</span>
+<span>           conf_level <span class="op">=</span> <span class="fl">0.95</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span>, n_cpu <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $pairs_test_order</span></span>
+<span><span class="co">#&gt; [1] "Sample 1 / Sample 2"</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $reject_decision</span></span>
+<span><span class="co">#&gt; [1] FALSE</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $p_value</span></span>
+<span><span class="co">#&gt; [1] 0.7725612</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $confidence_level</span></span>
+<span><span class="co">#&gt; [1] 0.95</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $test_statistic_value</span></span>
+<span><span class="co">#&gt; [1] 0.08353623</span></span></code></pre></div>
 <p>The hypothesis test conclude that the null hypothesis cannot be
 rejected, once again in line with what was expected given the specified
 parameters when simulating the data.</p>
-<p>Note that the following arguments of function ‘two_sample_test’ were
-intentionnally set to specific values:</p>
+<p>Note that the following arguments, involved in subroutines, were set
+to default values (but that the user can choose them setting parameter
+‘ask_poly_param’ to TRUE):</p>
 <ul>
-<li>‘method’ equals ‘Poly’ to define the testing strategy based on
-comparisons of expansion coefficients when decomposing the densities in
-the orthonormal polynomial basis,</li>
-<li>‘K’ equals 3 to mention that such expansions are computed up to the
-third order of the decomposition,</li>
 <li>‘est.method’ is set to ‘BVdk’ to tell the program to estimate the
 unknown proportions
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>p</mi><mn>1</mn></msub><annotation encoding="application/x-tex">p_1</annotation></semantics></math>
@@ -248,11 +273,11 @@ and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>p</mi><mn>2</mn></msub><annotation encoding="application/x-tex">p_2</annotation></semantics></math>
 using the estimator proposed in <span class="citation">(Bordes and
 Vandekerkhove 2010)</span>,</li>
-<li>‘nb.ssEch’ equals 2 since there are basically two quantities to
-estimate here (for each sample under study), namely the unknown
-component proportion and the expansion coefficients. This enables to
-create subsamples in order to artificially uncorrelate the
-estimators.</li>
+<li>‘K’ equals 3 to mention that such expansions are computed up to the
+third order of the decomposition,</li>
+<li>‘s’ equals 0.25 as the penalization rate involved in the
+penalization rule used in <span class="citation">(Milhaud et al.
+2022)</span>.</li>
 </ul>
 <p>When the unknown component distributions are not supposed to have
 symmetric densities, another solution is to use the IBM method (see
@@ -262,17 +287,15 @@ below).</p>
 <h3 id="case-of-fully-unknown-densities">Case of fully unknown densities<a class="anchor" aria-label="anchor" href="#case-of-fully-unknown-densities"></a>
 </h3>
 <p>Estimation of the unknown quantities is made by the Inversion - Best
-Matching approach, see <span class="citation">(Milhaud and Vandekerkhove
-2022b)</span>. In this case, one can still use the function
-‘two_sample_test()’ with same arguments except
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mi>e</mi><mi>t</mi><mi>h</mi><mi>o</mi><mi>d</mi><mo>=</mo></mrow><annotation encoding="application/x-tex">method=</annotation></semantics></math>’ICV’.
+Matching approach, see <span class="citation">(Milhaud et al.
+2024b)</span>. In this case, one can still use the function with same
+first arguments except
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mi>e</mi><mi>t</mi><mi>h</mi><mi>o</mi><mi>d</mi><mo>=</mo></mrow><annotation encoding="application/x-tex">method=</annotation></semantics></math>’icv’.
 The user also has to define the number of simulated gaussian processes
 used to tabulate the test statistic distribution (n-sim-tab), and can
 accelerate computations using parallel computations and choosing an
 adequate number of cpus. Other arguments such as
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mi>u</mi><mi>p</mi><mi>p</mi><mi>o</mi><mi>r</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">support</annotation></semantics></math>
-or
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>e</mi><mi>s</mi><mi>t</mi><mo>−</mo><mi>m</mi><mi>e</mi><mi>t</mi><mi>h</mi><mi>o</mi><mi>d</mi></mrow><annotation encoding="application/x-tex">est-method</annotation></semantics></math>
 are useless.</p>
 </div>
 </div>
@@ -280,8 +303,8 @@ are useless.</p>
 <h2 id="the-k-sample-case">The K-sample case<a class="anchor" aria-label="anchor" href="#the-k-sample-case"></a>
 </h2>
 <p>We introduce hereafter a natural extension of the two-sample case to
-the K-sample one, see <span class="citation">(Milhaud and Vandekerkhove
-2023)</span>. In what follows, the K-sample test is illustrated within
+the K-sample one, see <span class="citation">(Milhaud et al.
+2024a)</span>. In what follows, the K-sample test is illustrated within
 the framework of the IBM approach, i.e. using the associated inner
 convergence property. Of course, in the case when all the unknown
 component densities are assumed to be symmetric, one could use a
@@ -364,66 +387,78 @@ considering
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">K=3</annotation></semantics></math>
 different populations.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## Simulate data under the null H0:</span></span>
-<span><span class="va">list.comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>f1 <span class="op">=</span> <span class="st">'norm'</span>, g1 <span class="op">=</span> <span class="st">'norm'</span>,</span>
-<span>                  f2 <span class="op">=</span> <span class="st">'norm'</span>, g2 <span class="op">=</span> <span class="st">'norm'</span>,</span>
-<span>                  f3 <span class="op">=</span> <span class="st">'norm'</span>, g3 <span class="op">=</span> <span class="st">'norm'</span><span class="op">)</span></span>
-<span><span class="va">list.param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>f1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, g1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">2</span>, sd <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span>,</span>
-<span>                   f2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, g2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">4</span>, sd <span class="op">=</span> <span class="fl">1.1</span><span class="op">)</span>,</span>
-<span>                   f3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, g3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">3</span>, sd <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">sim1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rsimmix.html">rsimmix</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1500</span>, unknownComp_weight <span class="op">=</span> <span class="fl">0.8</span>, comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">list.comp</span><span class="op">$</span><span class="va">f1</span>,<span class="va">list.comp</span><span class="op">$</span><span class="va">g1</span><span class="op">)</span>,</span>
-<span>                comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">list.param</span><span class="op">$</span><span class="va">f1</span>, <span class="va">list.param</span><span class="op">$</span><span class="va">g1</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">mixt.data</span></span>
-<span><span class="va">sim2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rsimmix.html">rsimmix</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1700</span>, unknownComp_weight <span class="op">=</span> <span class="fl">0.7</span>, comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">list.comp</span><span class="op">$</span><span class="va">f2</span>,<span class="va">list.comp</span><span class="op">$</span><span class="va">g2</span><span class="op">)</span>,</span>
-<span>                comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">list.param</span><span class="op">$</span><span class="va">f2</span>, <span class="va">list.param</span><span class="op">$</span><span class="va">g2</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">mixt.data</span></span>
-<span><span class="va">sim3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/rsimmix.html">rsimmix</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">2000</span>, unknownComp_weight <span class="op">=</span> <span class="fl">0.6</span>, comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">list.comp</span><span class="op">$</span><span class="va">f3</span>,<span class="va">list.comp</span><span class="op">$</span><span class="va">g3</span><span class="op">)</span>,</span>
-<span>                comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">list.param</span><span class="op">$</span><span class="va">f3</span>, <span class="va">list.param</span><span class="op">$</span><span class="va">g3</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">mixt.data</span></span>
-<span><span class="co">## Perform the 3-samples test in a real-life setting:</span></span>
-<span><span class="va">list.comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>f1 <span class="op">=</span> <span class="cn">NULL</span>, g1 <span class="op">=</span> <span class="st">'norm'</span>,</span>
-<span>                  f2 <span class="op">=</span> <span class="cn">NULL</span>, g2 <span class="op">=</span> <span class="st">'norm'</span>,</span>
-<span>                  f3 <span class="op">=</span> <span class="cn">NULL</span>, g3 <span class="op">=</span> <span class="st">'norm'</span><span class="op">)</span></span>
-<span><span class="va">list.param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>f1 <span class="op">=</span> <span class="cn">NULL</span>, g1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">2</span>, sd <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span>,</span>
-<span>                   f2 <span class="op">=</span> <span class="cn">NULL</span>, g2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">4</span>, sd <span class="op">=</span> <span class="fl">1.1</span><span class="op">)</span>,</span>
-<span>                   f3 <span class="op">=</span> <span class="cn">NULL</span>, g3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mean <span class="op">=</span> <span class="fl">3</span>, sd <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/IBM_k_samples_test.html">IBM_k_samples_test</a></span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">sim1</span>,<span class="va">sim2</span>,<span class="va">sim3</span><span class="op">)</span>, sim_U <span class="op">=</span> <span class="cn">NULL</span>, n_sim_tab <span class="op">=</span> <span class="fl">8</span>,</span>
-<span>                          comp.dist <span class="op">=</span> <span class="va">list.comp</span>, comp.param <span class="op">=</span> <span class="va">list.param</span>, tune.penalty <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>                          parallel <span class="op">=</span> <span class="cn">FALSE</span>, n_cpu <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="va">obj</span><span class="op">$</span><span class="va">rejection_rule</span></span>
+<code class="sourceCode R"><span><span class="va">mixt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">450</span>, weight <span class="op">=</span> <span class="fl">0.4</span>,</span>
+<span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"norm"</span><span class="op">)</span>,</span>
+<span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span>
+<span>                                        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">0</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">mixt2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">600</span>, weight <span class="op">=</span> <span class="fl">0.24</span>,</span>
+<span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"norm"</span><span class="op">)</span>,</span>
+<span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span>
+<span>                                        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="op">-</span><span class="fl">1</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">mixt3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">400</span>, weight <span class="op">=</span> <span class="fl">0.53</span>,</span>
+<span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"norm"</span><span class="op">)</span>,</span>
+<span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span>
+<span>                                        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">2</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">data1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getmixtData.html">getmixtData</a></span><span class="op">(</span><span class="va">mixt1</span><span class="op">)</span></span>
+<span><span class="va">data2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getmixtData.html">getmixtData</a></span><span class="op">(</span><span class="va">mixt2</span><span class="op">)</span></span>
+<span><span class="va">data3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/getmixtData.html">getmixtData</a></span><span class="op">(</span><span class="va">mixt3</span><span class="op">)</span></span>
+<span><span class="va">admixMod1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt1</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>                         knownComp_param <span class="op">=</span> <span class="va">mixt1</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">admixMod2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt2</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>                         knownComp_param <span class="op">=</span> <span class="va">mixt2</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">admixMod3</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt3</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>                         knownComp_param <span class="op">=</span> <span class="va">mixt3</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/admix_test.html">admix_test</a></span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>, <span class="va">data2</span>, <span class="va">data3</span><span class="op">)</span>,</span>
+<span>           admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>, <span class="va">admixMod2</span>, <span class="va">admixMod3</span><span class="op">)</span>,</span>
+<span>           test_method <span class="op">=</span> <span class="st">"icv"</span>, n_sim_tab <span class="op">=</span> <span class="fl">10</span>, ICV_tunePenalty <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>           conf_level <span class="op">=</span> <span class="fl">0.95</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span>, n_cpu <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; $reject_decision</span></span>
 <span><span class="co">#&gt;   95% </span></span>
-<span><span class="co">#&gt; FALSE</span></span></code></pre></div>
+<span><span class="co">#&gt; FALSE </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $p_value</span></span>
+<span><span class="co">#&gt; [1] 0.9</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $confidence_level</span></span>
+<span><span class="co">#&gt; [1] 0.95</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; $test_statistic_value</span></span>
+<span><span class="co">#&gt; [1] 0.1906989</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
-<div id="ref-BV10" class="csl-entry">
+<div id="ref-BordesVandekerkhove2010" class="csl-entry">
 Bordes, L., and P. Vandekerkhove. 2010. <span>“Semiparametric
-Two-Component Mixture Model When a Component Is Known: An Asymptotically
-Normal Estimator.”</span> <em>Mathematical Methods of Statistics</em>
-19: 22–41.
+Two-Component Mixture Model with a Known Component: An Asymptotically
+Normal Estimator.”</span> <em>Mathematical Methods of Statistics</em> 19
+(1): 22–41. https://doi.org/<a href="https://doi.org/10.3103/S1066530710010023" class="external-link">https://doi.org/10.3103/S1066530710010023</a>.
 </div>
-<div id="ref-MPSV21" class="csl-entry">
-Milhaud, Pommeret, X., and P. Vandekerkhove. 2022a.
-<span>“Semiparametric Two-Sample Admixture Components Comparison Test:
-The Symmetric Case.”</span> <em>Journal of Statistical Planning and
-Inference</em> 216: 135–50.
+<div id="ref-MilhaudPommeretSalhiVandekerkhove2022" class="csl-entry">
+Milhaud, Xavier, Denys Pommeret, Yahia Salhi, and Pierre Vandekerkhove.
+2022. <span>“Semiparametric Two-Sample Admixture Components Comparison
+Test: The Symmetric Case.”</span> <em>Journal of Statistical Planning
+and Inference</em> 216: 135–50. https://doi.org/<a href="https://doi.org/10.1016/j.jspi.2021.05.010" class="external-link">https://doi.org/10.1016/j.jspi.2021.05.010</a>.
 </div>
-<div id="ref-MilhaudIBM21" class="csl-entry">
-———. 2022b. <span>“Shape Constraint Free Two-Sample Contamination Model
-Testing.”</span> <a href="https://hal.science/hal-03201760" class="external-link">https://hal.science/hal-03201760</a>.
+<div id="ref-MilhaudPommeretSalhiVandekerkhove2024b" class="csl-entry">
+———. 2024a. <span>“<span class="nocase">Clustering of K
+admixture</span>.”</span> <em>Journal of Machine Learning Research</em>
+0 (0): 0–0.
 </div>
-<div id="ref-MilhaudCluster23" class="csl-entry">
-———. 2023. <span>“Contamination-Source Based k-Sample
-Clustering.”</span> <a href="https://hal.science/hal-04129130" class="external-link">https://hal.science/hal-04129130</a>.
+<div id="ref-MilhaudPommeretSalhiVandekerkhove2024a" class="csl-entry">
+———. 2024b. <span>“<span class="nocase">Two-sample contamination model
+test</span>.”</span> <em>Bernoulli</em> 30 (1): 170–97. <a href="https://doi.org/10.3150/23-BEJ1593" class="external-link">https://doi.org/10.3150/23-BEJ1593</a>.
 </div>
-<div id="ref-Patra" class="csl-entry">
-Patra, R. K., and B. Sen. 2016. <span>“Estimation of a Two-Component
-Mixture Model with Applications to Multiple Testing.”</span> <em>Journal
-of the Royal Statistical Society, Series B</em> 78: 869–93.
+<div id="ref-PatraSen2016" class="csl-entry">
+Patra, Rohit Kumar, and Bodhisattva Sen. 2016. <span>“<span class="nocase">Estimation of a two-component mixture model with
+applications to multiple testing</span>.”</span> <em>Journal of the
+Royal Statistical Society Series B</em> 78 (4): 869–93.
 </div>
-<div id="ref-PVdk19" class="csl-entry">
-Pommeret, D., and P. Vandekerkhove. 2019. <span>“Semiparametric Density
-Testing in the Contamination Model.”</span> <em>Electronic Journal of
-Statistics</em> 13: 4743–93.
+<div id="ref-PommeretVandekerkhove2019" class="csl-entry">
+Pommeret, Denys, and Pierre Vandekerkhove. 2019. <span>“Semiparametric
+Density Testing in the Contamination Model.”</span> <em>Electronic
+Journal of Statistics</em>, no. 13: 4743–93. https://doi.org/<a href="https://doi.org/10.1214/19-EJS1650" class="external-link">https://doi.org/10.1214/19-EJS1650</a>.
 </div>
 <div id="ref-Schwarz_1978" class="csl-entry">
 Schwarz, G. 1978. <span>“Estimating the Dimension of a Model.”</span>

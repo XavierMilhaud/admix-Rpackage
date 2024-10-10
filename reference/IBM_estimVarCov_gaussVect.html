@@ -15,7 +15,7 @@ Further information for the IBM approach are given in 'Details' below."></head><
 
     <a class="navbar-brand me-2" href="../index.html">admix</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2-1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,6 +28,7 @@ Further information for the IBM approach are given in 'Details' below."></head><
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/admixture-clustering.html">Clustering of unknown subpopulations in admixture models</a></li>
     <li><a class="dropdown-item" href="../articles/admixture-weight-estimation.html">Estimation of unknown elements in admixture models</a></li>
+    <li><a class="dropdown-item" href="../articles/covid19-example-pairwiseTesting.html">covid19-pairwise-testing</a></li>
     <li><a class="dropdown-item" href="../articles/test-hypothesis.html">Hypothesis test in admixture models</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -56,18 +57,7 @@ Further information for the IBM approach are given in 'Details' below.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">IBM_estimVarCov_gaussVect</span><span class="op">(</span></span>
-<span>  <span class="va">x</span>,</span>
-<span>  <span class="va">y</span>,</span>
-<span>  <span class="va">estim.obj</span>,</span>
-<span>  fixed.p1 <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  known.p <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">sample1</span>,</span>
-<span>  <span class="va">sample2</span>,</span>
-<span>  min_size <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  comp.dist <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  comp.param <span class="op">=</span> <span class="cn">NULL</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">IBM_estimVarCov_gaussVect</span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, <span class="va">IBMestim.obj</span>, <span class="va">samples</span>, <span class="va">admixMod</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -75,54 +65,23 @@ Further information for the IBM approach are given in 'Details' below.</p>
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>Time point at which the first (related to the first parameter) underlying empirical process is looked through.</p></dd>
+<dd><p>Time point at which the 1st (related to the 1st parameter) underlying empirical process is looked through.</p></dd>
 
 
 <dt id="arg-y">y<a class="anchor" aria-label="anchor" href="#arg-y"></a></dt>
-<dd><p>Time point at which the second (related to the second parameter) underlying empirical process is looked through.</p></dd>
+<dd><p>Time point at which the 2nd (related to the 2nd parameter) underlying empirical process is looked through.</p></dd>
 
 
-<dt id="arg-estim-obj">estim.obj<a class="anchor" aria-label="anchor" href="#arg-estim-obj"></a></dt>
-<dd><p>Object obtained from the estimation of the component weights related to the proportions of the
-unknown component in each of the two admixture models.</p></dd>
+<dt id="arg-ibmestim-obj">IBMestim.obj<a class="anchor" aria-label="anchor" href="#arg-ibmestim-obj"></a></dt>
+<dd><p>An object of class 'estim_IBM'.</p></dd>
 
 
-<dt id="arg-fixed-p-">fixed.p1<a class="anchor" aria-label="anchor" href="#arg-fixed-p-"></a></dt>
-<dd><p>Arbitrary value chosen by the user for the component weight related to the unknown component of the first
-admixture model. Only useful for optimization when the known components of the two models are identical
-(G1=G2, leading to unidimensional optimization).</p></dd>
+<dt id="arg-samples">samples<a class="anchor" aria-label="anchor" href="#arg-samples"></a></dt>
+<dd><p>(List) List of the two considered samples.</p></dd>
 
 
-<dt id="arg-known-p">known.p<a class="anchor" aria-label="anchor" href="#arg-known-p"></a></dt>
-<dd><p>(optional, NULL by default) Numeric vector with two elements, the known (true) mixture weights.</p></dd>
-
-
-<dt id="arg-sample-">sample1<a class="anchor" aria-label="anchor" href="#arg-sample-"></a></dt>
-<dd><p>Observations of the first sample under study.</p></dd>
-
-
-<dt id="arg-sample-">sample2<a class="anchor" aria-label="anchor" href="#arg-sample-"></a></dt>
-<dd><p>Observations of the second sample under study.</p></dd>
-
-
-<dt id="arg-min-size">min_size<a class="anchor" aria-label="anchor" href="#arg-min-size"></a></dt>
-<dd><p>(optional, NULL by default) in the k-sample case, useful to provide the minimal size among all samples
-(needed to take into account the correction factor in variance-covariance assessment). Otherwise, useless.</p></dd>
-
-
-<dt id="arg-comp-dist">comp.dist<a class="anchor" aria-label="anchor" href="#arg-comp-dist"></a></dt>
-<dd><p>A list with four elements corresponding to the component distributions (specified with R native names for these distributions)
-involved in the two admixture models. The two first elements refer to the unknown and known components of the 1st admixture model,
-and the last two ones to those of the second admixture model. If there are unknown elements, they must be specified as 'NULL' objects.
-For instance, 'comp.dist' could be specified as follows: list(f1=NULL, g1='norm', f2=NULL, g2='norm').</p></dd>
-
-
-<dt id="arg-comp-param">comp.param<a class="anchor" aria-label="anchor" href="#arg-comp-param"></a></dt>
-<dd><p>A list with four elements corresponding to the parameters of the component distributions, each element being a list
-itself. The names used in this list must correspond to the native R argument names for these distributions.
-The two first elements refer to the parameters of unknown and known components of the 1st admixture model, and the last
-two ones to those of the second admixture model. If there are unknown elements, they must be specified as 'NULL' objects.
-For instance, 'comp.param' could be specified as follows: : list(f1=NULL, g1=list(mean=0,sd=1), f2=NULL, g2=list(mean=3,sd=1.1)).</p></dd>
+<dt id="arg-admixmod">admixMod<a class="anchor" aria-label="anchor" href="#arg-admixmod"></a></dt>
+<dd><p>(List) List of objects of class 'admix_model', one for each sample.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -141,32 +100,37 @@ For instance, 'comp.param' could be specified as follows: : list(f1=NULL, g1=lis
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="co">######## Analysis by simulated data:</span></span></span>
-<span class="r-in"><span><span class="co">## Simulate Gamma - Exponential admixtures :</span></span></span>
-<span class="r-in"><span><span class="va">list.comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>f1 <span class="op">=</span> <span class="st">"gamma"</span>, g1 <span class="op">=</span> <span class="st">"exp"</span>,</span></span>
-<span class="r-in"><span>                  f2 <span class="op">=</span> <span class="st">"gamma"</span>, g2 <span class="op">=</span> <span class="st">"exp"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">list.param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>f1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">2</span>, scale <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>, g1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                   f2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>shape <span class="op">=</span> <span class="fl">2</span>, scale <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>, g2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">X.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="rsimmix.html">rsimmix</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">400</span>, unknownComp_weight<span class="op">=</span><span class="fl">0.8</span>, comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">list.comp</span><span class="op">$</span><span class="va">f1</span>,<span class="va">list.comp</span><span class="op">$</span><span class="va">g1</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                 comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">list.param</span><span class="op">$</span><span class="va">f1</span>, <span class="va">list.param</span><span class="op">$</span><span class="va">g1</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">mixt.data</span></span></span>
-<span class="r-in"><span><span class="va">Y.sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="rsimmix.html">rsimmix</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">350</span>, unknownComp_weight<span class="op">=</span><span class="fl">0.9</span>, comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">list.comp</span><span class="op">$</span><span class="va">f2</span>,<span class="va">list.comp</span><span class="op">$</span><span class="va">g2</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                 comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">list.param</span><span class="op">$</span><span class="va">f2</span>, <span class="va">list.param</span><span class="op">$</span><span class="va">g2</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">mixt.data</span></span></span>
-<span class="r-in"><span><span class="co">## Real-life setting:</span></span></span>
-<span class="r-in"><span><span class="va">list.comp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>f1 <span class="op">=</span> <span class="cn">NULL</span>, g1 <span class="op">=</span> <span class="st">"exp"</span>,</span></span>
-<span class="r-in"><span>                  f2 <span class="op">=</span> <span class="cn">NULL</span>, g2 <span class="op">=</span> <span class="st">"exp"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">list.param</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>f1 <span class="op">=</span> <span class="cn">NULL</span>, g1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                   f2 <span class="op">=</span> <span class="cn">NULL</span>, g2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>rate <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co">## Estimate the unknown component weights in the two admixture models:</span></span></span>
-<span class="r-in"><span><span class="va">estim</span> <span class="op">&lt;-</span> <span class="fu"><a href="IBM_estimProp.html">IBM_estimProp</a></span><span class="op">(</span>sample1 <span class="op">=</span><span class="va">X.sim</span>, sample2 <span class="op">=</span><span class="va">Y.sim</span>, known.prop <span class="op">=</span> <span class="cn">NULL</span>, comp.dist <span class="op">=</span> <span class="va">list.comp</span>,</span></span>
-<span class="r-in"><span>                       comp.param <span class="op">=</span> <span class="va">list.param</span>, with.correction <span class="op">=</span> <span class="cn">FALSE</span>, n.integ <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">IBM_estimVarCov_gaussVect</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">X.sim</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">Y.sim</span><span class="op">)</span>, estim.obj <span class="op">=</span> <span class="va">estim</span>,</span></span>
-<span class="r-in"><span>                          fixed.p1 <span class="op">=</span> <span class="va">estim</span><span class="op">[[</span><span class="st">"p.X.fixed"</span><span class="op">]</span><span class="op">]</span>, known.p <span class="op">=</span> <span class="cn">NULL</span>, sample1<span class="op">=</span><span class="va">X.sim</span>,</span></span>
-<span class="r-in"><span>                          sample2 <span class="op">=</span> <span class="va">Y.sim</span>, min_size <span class="op">=</span> <span class="cn">NULL</span>,</span></span>
-<span class="r-in"><span>                          comp.dist <span class="op">=</span> <span class="va">list.comp</span>, comp.param <span class="op">=</span> <span class="va">list.param</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            [,1]        [,2]        [,3]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  8.1374978  28.3718607 -0.25787693</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] 28.3718607 146.7492622 -0.78173416</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] -0.2423617  -0.6227374  0.06692729</span>
+<span class="r-in"><span><span class="co">## Simulate mixture data:</span></span></span>
+<span class="r-in"><span><span class="va">mixt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">2000</span>, weight <span class="op">=</span> <span class="fl">0.2</span>,</span></span>
+<span class="r-in"><span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"norm"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">2</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                                        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mixt1</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">30</span><span class="op">)</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0.15</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">data1</span> <span class="op">&lt;-</span> <span class="fu"><a href="getmixtData.html">getmixtData</a></span><span class="op">(</span><span class="va">mixt1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mixt2</span> <span class="op">&lt;-</span> <span class="fu"><a href="twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1500</span>, weight <span class="op">=</span> <span class="fl">0.5</span>,</span></span>
+<span class="r-in"><span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"norm"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">2</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                                        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">6</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mixt2</span>, add.plot <span class="op">=</span> <span class="cn">TRUE</span>, xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">30</span><span class="op">)</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0.15</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span></span></span>
+<span class="r-plt img"><img src="IBM_estimVarCov_gaussVect-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="va">data2</span> <span class="op">&lt;-</span> <span class="fu"><a href="getmixtData.html">getmixtData</a></span><span class="op">(</span><span class="va">mixt2</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Define the admixture models:</span></span></span>
+<span class="r-in"><span><span class="va">admixMod1</span> <span class="op">&lt;-</span> <span class="fu"><a href="admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt1</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>                         knownComp_param <span class="op">=</span> <span class="va">mixt1</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">admixMod2</span> <span class="op">&lt;-</span> <span class="fu"><a href="admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt2</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>                         knownComp_param <span class="op">=</span> <span class="va">mixt2</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Estimate the mixture weights of the two admixture models (provide only hat(theta)_n):</span></span></span>
+<span class="r-in"><span><span class="va">est</span> <span class="op">&lt;-</span> <span class="fu"><a href="estim_IBM.html">estim_IBM</a></span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>,<span class="va">data2</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                 admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>,<span class="va">admixMod2</span><span class="op">)</span>, n.integ <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">IBM_estimVarCov_gaussVect</span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">data1</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">data2</span><span class="op">)</span>, IBMestim.obj <span class="op">=</span> <span class="va">est</span>,</span></span>
+<span class="r-in"><span>                          samples<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>,<span class="va">data2</span><span class="op">)</span>, admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>,<span class="va">admixMod2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>             [,1]        [,2]      [,3]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1,]  0.23805067 -0.08920454 0.3249304</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [2,] -0.08920454  0.83359042 0.9699464</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [3,] -0.40442562  2.27149519 2.5231662</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
