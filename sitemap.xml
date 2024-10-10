@@ -1,177 +1,40 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>/articles/admixture-clustering.html</loc>
-  </url>
-  <url>
-    <loc>/articles/admixture-weight-estimation.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/test-hypothesis.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/BVdk_ML_varCov_estimators.html</loc>
-  </url>
-  <url>
-    <loc>/reference/BVdk_contrast.html</loc>
-  </url>
-  <url>
-    <loc>/reference/BVdk_contrast_gradient.html</loc>
-  </url>
-  <url>
-    <loc>/reference/BVdk_estimParam.html</loc>
-  </url>
-  <url>
-    <loc>/reference/BVdk_varCov_estimators.html</loc>
-  </url>
-  <url>
-    <loc>/reference/IBM_2samples_test.html</loc>
-  </url>
-  <url>
-    <loc>/reference/IBM_empirical_contrast.html</loc>
-  </url>
-  <url>
-    <loc>/reference/IBM_estimProp.html</loc>
-  </url>
-  <url>
-    <loc>/reference/IBM_estimVarCov_gaussVect.html</loc>
-  </url>
-  <url>
-    <loc>/reference/IBM_gap.html</loc>
-  </url>
-  <url>
-    <loc>/reference/IBM_greenLight_criterion.html</loc>
-  </url>
-  <url>
-    <loc>/reference/IBM_hessian_contrast.html</loc>
-  </url>
-  <url>
-    <loc>/reference/IBM_k_samples_test.html</loc>
-  </url>
-  <url>
-    <loc>/reference/IBM_tabul_stochasticInteg.html</loc>
-  </url>
-  <url>
-    <loc>/reference/IBM_theoretical_contrast.html</loc>
-  </url>
-  <url>
-    <loc>/reference/IBM_theoretical_gap.html</loc>
-  </url>
-  <url>
-    <loc>/reference/PatraSen_cv_mixmodel.html</loc>
-  </url>
-  <url>
-    <loc>/reference/PatraSen_density_est.html</loc>
-  </url>
-  <url>
-    <loc>/reference/PatraSen_dist_calc.html</loc>
-  </url>
-  <url>
-    <loc>/reference/PatraSen_est_mix_model.html</loc>
-  </url>
-  <url>
-    <loc>/reference/admix-package.html</loc>
-  </url>
-  <url>
-    <loc>/reference/admix_clustering.html</loc>
-  </url>
-  <url>
-    <loc>/reference/admix_estim.html</loc>
-  </url>
-  <url>
-    <loc>/reference/admix_test.html</loc>
-  </url>
-  <url>
-    <loc>/reference/allGalaxies.html</loc>
-  </url>
-  <url>
-    <loc>/reference/decontaminated_cdf.html</loc>
-  </url>
-  <url>
-    <loc>/reference/decontaminated_density.html</loc>
-  </url>
-  <url>
-    <loc>/reference/detect_support_type.html</loc>
-  </url>
-  <url>
-    <loc>/reference/estimVarCov_empProcess.html</loc>
-  </url>
-  <url>
-    <loc>/reference/gaussianity_test.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/is_equal_knownComp.html</loc>
-  </url>
-  <url>
-    <loc>/reference/kernel_cdf.html</loc>
-  </url>
-  <url>
-    <loc>/reference/kernel_density.html</loc>
-  </url>
-  <url>
-    <loc>/reference/knownComp_to_uniform.html</loc>
-  </url>
-  <url>
-    <loc>/reference/milkyWay.html</loc>
-  </url>
-  <url>
-    <loc>/reference/mortality_sample.html</loc>
-  </url>
-  <url>
-    <loc>/reference/orthoBasis_coef.html</loc>
-  </url>
-  <url>
-    <loc>/reference/orthoBasis_test_H0.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot.decontaminated_density.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot_mixt_density.html</loc>
-  </url>
-  <url>
-    <loc>/reference/poly_orthonormal_basis.html</loc>
-  </url>
-  <url>
-    <loc>/reference/print.admix_cluster.html</loc>
-  </url>
-  <url>
-    <loc>/reference/print.admix_estim.html</loc>
-  </url>
-  <url>
-    <loc>/reference/print.admix_test.html</loc>
-  </url>
-  <url>
-    <loc>/reference/rsimmix.html</loc>
-  </url>
-  <url>
-    <loc>/reference/rsimmix_mix.html</loc>
-  </url>
-  <url>
-    <loc>/reference/sim_gaussianProcess.html</loc>
-  </url>
-  <url>
-    <loc>/reference/stmf_small.html</loc>
-  </url>
-  <url>
-    <loc>/reference/two_samples_test.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/LICENSE.html</loc></url>
+<url><loc>/articles/admixture-clustering.html</loc></url>
+<url><loc>/articles/admixture-weight-estimation.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/articles/test-hypothesis.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/reference/BVdk_estimParam.html</loc></url>
+<url><loc>/reference/BVdk_varCov_estimators.html</loc></url>
+<url><loc>/reference/IBM_2samples_test.html</loc></url>
+<url><loc>/reference/IBM_estimProp.html</loc></url>
+<url><loc>/reference/IBM_estimVarCov_gaussVect.html</loc></url>
+<url><loc>/reference/IBM_k_samples_test.html</loc></url>
+<url><loc>/reference/PatraSen_est_mix_model.html</loc></url>
+<url><loc>/reference/admix-package.html</loc></url>
+<url><loc>/reference/admix_clustering.html</loc></url>
+<url><loc>/reference/admix_estim.html</loc></url>
+<url><loc>/reference/admix_test.html</loc></url>
+<url><loc>/reference/allGalaxies.html</loc></url>
+<url><loc>/reference/decontaminated_density.html</loc></url>
+<url><loc>/reference/gaussianity_test.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/milkyWay.html</loc></url>
+<url><loc>/reference/mortality_sample.html</loc></url>
+<url><loc>/reference/orthoBasis_test_H0.html</loc></url>
+<url><loc>/reference/plot.2comp_mixt.html</loc></url>
+<url><loc>/reference/plot.PS_dist_fun.html</loc></url>
+<url><loc>/reference/plot.decontaminated_density.html</loc></url>
+<url><loc>/reference/print.PS_dist_fun.html</loc></url>
+<url><loc>/reference/print.admix_estim.html</loc></url>
+<url><loc>/reference/print.admix_model.html</loc></url>
+<url><loc>/reference/print.admix_test.html</loc></url>
+<url><loc>/reference/rsimmix.html</loc></url>
+<url><loc>/reference/rsimmix_mix.html</loc></url>
+<url><loc>/reference/stmf_small.html</loc></url>
+<url><loc>/reference/summary.admix_cluster.html</loc></url>
 </urlset>
+
