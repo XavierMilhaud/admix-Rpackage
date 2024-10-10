@@ -5,34 +5,23 @@
 \title{Estimate the unknown parameters of the admixture model(s)}
 \usage{
 admix_estim(
-  samples = NULL,
-  sym.f = FALSE,
-  est.method = c("PS", "BVdk", "IBM"),
-  comp.dist = NULL,
-  comp.param = NULL
+  samples,
+  admixMod,
+  est.method = c("BVdk", "PS", "IBM"),
+  sym.f = FALSE
 )
 }
 \arguments{
-\item{samples}{A list of the K samples to be studied, all following admixture distributions.}
+\item{samples}{(list) A list of the K (K>0) samples to be studied, all following admixture distributions.}
 
-\item{sym.f}{A boolean indicating whether the unknown component densities are assumed to be symmetric or not.}
+\item{admixMod}{(list) A list of objects of class 'admix_model', containing useful information about distributions and parameters.}
 
 \item{est.method}{The estimation method to be applied. Can be one of 'BVdk' (Bordes and Vandekerkhove estimator), 'PS' (Patra and Sen
 estimator), or 'IBM' (Inversion Best-Matching approach). The same estimation method is performed on each sample.
 Important note: estimation by 'IBM' is unbiased only under H0, meaning that choosing this method requires to perform
 previously the test hypothesis between the pairs of samples. For further details, see section 'Details' below.}
 
-\item{comp.dist}{A list with 2*K elements corresponding to the component distributions (specified with R native names for these distributions)
-involved in the K admixture models. Elements, grouped by 2, refer to the unknown and known components of each admixture model,
-If there are unknown elements, they must be specified as 'NULL' objects. For instance, 'comp.dist' could be specified
-as follows with K = 3: list(f1 = NULL, g1 = 'norm', f2 = NULL, g2 = 'norm', f3 = NULL, g3 = 'norm').}
-
-\item{comp.param}{A list with 2*K elements corresponding to the parameters of the component distributions, each element being a list
-itself. The names used in this list must correspond to the native R argument names for these distributions.
-Elements, grouped by 2, refer to the parameters of unknown and known components of each admixture model.
-If there are unknown elements, they must be specified as 'NULL' objects. For instance, 'comp.param' could
-be specified as follows (with K = 3):
-list(f1 = NULL, g1 = list(mean=0,sd=1), f2 = NULL, g2 = list(mean=3,sd=1.1), f3 = NULL, g3 = list(mean=-2,sd=0.6)).}
+\item{sym.f}{A boolean indicating whether the unknown component densities are assumed to be symmetric or not.}
 }
 \value{
 A list containing the estimated weight of every unknown component distribution among admixture samples.
@@ -49,23 +38,40 @@ For further details on the different estimation techniques, see references below
 ii) BVdk estimator ; iii) IBM approach.
 }
 \examples{
-##### On a simulated example to see whether the true parameters are well estimated.
-list.comp <- list(f1 = "norm", g1 = "norm",
-                  f2 = "norm", g2 = "norm")
-list.param <- list(f1 = list(mean = 0, sd = 1), g1 = list(mean = 2, sd = 0.7),
-                   f2 = list(mean = 0, sd = 1), g2 = list(mean = -3, sd = 1.1))
-## Simulate data:
-sim1 <- rsimmix(n = 2100, unknownComp_weight = 0.8, comp.dist = list(list.comp$f1,list.comp$g1),
-                comp.param = list(list.param$f1, list.param$g1))$mixt.data
-sim2 <- rsimmix(n= 2000, unknownComp_weight = 0.85, comp.dist = list(list.comp$f2,list.comp$g2),
-                comp.param = list(list.param$f2, list.param$g2))$mixt.data
-## Estimate the mixture weights of the admixture models:
-list.comp <- list(f1 = NULL, g1 = "norm",
-                  f2 = NULL, g2 = "norm")
-list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
-                   f2 = NULL, g2 = list(mean = -3, sd = 1.1))
-estim <- admix_estim(samples = list(sim1,sim2), sym.f = TRUE, est.method = 'IBM',
-                     comp.dist = list.comp, comp.param = list.param)
+## Simulate mixture data:
+mixt1 <- twoComp_mixt(n = 450, weight = 0.4,
+                      comp.dist = list("norm", "norm"),
+                      comp.param = list(list("mean" = -2, "sd" = 0.5),
+                                        list("mean" = 0, "sd" = 1)))
+mixt2 <- twoComp_mixt(n = 380, weight = 0.7,
+                      comp.dist = list("norm", "norm"),
+                      comp.param = list(list("mean" = -2, "sd" = 0.5),
+                                        list("mean" = 1, "sd" = 1)))
+mixt3 <- twoComp_mixt(n = 400, weight = 0.8,
+                      comp.dist = list("norm", "exp"),
+                      comp.param = list(list("mean" = 3, "sd" = 1),
+                                        list("rate" = 1)))
+data1 <- getmixtData(mixt1)
+data2 <- getmixtData(mixt2)
+data3 <- getmixtData(mixt3)
+
+## Define the admixture models:
+admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
+                         knownComp_param = mixt1$comp.param[[2]])
+admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
+                         knownComp_param = mixt2$comp.param[[2]])
+admixMod3 <- admix_model(knownComp_dist = mixt3$comp.dist[[2]],
+                         knownComp_param = mixt3$comp.param[[2]])
+
+admix_estim(samples = list(data1,data2,data3),
+            admixMod = list(admixMod1,admixMod2,admixMod3),
+            est.method = 'BVdk', sym.f = TRUE)
+admix_estim(samples = list(data1,data2,data3),
+            admixMod = list(admixMod1,admixMod2,admixMod3),
+            est.method = 'PS')
+admix_estim(samples = list(data1,data2,data3),
+            admixMod = list(admixMod1,admixMod2,admixMod3),
+            est.method = 'IBM')
 
 }
 \references{

@@ -2,45 +2,50 @@ test_that("good estimation of variance-covariance matrix of the gaussian process
   testthat::skip_on_cran()
   library(foreach)
   library(doParallel)
-  n1 <- 5000
-  n2 <- 4800
+  n1 <- 2000
+  n2 <- 1500
   z <- 2
-  list.comp <- list(f1 = "gamma", g1 = "exp",
-                    f2 = "gamma", g2 = "exp")
-  list.param <- list(f1 = list(shape = 2, scale = 2), g1 = list(rate = 1/3),
-                     f2 = list(shape = 2, scale = 2), g2 = list(rate = 1/5))
   resultats <-
     foreach::foreach (k = 1:10, .inorder = TRUE, .errorhandling = "remove") %do% {
-      X.sim <- rsimmix(n=n1, unknownComp_weight=0.4, comp.dist = list(list.comp$f1,list.comp$g1),
-                       comp.param = list(list.param$f1, list.param$g1))$mixt.data
-      Y.sim <- rsimmix(n=n2, unknownComp_weight=0.6, comp.dist = list(list.comp$f2,list.comp$g2),
-                       comp.param = list(list.param$f2, list.param$g2))$mixt.data
-      estim <- IBM_estimProp(sample1 = X.sim, sample2 = Y.sim, known.prop = c(0.4,0.6),
-                             comp.dist = list.comp, comp.param = list.param,
-                             with.correction = FALSE, n.integ = 1000)
-      D_z <- IBM_gap(z = z, par = estim[["prop.estim"]], fixed.p1 = NULL, sample1 = X.sim,
-                     sample2 = Y.sim, comp.dist = list.comp, comp.param = list.param)
-      D_z.theo <- IBM_theoretical_gap(z = z, par = estim[["theo.prop.estim"]], known.p = c(0.4,0.6),
-                                      comp.dist = list.comp, comp.param = list.param)
-      list(estim[["prop.estim"]], estim[["theo.prop.estim"]], D_z, D_z.theo)
+      ## Simulate mixture data:
+      X.sim <- twoComp_mixt(n = n1, weight = 0.2,
+                            comp.dist = list("norm", "norm"),
+                            comp.param = list(list("mean" = 2, "sd" = 3),
+                                              list("mean" = -2, "sd" = 1)))
+      data1 <- getmixtData(X.sim)
+      Y.sim <- twoComp_mixt(n = n2, weight = 0.5,
+                            comp.dist = list("norm", "norm"),
+                            comp.param = list(list("mean" = 2, "sd" = 3),
+                                              list("mean" = 6, "sd" = 1)))
+      data2 <- getmixtData(Y.sim)
+      admixMod1 <- admix_model(knownComp_dist = X.sim$comp.dist[[2]],
+                               knownComp_param = X.sim$comp.param[[2]])
+      admixMod2 <- admix_model(knownComp_dist = Y.sim$comp.dist[[2]],
+                               knownComp_param = Y.sim$comp.param[[2]])
+      estim <- estim_IBM(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2))
+      D_z <- IBM_gap(z = z, par = estim$prop.estim, samples = list(data1,data2), admixMod = list(admixMod1,admixMod2))
+      D_z.theo <- IBM_theoretical_gap(z = z, par = c(0.4,0.6), known.p = c(0.4,0.6), mixtMod = list(X.sim,Y.sim))
+      list(estim$prop.estim, c(0.4,0.6), D_z, D_z.theo)
     }
   vect.p1 <- sapply(resultats, "[[", 1)[1, ] ; vect.p1.theo <- sapply(resultats, "[[", 2)[1, ]
   vect.p2 <- sapply(resultats, "[[", 1)[2, ] ; vect.p2.theo <- sapply(resultats, "[[", 2)[2, ]
   vect.D_z <- sapply(resultats, "[[", 3) ; vect.D_z.theo <- sapply(resultats, "[[", 4)
   empirical_var_gaussVectcomponents <- round(c(var(sqrt(min(n1,n2)) * (vect.p1 - vect.p1.theo)),
                                                var(sqrt(min(n1,n2)) * (vect.p2 - vect.p2.theo)),
-                                               var(sqrt(min(n1,n2)) * (vect.D_z - vect.D_z.theo))))
+                                               var(sqrt(min(n1,n2)) * (vect.D_z - vect.D_z.theo))), 1)
   ## Then validate theoretical results by comparing them to empirical experience:
-  X.sim <- rsimmix(n=n1, unknownComp_weight=0.4, comp.dist = list(list.comp$f1,list.comp$g1),
-                   comp.param = list(list.param$f1, list.param$g1))$mixt.data
-  Y.sim <- rsimmix(n=n2, unknownComp_weight=0.6, comp.dist = list(list.comp$f2,list.comp$g2),
-                   comp.param = list(list.param$f2, list.param$g2))$mixt.data
-  estim <- IBM_estimProp(sample1 = X.sim, sample2 = Y.sim, known.prop = c(0.4,0.6),
-                         comp.dist = list.comp, comp.param = list.param,
-                         with.correction = FALSE, n.integ = 1000)
-#  varCov_estim <- IBM_estimVarCov_gaussVect(x = z, y = z, estim.obj = estim,
-#                                            fixed.p1 = estim[["p.X.fixed"]], known.p = c(0.4,0.6),
-#                                            sample1 = X.sim, sample2 = Y.sim, min_size = NULL,
-#                                            comp.dist = list.comp, comp.param = list.param)
+  X.sim <- twoComp_mixt(n=n1, weight=0.4, comp.dist = list("gamma","exp"),
+                        comp.param = list(list("shape" = 2, "scale" = 2), list("rate" = 1/3)))
+  data1 <- getmixtData(X.sim)
+  Y.sim <- twoComp_mixt(n=n2, weight=0.6, comp.dist = list("gamma","exp"),
+                        comp.param = list(list("shape" = 2, "scale" = 2), list("rate" = 1/5)))
+  data2 <- getmixtData(Y.sim)
+  admixMod1 <- admix_model(knownComp_dist = X.sim$comp.dist[[2]],
+                           knownComp_param = X.sim$comp.param[[2]])
+  admixMod2 <- admix_model(knownComp_dist = Y.sim$comp.dist[[2]],
+                           knownComp_param = Y.sim$comp.param[[2]])
+  estim <- estim_IBM(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2))
+  #varCov_estim <- IBM_estimVarCov_gaussVect(x = z, y = z, IBMestim.obj = estim,
+  #                                          samples = list(data1,data2), admixMod = list(admixMod1,admixMod2))
   expect_equal(0, 0)
 })

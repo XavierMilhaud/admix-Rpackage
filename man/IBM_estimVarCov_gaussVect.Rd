@@ -4,50 +4,18 @@
 \alias{IBM_estimVarCov_gaussVect}
 \title{Estimates the covariance matrix of the gaussian vector (IBM)}
 \usage{
-IBM_estimVarCov_gaussVect(
-  x,
-  y,
-  estim.obj,
-  fixed.p1 = NULL,
-  known.p = NULL,
-  sample1,
-  sample2,
-  min_size = NULL,
-  comp.dist = NULL,
-  comp.param = NULL
-)
+IBM_estimVarCov_gaussVect(x, y, IBMestim.obj, samples, admixMod)
 }
 \arguments{
-\item{x}{Time point at which the first (related to the first parameter) underlying empirical process is looked through.}
+\item{x}{Time point at which the 1st (related to the 1st parameter) underlying empirical process is looked through.}
 
-\item{y}{Time point at which the second (related to the second parameter) underlying empirical process is looked through.}
+\item{y}{Time point at which the 2nd (related to the 2nd parameter) underlying empirical process is looked through.}
 
-\item{estim.obj}{Object obtained from the estimation of the component weights related to the proportions of the
-unknown component in each of the two admixture models.}
+\item{IBMestim.obj}{An object of class 'estim_IBM'.}
 
-\item{fixed.p1}{Arbitrary value chosen by the user for the component weight related to the unknown component of the first
-admixture model. Only useful for optimization when the known components of the two models are identical
-(G1=G2, leading to unidimensional optimization).}
+\item{samples}{(List) List of the two considered samples.}
 
-\item{known.p}{(optional, NULL by default) Numeric vector with two elements, the known (true) mixture weights.}
-
-\item{sample1}{Observations of the first sample under study.}
-
-\item{sample2}{Observations of the second sample under study.}
-
-\item{min_size}{(optional, NULL by default) in the k-sample case, useful to provide the minimal size among all samples
-(needed to take into account the correction factor in variance-covariance assessment). Otherwise, useless.}
-
-\item{comp.dist}{A list with four elements corresponding to the component distributions (specified with R native names for these distributions)
-involved in the two admixture models. The two first elements refer to the unknown and known components of the 1st admixture model,
-and the last two ones to those of the second admixture model. If there are unknown elements, they must be specified as 'NULL' objects.
-For instance, 'comp.dist' could be specified as follows: list(f1=NULL, g1='norm', f2=NULL, g2='norm').}
-
-\item{comp.param}{A list with four elements corresponding to the parameters of the component distributions, each element being a list
-itself. The names used in this list must correspond to the native R argument names for these distributions.
-The two first elements refer to the parameters of unknown and known components of the 1st admixture model, and the last
-two ones to those of the second admixture model. If there are unknown elements, they must be specified as 'NULL' objects.
-For instance, 'comp.param' could be specified as follows: : list(f1=NULL, g1=list(mean=0,sd=1), f2=NULL, g2=list(mean=3,sd=1.1)).}
+\item{admixMod}{(List) List of objects of class 'admix_model', one for each sample.}
 }
 \value{
 The estimated variance-covariance matrix of the gaussian vector Z = (hat(p1),(hat(p2),Dn(z)), at location '(x,y)'.
@@ -61,28 +29,32 @@ Further information for the IBM approach are given in 'Details' below.
 }
 \examples{
 \donttest{
-######## Analysis by simulated data:
-## Simulate Gamma - Exponential admixtures :
-list.comp <- list(f1 = "gamma", g1 = "exp",
-                  f2 = "gamma", g2 = "exp")
-list.param <- list(f1 = list(shape = 2, scale = 3), g1 = list(rate = 1/3),
-                   f2 = list(shape = 2, scale = 3), g2 = list(rate = 1/5))
-X.sim <- rsimmix(n=400, unknownComp_weight=0.8, comp.dist = list(list.comp$f1,list.comp$g1),
-                 comp.param = list(list.param$f1, list.param$g1))$mixt.data
-Y.sim <- rsimmix(n=350, unknownComp_weight=0.9, comp.dist = list(list.comp$f2,list.comp$g2),
-                 comp.param = list(list.param$f2, list.param$g2))$mixt.data
-## Real-life setting:
-list.comp <- list(f1 = NULL, g1 = "exp",
-                  f2 = NULL, g2 = "exp")
-list.param <- list(f1 = NULL, g1 = list(rate = 1/3),
-                   f2 = NULL, g2 = list(rate = 1/5))
-## Estimate the unknown component weights in the two admixture models:
-estim <- IBM_estimProp(sample1 =X.sim, sample2 =Y.sim, known.prop = NULL, comp.dist = list.comp,
-                       comp.param = list.param, with.correction = FALSE, n.integ = 1000)
-IBM_estimVarCov_gaussVect(x = mean(X.sim), y = mean(Y.sim), estim.obj = estim,
-                          fixed.p1 = estim[["p.X.fixed"]], known.p = NULL, sample1=X.sim,
-                          sample2 = Y.sim, min_size = NULL,
-                          comp.dist = list.comp, comp.param = list.param)
+## Simulate mixture data:
+mixt1 <- twoComp_mixt(n = 2000, weight = 0.2,
+                      comp.dist = list("norm", "norm"),
+                      comp.param = list(list("mean" = 2, "sd" = 3),
+                                        list("mean" = -2, "sd" = 1)))
+plot(mixt1, xlim = c(0,30), ylim = c(0,0.15))
+data1 <- getmixtData(mixt1)
+mixt2 <- twoComp_mixt(n = 1500, weight = 0.5,
+                      comp.dist = list("norm", "norm"),
+                      comp.param = list(list("mean" = 2, "sd" = 3),
+                                        list("mean" = 6, "sd" = 1)))
+plot(mixt2, add.plot = TRUE, xlim = c(0,30), ylim = c(0,0.15), col = "blue")
+data2 <- getmixtData(mixt2)
+
+## Define the admixture models:
+admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
+                         knownComp_param = mixt1$comp.param[[2]])
+admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
+                         knownComp_param = mixt2$comp.param[[2]])
+
+## Estimate the mixture weights of the two admixture models (provide only hat(theta)_n):
+est <- estim_IBM(samples = list(data1,data2),
+                 admixMod = list(admixMod1,admixMod2), n.integ = 1000)
+
+IBM_estimVarCov_gaussVect(x = mean(data1), y = mean(data2), IBMestim.obj = est,
+                          samples=list(data1,data2), admixMod = list(admixMod1,admixMod2))
 }
 
 }

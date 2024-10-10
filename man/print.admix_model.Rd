@@ -11,21 +11,10 @@
 
 \item{...}{A list of additional parameters belonging to the default method.}
 }
-\value{
-A list containing the decision of the test (reject or not), the confidence level at which the test is performed,
-the p-value of the test, and the value of the test statistic (following a chi2 distribution with one degree of freedom
-under the null).
-}
 \description{
 Print an object of class 'admix_mod'. An admixture model has probability density function (pdf) l_i such that:
 l_i = p_i * f_i + (1-p_i) * g_i, with g_i the known component density.
 The unknown quantities p_i and f_i are thus listed.
-}
-\examples{
-##### On a simulated example, with 1 sample (gaussianity test):
-model <- admix_model()
-print(model)
-
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

@@ -31,103 +31,107 @@ In this setting, if no parametric assumption is made on the unknown component di
 
 The mixture weight $p$ of the unknown component distribution can be estimated using diverse techniques depending on the assumptions made on the unknown cdf $F$, among which the ones discussed in the sequel:
 
-  * the estimator provided by Bordes and Vandekerkhove, see [@BV10];
-  * the estimator provided by Patra and Sen, [@Patra];
-  * the estimator provided by Inversion - Best Matching method, [@MilhaudIBM21].
+  * the estimator provided by Bordes and Vandekerkhove, see [@BordesVandekerkhove2010];
+  * the estimator provided by Patra and Sen, [@PatraSen2016];
+  * the estimator provided by Inversion - Best Matching method, [@MilhaudPommeretSalhiVandekerkhove2024a].
   
 All the estimation methods presented hereafter can be performed using one single generic function for estimation with appropriate arguments, the so-called $admix_estim$ function.
   
 ## The one-sample case
 
-Many works studied the estimation of the unknown proportion in two-component admixture models. Among them, seminal papers are [@BDV06] and [@BMM06]. These papers are closely connected to the paper by [@BV10], where an asymptotic normal estimator is provided for the unknown component weight.
+Many works studied the estimation of the unknown proportion in two-component admixture models. Among them, seminal papers are [@BordesDelmasVandekerkhove2006] and [@BMM06]. These papers are closely connected to the paper by [@BordesVandekerkhove2010], where an asymptotic normal estimator is provided for the unknown component weight.
 
 ### Case of symmetric unknown density
-In this case, we use the Bordes and Vandekerkhove estimator, see [@BV10].
+In this case, we use the Bordes and Vandekerkhove estimator, see [@BordesVandekerkhove2010].
 
 ```{r}
-## Simulate data:
-list.comp <- list(f = 'norm', g = 'norm')
-list.param <- list(f = list(mean = 3, sd = 0.5), g = list(mean = 0, sd = 1))
-data1 <- rsimmix(n = 800, unknownComp_weight = 0.7, list.comp, list.param)[['mixt.data']]
-## Perform the estimation of parameters in real-life:
-list.comp <- list(f = NULL, g = 'norm')
-list.param <- list(f = NULL, g = list(mean = 0, sd = 1))
-BVdk_estimParam(data1, method = 'L-BFGS-B', list.comp, list.param)
+## Simulate mixture data:
+mixt1 <- twoComp_mixt(n = 800, weight = 0.7,
+                      comp.dist = list("norm", "norm"),
+                      comp.param = list(c("mean" = 3, "sd" = 0.5),
+                                        c("mean" = 0, "sd" = 1)))
+data1 <- getmixtData(mixt1)
+## Define the admixture model:
+admixMod <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
+                        knownComp_param = mixt1$comp.param[[2]])
+admix_estim(samples = list(data1), admixMod = list(admixMod),
+            est.method = 'BVdk', sym.f = TRUE)
 ```
-Here we look at the first listed parameter, which corresponds to the estimate of the unknown component weight.
 
 
 ### Other cases
-In this case, we use the Patra and Sen estimator, see [@Patra].
+In this case, we use the Patra and Sen estimator, see [@PatraSen2016].
 
 ```{r}
-## Simulate data:
-list.comp <- list(f = 'norm', g = 'norm')
-list.param <- list(f = list(mean = 3, sd = 0.5), g = list(mean = 0, sd = 1))
-data1 <- rsimmix(n = 1000, unknownComp_weight = 0.6, list.comp, list.param)[['mixt.data']]
-## Transform the known component of the admixture model into a Uniform(O,1) distribution:
-list.comp <- list(f = NULL, g = 'norm')
-list.param <- list(f = NULL, g = list(mean = 0, sd = 1))
-data1_transfo <- knownComp_to_uniform(data = data1, comp.dist=list.comp, comp.param=list.param)
-PatraSen_est_mix_model(data = data1_transfo, method = 'fixed',
-                        c.n = 0.1*log(log(length(data1_transfo))), gridsize = 1000)$alp.hat
+admix_estim(samples = list(data1), admixMod = list(admixMod),
+            est.method = 'PS')
 ```
+In this case, the only estimated parameter is the mixing proportion related to the unknown component distribution.
 
 
 ## The two-sample case
 
-In the two-sample setting, the idea is to use the Inversion - Best Matching (IBM) approach. The IBM method sensures asymptotically normal estimators of the unknown quantities, which will be very useful in a testing perspective. However, it is important to note that such estimators are mostly biased when $F_1 \neq F_2$, and general one-sample estimation strategies such as [@Patra] or [@BV10] may be preferred to estimate the unknown component proportion in general settings (despite that this is much more time-consuming). In the latter case, one performs twice the estimation method, on each of the two samples under study.
+In the two-sample setting, the idea is to use the Inversion - Best Matching (IBM) approach. The IBM method ensures asymptotically normal estimators of the unknown quantities, which will be very useful in a testing perspective. However, it is important to note that such estimators are mostly biased when $F_1 \neq F_2$, and general one-sample estimation strategies such as [@PatraSen2016] or [@BordesVandekerkhove2010] may be preferred to estimate the unknown component proportion in general settings (despite that this is much more time-consuming). In the latter case, one performs twice the estimation method, on each of the two samples under study.
 
 ### Under the null hypothesis $H_0: F_1 = F_2$
 
-When we are under the null, @MilhaudIBM21 show that the estimatorsis consistent towards the true parameter values.
+When we are under the null, @MilhaudPommeretSalhiVandekerkhove2024a show that the estimators is consistent towards the true parameter values.
 ```{r}
-## Simulate data:
-list.comp <- list(f1 = 'norm', g1 = 'norm',
-                  f2 = 'norm', g2 = 'norm')
-list.param <- list(f1 = list(mean = 3, sd = 0.5), g1 = list(mean = 0, sd = 1),
-                   f2 = list(mean = 3, sd = 0.5), g2 = list(mean = 5, sd = 2))
-sample1 <- rsimmix(n=1700, unknownComp_weight=0.5, comp.dist = list(list.comp$f1,list.comp$g1),
-                                                   comp.param=list(list.param$f1,list.param$g1))
-sample2 <- rsimmix(n=1500, unknownComp_weight=0.7, comp.dist = list(list.comp$f2,list.comp$g2),
-                                                   comp.param=list(list.param$f2,list.param$g2))
-##### On a real-life example (unknown component densities, unknown mixture weights).
-list.comp <- list(f1 = NULL, g1 = 'norm',
-                  f2 = NULL, g2 = 'norm')
-list.param <- list(f1 = NULL, g1 = list(mean = 0, sd = 1),
-                   f2 = NULL, g2 = list(mean = 5, sd = 2))
-## Estimate the mixture weights of the two admixture models (provide only hat(theta)_n):
-estim <- IBM_estimProp(sample1 = sample1[['mixt.data']], sample2 = sample2[['mixt.data']],
-                       known.prop = NULL, comp.dist = list.comp, comp.param = list.param,
-                       with.correction = FALSE, n.integ = 1000)
-estim[['prop.estim']]
+## Simulate mixture data:
+mixt1 <- twoComp_mixt(n = 450, weight = 0.4,
+                      comp.dist = list("norm", "norm"),
+                      comp.param = list(list("mean" = -2, "sd" = 0.5),
+                                        list("mean" = 0, "sd" = 1)))
+mixt2 <- twoComp_mixt(n = 380, weight = 0.7,
+                      comp.dist = list("norm", "norm"),
+                      comp.param = list(list("mean" = -2, "sd" = 0.5),
+                                        list("mean" = 1, "sd" = 1)))
+data1 <- getmixtData(mixt1)
+data2 <- getmixtData(mixt2)
+## Define the admixture models:
+admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
+                         knownComp_param = mixt1$comp.param[[2]])
+admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
+                         knownComp_param = mixt2$comp.param[[2]])
+admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, admixMod2),
+            est.method = 'IBM')
 ```
+
 Indeed, the two unknown proportions were consistently estimated.
 
 
 ### Under the alternative hypothesis $H_1: F_1 \neq F_2$
 
 Estimators are consistent under $H_1$, although they can be (strongly) biased as compared to their true values.
+
 ```{r}
-## Simulate data:
-list.comp <- list(f1 = 'norm', g1 = 'norm',
-                  f2 = 'norm', g2 = 'norm')
-list.param <- list(f1 = list(mean = 1, sd = 0.5), g1 = list(mean = 0, sd = 1),
-                   f2 = list(mean = 3, sd = 0.5), g2 = list(mean = 5, sd = 2))
-sample1 <- rsimmix(n=1700, unknownComp_weight=0.5, comp.dist = list(list.comp$f1,list.comp$g1),
-                                                   comp.param=list(list.param$f1,list.param$g1))
-sample2 <- rsimmix(n=1500, unknownComp_weight=0.7, comp.dist = list(list.comp$f2,list.comp$g2),
-                                                   comp.param=list(list.param$f2,list.param$g2))
-##### On a real-life example (unknown component densities, unknown mixture weights).
-list.comp <- list(f1 = NULL, g1 = 'norm',
-                  f2 = NULL, g2 = 'norm')
-list.param <- list(f1 = NULL, g1 = list(mean = 0, sd = 1),
-                   f2 = NULL, g2 = list(mean = 5, sd = 2))
+## Simulate mixture data:
+mixt1 <- twoComp_mixt(n = 1700, weight = 0.5,
+                      comp.dist = list("norm", "norm"),
+                      comp.param = list(list("mean" = 1, "sd" = 0.5),
+                                        list("mean" = 0, "sd" = 1)))
+mixt2 <- twoComp_mixt(n = 1500, weight = 0.7,
+                      comp.dist = list("norm", "norm"),
+                      comp.param = list(list("mean" = 3, "sd" = 0.5),
+                                        list("mean" = 5, "sd" = 2)))
+data1 <- getmixtData(mixt1)
+data2 <- getmixtData(mixt2)
+## Define the admixture models:
+admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
+                         knownComp_param = mixt1$comp.param[[2]])
+admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
+                         knownComp_param = mixt2$comp.param[[2]])
 ## Estimate the mixture weights of the two admixture models (provide only hat(theta)_n):
-estim <- IBM_estimProp(sample1 = sample1[['mixt.data']], sample2 = sample2[['mixt.data']],
-                       known.prop = NULL, comp.dist = list.comp, comp.param = list.param,
-                       with.correction = FALSE, n.integ = 1000)
-estim[['prop.estim']]
+admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, admixMod2),
+            est.method = 'IBM')
+```
+
+
+In such a framework, it is thus better to use the estimator by [@PatraSen2016], which remains unbiased in full generality:
+
+```{r}
+admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, admixMod2),
+            est.method = 'PS')
 ```
 
 
@@ -139,29 +143,33 @@ once $p$ has been consistenly estimated.
 
 This is what is commonly called the decontaminated density of the unknown component. In the following, we propose to compare the two decontaminated densities obtained once the unknown quantities have been consistently estimated by the IBM approach. Note that we are under the null ($F_1=F_2$), and thus that the decontaminated densities should look similar.
 ```{r}
-## Simulate data:
-list.comp <- list(f1 = 'norm', g1 = 'norm',
-                  f2 = 'norm', g2 = 'norm')
-list.param <- list(f1 = list(mean = 3, sd = 0.5), g1 = list(mean = 0, sd = 1),
-                   f2 = list(mean = 3, sd = 0.5), g2 = list(mean = 5, sd = 2))
-sample1 <- rsimmix(n=1700, unknownComp_weight=0.5, comp.dist = list(list.comp$f1,list.comp$g1),
-                   comp.param=list(list.param$f1,list.param$g1))
-sample2 <- rsimmix(n=1500, unknownComp_weight=0.7, comp.dist = list(list.comp$f2,list.comp$g2),
-                   comp.param=list(list.param$f2,list.param$g2))
-## Estimate the mixture weight in each of the sample in real-life setting:
-list.comp <- list(f1 = NULL, g1 = 'norm',
-                  f2 = NULL, g2 = 'norm')
-list.param <- list(f1 = NULL, g1 = list(mean = 0, sd = 1),
-                   f2 = NULL, g2 = list(mean = 5, sd = 2))
-estimate <- IBM_estimProp(sample1[['mixt.data']], sample2[['mixt.data']], comp.dist = list.comp,
-                          comp.param = list.param, with.correction = FALSE, n.integ = 1000)
+## Simulate mixture data:
+mixt1 <- twoComp_mixt(n = 1300, weight = 0.4,
+                      comp.dist = list("norm", "norm"),
+                      comp.param = list(list("mean" = 3, "sd" = 0.5),
+                                        list("mean" = 0, "sd" = 1)))
+mixt2 <- twoComp_mixt(n = 1000, weight = 0.6,
+                      comp.dist = list("norm", "norm"),
+                      comp.param = list(list("mean" = 3, "sd" = 0.5),
+                                        list("mean" = 5, "sd" = 2)))
+data1 <- getmixtData(mixt1)
+data2 <- getmixtData(mixt2)
+## Define the admixture models:
+admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
+                         knownComp_param = mixt1$comp.param[[2]])
+admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
+                         knownComp_param = mixt2$comp.param[[2]])
+## Estimation:
+est <- admix_estim(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
+                   est.method = 'PS')
 ## Determine the decontaminated version of the unknown density by inversion:
-res1 <- decontaminated_density(sample1 = sample1[['mixt.data']], comp.dist = list.comp[1:2], 
-                               comp.param = list.param[1:2], estim.p = estimate$prop.estim[1])
-res2 <- decontaminated_density(sample1 = sample2[['mixt.data']], comp.dist = list.comp[3:4], 
-                               comp.param = list.param[3:4], estim.p = estimate$prop.estim[2])
-plot(x = res1, type = "l", x_val = seq(from=-1,to=6,length.out=40), add_plot = FALSE)
-plot(x = res2, type="l", col="red", x_val = seq(from=-1,to=6,length.out=40), add_plot = TRUE)
+res1 <- decontaminated_density(sample1 = data1, estim.p = est$estimated_mixing_weights[1],
+                               admixMod = admixMod1)
+res2 <- decontaminated_density(sample1 = data2, estim.p = est$estimated_mixing_weights[2],
+                               admixMod = admixMod2)
+## Use appropriate sequence of x values:
+plot(x = res1, x_val = seq(from = 0, to = 6, length.out = 100), add_plot = FALSE)
+plot(x = res2, x_val = seq(from = 0, to = 6, length.out = 100), add_plot = TRUE, col = "red")
 ```
 
 # References

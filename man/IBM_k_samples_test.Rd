@@ -5,39 +5,28 @@
 \title{Equality test of K unknown component distributions}
 \usage{
 IBM_k_samples_test(
-  samples = NULL,
+  samples,
+  admixMod,
   sim_U = NULL,
   n_sim_tab = 100,
-  comp.dist = NULL,
-  comp.param = NULL,
-  conf.level = 0.95,
-  tune.penalty = TRUE,
+  conf_level = 0.95,
+  tune_penalty = TRUE,
   parallel = FALSE,
   n_cpu = 2
 )
 }
 \arguments{
-\item{samples}{A list of the K samples to be studied, all following admixture distributions.}
+\item{samples}{(list) A list of the K samples to be studied, all following admixture distributions.}
+
+\item{admixMod}{(list) A list of objects of class 'admix_model', containing useful information about distributions and parameters.}
 
 \item{sim_U}{(default to NULL) Random draws of the inner convergence part of the contrast as defined in the IBM approach (see 'Details' below).}
 
 \item{n_sim_tab}{Number of simulated gaussian processes when tabulating the inner convergence distribution in the IBM approach.}
 
-\item{comp.dist}{A list with 2*K elements corresponding to the component distributions (specified with R native names for these distributions)
-involved in the K admixture models. Elements, grouped by 2, refer to the unknown and known components of each admixture model,
-If there are unknown elements, they must be specified as 'NULL' objects. For instance, 'comp.dist' could be specified
-as follows with K = 3: list(f1 = NULL, g1 = 'norm', f2 = NULL, g2 = 'norm', f3 = NULL, g3 = 'rnorm').}
+\item{conf_level}{The confidence level of the K-sample test.}
 
-\item{comp.param}{A list with 2*K elements corresponding to the parameters of the component distributions, each element being a list
-itself. The names used in this list must correspond to the native R argument names for these distributions.
-Elements, grouped by 2, refer to the parameters of unknown and known components of each admixture model.
-If there are unknown elements, they must be specified as 'NULL' objects. For instance, 'comp.param' could
-be specified as follows (with K = 3):
-list(f1 = NULL, g1 = list(mean=0,sd=1), f2 = NULL, g2 = list(mean=3,sd=1.1), f3 = NULL, g3 = list(mean=-2,sd=0.6)).}
-
-\item{conf.level}{The confidence level of the K-sample test.}
-
-\item{tune.penalty}{A boolean that allows to choose between a classical penalty term or an optimized penalty embedding some tuning parameters
+\item{tune_penalty}{A boolean that allows to choose between a classical penalty term or an optimized penalty embedding some tuning parameters
 (automatically optimized). Optimized penalty is particularly useful for low sample size.}
 
 \item{parallel}{(default to FALSE) Boolean indicating whether parallel computations are performed.}
@@ -45,11 +34,13 @@ list(f1 = NULL, g1 = list(mean=0,sd=1), f2 = NULL, g2 = list(mean=3,sd=1.1), f3 
 \item{n_cpu}{(default to 2) Number of cores used when parallelizing.}
 }
 \value{
-A list of ten elements, containing: 1) the rejection decision; 2) the test p-value; 3) the terms involved in
-the test statistic; 4) the test statistic value; 5) the selected rank (number of terms involved in the test statistic);
-6) the value of the penalized test statistic; 7) a boolean indicating whether the applied penalty rule is that under
-the null H0; 8) the sorted contrast values; 9) the 95th-quantile of the contrast distribution; 10) the final terms of
-the statistic; and 11) the contrast matrix.
+A list of 13 elements, containing: 1) the rejection decision; 2) the confidence level of the test (1-alpha, where alpha
+refers to the first-type error); 3) the test p-value; 4) the 95th-quantile of the contrast distribution; 5) the test
+statistic value; 6) the selected rank (number of terms involved in the test statistic); 7) the terms involved in
+the test statistic; 8) A boolean indicating whether the penalization corresponds to the null hypothesis has been considered;
+9) the value of the penalized (potential) test statistics; 10) the selected optimal 'gamma'; 11) the selected optimal constant
+'constant' involved in the penalization process; 12) the tabulated distribution of the contrast; 13) the matrix of
+pairwise contrasts (distance between two samples).
 }
 \description{
 Equality test of the unknown component distributions coming from K (K > 1) admixture models, based on the Inversion - Best
@@ -61,54 +52,64 @@ H0 : f_1 = ... = f_K  against  H1 : f_i differs from f_j (i different from j, an
 \examples{
 \donttest{
 ####### Under the null hypothesis H0 (with K=3 populations):
-## Specify the parameters of the mixture models for simulation:
-list.comp <- list(f1 = "norm", g1 = "norm",
-                  f2 = "norm", g2 = "norm",
-                  f3 = "norm", g3 = "norm")
-list.param <- list(f1 = list(mean = 0, sd = 1), g1 = list(mean = 2, sd = 0.7),
-                   f2 = list(mean = 0, sd = 1), g2 = list(mean = 4, sd = 1.1),
-                   f3 = list(mean = 0, sd = 1), g3 = list(mean = -3, sd = 0.8))
-## Simulate the data:
-sim1 <- rsimmix(n = 1000, unknownComp_weight = 0.8, comp.dist = list(list.comp$f1,list.comp$g1),
-                comp.param = list(list.param$f1, list.param$g1))$mixt.data
-sim2 <- rsimmix(n= 1300, unknownComp_weight = 0.6, comp.dist = list(list.comp$f2,list.comp$g2),
-                comp.param = list(list.param$f2, list.param$g2))$mixt.data
-sim3 <- rsimmix(n = 1100, unknownComp_weight = 0.7, comp.dist = list(list.comp$f3,list.comp$g3),
-                comp.param = list(list.param$f3, list.param$g3))$mixt.data
-## Back to the context of admixture models, where one mixture component is unknown:
-list.comp <- list(f1 = NULL, g1 = "norm",
-                  f2 = NULL, g2 = "norm",
-                  f3 = NULL, g3 = "norm")
-list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
-                   f2 = NULL, g2 = list(mean = 4, sd = 1.1),
-                   f3 = NULL, g3 = list(mean = -3, sd = 0.8))
+## Simulate mixture data:
+mixt1 <- twoComp_mixt(n = 450, weight = 0.4,
+                      comp.dist = list("norm", "norm"),
+                      comp.param = list(list("mean" = -2, "sd" = 0.5),
+                                        list("mean" = 0, "sd" = 1)))
+mixt2 <- twoComp_mixt(n = 380, weight = 0.7,
+                      comp.dist = list("norm", "norm"),
+                      comp.param = list(list("mean" = -2, "sd" = 0.5),
+                                        list("mean" = 1, "sd" = 1)))
+mixt3 <- twoComp_mixt(n = 400, weight = 0.8,
+                      comp.dist = list("norm", "exp"),
+                      comp.param = list(list("mean" = -2, "sd" = 0.5),
+                                        list("rate" = 1)))
+data1 <- getmixtData(mixt1)
+data2 <- getmixtData(mixt2)
+data3 <- getmixtData(mixt3)
+
+## Define the admixture models:
+admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
+                         knownComp_param = mixt1$comp.param[[2]])
+admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
+                         knownComp_param = mixt2$comp.param[[2]])
+admixMod3 <- admix_model(knownComp_dist = mixt3$comp.dist[[2]],
+                         knownComp_param = mixt3$comp.param[[2]])
 ## Perform the 3-samples test:
-IBM_k_samples_test(samples = list(sim1,sim2,sim3), sim_U= NULL, n_sim_tab = 20,
-                   comp.dist = list.comp, comp.param = list.param, conf.level = 0.95,
-                   tune.penalty = FALSE, parallel = FALSE, n_cpu = 2)
+k_test <- IBM_k_samples_test(samples = list(data1, data2, data3),
+                             admixMod = list(admixMod1, admixMod2, admixMod3),
+                             sim_U = NULL, n_sim_tab = 20, conf_level = 0.95,
+                             tune_penalty = FALSE, parallel = FALSE, n_cpu = 2)
 
 ####### Now under the alternative H1:
-list.comp <- list(f1 = "norm", g1 = "norm",
-                  f2 = "norm", g2 = "norm",
-                  f3 = "norm", g3 = "norm")
-list.param <- list(f1 = list(mean = 0, sd = 1), g1 = list(mean = 2, sd = 0.7),
-                   f2 = list(mean = 0, sd = 1), g2 = list(mean = 4, sd = 1.1),
-                   f3 = list(mean = 2, sd = 0.7), g3 = list(mean = 3, sd = 0.8))
-sim1 <- rsimmix(n = 3000, unknownComp_weight = 0.8, comp.dist = list(list.comp$f1,list.comp$g1),
-                comp.param = list(list.param$f1, list.param$g1))$mixt.data
-sim2 <- rsimmix(n= 3300, unknownComp_weight = 0.6, comp.dist = list(list.comp$f2,list.comp$g2),
-                comp.param = list(list.param$f2, list.param$g2))$mixt.data
-sim3 <- rsimmix(n = 3100, unknownComp_weight = 0.7, comp.dist = list(list.comp$f3,list.comp$g3),
-                comp.param = list(list.param$f3, list.param$g3))$mixt.data
-list.comp <- list(f1 = NULL, g1 = "norm",
-                  f2 = NULL, g2 = "norm",
-                  f3 = NULL, g3 = "norm")
-list.param <- list(f1 = NULL, g1 = list(mean = 2, sd = 0.7),
-                   f2 = NULL, g2 = list(mean = 4, sd = 1.1),
-                   f3 = NULL, g3 = list(mean = 3, sd = 0.8))
-IBM_k_samples_test(samples = list(sim1,sim2,sim3), sim_U= NULL, n_sim_tab = 20,
-                   comp.dist = list.comp, comp.param = list.param, conf.level = 0.95,
-                   tune.penalty = FALSE, parallel = FALSE, n_cpu = 2)
+mixt1 <- twoComp_mixt(n = 450, weight = 0.4,
+                      comp.dist = list("norm", "norm"),
+                      comp.param = list(list("mean" = -2, "sd" = 0.5),
+                                        list("mean" = 0, "sd" = 1)))
+mixt2 <- twoComp_mixt(n = 380, weight = 0.7,
+                      comp.dist = list("norm", "norm"),
+                      comp.param = list(list("mean" = -2, "sd" = 0.5),
+                                        list("mean" = 1, "sd" = 1)))
+mixt3 <- twoComp_mixt(n = 400, weight = 0.8,
+                      comp.dist = list("norm", "exp"),
+                      comp.param = list(list("mean" = 3, "sd" = 1),
+                                        list("rate" = 1)))
+data1 <- getmixtData(mixt1)
+data2 <- getmixtData(mixt2)
+data3 <- getmixtData(mixt3)
+
+## Define the admixture models:
+admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
+                         knownComp_param = mixt1$comp.param[[2]])
+admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
+                         knownComp_param = mixt2$comp.param[[2]])
+admixMod3 <- admix_model(knownComp_dist = mixt3$comp.dist[[2]],
+                         knownComp_param = mixt3$comp.param[[2]])
+k_test <- IBM_k_samples_test(samples = list(data1, data2, data3),
+                             admixMod = list(admixMod1, admixMod2, admixMod3),
+                             sim_U = NULL, n_sim_tab = 20, conf_level = 0.95,
+                             tune_penalty = FALSE, parallel = FALSE, n_cpu = 2)
 }
 
 }

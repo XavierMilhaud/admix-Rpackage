@@ -6,62 +6,56 @@
 \usage{
 gaussianity_test(
   sample1,
-  comp.dist,
-  comp.param,
+  admixMod,
+  conf_level = 0.95,
   K = 3,
-  lambda = 0.2,
-  conf.level = 0.95,
+  s = 0.25,
   support = c("Real", "Integer", "Positive", "Bounded.continuous")
 )
 }
 \arguments{
-\item{sample1}{Observed sample with mixture distribution given by l = p*f + (1-p)*g, where f and p are unknown and g is known.}
+\item{sample1}{Sample under study.}
 
-\item{comp.dist}{List with two elements corresponding to the component distributions involved in the admixture model. Unknown
-elements must be specified as 'NULL' objects. For instance if 'f' is unknown: list(f = NULL, g = 'norm').}
+\item{admixMod}{An object of class 'admix_model', containing useful information about distributions and parameters.}
 
-\item{comp.param}{List with two elements corresponding to the parameters of the component distributions, each element being a list
-itself. The names used in this list must correspond to the native R names for distributions.
-Unknown elements must be specified as 'NULL' objects (e.g. if 'f' is unknown: list(f=NULL, g=list(mean=0,sd=1)).}
+\item{conf_level}{The confidence level, default to 95 percent. Equals 1-alpha, where alpha is the level of the test (type-I error).}
 
-\item{K}{Number of coefficients considered for the polynomial basis expansion.}
+\item{K}{(K>0) Number of coefficients considered for the polynomial basis expansion.}
 
-\item{lambda}{Rate at which the normalization factor is set in the penalization rule for model selection (in ]0,1/2[). See 'Details' below.}
+\item{s}{Normalization rate involved in the penalization rule for model selection (in ]0,1/2[). See 'Details' below.}
 
-\item{conf.level}{The confidence level, default to 95 percent. Equals 1-alpha, where alpha is the level of the test (type-I error).}
-
-\item{support}{Support of the densities under consideration, useful to choose the polynomial orthonormal basis. One of 'Real',
+\item{support}{Support of the probability density functions, useful to choose the polynomial orthonormal basis. One of 'Real',
 'Integer', 'Positive', or 'Bounded.continuous'.}
 }
 \value{
-A list of 6 elements, containing: 1) the rejection decision; 2) the p-value of the test; 3) the test statistic; 4) the
-variance-covariance matrix of the test statistic; 5) the selected rank for testing; and 6) a list of the estimates
-(unknown component weight 'p', shift location parameter 'mu' and standard deviation 's' of the symmetric unknown distribution).
+A list of 7 elements, containing: 1) the rejection decision; 2) the confidence level of the test, 3) the p-value of the test;
+4) the value of the test statistic; 5) the variance of each order of the test statistic; 6) the selected rank for the test statistic;
+and 7) a list of the estimates (mixing weight, mean and standard deviation of the gaussian unknown distribution).
 }
 \description{
 Performs an hypothesis test to check for the gaussianity of the unknown mixture component, given that the known component
 has support on the real line. Recall that an admixture model has probability density function (pdf) l = p*f + (1-p)*g, where g is
-the known pdf and l is observed (others are unknown). Requires optimization (to estimate the unknown parameters) as defined
-by Bordes & Vandekerkhove (2010), which means that the unknown mixture component must have a symmetric density.
+the known pdf and l is observed (others are unknown). This test requires optimization (to estimate the unknown parameters) as
+defined by Bordes & Vandekerkhove (2010), which means that the unknown mixture component must have a symmetric density.
 }
 \details{
 Extensions to the case of non-gaussian known components can be overcome thanks to basic transformations using cdf.
 }
 \examples{
 ####### Under the null hypothesis H0.
-## Parameters of the gaussian distribution to be tested:
-list.comp <- list(f = "norm", g = "norm")
-list.param <- list(f = c(mean = 2, sd = 0.5),
-                   g = c(mean = 0, sd = 1))
-## Simulate and plot the data at hand:
-obs.data <- rsimmix(n = 150, unknownComp_weight = 0.9, comp.dist = list.comp,
-                    comp.param = list.param)[['mixt.data']]
-plot(density(obs.data))
+## Simulate mixture data:
+mixt1 <- twoComp_mixt(n = 450, weight = 0.4,
+                      comp.dist = list("norm", "norm"),
+                      comp.param = list(c("mean" = -2, "sd" = 0.5),
+                                        c("mean" = 0, "sd" = 1)))
+data1 <- getmixtData(mixt1)
+
+## Define the admixture models:
+admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
+                         knownComp_param = mixt1$comp.param[[2]])
 ## Performs the test:
-list.comp <- list(f = NULL, g = "norm")
-list.param <- list(f = NULL, g = c(mean = 0, sd = 1))
-gaussianity_test(sample1 = obs.data, comp.dist = list.comp, comp.param = list.param,
-                 K = 3, lambda = 0.1, conf.level = 0.95, support = 'Real')
+gauss_test <- gaussianity_test(sample1 = data1, admixMod = admixMod1,
+                               conf_level = 0.95, K = 3, s = 0.1, support = 'Real')
 
 }
 \references{

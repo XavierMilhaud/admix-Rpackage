@@ -23,7 +23,7 @@ library(admix)
 ```
 
 
-The clustering of populations following admixture models is, for now, based on the K-sample test theory (see [@MilhaudCluster23]. Consider $K$ samples. For $i=1,...,K$, sample $X^{(i)} = (X_1^{(i)}, ..., X_{n_i}^{(i)})$ follows
+The clustering of populations following admixture models is, for now, based on the K-sample test theory (see [@MilhaudPommeretSalhiVandekerkhove2024b]. Consider $K$ samples. For $i=1,...,K$, sample $X^{(i)} = (X_1^{(i)}, ..., X_{n_i}^{(i)})$ follows
 $$L_i(x) = p_i F_i(x) + (1-p_i) G_i, \qquad x \in \mathbb{R}.$$
 
 We still use IBM approach to perform pairwise hypothesis testing. The idea is to adapt the K-sample test procedure to obtain a data-driven method that cluster the $K$ populations into $N$ subgroups, characterized by a common unknown mixture component. The advantages of such an approach is twofold:
@@ -57,42 +57,48 @@ We now detail the steps of the algorithm.
 
 ## On $\mathbb{R}^+$
 
-We present a case study with 5 populations to cluster on $\mathbb{R}^+$, with Gamma-Exponential and Gamma-Gamma mixtures.
+We present a case study with 5 populations to cluster on $\mathbb{R}^+$, with Gamma-Exponential, Exponential-Exponential and Gamma-Gamma mixtures.
 
 ```{r}
-## Simulate data (chosen parameters indicate 3 clusters (populations (1,3), (2,5) and 4)!):
-list.comp <- list(f1 = "gamma", g1 = "exp",
-                  f2 = "gamma", g2 = "exp",
-                  f3 = "gamma", g3 = "gamma",
-                  f4 = "exp", g4 = "exp",
-                  f5 = "gamma", g5 = "exp")
-list.param <- list(f1 = list(shape = 16, rate = 4), g1 = list(rate = 1/3.5),
-                   f2 = list(shape = 14, rate = 2), g2 = list(rate = 1/5),
-                   f3 = list(shape = 16, rate = 4), g3 = list(shape = 12, rate = 2),
-                   f4 = list(rate = 1/2), g4 = list(rate = 1/7),
-                   f5 = list(shape = 14, rate = 2), g5 = list(rate = 1/6))
-A.sim <- rsimmix(n=6000, unknownComp_weight=0.8, comp.dist = list(list.comp$f1,list.comp$g1),
-                 comp.param = list(list.param$f1, list.param$g1))$mixt.data
-B.sim <- rsimmix(n=6000, unknownComp_weight=0.5, comp.dist = list(list.comp$f2,list.comp$g2),
-                 comp.param = list(list.param$f2, list.param$g2))$mixt.data
-C.sim <- rsimmix(n=6000, unknownComp_weight=0.65, comp.dist = list(list.comp$f3,list.comp$g3),
-                 comp.param = list(list.param$f3, list.param$g3))$mixt.data
-D.sim <- rsimmix(n=6000, unknownComp_weight=0.75, comp.dist = list(list.comp$f4,list.comp$g4),
-                 comp.param = list(list.param$f4, list.param$g4))$mixt.data
-E.sim <- rsimmix(n=6000, unknownComp_weight=0.55, comp.dist = list(list.comp$f5,list.comp$g5),
-                 comp.param = list(list.param$f5, list.param$g5))$mixt.data
+## Simulate mixture data:
+mixt1 <- twoComp_mixt(n = 6000, weight = 0.8,
+                      comp.dist = list("gamma", "exp"),
+                      comp.param = list(list("shape" = 16, "scale" = 1/4),
+                                        list("rate" = 1/3.5)))
+mixt2 <- twoComp_mixt(n = 6000, weight = 0.7,
+                      comp.dist = list("gamma", "exp"),
+                      comp.param = list(list("shape" = 14, "scale" = 1/2),
+                                        list("rate" = 1/5)))
+mixt3 <- twoComp_mixt(n = 6000, weight = 0.6,
+                      comp.dist = list("gamma", "gamma"),
+                      comp.param = list(list("shape" = 16, "scale" = 1/4),
+                                        list("shape" = 12, "scale" = 1/2)))
+mixt4 <- twoComp_mixt(n = 6000, weight = 0.5,
+                      comp.dist = list("exp", "exp"),
+                      comp.param = list(list("rate" = 1/2),
+                                        list("rate" = 1/7)))
+mixt5 <- twoComp_mixt(n = 6000, weight = 0.5,
+                      comp.dist = list("gamma", "exp"),
+                      comp.param = list(list("shape" = 14, "scale" = 1/2),
+                                        list("rate" = 1/6)))
+data1 <- getmixtData(mixt1)
+data2 <- getmixtData(mixt2)
+data3 <- getmixtData(mixt3)
+data4 <- getmixtData(mixt4)
+data5 <- getmixtData(mixt5)
+admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
+                         knownComp_param = mixt1$comp.param[[2]])
+admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
+                         knownComp_param = mixt2$comp.param[[2]])
+admixMod3 <- admix_model(knownComp_dist = mixt3$comp.dist[[2]],
+                         knownComp_param = mixt3$comp.param[[2]])
+admixMod4 <- admix_model(knownComp_dist = mixt4$comp.dist[[2]],
+                         knownComp_param = mixt4$comp.param[[2]])
+admixMod5 <- admix_model(knownComp_dist = mixt5$comp.dist[[2]],
+                         knownComp_param = mixt5$comp.param[[2]])
 ## Look for the clusters:
-list.comp <- list(f1 = NULL, g1 = "exp",
-                  f2 = NULL, g2 = "exp",
-                  f3 = NULL, g3 = "gamma",
-                  f4 = NULL, g4 = "exp",
-                  f5 = NULL, g5 = "exp")
-list.param <- list(f1 = NULL, g1 = list(rate = 1/3.5),
-                   f2 = NULL, g2 = list(rate = 1/5),
-                   f3 = NULL, g3 = list(shape = 12, rate = 2),
-                   f4 = NULL, g4 = list(rate = 1/7),
-                   f5 = NULL, g5 = list(rate = 1/6))
-clusters <- admix_clustering(samples = list(A.sim,B.sim,C.sim,D.sim,E.sim), n_sim_tab = 10,
-                             comp.dist=list.comp, comp.param=list.param, parallel=FALSE, n_cpu=2)
-clusters
+admix_cluster(samples = list(data1,data2,data3,data4,data5), 
+              admixMod = list(admixMod1,admixMod2,admixMod3,admixMod4,admixMod5),
+              conf_level = 0.95, n_sim_tab = 10, tune_penalty = FALSE, tabul_dist = NULL, 
+              echo = FALSE, parallel = FALSE, n_cpu = 2)
 ```

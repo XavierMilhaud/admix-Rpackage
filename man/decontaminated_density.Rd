@@ -4,22 +4,15 @@
 \alias{decontaminated_density}
 \title{Estimates the decontaminated density of the unknown component in an admixture}
 \usage{
-decontaminated_density(sample1, comp.dist, comp.param, estim.p)
+decontaminated_density(sample1, estim.p, admixMod)
 }
 \arguments{
-\item{sample1}{Observations of the first sample under study.}
-
-\item{comp.dist}{A list with two elements corresponding to the component distributions (specified with R native names for these distributions)
-involved in the admixture model. The two elements refer to the unknown and known components of the admixture model,
-If there are unknown elements, they must be specified as 'NULL' objects (e.g. 'comp.dist' could be set to list(f1=NULL, g1='norm')).}
-
-\item{comp.param}{A list with two elements corresponding to the parameters of the component distributions, each element being a list
-itself. The names used in this list must correspond to the native R argument names for these distributions.
-The two elements refer to the parameters of unknown and known components of the admixture model. If there are unknown
-elements, they must be specified as 'NULL' objects (e.g. 'comp.param' could be set to list(f1=NULL, g1=list(mean=0,sd=1))).}
+\item{sample1}{Sample under study.}
 
 \item{estim.p}{The estimated weight of the unknown component distribution, related to the proportion of the unknown component
 in the admixture model studied.}
+
+\item{admixMod}{An object of class 'admix_model', containing useful information about distributions and parameters.}
 }
 \value{
 A list containing the decontaminated density of the admixture model (of class 'function'),
@@ -35,66 +28,67 @@ The decontaminated density is obtained by inverting the admixture density, given
 unknown component f after having estimated p.
 }
 \examples{
-## Simulate data:
-
-####### Continuous support:
-list.comp <- list(f1 = 'norm', g1 = 'norm',
-                  f2 = 'norm', g2 = 'norm')
-list.param <- list(f1 = list(mean = 3, sd = 0.5), g1 = list(mean = 0, sd = 1),
-                   f2 = list(mean = 3, sd = 0.5), g2 = list(mean = 5, sd = 2))
-sample1 <- rsimmix(n=8000, unknownComp_weight=0.5, comp.dist = list(list.comp$f1,list.comp$g1),
-                                                   comp.param=list(list.param$f1,list.param$g1))
-sample2 <- rsimmix(n=7000, unknownComp_weight=0.7, comp.dist = list(list.comp$f2,list.comp$g2),
-                                                   comp.param=list(list.param$f2,list.param$g2))
-## Estimate the mixture weight in each of the sample in real-life setting:
-list.comp <- list(f1 = NULL, g1 = 'norm',
-                  f2 = NULL, g2 = 'norm')
-list.param <- list(f1 = NULL, g1 = list(mean = 0, sd = 1),
-                   f2 = NULL, g2 = list(mean = 5, sd = 2))
-estimate <- IBM_estimProp(sample1[['mixt.data']], sample2[['mixt.data']], comp.dist = list.comp,
-                          comp.param = list.param, with.correction = FALSE, n.integ = 1000)
+## Simulate mixture data:
+mixt1 <- twoComp_mixt(n = 1300, weight = 0.4,
+                      comp.dist = list("norm", "norm"),
+                      comp.param = list(list("mean" = -2, "sd" = 0.5),
+                                        list("mean" = 0, "sd" = 1)))
+data1 <- getmixtData(mixt1)
+## Define the admixture models:
+admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
+                         knownComp_param = mixt1$comp.param[[2]])
+## Estimation:
+est <- admix_estim(samples = list(data1), admixMod = list(admixMod1),
+                   est.method = 'PS')
 ## Determine the decontaminated version of the unknown density by inversion:
-decontaminated_density(sample1 = sample1[['mixt.data']], comp.dist = list.comp[1:2],
-                       comp.param = list.param[1:2], estim.p = estimate$prop.estim[1])
+decontaminated_density(sample1 = data1, estim.p = est$estimated_mixing_weights[1],
+                       admixMod = admixMod1)
 
 ####### Discrete support:
-list.comp <- list(f1 = 'pois', g1 = 'pois',
-                  f2 = 'pois', g2 = 'pois')
-list.param <- list(f1 = list(lambda = 3), g1 = list(lambda = 2),
-                   f2 = list(lambda = 3), g2 = list(lambda = 4))
-sample1 <- rsimmix(n=7000, unknownComp_weight=0.6, comp.dist = list(list.comp$f1,list.comp$g1),
-                                                   comp.param=list(list.param$f1,list.param$g1))
-sample2 <- rsimmix(n=6000, unknownComp_weight=0.8, comp.dist = list(list.comp$f2,list.comp$g2),
-                                                   comp.param=list(list.param$f2,list.param$g2))
-## Estimate the mixture weight in each of the sample in real-life setting:
-list.comp <- list(f1 = NULL, g1 = 'pois',
-                  f2 = NULL, g2 = 'pois')
-list.param <- list(f1 = NULL, g1 = list(lambda = 2),
-                   f2 = NULL, g2 = list(lambda = 4))
-estimate <- IBM_estimProp(sample1[['mixt.data']], sample2[['mixt.data']], comp.dist = list.comp,
-                          comp.param = list.param, with.correction = FALSE, n.integ = 1000)
+mixt1 <- twoComp_mixt(n = 7000, weight = 0.6,
+                      comp.dist = list("pois", "pois"),
+                      comp.param = list(list("lambda" = 3),
+                                        list("lambda" = 2)))
+mixt2 <- twoComp_mixt(n = 6000, weight = 0.8,
+                      comp.dist = list("pois", "pois"),
+                      comp.param = list(list("lambda" = 3),
+                                        list("lambda" = 4)))
+data1 <- getmixtData(mixt1)
+data2 <- getmixtData(mixt2)
+## Define the admixture models:
+admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
+                         knownComp_param = mixt1$comp.param[[2]])
+admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
+                         knownComp_param = mixt2$comp.param[[2]])
+## Estimation:
+est <- admix_estim(samples = list(data1, data2),
+                   admixMod = list(admixMod1, admixMod2), est.method = 'IBM')
 ## Determine the decontaminated version of the unknown density by inversion:
-decontaminated_density(sample1 = sample1[['mixt.data']], comp.dist = list.comp[1:2],
-                       comp.param = list.param[1:2], estim.p = estimate$prop.estim[1])
+decontaminated_density(sample1 = data1, estim.p = est$estimated_mixing_weights[1],
+                       admixMod = admixMod1)
+
 ####### Finite discrete support:
-list.comp <- list(f1 = 'multinom', g1 = 'multinom',
-                  f2 = 'multinom', g2 = 'multinom')
-list.param <- list(f1 = list(size=1, prob=c(0.3,0.4,0.3)), g1 = list(size=1, prob=c(0.6,0.3,0.1)),
-                   f2 = list(size=1, prob=c(0.3,0.4,0.3)), g2 = list(size=1, prob=c(0.2,0.6,0.2)))
-sample1 <- rsimmix(n=12000, unknownComp_weight=0.6, comp.dist = list(list.comp$f1,list.comp$g1),
-                                                   comp.param=list(list.param$f1,list.param$g1))
-sample2 <- rsimmix(n=10000, unknownComp_weight=0.8, comp.dist = list(list.comp$f2,list.comp$g2),
-                                                   comp.param=list(list.param$f2,list.param$g2))
-## Estimate the mixture weight in each of the sample in real-life setting:
-list.comp <- list(f1 = NULL, g1 = 'multinom',
-                  f2 = NULL, g2 = 'multinom')
-list.param <- list(f1 = NULL, g1 = list(size=1, prob=c(0.6,0.3,0.1)),
-                   f2 = NULL, g2 = list(size=1, prob=c(0.2,0.6,0.2)))
-estimate <- IBM_estimProp(sample1[['mixt.data']], sample2[['mixt.data']], comp.dist = list.comp,
-                          comp.param = list.param, with.correction = FALSE, n.integ = 1000)
+mixt1 <- twoComp_mixt(n = 12000, weight = 0.6,
+                      comp.dist = list("multinom", "multinom"),
+                      comp.param = list(list("size" = 1, "prob" = c(0.3,0.4,0.3)),
+                                        list("size" = 1, "prob" = c(0.6,0.3,0.1))))
+mixt2 <- twoComp_mixt(n = 10000, weight = 0.8,
+                      comp.dist = list("multinom", "multinom"),
+                      comp.param = list(list("size" = 1, "prob" = c(0.3,0.4,0.3)),
+                                        list("size" = 1, "prob" = c(0.2,0.6,0.2))))
+data1 <- getmixtData(mixt1)
+data2 <- getmixtData(mixt2)
+## Define the admixture models:
+admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
+                         knownComp_param = mixt1$comp.param[[2]])
+admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
+                         knownComp_param = mixt2$comp.param[[2]])
+## Estimation:
+est <- admix_estim(samples = list(data1, data2),
+                   admixMod = list(admixMod1, admixMod2), est.method = 'IBM')
 ## Determine the decontaminated version of the unknown density by inversion:
-decontaminated_density(sample1 = sample1[['mixt.data']], comp.dist = list.comp[1:2],
-                       comp.param = list.param[1:2], estim.p = estimate$prop.estim[1])
+decontaminated_density(sample1 = data1, estim.p = est$estimated_mixing_weights[1],
+                       admixMod = admixMod1)
 
 }
 \author{
