@@ -117,8 +117,8 @@ orthobasis_test <- function(samples, admixMod, K = 3, s = 0.49, est_method = c("
     has a symmetric density function.")
     p1.estim <- estim_BVdk(data = data.p1, admixMod = admixMod[[1]], method = "L-BFGS-B")
     p2.estim <- estim_BVdk(data = data.p2, admixMod = admixMod[[2]], method = "L-BFGS-B")
-    hat.p1 <- p1.estim$mix_prop_estimate
-    hat.p2 <- p2.estim$mix_prop_estimate
+    hat.p1 <- p1.estim$estimated_mixing_weights
+    hat.p2 <- p2.estim$estimated_mixing_weights
     ## Estimation of the variances of the estimators :
     varCov.p1 <- BVdk_varCov_estimators(estim = p1.estim, data = data.p1, admixMod = admixMod[[1]])
     var_hat.p1 <- varCov.p1$var.estim_prop

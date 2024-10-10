@@ -2,7 +2,7 @@
 % Please edit documentation in R/estim_IBM.R
 \name{print.estim_IBM}
 \alias{print.estim_IBM}
-\title{Print method for objects 'estim_IBM'}
+\title{Print method for objects of class 'estim_IBM'}
 \usage{
 \method{print}{estim_IBM}(x, ...)
 }
@@ -12,9 +12,7 @@
 \item{...}{A list of additional parameters belonging to the default method.}
 }
 \description{
-Print an object of class 'estim_IBM'. An admixture model has probability density function (pdf) l_i such that:
-l_i = p_i * f_i + (1-p_i) * g_i, with g_i the known component density.
-The unknown quantities p_i (i=1,2) are thus listed.
+Print the results stored in an object of class 'estim_IBM'.
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/estim_PS.R
 \name{print.estim_PS}
 \alias{print.estim_PS}
-\title{Results of estimated quantities in an admixture using Patra and Sen approach}
+\title{Print method for objects of class 'estim_PS'}
 \usage{
 \method{print}{estim_PS}(x, ...)
 }
@@ -12,7 +12,8 @@
 \item{...}{further arguments passed to or from other methods.}
 }
 \description{
-Print all the attributes of objects of class 'estim_PS'.
+Print all the attributes of objects of class 'estim_PS'. Results of estimated quantities in an admixture
+using Patra and Sen approach
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

@@ -85,10 +85,10 @@ gaussianity_test <- function(sample1, admixMod, conf_level = 0.95, K = 3, s = 0.
 	## Focus on parameters (weight, localization and variance), consider independent subsamples of the original data:
 	BVdk <- estim_BVdk(data = data.BVdk, admixMod = admixMod, method = "L-BFGS-B")
 	#BVdk <- estim_BVdk(data = data.p, admixMod = admixMod, method = "L-BFGS-B")
-	hat_p <- BVdk$mix_prop_estimate
-	hat_loc <- BVdk$location_param_estimate
-	#hat_p <- estim_BVdk(data = data.p, admixMod = admixMod, method = "L-BFGS-B")$mix_prop_estimate
-	#hat_loc <- estim_BVdk(data = data.loc, admixMod = admixMod, method = "L-BFGS-B")$location_param_estimate
+	hat_p <- BVdk$estimated_mixing_weights
+	hat_loc <- BVdk$estimated_locations
+	#hat_p <- estim_BVdk(data = data.p, admixMod = admixMod, method = "L-BFGS-B")$estimated_mixing_weights
+	#hat_loc <- estim_BVdk(data = data.loc, admixMod = admixMod, method = "L-BFGS-B")$estimated_locations
   ## Plug-in method to estimate the variance:
 	kernelDensity_est_obs <- stats::density(sample1)
 	integrand_totweight <- function(x) {

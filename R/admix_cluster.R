@@ -101,7 +101,7 @@ admix_cluster <- function(samples, admixMod, conf_level = 0.95, n_sim_tab = 100,
       XY <- estim_IBM(samples = samples[as.numeric(couples.list[k, ])],
                       admixMod = admixMod[as.numeric(couples.list[k, ])], n.integ = 1000)
     }
-    minimal_size * IBM_empirical_contrast(XY$prop.estim, samples = samples[as.numeric(couples.list[k, ])],
+    minimal_size * IBM_empirical_contrast(XY$estimated_mixing_weights, samples = samples[as.numeric(couples.list[k, ])],
                                           admixMod = admixMod[as.numeric(couples.list[k, ])], G = XY$integ.supp, fixed.p.X = XY$p.X.fixed)
   }
   ## Manage cases when the optimization algorithm could not find a solution:

@@ -76,11 +76,14 @@ estim_BVdk <- function(data, admixMod, method = c("L-BFGS-B","Nelder-Mead"))
   }
 
   obj <- list(
-   mix_prop_estimate = sol$par[1],
-   location_param_estimate = sol$par[2],
-   optim_method = method
+    n_populations = 1,
+    population_sizes = length(data),
+    estimation_method = "Bordes and Vandekerkhove",
+    estimated_mixing_weights = sol$par[1],
+    estimated_locations = sol$par[2],
+    optim_method = method
   )
-  class(obj) <- "estim_BVdk"
+  class(obj) <- c("estim_BVdk", "admix_estim")
   obj$call <- match.call()
 
   return(obj)
@@ -89,8 +92,7 @@ estim_BVdk <- function(data, admixMod, method = c("L-BFGS-B","Nelder-Mead"))
 
 #' Print method for objects 'estim_BVdk'
 #'
-#' Print an object of class 'estim_BVdk'. An admixture model has probability density function (pdf) l_i such that:
-#'    l_i = p_i * f_i + (1-p_i) * g_i, with g_i the known component density.
+#' Print the results stored in an object of class 'estim_BVdk'.
 #'
 #' @param x An object of class 'estim_BVdk'.
 #' @param ... A list of additional parameters belonging to the default method.
@@ -103,8 +105,8 @@ print.estim_BVdk <- function(x, ...)
   cat("\nCall:")
   print(x$call)
   cat("\n")
-  cat("Estimated mixing proportion: ", x$mix_prop_estimate, "\n")
-  cat("Estimated location parameter: ", x$location_param_estimate, "\n")
+  cat("Estimated mixing proportion: ", x$estimated_mixing_weights, "\n")
+  cat("Estimated location parameter: ", x$estimated_locations, "\n")
   cat("\n")
   cat("Optimization method: ", x$optim_method, "\n\n")
 }

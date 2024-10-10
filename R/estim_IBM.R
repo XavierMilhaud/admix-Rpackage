@@ -124,21 +124,23 @@ estim_IBM <- function(samples, admixMod, n.integ = 1000)
     estim.weights <- sol[['par']]
   }
 
-  res <- list(prop.estim = estim.weights,
-              p.X.fixed = fixed.p.X,
-              integ.supp = sort(G)
-              )
-  class(res) <- "estim_IBM"
+  res <- list(
+    n_populations = length(samples),
+    population_sizes = sapply(X = samples, FUN = length),
+    estimation_method = "Inversion Best Matching (IBM)",
+    estimated_mixing_weights = estim.weights,
+    p.X.fixed = fixed.p.X,
+    integ.supp = sort(G)
+    )
+  class(res) <- c("estim_IBM", "admix_estim")
   res$call <- match.call()
   return(res)
 }
 
 
-#' Print method for objects 'estim_IBM'
+#' Print method for objects of class 'estim_IBM'
 #'
-#' Print an object of class 'estim_IBM'. An admixture model has probability density function (pdf) l_i such that:
-#'    l_i = p_i * f_i + (1-p_i) * g_i, with g_i the known component density.
-#' The unknown quantities p_i (i=1,2) are thus listed.
+#' Print the results stored in an object of class 'estim_IBM'.
 #'
 #' @param x An object of class 'estim_IBM'.
 #' @param ... A list of additional parameters belonging to the default method.
@@ -151,10 +153,11 @@ print.estim_IBM <- function(x, ...)
   cat("Call:")
   print(x$call)
   cat("\n")
-  cat("Estimated mixing proportion (of the unknown component) in the 1st sample: ", x$prop.estim[1], "\n")
-  cat("Estimated mixing proportion (of the unknown component) in the 2nd sample: ", x$prop.estim[2], "\n")
-  cat("\nFixed value for the mixing weight in the 1st sample (case of identical known components in the 2 samples):", x$p.X.fixed, "\n\n")
-  cat("\nSupport of integration:", x$integ.supp, "\n\n")
+  cat("Estimated mixing proportion (of the unknown component) in the 1st sample: ", x$estimated_mixing_weights[1], "\n")
+  cat("Estimated mixing proportion (of the unknown component) in the 2nd sample: ", x$estimated_mixing_weights[2], "\n")
+  if (!is.null(x$p.X.fixed))
+    cat("\nFixed value for the mixing weight in the 1st sample (case of identical known components in the 2 samples):", x$p.X.fixed, "\n\n")
+  cat("\nSupport of integration:", utils::head(x$integ.supp,3), "...", utils::tail(x$integ.supp,3), "\n\n")
 }
 
 

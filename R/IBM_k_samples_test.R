@@ -134,9 +134,9 @@ IBM_k_samples_test <- function(samples, admixMod, sim_U = NULL, n_sim_tab = 100,
             ## Comparison between the two populations :
             XY <- estim_IBM(samples = list(samples[[k]][subsample1_index[ ,l]], samples[[k]][subsample2_index[ ,l]]),
                             admixMod = list(admixMod[[k]], admixMod[[k]]), n.integ = 1000)
-            F_i1 <- decontaminated_cdf(sample1 = samples[[k]][subsample1_index[ ,l]], estim.p = XY$prop.estim[1],
+            F_i1 <- decontaminated_cdf(sample1 = samples[[k]][subsample1_index[ ,l]], estim.p = XY$estimated_mixing_weights[1],
                                        admixMod = admixMod[[k]])
-            F_i2 <- decontaminated_cdf(sample1 = samples[[k]][subsample2_index[ ,l]], estim.p = XY$prop.estim[1],
+            F_i2 <- decontaminated_cdf(sample1 = samples[[k]][subsample2_index[ ,l]], estim.p = XY$estimated_mixing_weights[1],
                                        admixMod = admixMod[[k]])
 
             ## Assessment of the difference of interest at each specified x-value:
@@ -163,25 +163,25 @@ IBM_k_samples_test <- function(samples, admixMod, sim_U = NULL, n_sim_tab = 100,
           ## Compute the test statistics for each combination of subsets :
           XY <- estim_IBM(samples = list(samples[[i]][subsample1_index], samples[[i]][subsample2_index]),
                           admixMod = list(admixMod[[i]], admixMod[[i]]), n.integ = 1000)
-          if (is.numeric(XY$prop.estim)) {
+          if (is.numeric(XY$estimated_mixing_weights)) {
             T_12 <- (length(samples[[i]])/3) *
-              IBM_empirical_contrast(par = XY$prop.estim, samples = list(samples[[i]][subsample1_index], samples[[i]][subsample2_index]),
+              IBM_empirical_contrast(par = XY$estimated_mixing_weights, samples = list(samples[[i]][subsample1_index], samples[[i]][subsample2_index]),
                                      admixMod = list(admixMod[[i]], admixMod[[i]]),
                                      G = XY$integ.supp, fixed.p.X = XY$p.X.fixed)
           } else T_12 <- NA
           XZ <- estim_IBM(samples = list(samples[[i]][subsample1_index], samples[[i]][subsample3_index]),
                           admixMod = list(admixMod[[i]], admixMod[[i]]), n.integ = 1000)
-          if (is.numeric(XZ$prop.estim)) {
+          if (is.numeric(XZ$estimated_mixing_weights)) {
             T_13 <- (length(samples[[i]])/3) *
-              IBM_empirical_contrast(par = XZ$prop.estim, samples = list(samples[[i]][subsample1_index], samples[[i]][subsample3_index]),
+              IBM_empirical_contrast(par = XZ$estimated_mixing_weights, samples = list(samples[[i]][subsample1_index], samples[[i]][subsample3_index]),
                                      admixMod = list(admixMod[[i]], admixMod[[i]]),
                                      G = XZ$integ.supp, fixed.p.X = XZ[["p.X.fixed"]])
           } else T_13 <- NA
           YZ <- estim_IBM(samples = list(samples[[i]][subsample2_index], samples[[i]][subsample3_index]),
                           admixMod = list(admixMod[[i]], admixMod[[i]]), n.integ = 1000)
-          if (is.numeric(YZ$prop.estim)) {
+          if (is.numeric(YZ$estimated_mixing_weights)) {
             T_23 <- (length(samples[[i]])/3) *
-              IBM_empirical_contrast(par = YZ$prop.estim, samples = list(samples[[i]][subsample2_index], samples[[i]][subsample3_index]),
+              IBM_empirical_contrast(par = YZ$estimated_mixing_weights, samples = list(samples[[i]][subsample2_index], samples[[i]][subsample3_index]),
                                      admixMod = list(admixMod[[i]], admixMod[[i]]),
                                      G = YZ$integ.supp, fixed.p.X = YZ[["p.X.fixed"]])
           } else T_23 <- NA
@@ -218,21 +218,21 @@ IBM_k_samples_test <- function(samples, admixMod, sim_U = NULL, n_sim_tab = 100,
       foreach::foreach (k = 1:nrow(couples.list), .inorder = TRUE, .errorhandling = 'pass', .export = ls(globalenv())) %fun% {
         ## Comparison between the two populations :
         XY <- estim_IBM(samples = samples[as.numeric(couples.list[k, ])], admixMod = admixMod[as.numeric(couples.list[k, ])], n.integ = 1000)
-        emp.contr <- minimal_size * IBM_empirical_contrast(XY$prop.estim,
+        emp.contr <- minimal_size * IBM_empirical_contrast(XY$estimated_mixing_weights,
                                                            samples = samples[as.numeric(couples.list[k, ])],
                                                            admixMod = admixMod[as.numeric(couples.list[k, ])],
                                                            G = XY$integ.supp, fixed.p.X = XY$p.X.fixed)
         x_val <- seq(from = min(samples[[couples.list[k, ][1]]], samples[[couples.list[k, ][2]]]),
                      to = max(samples[[couples.list[k, ][1]]], samples[[couples.list[k, ][2]]]), length.out = 1000)
-        if (length(XY$prop.estim) == 2) {
-          F_1 <- decontaminated_cdf(sample1 = samples[[couples.list[k, ][1]]], estim.p = XY$prop.estim[1],
+        if (length(XY$estimated_mixing_weights) == 2) {
+          F_1 <- decontaminated_cdf(sample1 = samples[[couples.list[k, ][1]]], estim.p = XY$estimated_mixing_weights[1],
                                     admixMod = admixMod[[couples.list[k, ][1]]])
-          F_2 <- decontaminated_cdf(sample1 = samples[[couples.list[k, ][2]]], estim.p = XY$prop.estim[2],
+          F_2 <- decontaminated_cdf(sample1 = samples[[couples.list[k, ][2]]], estim.p = XY$estimated_mixing_weights[2],
                                     admixMod = admixMod[[couples.list[k, ][2]]])
         } else {
           F_1 <- decontaminated_cdf(sample1 = samples[[couples.list[k, ][1]]], estim.p = XY$p.X.fixed,
                                     admixMod = admixMod[[couples.list[k, ][1]]])
-          F_2 <- decontaminated_cdf(sample1 = samples[[couples.list[k, ][2]]], estim.p = XY$prop.estim,
+          F_2 <- decontaminated_cdf(sample1 = samples[[couples.list[k, ][2]]], estim.p = XY$estimated_mixing_weights,
                                     admixMod = admixMod[[couples.list[k, ][2]]])
         }
         ## Assessment of the supremum:
@@ -452,7 +452,7 @@ IBM_2samples_test <- function(samples, admixMod, sim_U = NULL, n_sim_tab = 50,
     estim.weights <- 100
     contrast_val <- NA
   } else {
-    estim.weights <- estim$prop.estim
+    estim.weights <- estim$estimated_mixing_weights
     min_size <- min(length(samples[[1]]), length(samples[[2]]))
     contrast_val <- min_size * IBM_empirical_contrast(par = estim.weights, samples = samples, admixMod = admixMod,
                                                       G = estim$integ.supp, fixed.p.X = estim$p.X.fixed)
@@ -570,17 +570,17 @@ IBM_greenLight_criterion <- function(estim_obj, samples, admixMod, alpha = 0.05)
   z <- estim_obj$integ.supp[round(floor(length.support/2))]
   varCov_estim <- IBM_estimVarCov_gaussVect(x = z, y = z, IBMestim.obj = estim_obj, samples = samples, admixMod = admixMod)
 
-  if (length(estim_obj$prop.estim) == 2) {
-    inf_bound.p1 <- estim_obj$prop.estim[1] - sqrt(varCov_estim[1,1]/min_sample_size) * stats::qnorm(p=(1-alpha/4), mean=0, sd=1)
-    sup_bound.p1 <- estim_obj$prop.estim[1] + sqrt(varCov_estim[1,1]/min_sample_size) * stats::qnorm(p=(1-alpha/4), mean=0, sd=1)
+  if (length(estim_obj$estimated_mixing_weights) == 2) {
+    inf_bound.p1 <- estim_obj$estimated_mixing_weights[1] - sqrt(varCov_estim[1,1]/min_sample_size) * stats::qnorm(p=(1-alpha/4), mean=0, sd=1)
+    sup_bound.p1 <- estim_obj$estimated_mixing_weights[1] + sqrt(varCov_estim[1,1]/min_sample_size) * stats::qnorm(p=(1-alpha/4), mean=0, sd=1)
     conf_interval.p1 <- c(inf_bound.p1, sup_bound.p1)
-    inf_bound.p2 <- estim_obj$prop.estim[2] - sqrt(varCov_estim[2,2]/min_sample_size) * stats::qnorm(p=(1-alpha/4), mean=0, sd=1)
-    sup_bound.p2 <- estim_obj$prop.estim[2] + sqrt(varCov_estim[2,2]/min_sample_size) * stats::qnorm(p=(1-alpha/4), mean=0, sd=1)
+    inf_bound.p2 <- estim_obj$estimated_mixing_weights[2] - sqrt(varCov_estim[2,2]/min_sample_size) * stats::qnorm(p=(1-alpha/4), mean=0, sd=1)
+    sup_bound.p2 <- estim_obj$estimated_mixing_weights[2] + sqrt(varCov_estim[2,2]/min_sample_size) * stats::qnorm(p=(1-alpha/4), mean=0, sd=1)
     conf_interval.p2 <- c(inf_bound.p2, sup_bound.p2)
     green_light_crit <- max(conf_interval.p1[1],conf_interval.p2[1]) <= 1
   } else {
-    inf_bound.p <- estim_obj$prop.estim[1] - sqrt(varCov_estim[1,1]/min_sample_size) * stats::qnorm(p=(1-alpha/4), mean=0, sd=1)
-    sup_bound.p <- estim_obj$prop.estim[1] + sqrt(varCov_estim[1,1]/min_sample_size) * stats::qnorm(p=(1-alpha/4), mean=0, sd=1)
+    inf_bound.p <- estim_obj$estimated_mixing_weights[1] - sqrt(varCov_estim[1,1]/min_sample_size) * stats::qnorm(p=(1-alpha/4), mean=0, sd=1)
+    sup_bound.p <- estim_obj$estimated_mixing_weights[1] + sqrt(varCov_estim[1,1]/min_sample_size) * stats::qnorm(p=(1-alpha/4), mean=0, sd=1)
     conf_interval.p2 <- c(inf_bound.p, sup_bound.p)
     conf_interval.p1 <- NULL
     green_light_crit <- conf_interval.p2[1] <= 1
@@ -695,7 +695,7 @@ IBM_tabul_stochasticInteg <- function(n.sim = 200, n.varCovMat = 100, samples, a
     sample.size <- min_size
   }
   contrast_val <- sample.size *
-    IBM_empirical_contrast(par = estim$prop.estim, samples = samples, admixMod = admixMod,
+    IBM_empirical_contrast(par = estim$estimated_mixing_weights, samples = samples, admixMod = admixMod,
                            G = estim$integ.supp, fixed.p.X = estim$p.X.fixed)
   ## Integration support:
   support <- detect_support_type(samples[[1]], samples[[2]])
@@ -730,19 +730,19 @@ IBM_tabul_stochasticInteg <- function(n.sim = 200, n.varCovMat = 100, samples, a
   ##------- Differentiates the cases where G1 = G2 or not --------##
   G1equalG2 <- is_equal_knownComp(admixMod[[1]], admixMod[[2]])
   if (G1equalG2) {
-    psi1 <- function(z) 2*( ((2-estim[["prop.estim"]])/estim[["prop.estim"]]^3) * G1(z) -
-                              (2/estim[["prop.estim"]]^3)*L2(z) + (1/(estim[["prop.estim"]]^2*estim[["p.X.fixed"]]))*L1(z) -
-                              ((1-estim[["p.X.fixed"]])/(estim[["prop.estim"]]^2*estim[["p.X.fixed"]])) * G1(z) )
-    psi2 <- function(z) 2*( (1/(estim[["prop.estim"]]^2*estim[["p.X.fixed"]])) * (L2(z) - G1(z)) )
+    psi1 <- function(z) 2*( ((2-estim[["estimated_mixing_weights"]])/estim[["estimated_mixing_weights"]]^3) * G1(z) -
+                              (2/estim[["estimated_mixing_weights"]]^3)*L2(z) + (1/(estim[["estimated_mixing_weights"]]^2*estim[["p.X.fixed"]]))*L1(z) -
+                              ((1-estim[["p.X.fixed"]])/(estim[["estimated_mixing_weights"]]^2*estim[["p.X.fixed"]])) * G1(z) )
+    psi2 <- function(z) 2*( (1/(estim[["estimated_mixing_weights"]]^2*estim[["p.X.fixed"]])) * (L2(z) - G1(z)) )
   } else {
-    psi1.1 <- function(z) 2*( ((2-estim[["prop.estim"]][1])/estim[["prop.estim"]][1]^3) * G1(z) -
-                                (2/estim[["prop.estim"]][1]^3)*L1(z) + (1/(estim[["prop.estim"]][1]^2*estim[["prop.estim"]][2]))*L2(z) -
-                                ((1-estim[["prop.estim"]][2])/(estim[["prop.estim"]][1]^2*estim[["prop.estim"]][2])) * G2(z) )
-    psi1.2 <- function(z) 2*( (1/(estim[["prop.estim"]][1]^2*estim[["prop.estim"]][2])) * (L1(z) - G1(z)) )
-    psi2.1 <- function(z) 2*( ((2-estim[["prop.estim"]][2])/estim[["prop.estim"]][2]^3) * G2(z) -
-                                (2/estim[["prop.estim"]][2]^3)*L2(z) + (1/(estim[["prop.estim"]][2]^2*estim[["prop.estim"]][1]))*L1(z) -
-                                ((1-estim[["prop.estim"]][1])/(estim[["prop.estim"]][2]^2*estim[["prop.estim"]][1])) * G1(z) )
-    psi2.2 <- function(z) 2*( (1/(estim[["prop.estim"]][2]^2*estim[["prop.estim"]][1])) * (L2(z) - G2(z)) )
+    psi1.1 <- function(z) 2*( ((2-estim[["estimated_mixing_weights"]][1])/estim[["estimated_mixing_weights"]][1]^3) * G1(z) -
+                                (2/estim[["estimated_mixing_weights"]][1]^3)*L1(z) + (1/(estim[["estimated_mixing_weights"]][1]^2*estim[["estimated_mixing_weights"]][2]))*L2(z) -
+                                ((1-estim[["estimated_mixing_weights"]][2])/(estim[["estimated_mixing_weights"]][1]^2*estim[["estimated_mixing_weights"]][2])) * G2(z) )
+    psi1.2 <- function(z) 2*( (1/(estim[["estimated_mixing_weights"]][1]^2*estim[["estimated_mixing_weights"]][2])) * (L1(z) - G1(z)) )
+    psi2.1 <- function(z) 2*( ((2-estim[["estimated_mixing_weights"]][2])/estim[["estimated_mixing_weights"]][2]^3) * G2(z) -
+                                (2/estim[["estimated_mixing_weights"]][2]^3)*L2(z) + (1/(estim[["estimated_mixing_weights"]][2]^2*estim[["estimated_mixing_weights"]][1]))*L1(z) -
+                                ((1-estim[["estimated_mixing_weights"]][1])/(estim[["estimated_mixing_weights"]][2]^2*estim[["estimated_mixing_weights"]][1])) * G1(z) )
+    psi2.2 <- function(z) 2*( (1/(estim[["estimated_mixing_weights"]][2]^2*estim[["estimated_mixing_weights"]][1])) * (L2(z) - G2(z)) )
   }
 
   U_sim <-

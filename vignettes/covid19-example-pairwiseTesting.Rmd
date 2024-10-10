@@ -128,7 +128,7 @@ where the probability $p=P(A)$ of being impacted by COVID-19 is unknown, the pro
 We now proceed to the pairwise testing across the six countries using the Inversion Best-Matching (IBM) method (warning: you need some time to perform this step, at least ten minutes depending on your machine):
 ```{r warning = FALSE}
 ## First, define a function that allows to get the decontaminated version (Inversion step) of the unknown CDF Fi:
-decontaminated_cdf <- function(p, COUNTRY) {
+decontaminated_theoCDF <- function(p, COUNTRY) {
   i <- which(CNT == COUNTRY)
   G.probs <- probs_countries[[i]]$probs
   L.probs <- sample[[i]]$X[length(sample[[i]]$X$YEAR), -1] / sum(sample[[i]]$X[length(sample[[i]]$X$YEAR), -1])
@@ -152,7 +152,7 @@ for (a in 1:(length(CNT)-1)) {
     admixMod.Y <- admix_model(knownComp_dist = "multinom", 
                               knownComp_param = list("size"=1, "prob" = probs_countries[[b]]$probs))
     estim_prop <- estim_IBM(samples = list(X.sim,Y.sim), admixMod = list(admixMod.X,admixMod.Y), n.integ = 1000)
-    if (prod(estim_prop$prop.estim < c(1,1)) == 1) {
+    if (prod(estim_prop$estimated_mixing_weights < c(1,1)) == 1) {
       U.H0 <- IBM_tabul_stochasticInteg(n.sim = 30, n.varCovMat = 50, samples = list(X.sim, Y.sim),
                                         admixMod = list(admixMod.X,admixMod.Y), 
                                         min_size = NULL, parallel = FALSE, n_cpu = 2)
@@ -162,12 +162,12 @@ for (a in 1:(length(CNT)-1)) {
       decision <- res_test$reject_decision
       ## Decontaminated CDF:
       df <- data.frame(AGE = AGES,
-                       A = diff(decontaminated_cdf(estim_prop$prop.estim[1], probs_countries[[a]]$L)$FX(0:5))[1:4],
-                       B = diff(decontaminated_cdf(estim_prop$prop.estim[2], probs_countries[[b]]$L)$FX(0:5))[1:4])
+              A = diff(decontaminated_theoCDF(estim_prop$estimated_mixing_weights[1], probs_countries[[a]]$L)$FX(0:5))[1:4],
+              B = diff(decontaminated_theoCDF(estim_prop$estimated_mixing_weights[2], probs_countries[[b]]$L)$FX(0:5))[1:4])
     }
     obj <- NULL
     obj <- list(countries = c(probs_countries[[a]]$L,probs_countries[[b]]$L),
-                weights = estim_prop$prop.estim,
+                weights = estim_prop$estimated_mixing_weights,
                 q95 = ifelse(is.null(U.H0), "Test red light", quantile(U.H0$U_sim, 0.95)),
                 test = ifelse(is.null(U.H0), "Test red light", decision),
                 decontamin = df)

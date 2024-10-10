@@ -95,22 +95,24 @@ estim_PS <- function(data, admixMod, method = c("lwr.bnd", "fixed", "cv"), c.n =
 		c.n <- out.cv$cn.cv
 	}
 
-	ret <- list(alp.hat = alp.hat,
-	            Fs.hat = Fs.hat.fun,
-	            dist.out = dist.out,
-	            c.n = c.n,
-	            alp.Lwr =alp.Lwr,
-	            n = n)
+	ret <- list(
+	  n_populations = 1,
+	  admixture_models = admixMod,
+	  population_sizes = length(data),
+	  estimation_method = "Patra and Sen",
+	  estimated_mixing_weights = alp.hat,
+	  Fs.hat = Fs.hat.fun,
+	  dist.out = dist.out,
+	  c.n = c.n,
+	  alp.Lwr = alp.Lwr,
+	  n = n)
 
-	if (method == "cv"){
-		ret$cv.out <- out.cv
-	} else {
-		ret$cv.out <- NULL
-	}
+	if (method == "cv"){ ret$cv.out <- out.cv
+	} else { ret$cv.out <- NULL }
+
 	ret$method <- method
 	ret$call <- match.call()
-
-	class(ret) <- "estim_PS"
+	class(ret) <- c("estim_PS", "admix_estim")
 	return(ret)
 }
 
@@ -136,9 +138,10 @@ plot.estim_PS <- function(x, ...){
 }
 
 
-#' Results of estimated quantities in an admixture using Patra and Sen approach
+#' Print method for objects of class 'estim_PS'
 #'
-#' Print all the attributes of objects of class 'estim_PS'.
+#' Print all the attributes of objects of class 'estim_PS'. Results of estimated quantities in an admixture
+#' using Patra and Sen approach
 #'
 #' @param x An object of class 'estim_PS'.
 #' @param ... further arguments passed to or from other methods.
@@ -150,8 +153,8 @@ print.estim_PS <- function(x, ...){
   cat("Call:")
   print(x$call)
   if(x$method != "lwr.bnd"){
-    print(paste("Estimate of the mixing weight (proportion of the unknown component distribution) is" , x$alp.hat))
-    print(paste(" The chosen value c_n is", x$c.n))
+    cat("\n", paste("Estimate of the mixing weight (proportion of the unknown component distribution) is" , x$estimated_mixing_weights))
+    cat("\n", paste(" The chosen value c_n is", x$c.n))
     if( !is.null(x$cv.out)){
       old_par <- graphics::par()$mfrow
       graphics::par(mfrow=c(1,2))

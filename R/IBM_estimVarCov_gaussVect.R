@@ -52,7 +52,7 @@
 
 IBM_estimVarCov_gaussVect <- function(x, y, IBMestim.obj, samples, admixMod)
 {
-  estimators <- IBMestim.obj$prop.estim
+  estimators <- IBMestim.obj$estimated_mixing_weights
   ## Location at which the variance-covariance matrix is evaluated:
   varCov.gaussianVect <- IBM_mat_Sigma(x = x, y = y, par = estimators, samples = samples, admixMod = admixMod, G = IBMestim.obj$integ.supp)
   ## Adjusts by the normalization factor to get the distribution of the gaussian vector Z=(hat(p1), hat(p2), Dn(z)):
@@ -67,8 +67,9 @@ IBM_estimVarCov_gaussVect <- function(x, y, IBMestim.obj, samples, admixMod)
 IBM_normalization_term <- function(z, IBMestim.obj, samples, admixMod)
 {
   ## Adjusts by the normalization factor to get the distribution of the gaussian vector Z=(hat(p1), hat(p2), Dn(z)):
-  L <- IBM_mat_L(z = z, par = IBMestim.obj$prop.estim, IBMestim.obj = IBMestim.obj, samples = samples, admixMod = admixMod)
-  inv_J <- solve(IBM_mat_J(par = IBMestim.obj$prop.estim, IBMestim.obj = IBMestim.obj, samples = samples,
+  L <- IBM_mat_L(z = z, par = IBMestim.obj$estimated_mixing_weights, IBMestim.obj = IBMestim.obj, samples = samples,
+                 admixMod = admixMod)
+  inv_J <- solve(IBM_mat_J(par = IBMestim.obj$estimated_mixing_weights, IBMestim.obj = IBMestim.obj, samples = samples,
                            admixMod = admixMod, G = IBMestim.obj$integ.supp))
 
   ##------- Differentiates the cases where G1 = G2 or not --------##

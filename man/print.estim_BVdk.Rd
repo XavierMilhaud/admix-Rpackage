@@ -12,8 +12,7 @@
 \item{...}{A list of additional parameters belonging to the default method.}
 }
 \description{
-Print an object of class 'estim_BVdk'. An admixture model has probability density function (pdf) l_i such that:
-l_i = p_i * f_i + (1-p_i) * g_i, with g_i the known component density.
+Print the results stored in an object of class 'estim_BVdk'.
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}
