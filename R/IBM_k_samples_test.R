@@ -98,7 +98,7 @@ IBM_k_samples_test <- function(samples, admixMod, sim_U = NULL, n_sim_tab = 100,
 {
   ## Control whether parallel computations were asked for or not:
   if (parallel) {
-    `%fun%` <- foreach::`%dopar%`
+    `%fun%` <- doRNG::`%dorng%`
     doParallel::registerDoParallel(cores = n_cpu)
   } else {
     `%fun%` <- foreach::`%do%`
@@ -651,7 +651,7 @@ IBM_tabul_stochasticInteg <- function(n.sim = 200, n.varCovMat = 100, samples, a
 
   i <- NULL
   if (parallel) {
-    `%fun%` <- foreach::`%dopar%`
+    `%fun%` <- doRNG::`%dorng%`
     doParallel::registerDoParallel(cores = n_cpu)
   } else {
     `%fun%` <- foreach::`%do%`

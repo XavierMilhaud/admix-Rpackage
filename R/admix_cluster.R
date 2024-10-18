@@ -77,7 +77,7 @@ admix_cluster <- function(samples, admixMod, conf_level = 0.95, n_sim_tab = 100,
 {
   ## Control whether parallel computations were asked for or not:
   if (parallel) {
-    `%fun%` <- foreach::`%dopar%`
+    `%fun%` <- doRNG::`%dorng%`
     doParallel::registerDoParallel(cores = n_cpu)
   } else {
     `%fun%` <- foreach::`%do%`
@@ -320,12 +320,32 @@ admix_cluster <- function(samples, admixMod, conf_level = 0.95, n_sim_tab = 100,
 }
 
 
-#' Results of clustering performed over K populations
+#' Print method for object of class 'admix_cluster'
 #'
-#' Prints the detected clusters among the populations under study, where populations belonging to the same cluster share
-#' the same unknown component distribution. This method also prints the number of clusters, the p-values of statistical
-#' tests performed when building the clusters, the estimated weights of the unknown component distributions inside each
-#' cluster, and the discrepancy matrix. The latter represents some kind of distance between the populations.
+#' Print the main results when clustering the unknown component distributions coming from various
+#' admixture samples, i.e. the obtained clusters.
+#'
+#' @param x An object of class 'admix_cluster' (see ?admix_clustering).
+#' @param ... further arguments passed to or from other methods.
+#'
+#' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
+#' @export
+
+print.admix_cluster <- function(x, ...)
+{
+  cat("Call:\n")
+  print(x$call)
+  cat("\n\nThe number of detected clusters in these populations equals ", x$n_clust, ".", sep = "")
+  cat("\n\nThe list of clusters with populations belonging to them (in numeric format, i.e. inside c()) :\n",
+      paste("  - Cluster #", 1:length(x$clust_pop), ": vector of populations ", x$clust_pop, collapse="\n", sep = ""), sep="")
+}
+
+
+
+#' Summary method for object of class 'admix_cluster'
+#'
+#' Summarizes the results obtained when clustering the unknown component distributions coming from various
+#' admixture samples.
 #'
 #' @param object An object of class 'admix_cluster' (see ?admix_clustering).
 #' @param ... further arguments passed to or from other methods.

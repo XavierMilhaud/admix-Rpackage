@@ -128,6 +128,30 @@ decontaminated_density <- function(sample1, estim.p, admixMod)
 }
 
 
+#' Print method for object of class 'decontaminated_density'
+#'
+#' Print some overview of the decontaminated density function.
+#'
+#' @param x An object of class 'decontaminated_density' (see ?decontaminated_density).
+#' @param ... Arguments to be passed to generic method 'plot', such as graphical parameters (see par).
+#'
+#' @return More important information about the decontaminated density.
+#'
+#' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
+#' @export
+
+print.decontaminated_density <- function(x, ...)
+{
+  cat("Call:")
+  print(x$call)
+  cat("\n")
+  print(x$decontaminated_density_fun)
+  cat("\n")
+  cat("Type of support: ", x$support, sep = "")
+}
+
+
+
 #' Plot method for class 'decontaminated_density'
 #'
 #' Plot the decontaminated density of the unknown component from some admixture model, after inversion of the admixture
@@ -193,10 +217,11 @@ decontaminated_density <- function(sample1, estim.p, admixMod)
 #' ## Estimation:
 #' est <- admix_estim(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
 #'                    est.method = "IBM")
+#' prop <- getmixingWeight(est)
 #' ## Determine the decontaminated version of the unknown density by inversion:
-#' res1 <- decontaminated_density(sample1 = data1, estim.p = est$estimated_mixing_weights[1],
+#' res1 <- decontaminated_density(sample1 = data1, estim.p = prop[1],
 #'                                admixMod = admixMod1)
-#' res2 <- decontaminated_density(sample1 = data2, estim.p = est$estimated_mixing_weights[2],
+#' res2 <- decontaminated_density(sample1 = data2, estim.p = prop[2],
 #'                                admixMod = admixMod2)
 #' ## Use appropriate sequence of x values:
 #' plot(x = res1, x_val = seq(from = 0, to = 15, by = 1), add_plot = FALSE)
@@ -221,10 +246,11 @@ decontaminated_density <- function(sample1, estim.p, admixMod)
 #' ## Estimation:
 #' est <- admix_estim(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
 #'                    est.method = "IBM")
+#' prop <- getmixingWeight(est)
 #' ## Determine the decontaminated version of the unknown density by inversion:
-#' res1 <- decontaminated_density(sample1 = data1, estim.p = est$estimated_mixing_weights[1],
+#' res1 <- decontaminated_density(sample1 = data1, estim.p = prop[1],
 #'                                admixMod = admixMod1)
-#' res2 <- decontaminated_density(sample1 = data2, estim.p = est$estimated_mixing_weights[2],
+#' res2 <- decontaminated_density(sample1 = data2, estim.p = prop[2],
 #'                                admixMod = admixMod2)
 #' ## Use appropriate sequence of x values:
 #' plot(x = res1, x_val = seq(from=1, to=3, by=1), add_plot = FALSE)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/twoComp_mixt.R
 \name{getmixtData}
 \alias{getmixtData}
-\title{Extractor for object 'twoComp_mixt'}
+\title{Extractor for object of class 'twoComp_mixt'}
 \usage{
 getmixtData(x)
 }
@@ -10,7 +10,7 @@ getmixtData(x)
 \item{x}{An object of class 'twoComp_mixt'.}
 }
 \description{
-Get the mixture data generated from method 'twoComp_mixt'
+Get the mixture data generated from method 'twoComp_mixt'.
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

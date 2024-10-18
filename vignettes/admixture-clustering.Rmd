@@ -60,6 +60,7 @@ We now detail the steps of the algorithm.
 We present a case study with 5 populations to cluster on $\mathbb{R}^+$, with Gamma-Exponential, Exponential-Exponential and Gamma-Gamma mixtures.
 
 ```{r}
+set.seed(123)
 ## Simulate mixture data:
 mixt1 <- twoComp_mixt(n = 6000, weight = 0.8,
                       comp.dist = list("gamma", "exp"),

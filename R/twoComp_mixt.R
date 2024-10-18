@@ -180,9 +180,9 @@ print.twoComp_mixt <- function(x, ...)
 }
 
 
-#' Extractor for object 'twoComp_mixt'
+#' Extractor for object of class 'twoComp_mixt'
 #'
-#' Get the mixture data generated from method 'twoComp_mixt'
+#' Get the mixture data generated from method 'twoComp_mixt'.
 #'
 #' @param x An object of class 'twoComp_mixt'.
 #'

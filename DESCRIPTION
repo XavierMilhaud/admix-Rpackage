@@ -46,6 +46,7 @@ Imports:
     utils
 Suggests: 
     doParallel,
+    doRNG,
     evd,
     flexsurv,
     foreach,

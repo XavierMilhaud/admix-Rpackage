@@ -187,3 +187,21 @@ summary.admix_estim <- function(object, ...)
               ": ", round(object$estimated_locations,2), sep = ""), sep = "\n")
   }
 }
+
+
+
+#' Extractor for object of class 'admix_estim'
+#'
+#' Get the estimated unknown mixing proportion related to the weight of
+#' the unknown component distribution of the admixture model.
+#'
+#' @param x An object of class 'admix_estim'.
+#'
+#' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
+#' @export
+
+getmixingWeight <- function(x)
+{
+  if (!inherits(x, "admix_estim")) stop("This function must be used with objects of class 'admix_estim'")
+  x$estimated_mixing_weights
+}

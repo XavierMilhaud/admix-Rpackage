@@ -2,7 +2,7 @@
 % Please edit documentation in R/admix_cluster.R
 \name{summary.admix_cluster}
 \alias{summary.admix_cluster}
-\title{Results of clustering performed over K populations}
+\title{Summary method for object of class 'admix_cluster'}
 \usage{
 \method{summary}{admix_cluster}(object, ...)
 }
@@ -12,10 +12,8 @@
 \item{...}{further arguments passed to or from other methods.}
 }
 \description{
-Prints the detected clusters among the populations under study, where populations belonging to the same cluster share
-the same unknown component distribution. This method also prints the number of clusters, the p-values of statistical
-tests performed when building the clusters, the estimated weights of the unknown component distributions inside each
-cluster, and the discrepancy matrix. The latter represents some kind of distance between the populations.
+Summarizes the results obtained when clustering the unknown component distributions coming from various
+admixture samples.
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}
