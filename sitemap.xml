@@ -23,6 +23,7 @@
 <url><loc>/reference/estim_IBM.html</loc></url>
 <url><loc>/reference/estim_PS.html</loc></url>
 <url><loc>/reference/gaussianity_test.html</loc></url>
+<url><loc>/reference/getmixingWeight.html</loc></url>
 <url><loc>/reference/getmixtData.html</loc></url>
 <url><loc>/reference/index.html</loc></url>
 <url><loc>/reference/milkyWay.html</loc></url>
@@ -32,9 +33,11 @@
 <url><loc>/reference/plot.estim_PS.html</loc></url>
 <url><loc>/reference/plot.twoComp_mixt.html</loc></url>
 <url><loc>/reference/print.IBM_test.html</loc></url>
+<url><loc>/reference/print.admix_cluster.html</loc></url>
 <url><loc>/reference/print.admix_estim.html</loc></url>
 <url><loc>/reference/print.admix_model.html</loc></url>
 <url><loc>/reference/print.admix_test.html</loc></url>
+<url><loc>/reference/print.decontaminated_density.html</loc></url>
 <url><loc>/reference/print.estim_BVdk.html</loc></url>
 <url><loc>/reference/print.estim_IBM.html</loc></url>
 <url><loc>/reference/print.estim_PS.html</loc></url>

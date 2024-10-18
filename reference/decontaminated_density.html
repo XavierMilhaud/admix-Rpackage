@@ -103,21 +103,15 @@ unknown component f after having estimated p.</p>
 <span class="r-in"><span><span class="co">## Determine the decontaminated version of the unknown density by inversion:</span></span></span>
 <span class="r-in"><span><span class="fu">decontaminated_density</span><span class="op">(</span>sample1 <span class="op">=</span> <span class="va">data1</span>, estim.p <span class="op">=</span> <span class="va">est</span><span class="op">$</span><span class="va">estimated_mixing_weights</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>                       admixMod <span class="op">=</span> <span class="va">admixMod1</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $decontaminated_density_fun</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> function (x) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (1/estim.p) * (l1_emp(x) - (1 - estim.p) * g1(x))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5563ca683f40&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5563ca681140&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $support</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Continuous"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $call</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> decontaminated_density(sample1 = data1, estim.p = est$estimated_mixing_weights[1], </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call:decontaminated_density(sample1 = data1, estim.p = est$estimated_mixing_weights[1], </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     admixMod = admixMod1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "decontaminated_density"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> function (x) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (1/estim.p) * (l1_emp(x) - (1 - estim.p) * g1(x))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55e27488faf8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55e27060ca98&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Type of support: Continuous</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">####### Discrete support:</span></span></span>
 <span class="r-in"><span><span class="va">mixt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">7000</span>, weight <span class="op">=</span> <span class="fl">0.6</span>,</span></span>
@@ -148,21 +142,15 @@ unknown component f after having estimated p.</p>
 <span class="r-in"><span><span class="co">## Determine the decontaminated version of the unknown density by inversion:</span></span></span>
 <span class="r-in"><span><span class="fu">decontaminated_density</span><span class="op">(</span>sample1 <span class="op">=</span> <span class="va">data1</span>, estim.p <span class="op">=</span> <span class="va">est</span><span class="op">$</span><span class="va">estimated_mixing_weights</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>                       admixMod <span class="op">=</span> <span class="va">admixMod1</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $decontaminated_density_fun</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> function (x) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (1/estim.p) * (l1_emp(x) - (1 - estim.p) * g1(x))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5563ca683f40&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5563cbfa00c8&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $support</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Discrete"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $call</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> decontaminated_density(sample1 = data1, estim.p = est$estimated_mixing_weights[1], </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call:decontaminated_density(sample1 = data1, estim.p = est$estimated_mixing_weights[1], </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     admixMod = admixMod1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "decontaminated_density"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> function (x) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (1/estim.p) * (l1_emp(x) - (1 - estim.p) * g1(x))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55e27488faf8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55e276abec00&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Type of support: Discrete</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">####### Finite discrete support:</span></span></span>
 <span class="r-in"><span><span class="va">mixt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">12000</span>, weight <span class="op">=</span> <span class="fl">0.6</span>,</span></span>
@@ -193,21 +181,15 @@ unknown component f after having estimated p.</p>
 <span class="r-in"><span><span class="co">## Determine the decontaminated version of the unknown density by inversion:</span></span></span>
 <span class="r-in"><span><span class="fu">decontaminated_density</span><span class="op">(</span>sample1 <span class="op">=</span> <span class="va">data1</span>, estim.p <span class="op">=</span> <span class="va">est</span><span class="op">$</span><span class="va">estimated_mixing_weights</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>                       admixMod <span class="op">=</span> <span class="va">admixMod1</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $decontaminated_density_fun</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> function (x) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (1/estim.p) * (l1_emp(x) - (1 - estim.p) * g1(x))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5563ca683f40&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x5563cccd0710&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $support</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "Discrete"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> $call</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> decontaminated_density(sample1 = data1, estim.p = est$estimated_mixing_weights[1], </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call:decontaminated_density(sample1 = data1, estim.p = est$estimated_mixing_weights[1], </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     admixMod = admixMod1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> [1] "decontaminated_density"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> function (x) </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> (1/estim.p) * (l1_emp(x) - (1 - estim.p) * g1(x))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x55e27488faf8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x55e276b2b5a0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Type of support: Discrete</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
