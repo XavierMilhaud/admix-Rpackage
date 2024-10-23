@@ -300,7 +300,7 @@ plot.decontaminated_density <- function(x, x_val, add_plot = FALSE, ...)
 #' @details The decontaminated CDF is obtained by inverting the admixture CDF, given by L = p*F + (1-p)*G, to isolate the
 #'          unknown component F after having estimated p. This means that F = (1/hat(p)) * (hat(L)-(1-p)*G).
 #'
-#' @return The decontaminated CDF F of the admixture model, as an of class 'stepfun' (step function).
+#' @return The decontaminated CDF F of the admixture model, of class 'stepfun' (step function).
 #'
 #' @examples
 #' ####### Continuous support:
@@ -323,12 +323,17 @@ plot.decontaminated_density <- function(x, x_val, add_plot = FALSE, ...)
 #' ## Estimation:
 #' est <- admix_estim(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
 #'                    est.method = 'PS')
+#' prop <- getmixingWeight(est)
 #' ## Determine the decontaminated version of the unknown CDF by inversion:
-#' decontaminated_cdf(sample1 = data1, estim.p = est$estimated_mixing_weights[1],
-#'                    admixMod = admixMod1)
+#' F1 <- decontaminated_cdf(sample1 = data1, estim.p = prop[1], admixMod = admixMod1)
+#' F2 <- decontaminated_cdf(sample1 = data2, estim.p = prop[2], admixMod = admixMod2)
+#' abs <- seq(from=-1, to=4, length.out=100)
+#' plot(x=abs, y=F1(abs), xlim=c(-1,4), ylim=c(0,1), type="l")
+#' par(new = TRUE)
+#' plot(x=abs, y=F2(abs), xlim=c(-1,4), ylim=c(0,1), type="l", col="red")
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @noRd
+#' @export
 
 decontaminated_cdf <- function(sample1, estim.p, admixMod)
 {
