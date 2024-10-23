@@ -14,7 +14,11 @@
 #' @references
 #' \insertRef{BordesVandekerkhove2010}{admix}
 #'
-#' @return A numeric vector with the two estimated parameters (proportion first, and then location shift).
+#' @return An object of class 'estim_BVdk', containing 7 attributes: 1) the number of sample under study (set to 1 here);
+#'         2) the sample size; 3) the information about mixture components (distributions and parameters); 4) the estimation
+#'         method (Bordes and Vandekerkhove here, see the given reference); 5) the estimated mixing proportion (weight of the
+#'         unknown component distribution); 6) the estimated location parameter of the unknown component distribution (with symetric
+#'         density); 7) the optimization method that was used.
 #'
 #' @examples
 #' ## Simulate mixture data:
@@ -22,10 +26,8 @@
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = -2, "sd" = 0.5),
 #'                                         list("mean" = 0, "sd" = 1)))
-#' plot(mixt1)
 #' ## Retrieves the mixture data:
 #' data1 <- getmixtData(mixt1)
-#'
 #' ## Define the admixture model:
 #' admixMod <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                         knownComp_param = mixt1$comp.param[[2]])
@@ -78,6 +80,7 @@ estim_BVdk <- function(data, admixMod, method = c("L-BFGS-B","Nelder-Mead"))
   obj <- list(
     n_populations = 1,
     population_sizes = length(data),
+    admixture_models = admixMod,
     estimation_method = "Bordes and Vandekerkhove",
     estimated_mixing_weights = sol$par[1],
     estimated_locations = sol$par[2],
@@ -106,9 +109,35 @@ print.estim_BVdk <- function(x, ...)
   print(x$call)
   cat("\n")
   cat("Estimated mixing proportion: ", x$estimated_mixing_weights, "\n")
-  cat("Estimated location parameter: ", x$estimated_locations, "\n")
+  cat("Estimated location parameter: ", x$estimated_locations, "\n\n")
+}
+
+
+#' Summary method for objects 'estim_BVdk'
+#'
+#' Summarizes the results stored in an object of class 'estim_BVdk'.
+#'
+#' @param object An object of class 'estim_BVdk'.
+#' @param ... A list of additional parameters belonging to the default method.
+#'
+#' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
+#' @export
+
+summary.estim_BVdk <- function(object, ...)
+{
+  cat("Call:")
+  print(object$call)
   cat("\n")
-  cat("Optimization method: ", x$optim_method, "\n\n")
+  cat("------- Sample -------\n")
+  cat("Sample size: ", object$population_sizes, "\n")
+  cat("-> Distribution and parameters of the known component \n in the admixture model: ", sep="")
+  cat(object$admixture_models$comp.dist$known, "\n")
+  print(unlist(object$admixture_models$comp.param$known, use.names = TRUE))
+  cat("\n------- Estimation results -------\n")
+  cat("Estimated mixing proportion: ", object$estimated_mixing_weights, "\n")
+  cat("Estimated location parameter: ", object$estimated_locations, "\n\n")
+  cat("------- Optimization -------\n")
+  cat("Optimization method: ", object$optim_method, "\n\n")
 }
 
 

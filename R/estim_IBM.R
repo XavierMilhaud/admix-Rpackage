@@ -12,7 +12,11 @@
 #' @references
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2024a}{admix}
 #'
-#' @return A list with the two estimates of the component weights for each of the admixture model, plus that of the theoretical model if specified.
+#' @return An object of class 'estim_IBM', containing 7 attributes: 1) the number of samples under study; 2) the sizes of samples;
+#'         3) the information about mixture components (distributions and parameters) for each sample; 4) the estimation
+#'         method (Inversion Best Matching here, see the given reference); 5) the estimated mixing proportions (weights of the
+#'         unknown component distributions in each sample); 6) the arbitrary value of the mixing weight in the first admixture sample
+#'         (in case of equal known components, see the given reference); 7) the support of integration that was used in the computations.
 #'
 #' @examples
 #' ## Simulate mixture data:
@@ -63,6 +67,12 @@
 
 estim_IBM <- function(samples, admixMod, n.integ = 1000)
 {
+  warning(" IBM estimators of two unknown proportions are reliable only if the two
+    corresponding unknown component distributions have been tested equal (see 'admix_test()').
+    Furthermore, when both the known and unknown component distributions of the mixture
+    models are identical, the IBM approach provides an estimation of the ratio of the
+    actual mixing weights rather than an estimation of the unknown weights themselves.\n")
+
   ##------- Defines the support for integration by simulation --------##
   ## Allows to integrate the gap between F1 and F2 in the contrast computation. span(G) must contain span(X) and span(Y).
   ## Ideally, this distribution should put more weight to locations where differences between F1 and F2 are expected.
@@ -127,6 +137,7 @@ estim_IBM <- function(samples, admixMod, n.integ = 1000)
   res <- list(
     n_populations = length(samples),
     population_sizes = sapply(X = samples, FUN = length),
+    admixture_models = admixMod,
     estimation_method = "Inversion Best Matching (IBM)",
     estimated_mixing_weights = estim.weights,
     p.X.fixed = fixed.p.X,
@@ -157,7 +168,40 @@ print.estim_IBM <- function(x, ...)
   cat("Estimated mixing proportion (of the unknown component) in the 2nd sample: ", x$estimated_mixing_weights[2], "\n")
   if (!is.null(x$p.X.fixed))
     cat("\nFixed value for the mixing weight in the 1st sample (case of identical known components in the 2 samples):", x$p.X.fixed, "\n\n")
-  cat("\nSupport of integration:", utils::head(x$integ.supp,3), "...", utils::tail(x$integ.supp,3), "\n\n")
+}
+
+
+#' Summary method for objects 'estim_IBM'
+#'
+#' Summarizes the results stored in an object of class 'estim_IBM'.
+#'
+#' @param object An object of class 'estim_IBM'.
+#' @param ... A list of additional parameters belonging to the default method.
+#'
+#' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
+#' @export
+
+summary.estim_IBM <- function(object, ...)
+{
+  cat("Call:")
+  print(object$call)
+  cat("\n")
+  cat("------- Samples -------\n")
+  cat("Number of samples: ", object$n_populations, "\n")
+  cat("Sample sizes: ", object$population_sizes, "\n")
+  for (k in 1:object$n_populations) {
+    cat("-> Distribution and parameters of the known component \n for admixture model #", k, ": ", sep="")
+    cat(paste(sapply(object$admixture_models[[k]], "[[", "known")[1:2], collapse = " - "))
+    cat("\n")
+  }
+  cat("\n------- Estimation results -------\n")
+  cat("Estimated mixing proportion (of the unknown component) in the 1st sample: ", object$estimated_mixing_weights[1], "\n")
+  cat("Estimated mixing proportion (of the unknown component) in the 2nd sample: ", object$estimated_mixing_weights[2], "\n\n")
+  if (!is.null(object$p.X.fixed))
+    cat("\nFixed value for the mixing weight in the 1st sample (case of identical known components in the 2 samples):", object$p.X.fixed, "\n\n")
+  cat("------- Support -------\n")
+  cat("Integration support: ", paste(utils::head(object$integ.supp,3), collapse=" "), "...",
+      paste(utils::tail(object$integ.supp,3), collapse = " "), "\n\n", sep="")
 }
 
 

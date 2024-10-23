@@ -18,19 +18,21 @@ gaussianity_test(
 
 \item{admixMod}{An object of class 'admix_model', containing useful information about distributions and parameters.}
 
-\item{conf_level}{The confidence level, default to 95 percent. Equals 1-alpha, where alpha is the level of the test (type-I error).}
+\item{conf_level}{(default to 0.95) The confidence level. Equals 1-alpha, where alpha is the level of the test (type-I error).}
 
-\item{K}{(K>0) Number of coefficients considered for the polynomial basis expansion.}
+\item{K}{(K > 0) Number of coefficients considered for the polynomial basis expansion.}
 
-\item{s}{Normalization rate involved in the penalization rule for model selection (in ]0,1/2[). See 'Details' below.}
+\item{s}{Normalization rate involved in the penalization rule for model selection (in ]0,1/2[). See the reference below.}
 
 \item{support}{Support of the probability density functions, useful to choose the polynomial orthonormal basis. One of 'Real',
 'Integer', 'Positive', or 'Bounded.continuous'.}
 }
 \value{
-A list of 7 elements, containing: 1) the rejection decision; 2) the confidence level of the test, 3) the p-value of the test;
-4) the value of the test statistic; 5) the variance of each order of the test statistic; 6) the selected rank for the test statistic;
-and 7) a list of the estimates (mixing weight, mean and standard deviation of the gaussian unknown distribution).
+An object of class 'gaussianity_test', containing 10 elements: 1) the number of populations under study (1 in this case);
+2) the sample size; 3) the information about the known component distribution; 4) the reject decision of the test; 5) the
+confidence level of the test, 6) the p-value of the test; 7) the value of the test statistic; 8) the variance of the test
+statistic at each order in the polynomial orthobasis expansion; 9) the selected rank (order) for the test statistic;
+10) a list of estimates (mixing weight, mean and standard deviation of the Gaussian unknown distribution).
 }
 \description{
 Performs an hypothesis test to check for the gaussianity of the unknown mixture component, given that the known component
@@ -39,12 +41,12 @@ the known pdf and l is observed (others are unknown). This test requires optimiz
 defined by Bordes & Vandekerkhove (2010), which means that the unknown mixture component must have a symmetric density.
 }
 \details{
-Extensions to the case of non-gaussian known components can be overcome thanks to basic transformations using cdf.
+Extensions to the case of non-Gaussian known components can be overcome thanks to basic transformations using cdf.
 }
 \examples{
 ####### Under the null hypothesis H0.
 ## Simulate mixture data:
-mixt1 <- twoComp_mixt(n = 450, weight = 0.4,
+mixt1 <- twoComp_mixt(n = 250, weight = 0.4,
                       comp.dist = list("norm", "norm"),
                       comp.param = list(c("mean" = -2, "sd" = 0.5),
                                         c("mean" = 0, "sd" = 1)))
@@ -54,8 +56,8 @@ data1 <- getmixtData(mixt1)
 admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
                          knownComp_param = mixt1$comp.param[[2]])
 ## Performs the test:
-gauss_test <- gaussianity_test(sample1 = data1, admixMod = admixMod1,
-                               conf_level = 0.95, K = 3, s = 0.1, support = 'Real')
+gaussianity_test(sample1 = data1, admixMod = admixMod1,
+                 conf_level = 0.95, K = 3, s = 0.1, support = 'Real')
 
 }
 \references{

@@ -48,7 +48,7 @@
 #' }
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @export
+#' @noRd
 
 IBM_estimVarCov_gaussVect <- function(x, y, IBMestim.obj, samples, admixMod)
 {

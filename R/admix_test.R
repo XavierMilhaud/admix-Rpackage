@@ -8,7 +8,7 @@
 #' The test can be performed using two methods, either the comparison of coefficients obtained through polynomial basis expansions
 #' of the component densities, or by the inner-convergence property obtained using the IBM approach. See 'Details' below for further information.
 #'
-#' @param samples (list) A list of the K (K>0) samples to be studied, each one assumed to follow a mixture distributions.
+#' @param samples (list) A list of the K (K > 0) samples to be studied, each one assumed to follow a mixture distribution.
 #' @param admixMod (list) A list of objects of class 'admix_model', containing useful information about distributions and parameters.
 #' @param test_method The testing method to be applied. Can be either 'poly' (polynomial basis expansion) or 'icv' (inner
 #'                    convergence from IBM). The same testing method is performed between all samples. In the one-sample case,
@@ -17,28 +17,33 @@
 #'               as defined in the IBM approach (see 'Details' below).
 #' @param n_sim_tab (Only with 'icv' testing method, otherwise useless) Number of simulated gaussian processes used in the
 #'                   tabulation of the inner convergence distribution in the IBM approach.
-#' @param ICV_tunePenalty (Only with 'icv' testing method, otherwise useless. Default to TRUE) Boolean used to tune the penalty term in the
-#'                        k-sample test (k=2,3,...,K) when using Inversion Best Matching (IBM) approach coupled to Inner ConVergence (icv)
-#'                        property. Particularly useful when studying unbalanced samples (in terms of sample size) or small-sized samples.
+#' @param ICV_tunePenalty (Only with 'icv' testing with at least 3 samples to deal with, otherwise useless. Default to FALSE) Boolean used
+#'                        to tune the penalty term in the k-sample test (k = 3,...,K) when using Inversion Best Matching (IBM) approach coupled
+#'                        to Inner ConVergence (icv) property. Particularly useful when studying unbalanced samples (in terms of sample size)
+#'                        or small-sized samples.
 #' @param ask_poly_param (Only with 'poly' testing method, otherwise useless. Boolean, default to FALSE) If TRUE, ask the user to choose
 #'                        both the order 'K' of expansion coefficients in the orthonormal polynomial basis, and the penalization rate 's'
 #'                        involved on the penalization rule for the test. Default values for these two parameters are 'K=3' and 's=0.25'.
 #' @param support (Used with 'poly' testing method, otherwise useless) The support of the observations; one of "Real",
 #'                 "Integer", "Positive", or "Bounded.continuous".
 #' @param conf_level The confidence level of the K-sample test.
-#' @param parallel (default to FALSE) Boolean indicating whether parallel computations are performed (speed-up the tabulation).
-#' @param n_cpu (default to 2) Number of cores used when parallelizing.
+#' @param parallel (default to FALSE, only used with 'icv' testing) Boolean indicating whether parallel computations are performed
+#'                 (to speed-up the tabulation).
+#' @param n_cpu (default to 2, only used with 'icv' testing) Number of cores used when parallelizing.
 #'
-#' @details For further details on hypothesis tests, see i) Inner convergence through IBM approach ; ii) Polynomial expansions.
+#' @details For further details on implemented hypothesis tests, see the references hereafter.
 #'          .
 #' @references
-#' \insertRef{MilhaudPommeretSalhiVandekerkhove2024a}{admix}
+#' \insertRef{MilhaudPommeretSalhiVandekerkhove2024b}{admix}
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2022}{admix}
 #' \insertRef{PommeretVandekerkhove2019}{admix}
 #'
-#' @return A list containing the decision of the test (reject or not), the confidence level at which the test is performed,
-#'         the p-value of the test, and the value of the test statistic (following a chi2 distribution with one degree of freedom
-#'         under the null).
+#' @return An object of class 'admix_test', containing 8 attributes: 1) the test decision (reject the null hypothesis or not);
+#'         2) the p-value of the test; 3) the confidence level of the test (1-alpha, where alpha denotes the level of the test
+#'         or equivalently the type-I error); 4) the value of the test statistic; 5) the number of samples under study; 6) the
+#'         respective size of each sample; 7) the information about mixture components (distributions and parameters); 8) the
+#'         chosen testing method (either based on polynomial basis expansions, or on the inner convergence property; see given
+#'         references).
 #'
 #' @examples
 #' ####### Example with 1 sample (gaussianity test):
@@ -72,39 +77,11 @@
 #'            test_method = "poly", ask_poly_param = FALSE, support = "Real",
 #'            conf_level = 0.95, parallel = FALSE, n_cpu = 2)
 #'
-#' ####### Example with 3 samples
-#' mixt1 <- twoComp_mixt(n = 450, weight = 0.4,
-#'                       comp.dist = list("norm", "norm"),
-#'                       comp.param = list(c("mean" = -2, "sd" = 0.5),
-#'                                         c("mean" = 0, "sd" = 1)))
-#' mixt2 <- twoComp_mixt(n = 600, weight = 0.24,
-#'                       comp.dist = list("norm", "norm"),
-#'                       comp.param = list(c("mean" = -2, "sd" = 0.5),
-#'                                         c("mean" = -1, "sd" = 1)))
-#' mixt3 <- twoComp_mixt(n = 400, weight = 0.53,
-#'                       comp.dist = list("norm", "norm"),
-#'                       comp.param = list(c("mean" = -2, "sd" = 0.5),
-#'                                         c("mean" = 2, "sd" = 1)))
-#' data1 <- getmixtData(mixt1)
-#' data2 <- getmixtData(mixt2)
-#' data3 <- getmixtData(mixt3)
-#' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
-#'                          knownComp_param = mixt1$comp.param[[2]])
-#' admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
-#'                          knownComp_param = mixt2$comp.param[[2]])
-#' admixMod3 <- admix_model(knownComp_dist = mixt3$comp.dist[[2]],
-#'                          knownComp_param = mixt3$comp.param[[2]])
-#'
-#' admix_test(samples = list(data1, data2, data3),
-#'            admixMod = list(admixMod1, admixMod2, admixMod3),
-#'            test_method = "icv", n_sim_tab = 10, ICV_tunePenalty = FALSE,
-#'            conf_level = 0.95, parallel = FALSE, n_cpu = 2)
-#'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
 admix_test <- function(samples, admixMod, test_method = c("poly","icv"), sim_U = NULL, n_sim_tab = 50,
-                       ICV_tunePenalty = TRUE, ask_poly_param = FALSE,
+                       ICV_tunePenalty = FALSE, ask_poly_param = FALSE,
                        support = c("Real","Integer","Positive","Bounded.continuous"),
                        conf_level = 0.95, parallel = FALSE, n_cpu = 2)
 {
@@ -113,16 +90,15 @@ admix_test <- function(samples, admixMod, test_method = c("poly","icv"), sim_U =
 
   n_samples <- length(samples)
   ## Check right specification of arguments:
-  if ((n_samples == 1) & (meth == "icv")) stop("Testing through the inner convergence property obtained using IBM approach requires at least TWO samples.\n")
-  if (meth == "poly") message("Testing using polynomial basis expansions should require a square-root n consistent estimation
-  of the proportions of the unknown component distributions, and thus symmetric unknown densities.\n")
+  if ((n_samples == 1) & (meth == "icv")) stop("Testing using the inner convergence property (obtained from IBM estimation) requires at least TWO samples.\n")
+  if (meth == "poly") message("  Testing using polynomial basis expansions requires a square-root n consistent estimation
+  of the proportions of the unknown component distributions (with 'BVdk' estimation),
+  and thus unknown component distributions with symmetric densities.\n")
 
   if (meth == "icv") {
-
+    options(warn = -1)
     if (n_samples == 2) {
-      U <- IBM_tabul_stochasticInteg(n.sim = n_sim_tab, n.varCovMat = 100, samples = samples, admixMod = admixMod,
-                                     min_size = NULL, parallel = parallel, n_cpu = n_cpu)
-      test_res <- IBM_2samples_test(samples = samples, admixMod = admixMod, sim_U = U[["U_sim"]],
+      test_res <- IBM_k_samples_test(samples = samples, admixMod = admixMod, sim_U = NULL, n_sim_tab = n_sim_tab,
                                     conf_level = conf_level, parallel = parallel, n_cpu = n_cpu)
     } else if (n_samples > 2) {
       test_res <- IBM_k_samples_test(samples = samples, admixMod = admixMod, sim_U = NULL, n_sim_tab = n_sim_tab,
@@ -144,47 +120,34 @@ admix_test <- function(samples, admixMod, test_method = c("poly","icv"), sim_U =
       est_tech <- "BVdk"
     }
     if (n_samples == 1) {
-      message("In the one-sample case, with polynomial basis expansions, the implemented test is a gaussianity test.\n")
+      message("In the one-sample case, testing using polynomial basis expansions corresponds to a gaussianity test.\n")
       test_res <- gaussianity_test(sample1 = samples[[1]], admixMod = admixMod[[1]],
                                    K = as.numeric(K.user), s = as.numeric(s.user), support = supp)
+    } else if (n_samples == 2) {
+      test_res <- orthobasis_test(samples = samples, admixMod = admixMod, K = as.numeric(K.user), s = as.numeric(s.user),
+                                       est_method = est_tech, conf_level = conf_level, nb_echBoot = 100, support = supp)[1:7]
     } else {
-      message("Pairwise tests among all the samples provided.\n")
-      ## Look for all possible couples on which the test will be performed :
-      couples.list <- NULL
-      for (i in 1:(length(samples)-1)) { for (j in (i+1):length(samples)) { couples.list <- rbind(couples.list,c(i,j)) } }
-
-      test_res <- vector(mode = "list", length = nrow(couples.list))
-      for (k in 1:nrow(couples.list)) {
-        test_res[[k]] <- orthobasis_test(samples = samples[as.numeric(couples.list[k, ])],
-                                         admixMod = admixMod[as.numeric(couples.list[k, ])],
-                                         K = as.numeric(K.user), s = as.numeric(s.user),
-                                         est_method = est_tech, conf_level = conf_level, nb_echBoot = 100, support = supp)[1:7]
-        test_res[[k]]$pair_tested <- paste("Sample", as.character(couples.list[k, ]), collapse = " / ")
-      }
+      stop("Testing using polynomial basis expansions is limited to ONE-sample or TWO-samples tests!")
     }
 
   } else stop("Please choose appropriately the arguments of the function.")
 
-  if ((meth == "poly") & (n_samples > 1)) {
-    obj_res <- list(
-      pairs_test_order = sapply(test_res, "[[", "pair_tested"),
-      reject_decision = sapply(test_res, "[[", "reject_decision"),
-      p_value = sapply(test_res, "[[", "p_value"),
-      confidence_level = sapply(test_res, "[[", "confidence_level"),
-      test_statistic_value = sapply(test_res, "[[", "test_statistic_value")
-    )
-  } else {
-    obj_res <- list(
-      reject_decision = test_res$reject_decision,
-      p_value = test_res$p_value,
-      confidence_level = test_res$confidence_level,
-      test_statistic_value = test_res$test_statistic_value
-    )
-  }
+  obj_res <- list(
+    reject_decision = test_res$reject_decision,
+    p_value = test_res$p_value,
+    confidence_level = test_res$confidence_level,
+    test_statistic_value = test_res$test_statistic_value,
+    n_populations = n_samples,
+    population_sizes = sapply(X = samples, FUN = length),
+    admixture_models = admixMod,
+    testing_meth = switch(meth, "poly" = "Polynomial expansions of densities",
+                          "icv" = "Inner convergence property (following IBM)")
+  )
 
-  #class(obj_res) <- "admix_test"
-  #obj_res$call <- match.call()
+  class(obj_res) <- "admix_test"
+  obj_res$call <- match.call()
 
+  options(warn = 0)
   return(obj_res)
 }
 
@@ -202,7 +165,8 @@ print.admix_test <- function(x, ...)
   cat("Call:")
   print(x$call)
   cat("\n")
-  print(x)
+  cat("Do we reject the null hypothesis? ", ifelse(x$reject_decision, "Yes", "No"), "\n", sep="")
+  cat("Here is the associated p-value of the test: ", round(x$p_value, 3), "\n", sep="")
 }
 
 
@@ -223,8 +187,25 @@ summary.admix_test <- function(object, ...)
 {
   cat("Call:\n")
   print(object$call)
-  cat("\nIs the null hypothesis rejected? ", object$reject_decision, "\n", sep = "")
+  cat("\n--------- About samples ---------\n")
+  cat(paste("Size of sample ", 1:object$n_populations, ": ", object$population_sizes, sep = ""), sep = "\n")
+  cat("\n-------- About contamination (admixture) models -------")
+  cat("\n")
+  if (object$n_populations == 1) {
+    cat("-> Distribution and parameters of the known component \n for the admixture model: ", sep="")
+    cat(object$admixture_models[[1]]$comp.dist$known, "\n")
+    print(unlist(object$admixture_models[[1]]$comp.param$known, use.names = TRUE))
+  } else {
+    for (k in 1:object$n_populations) {
+      cat("-> Distribution and parameters of the known component \n for admixture model #", k, ": ", sep="")
+      cat(paste(sapply(object$admixture_models[[k]], "[[", "known")[1:2], collapse = " - "))
+      cat("\n")
+    }
+  }
+  cat("\n--------- About testing results ---------\n")
+  cat("Testing method: ", object$testing_meth, "\n", sep = "")
+  cat("Is the null hypothesis rejected? ", ifelse(object$reject_decision, "Yes", "No"), "\n", sep = "")
   cat("The type-I error is fixed to ", (1-object$confidence_level)*100, "%\n", sep = "")
-  cat("The p-value of the test equals ", object$p_value, "\n", sep = "")
+  cat("The p-value of the test equals ", round(object$p_value, 3), "\n", sep = "")
   cat("The value of the test statistics is ", object$test_statistic_value, "\n\n", sep = "")
 }

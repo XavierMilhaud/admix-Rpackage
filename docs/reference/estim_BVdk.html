@@ -36,7 +36,6 @@ See 'Details' below for further information."><!-- mathjax --><script src="https
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/admixture-clustering.html">Clustering of unknown subpopulations in admixture models</a>
     <a class="dropdown-item" href="../articles/admixture-weight-estimation.html">Estimation of unknown elements in admixture models</a>
-    <a class="dropdown-item" href="../articles/covid19-example-pairwiseTesting.html">covid19-pairwise-testing</a>
     <a class="dropdown-item" href="../articles/test-hypothesis.html">Hypothesis test in admixture models</a>
   </div>
 </li>
@@ -93,7 +92,11 @@ See 'Details' below for further information.</p>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A numeric vector with the two estimated parameters (proportion first, and then location shift).</p>
+<p>An object of class 'estim_BVdk', containing 7 attributes: 1) the number of sample under study (set to 1 here);
+2) the sample size; 3) the information about mixture components (distributions and parameters); 4) the estimation
+method (Bordes and Vandekerkhove here, see the given reference); 5) the estimated mixing proportion (weight of the
+unknown component distribution); 6) the estimated location parameter of the unknown component distribution (with symetric
+density); 7) the optimization method that was used.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -115,11 +118,8 @@ See 'Details' below for further information.</p>
 <span class="r-in"><span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"norm"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="op">-</span><span class="fl">2</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                                        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">0</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">mixt1</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="estim_BVdk-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co">## Retrieves the mixture data:</span></span></span>
 <span class="r-in"><span><span class="va">data1</span> <span class="op">&lt;-</span> <span class="fu"><a href="getmixtData.html">getmixtData</a></span><span class="op">(</span><span class="va">mixt1</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Define the admixture model:</span></span></span>
 <span class="r-in"><span><span class="va">admixMod</span> <span class="op">&lt;-</span> <span class="fu"><a href="admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt1</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>                        knownComp_param <span class="op">=</span> <span class="va">mixt1</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
@@ -129,10 +129,8 @@ See 'Details' below for further information.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:estim_BVdk(data = data1, admixMod = admixMod, method = "L-BFGS-B")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion:  0.4063327 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated location parameter:  -1.757116 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Optimization method:  L-BFGS-B </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion:  0.4275621 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated location parameter:  -1.958389 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Second example:</span></span></span>
@@ -149,10 +147,8 @@ See 'Details' below for further information.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:estim_BVdk(data = data2, admixMod = admixMod2, method = "L-BFGS-B")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion:  0.6466514 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated location parameter:  -0.9147868 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Optimization method:  L-BFGS-B </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion:  0.7076288 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated location parameter:  -0.9657232 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

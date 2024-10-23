@@ -7,25 +7,27 @@
 #'
 #' @param sample1 Sample under study.
 #' @param admixMod An object of class 'admix_model', containing useful information about distributions and parameters.
-#' @param conf_level The confidence level, default to 95 percent. Equals 1-alpha, where alpha is the level of the test (type-I error).
-#' @param K (K>0) Number of coefficients considered for the polynomial basis expansion.
-#' @param s Normalization rate involved in the penalization rule for model selection (in ]0,1/2[). See 'Details' below.
+#' @param conf_level (default to 0.95) The confidence level. Equals 1-alpha, where alpha is the level of the test (type-I error).
+#' @param K (K > 0) Number of coefficients considered for the polynomial basis expansion.
+#' @param s Normalization rate involved in the penalization rule for model selection (in ]0,1/2[). See the reference below.
 #' @param support Support of the probability density functions, useful to choose the polynomial orthonormal basis. One of 'Real',
 #'                'Integer', 'Positive', or 'Bounded.continuous'.
 #'
-#' @details Extensions to the case of non-gaussian known components can be overcome thanks to basic transformations using cdf.
+#' @details Extensions to the case of non-Gaussian known components can be overcome thanks to basic transformations using cdf.
 #'
 #' @references
 #' \insertRef{PommeretVandekerkhove2019}{admix}
 #'
-#' @return A list of 7 elements, containing: 1) the rejection decision; 2) the confidence level of the test, 3) the p-value of the test;
-#'         4) the value of the test statistic; 5) the variance of each order of the test statistic; 6) the selected rank for the test statistic;
-#'         and 7) a list of the estimates (mixing weight, mean and standard deviation of the gaussian unknown distribution).
+#' @return An object of class 'gaussianity_test', containing 10 elements: 1) the number of populations under study (1 in this case);
+#'         2) the sample size; 3) the information about the known component distribution; 4) the reject decision of the test; 5) the
+#'         confidence level of the test, 6) the p-value of the test; 7) the value of the test statistic; 8) the variance of the test
+#'         statistic at each order in the polynomial orthobasis expansion; 9) the selected rank (order) for the test statistic;
+#'         10) a list of estimates (mixing weight, mean and standard deviation of the Gaussian unknown distribution).
 #'
 #' @examples
 #' ####### Under the null hypothesis H0.
 #' ## Simulate mixture data:
-#' mixt1 <- twoComp_mixt(n = 450, weight = 0.4,
+#' mixt1 <- twoComp_mixt(n = 250, weight = 0.4,
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(c("mean" = -2, "sd" = 0.5),
 #'                                         c("mean" = 0, "sd" = 1)))
@@ -35,8 +37,8 @@
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                          knownComp_param = mixt1$comp.param[[2]])
 #' ## Performs the test:
-#' gauss_test <- gaussianity_test(sample1 = data1, admixMod = admixMod1,
-#'                                conf_level = 0.95, K = 3, s = 0.1, support = 'Real')
+#' gaussianity_test(sample1 = data1, admixMod = admixMod1,
+#'                  conf_level = 0.95, K = 3, s = 0.1, support = 'Real')
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
@@ -84,12 +86,9 @@ gaussianity_test <- function(sample1, admixMod, conf_level = 0.95, K = 3, s = 0.
 	##-------- Estimation of parameters and corresponding variances -----------##
 	## Focus on parameters (weight, localization and variance), consider independent subsamples of the original data:
 	BVdk <- estim_BVdk(data = data.BVdk, admixMod = admixMod, method = "L-BFGS-B")
-	#BVdk <- estim_BVdk(data = data.p, admixMod = admixMod, method = "L-BFGS-B")
 	hat_p <- BVdk$estimated_mixing_weights
 	hat_loc <- BVdk$estimated_locations
-	#hat_p <- estim_BVdk(data = data.p, admixMod = admixMod, method = "L-BFGS-B")$estimated_mixing_weights
-	#hat_loc <- estim_BVdk(data = data.loc, admixMod = admixMod, method = "L-BFGS-B")$estimated_locations
-  ## Plug-in method to estimate the variance:
+	## Plug-in method to estimate the variance:
 	kernelDensity_est_obs <- stats::density(sample1)
 	integrand_totweight <- function(x) {
 	  w <- (1/hat_p) * stats::approxfun(kernelDensity_est_obs)(x) - ((1-hat_p)/hat_p) * eval(parse(text = expr.dens))
@@ -99,8 +98,6 @@ gaussianity_test <- function(sample1, admixMod, conf_level = 0.95, K = 3, s = 0.
 	  w <- (1/hat_p) * stats::approxfun(kernelDensity_est_obs)(x) - ((1-hat_p)/hat_p) * eval(parse(text = expr.dens))
 	  return( (x-hat_loc)^2 * (w * (w > 0)) / total_weight )
 	}
-	#total_weight <- stats::integrate(integrand_totweight, lower = min(kernelDensity_est_obs$x), upper = max(kernelDensity_est_obs$x))$value
-	#hat_s2 <- stats::integrate(integrand_unknownComp, lower = min(kernelDensity_est_obs$x), upper = max(kernelDensity_est_obs$x))$value
 	total_weight <- try(stats::integrate(integrand_totweight, lower = min(kernelDensity_est_obs$x), upper = max(kernelDensity_est_obs$x))$value, silent = TRUE)
 	hat_s2 <- try(stats::integrate(integrand_unknownComp, lower = min(kernelDensity_est_obs$x), upper = max(kernelDensity_est_obs$x))$value, silent = TRUE)
 
@@ -179,6 +176,9 @@ gaussianity_test <- function(sample1, admixMod, conf_level = 0.95, K = 3, s = 0.
   if (final.stat > stats::qchisq(conf_level,1)) { rej <- TRUE }
 
 	obj <- list(
+	  n_populations = 1,
+	  population_sizes = length(sample1),
+	  admixture_models = admixMod,
 	  reject_decision = rej,
 	  confidence_level = conf_level,
 	  p_value = p.value,
@@ -207,7 +207,9 @@ print.gaussianity_test <- function(x, ...)
   cat("Call:")
   print(x$call)
   cat("\n")
-  print(x)
+  cat("Is the null hypothesis (gaussian unknown component distribution) rejected? ",
+      ifelse(x$reject_decision, "Yes", "No"), sep="")
+  cat("\nTest p-value: ", round(x$p_value,3), sep="")
 }
 
 
@@ -223,9 +225,15 @@ summary.gaussianity_test <- function(object, ...)
 {
   cat("Call:")
   print(object$call)
-  cat("\n")
-  cat("------- Test decision -------\n")
-  cat("Is the null hypothesis (gaussian unknown component distribution) rejected? ", object$reject_decision, sep="")
+  cat("\n--------- About samples ---------\n")
+  cat(paste("Size of sample ", 1:object$n_populations, ": ", object$population_sizes, sep = ""), sep = "\n")
+  cat("\n-------- About contamination (admixture) models -------")
+  cat("-> Distribution and parameters of the known component \n for the admixture model: ", sep="")
+  cat(object$admixture_models$comp.dist$known, "\n")
+  print(unlist(object$admixture_models$comp.param$known, use.names = TRUE))
+  cat("\n------- Test decision -------\n")
+  cat("Is the null hypothesis (gaussian unknown component distribution) rejected? ",
+      ifelse(object$reject_decision, "Yes", "No"), sep="")
   cat("\nConfidence level of the test: ", object$confidence_level, sep="")
   cat("\nTest p-value: ", round(object$p_value,3), sep="")
   cat("\n\n------- Test statistic -------\n")
@@ -235,5 +243,6 @@ summary.gaussianity_test <- function(object, ...)
   cat("\n\n------- Estimates -------\n")
   cat(paste(c(" Estimation of the mixing weight (proportion of the unknown component distribution): ",
           "Estimation of the mean of the unknown gaussian distribution: ",
-          "Estimation of the standard deviation of the unknown gaussian distribution: "), object$estimates, "\n"))
+          "Estimation of the standard deviation of the unknown gaussian distribution: "),
+          sapply(object$estimates, round, 2), "\n"))
 }

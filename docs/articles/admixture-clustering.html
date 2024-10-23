@@ -43,7 +43,6 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/admixture-clustering.html">Clustering of unknown subpopulations in admixture models</a>
     <a class="dropdown-item" href="../articles/admixture-weight-estimation.html">Estimation of unknown elements in admixture models</a>
-    <a class="dropdown-item" href="../articles/covid19-example-pairwiseTesting.html">covid19-pairwise-testing</a>
     <a class="dropdown-item" href="../articles/test-hypothesis.html">Hypothesis test in admixture models</a>
   </div>
 </li>
@@ -136,7 +135,8 @@ Test $H_0$ the simultaneous equality of all the $f_j$, $j\in S_c$ :\\
 <p>We present a case study with 5 populations to cluster on <span class="math inline">\(\mathbb{R}^+\)</span>, with Gamma-Exponential,
 Exponential-Exponential and Gamma-Gamma mixtures.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">## Simulate mixture data:</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="co">## Simulate mixture data:</span></span>
 <span><span class="va">mixt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">6000</span>, weight <span class="op">=</span> <span class="fl">0.8</span>,</span>
 <span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"gamma"</span>, <span class="st">"exp"</span><span class="op">)</span>,</span>
 <span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"shape"</span> <span class="op">=</span> <span class="fl">16</span>, <span class="st">"scale"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span>,</span>
@@ -177,81 +177,23 @@ Exponential-Exponential and Gamma-Gamma mixtures.</p>
 <span>              admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>,<span class="va">admixMod2</span>,<span class="va">admixMod3</span>,<span class="va">admixMod4</span>,<span class="va">admixMod5</span><span class="op">)</span>,</span>
 <span>              conf_level <span class="op">=</span> <span class="fl">0.95</span>, n_sim_tab <span class="op">=</span> <span class="fl">10</span>, tune_penalty <span class="op">=</span> <span class="cn">FALSE</span>, tabul_dist <span class="op">=</span> <span class="cn">NULL</span>, </span>
 <span>              echo <span class="op">=</span> <span class="cn">FALSE</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span>, n_cpu <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="co">#&gt; $n_popu</span></span>
-<span><span class="co">#&gt; [1] 5</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $n_clust</span></span>
-<span><span class="co">#&gt; [1] 3</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $pval_clust</span></span>
-<span><span class="co">#&gt; [1] 1.000 0.000 0.000 0.857</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $clusters</span></span>
-<span><span class="co">#&gt;            [,1] [,2] [,3] [,4] [,5]</span></span>
-<span><span class="co">#&gt; Id_sample     1    2    3    4    5</span></span>
-<span><span class="co">#&gt; Id_cluster    3    1    3    2    1</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $confidence_level</span></span>
-<span><span class="co">#&gt; [1] 0.95</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $clust_pop</span></span>
-<span><span class="co">#&gt; $clust_pop[[1]]</span></span>
-<span><span class="co">#&gt; [1] 2 5</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $clust_pop[[2]]</span></span>
-<span><span class="co">#&gt; [1] 4</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $clust_pop[[3]]</span></span>
-<span><span class="co">#&gt; [1] 1 3</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $clust_sizes</span></span>
-<span><span class="co">#&gt; [1] 2 1 2</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $clust_weights</span></span>
-<span><span class="co">#&gt; $clust_weights[[1]]</span></span>
-<span><span class="co">#&gt; [1] 0.7273134 0.5179727</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $clust_weights[[2]]</span></span>
-<span><span class="co">#&gt;      [,1] [,2]</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $clust_weights[[3]]</span></span>
-<span><span class="co">#&gt; [1] 0.8070509 0.6040910</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $discrepancy_matrix</span></span>
-<span><span class="co">#&gt;            [,1]        [,2]       [,3]      [,4]        [,5]</span></span>
-<span><span class="co">#&gt; [1,]  0.0000000 31.08861190  0.0437062  5.206923 37.98024648</span></span>
-<span><span class="co">#&gt; [2,] 31.0886119  0.00000000 18.9895617  4.419509  0.02699982</span></span>
-<span><span class="co">#&gt; [3,]  0.0437062 18.98956165  0.0000000 51.037498 15.75618448</span></span>
-<span><span class="co">#&gt; [4,]  5.2069229  4.41950876 51.0374985  0.000000  1.85568136</span></span>
-<span><span class="co">#&gt; [5,] 37.9802465  0.02699982 15.7561845  1.855681  0.00000000</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $tab_distributions</span></span>
-<span><span class="co">#&gt; $tab_distributions[[1]]</span></span>
-<span><span class="co">#&gt; [1] 0.04744806 0.56621103 0.15812350 0.46549308 0.13192146 0.04829081 0.05276727</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $tab_distributions[[2]]</span></span>
-<span><span class="co">#&gt; [1] 0.04640797 0.01963401 0.07602376 0.15958897 0.01452907 0.03190193</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $tab_distributions[[3]]</span></span>
-<span><span class="co">#&gt; [1] 0.08971300 0.04682776 0.08641390 0.08894707 0.03629082 0.06019453 0.06513454</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $call</span></span>
+<span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; admix_cluster(samples = list(data1, data2, data3, data4, data5), </span></span>
 <span><span class="co">#&gt;     admixMod = list(admixMod1, admixMod2, admixMod3, admixMod4, </span></span>
 <span><span class="co">#&gt;         admixMod5), conf_level = 0.95, n_sim_tab = 10, tune_penalty = FALSE, </span></span>
 <span><span class="co">#&gt;     tabul_dist = NULL, echo = FALSE, parallel = FALSE, n_cpu = 2)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; attr(,"class")</span></span>
-<span><span class="co">#&gt; [1] "admix_cluster"</span></span></code></pre></div>
+<span><span class="co">#&gt; Number of detected clusters across the samples provided: 3.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; List of samples involved in each built cluster (in numeric format, i.e. inside c()) :</span></span>
+<span><span class="co">#&gt;   - Cluster #1: vector of populations c(1, 3)</span></span>
+<span><span class="co">#&gt;   - Cluster #2: vector of populations 4</span></span>
+<span><span class="co">#&gt;   - Cluster #3: vector of populations c(2, 5)</span></span></code></pre></div>
 <div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-MilhaudPommeretSalhiVandekerkhove2024b" class="csl-entry">
 Milhaud, Xavier, Denys Pommeret, Yahia Salhi, and Pierre Vandekerkhove.
-2024. <span>“<span class="nocase">Clustering of K
-admixture</span>.”</span> <em>Journal of Machine Learning Research</em>
-0 (0): 0–0.
+2024. <span>“Contamination-Source Based k-Sample Clustering.”</span>
+<em>Journal of Machine Learning Research</em> 25 (287): 1–32. <a href="http://jmlr.org/papers/v25/23-0914.html" class="external-link">http://jmlr.org/papers/v25/23-0914.html</a>.
 </div>
 </div>
 </div>

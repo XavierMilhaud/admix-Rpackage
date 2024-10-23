@@ -2,7 +2,7 @@
 % Please edit documentation in R/admix_model.R
 \name{print.admix_model}
 \alias{print.admix_model}
-\title{Print method for objects 'admix_model'}
+\title{Print method for objects of class 'admix_model'}
 \usage{
 \method{print}{admix_model}(x, ...)
 }
@@ -14,7 +14,7 @@
 \description{
 Print an object of class 'admix_mod'. An admixture model has probability density function (pdf) l_i such that:
 l_i = p_i * f_i + (1-p_i) * g_i, with g_i the known component density.
-The unknown quantities p_i and f_i are thus listed.
+The unknown quantities are therefore p_i and f_i.
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

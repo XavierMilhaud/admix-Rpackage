@@ -24,7 +24,7 @@ library(admix)
 
 We remind that a random variable $X$ following an admixture distribution has cumulative distribution function (cdf) $L$ given by
 $$L(x) = pF(x) + (1-p)G(x), \qquad x \in \mathbb{R},$$
-where $G$ is a mixture component whose distribution is perfectly known, whereas $p$ and $F$ are unknown.\\
+where $G$ is a mixture component whose distribution is perfectly known, whereas $p$ and $F$ are unknown. 
 In this setting, if no parametric assumption is made on the unknown component distribution $F$, the mixture is considered as a semiparametric mixture. For an overview on semiparametric extensions of finite mixture models, see [@Xiang19].
 
 # Estimation of the unknown component weight in an admixture model
@@ -32,10 +32,10 @@ In this setting, if no parametric assumption is made on the unknown component di
 The mixture weight $p$ of the unknown component distribution can be estimated using diverse techniques depending on the assumptions made on the unknown cdf $F$, among which the ones discussed in the sequel:
 
   * the estimator provided by Bordes and Vandekerkhove, see [@BordesVandekerkhove2010];
-  * the estimator provided by Patra and Sen, [@PatraSen2016];
-  * the estimator provided by Inversion - Best Matching method, [@MilhaudPommeretSalhiVandekerkhove2024a].
+  * the estimator provided by Patra and Sen, see [@PatraSen2016];
+  * the estimator provided by the Inversion - Best Matching method, see [@MilhaudPommeretSalhiVandekerkhove2024a].
   
-All the estimation methods presented hereafter can be performed using one single generic function for estimation with appropriate arguments, the so-called $admix_estim$ function.
+All these estimation methods can be performed using one single generic function for estimation with appropriate arguments, the so-called $admix\_estim$ function.
   
 ## The one-sample case
 
@@ -46,7 +46,7 @@ In this case, we use the Bordes and Vandekerkhove estimator, see [@BordesVandeke
 
 ```{r}
 ## Simulate mixture data:
-mixt1 <- twoComp_mixt(n = 800, weight = 0.7,
+mixt1 <- twoComp_mixt(n = 400, weight = 0.7,
                       comp.dist = list("norm", "norm"),
                       comp.param = list(c("mean" = 3, "sd" = 0.5),
                                         c("mean" = 0, "sd" = 1)))
@@ -57,10 +57,11 @@ admixMod <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 admix_estim(samples = list(data1), admixMod = list(admixMod),
             est.method = 'BVdk', sym.f = TRUE)
 ```
+Because this estimation method relies on the symmetry of the unknown component density, the estimator provides both the estimated mixing weight of the unknown component distribution and the estimated location shift parameter.
 
 
 ### Other cases
-In this case, we use the Patra and Sen estimator, see [@PatraSen2016].
+In full generality (no assumptions made on the unknown component distribution), we use the Patra and Sen estimator, see [@PatraSen2016].
 
 ```{r}
 admix_estim(samples = list(data1), admixMod = list(admixMod),
@@ -71,7 +72,7 @@ In this case, the only estimated parameter is the mixing proportion related to t
 
 ## The two-sample case
 
-In the two-sample setting, the idea is to use the Inversion - Best Matching (IBM) approach. The IBM method ensures asymptotically normal estimators of the unknown quantities, which will be very useful in a testing perspective. However, it is important to note that such estimators are mostly biased when $F_1 \neq F_2$, and general one-sample estimation strategies such as [@PatraSen2016] or [@BordesVandekerkhove2010] may be preferred to estimate the unknown component proportion in general settings (despite that this is much more time-consuming). In the latter case, one performs twice the estimation method, on each of the two samples under study.
+In the two-sample setting, one idea could be to use the Inversion - Best Matching (IBM) approach. The IBM method ensures asymptotically normal estimators of the unknown quantities, which will be very useful in a testing perspective. However, it is important to note that such estimators are mostly biased when $F_1 \neq F_2$, and general one-sample estimation strategies such as [@PatraSen2016] or [@BordesVandekerkhove2010] may be preferred to estimate the unknown component proportion in general settings (despite that this is more time-consuming). In the latter case, one performs twice the estimation method, on each of the two samples under study.
 
 ### Under the null hypothesis $H_0: F_1 = F_2$
 
@@ -97,20 +98,20 @@ admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, admixMod2),
             est.method = 'IBM')
 ```
 
-Indeed, the two unknown proportions were consistently estimated.
+Indeed, one can see that the two unknown proportions were consistently estimated.
 
 
 ### Under the alternative hypothesis $H_1: F_1 \neq F_2$
 
-Estimators are consistent under $H_1$, although they can be (strongly) biased as compared to their true values.
+Estimators are also consistent under $H_1$, although they can be (strongly) biased as compared to their true values as illustrated in the following example.
 
 ```{r}
 ## Simulate mixture data:
-mixt1 <- twoComp_mixt(n = 1700, weight = 0.5,
+mixt1 <- twoComp_mixt(n = 800, weight = 0.5,
                       comp.dist = list("norm", "norm"),
                       comp.param = list(list("mean" = 1, "sd" = 0.5),
                                         list("mean" = 0, "sd" = 1)))
-mixt2 <- twoComp_mixt(n = 1500, weight = 0.7,
+mixt2 <- twoComp_mixt(n = 600, weight = 0.7,
                       comp.dist = list("norm", "norm"),
                       comp.param = list(list("mean" = 3, "sd" = 0.5),
                                         list("mean" = 5, "sd" = 2)))
@@ -126,8 +127,7 @@ admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, admixMod2),
             est.method = 'IBM')
 ```
 
-
-In such a framework, it is thus better to use the estimator by [@PatraSen2016], which remains unbiased in full generality:
+In such a framework, it is therefore better to use the estimator by [@PatraSen2016], which shows better performance:
 
 ```{r}
 admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, admixMod2),
@@ -144,11 +144,11 @@ once $p$ has been consistenly estimated.
 This is what is commonly called the decontaminated density of the unknown component. In the following, we propose to compare the two decontaminated densities obtained once the unknown quantities have been consistently estimated by the IBM approach. Note that we are under the null ($F_1=F_2$), and thus that the decontaminated densities should look similar.
 ```{r}
 ## Simulate mixture data:
-mixt1 <- twoComp_mixt(n = 1300, weight = 0.4,
+mixt1 <- twoComp_mixt(n = 800, weight = 0.4,
                       comp.dist = list("norm", "norm"),
                       comp.param = list(list("mean" = 3, "sd" = 0.5),
                                         list("mean" = 0, "sd" = 1)))
-mixt2 <- twoComp_mixt(n = 1000, weight = 0.6,
+mixt2 <- twoComp_mixt(n = 700, weight = 0.6,
                       comp.dist = list("norm", "norm"),
                       comp.param = list(list("mean" = 3, "sd" = 0.5),
                                         list("mean" = 5, "sd" = 2)))
@@ -162,11 +162,10 @@ admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
 ## Estimation:
 est <- admix_estim(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
                    est.method = 'PS')
+prop <- getmixingWeight(est)
 ## Determine the decontaminated version of the unknown density by inversion:
-res1 <- decontaminated_density(sample1 = data1, estim.p = est$estimated_mixing_weights[1],
-                               admixMod = admixMod1)
-res2 <- decontaminated_density(sample1 = data2, estim.p = est$estimated_mixing_weights[2],
-                               admixMod = admixMod2)
+res1 <- decontaminated_density(sample1 = data1, estim.p = prop[1], admixMod = admixMod1)
+res2 <- decontaminated_density(sample1 = data2, estim.p = prop[2], admixMod = admixMod2)
 ## Use appropriate sequence of x values:
 plot(x = res1, x_val = seq(from = 0, to = 6, length.out = 100), add_plot = FALSE)
 plot(x = res2, x_val = seq(from = 0, to = 6, length.out = 100), add_plot = TRUE, col = "red")

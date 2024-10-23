@@ -15,13 +15,13 @@ IBM_tabul_stochasticInteg(
 )
 }
 \arguments{
-\item{n.sim}{Number of trajectories of simulated gaussian processes (number of random draws for tabulation).}
+\item{n.sim}{Number of trajectories for the simulated Gaussian processes (number of random draws for tabulation).}
 
-\item{n.varCovMat}{Number of time points on which gaussian processes are simulated.}
+\item{n.varCovMat}{Number of time points at which the Gaussian processes are simulated.}
 
 \item{samples}{(list) A list of the two samples under study.}
 
-\item{admixMod}{(list) A list of two objects of class 'admix_model', containing useful information about distributions and parameters.}
+\item{admixMod}{(list) A list of two objects of class 'admix_model', with information about distributions and parameters.}
 
 \item{min_size}{(optional, NULL by default) In the k-sample case, useful to provide the minimal size among all samples
 (needed to take into account the correction factor for variance-covariance assessment). Otherwise, useless.}
@@ -31,10 +31,9 @@ IBM_tabul_stochasticInteg(
 \item{n_cpu}{(default to 2) Number of cores used for computations when parallelizing.}
 }
 \value{
-A list with four elements, containing: 1) random draws of the quantity 'sample size times the empirical contrast',
-as defined in the IBM approach (see 'Details' above); 2) the estimated unknown component weights for the two admixture
-models; 3) the value of the quantity 'sample size times the empirical contrast'; 4) the sequence of points in the
-support that were used to evaluate the variance-covariance matrix of empirical processes.
+A list with four elements, containing: 1) random draws of the contrast as defined in the reference given here;
+2) estimated unknown component weights for the two admixture models; 3) the value of the the empirical contrast;
+4) support that was used to evaluate the variance-covariance matrix of the empirical processes.
 }
 \description{
 Tabulate the distribution related to the inner convergence part of the contrast, by simulating trajectories of Gaussian

@@ -14,7 +14,11 @@ estim_BVdk(data, admixMod, method = c("L-BFGS-B", "Nelder-Mead"))
 \item{method}{The method used throughout the optimization process, either 'L-BFGS-B' or 'Nelder-Mead' (see ?optim).}
 }
 \value{
-A numeric vector with the two estimated parameters (proportion first, and then location shift).
+An object of class 'estim_BVdk', containing 7 attributes: 1) the number of sample under study (set to 1 here);
+2) the sample size; 3) the information about mixture components (distributions and parameters); 4) the estimation
+method (Bordes and Vandekerkhove here, see the given reference); 5) the estimated mixing proportion (weight of the
+unknown component distribution); 6) the estimated location parameter of the unknown component distribution (with symetric
+density); 7) the optimization method that was used.
 }
 \description{
 Estimates parameters in an admixture model where the unknown component is assumed to have a symmetric density.
@@ -30,10 +34,8 @@ mixt1 <- twoComp_mixt(n = 200, weight = 0.4,
                       comp.dist = list("norm", "norm"),
                       comp.param = list(list("mean" = -2, "sd" = 0.5),
                                         list("mean" = 0, "sd" = 1)))
-plot(mixt1)
 ## Retrieves the mixture data:
 data1 <- getmixtData(mixt1)
-
 ## Define the admixture model:
 admixMod <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
                         knownComp_param = mixt1$comp.param[[2]])

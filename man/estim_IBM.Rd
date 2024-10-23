@@ -14,7 +14,11 @@ estim_IBM(samples, admixMod, n.integ = 1000)
 \item{n.integ}{Number of data points generated for the distribution on which to integrate.}
 }
 \value{
-A list with the two estimates of the component weights for each of the admixture model, plus that of the theoretical model if specified.
+An object of class 'estim_IBM', containing 7 attributes: 1) the number of samples under study; 2) the sizes of samples;
+3) the information about mixture components (distributions and parameters) for each sample; 4) the estimation
+method (Inversion Best Matching here, see the given reference); 5) the estimated mixing proportions (weights of the
+unknown component distributions in each sample); 6) the arbitrary value of the mixing weight in the first admixture sample
+(in case of equal known components, see the given reference); 7) the support of integration that was used in the computations.
 }
 \description{
 Estimation of the component weights from the Inversion - Best Matching (IBM) method, related to two admixture models

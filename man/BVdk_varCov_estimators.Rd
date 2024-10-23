@@ -15,10 +15,9 @@ BVdk_varCov_estimators(estim, data, admixMod)
 }
 \value{
 A list containing 1) the variance-covariance matrix of the estimators (assessed at the specific time points 'u' and 'v'
-such that u=v=mean(data)); 2) the variance of the mixture weight estimator; 3) the variance
-of the location shift estimator; 4) the variance of the unknown component cumulative distribution
-function at points 'u' and 'v' (useless for most of applications, explaining why 'u' and 'v'
-are set equal to mean(data) by default, with no corresponding arguments here).
+such that u = v = mean(data)); 2) the variance of the estimator of the unknown mixture weight; 3) the variance of the
+estimator of the location shift parameter; 4) the variance of the estimator of the unknown component cumulative
+distribution function at points 'u' and 'v'.
 }
 \description{
 Semiparametric estimation of the variance of the estimators related to the mixture weight p and the location shift parameter mu,

@@ -42,7 +42,7 @@ You can install the released version of admix from
 ``` r
 #once on CRAN with : install.package("admix")
 # from now on:
-remotes::install_git("git@github.com:XavierMilhaud/admix.git", build_manual = TRUE, build_vignettes = FALSE)
+remotes::install_git("git@github.com:XavierMilhaud/admix.git", build_manual = TRUE, build_vignettes = TRUE)
 ```
 
 The optional argument build_vignettes can be set to TRUE to get

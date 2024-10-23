@@ -23,7 +23,11 @@
 #' \insertRef{BordesVandekerkhove2010}{admix}
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2024a}{admix}
 #'
-#' @return A list containing the estimated weight of every unknown component distribution among admixture samples.
+#' @return An object of class 'admix_estim', containing at least 5 attributes: 1) the number of samples under study; 2) the information
+#'         about the mixture components (distributions and parameters); 3) the sizes of the samples; 4) the chosen estimation technique
+#'         (one of 'BVdk', 'PS' or 'IBM'); 5) the estimated mixing proportions (weights of the unknown component distributions in the
+#'         mixture model). In case of 'BVdk' estimation, one additional attribute corresponding to the estimated location shift parameter
+#'         is included.
 #'
 #' @examples
 #' ## Simulate mixture data:
@@ -31,34 +35,27 @@
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = -2, "sd" = 0.5),
 #'                                         list("mean" = 0, "sd" = 1)))
-#' mixt2 <- twoComp_mixt(n = 380, weight = 0.7,
-#'                       comp.dist = list("norm", "norm"),
-#'                       comp.param = list(list("mean" = -2, "sd" = 0.5),
-#'                                         list("mean" = 1, "sd" = 1)))
 #' mixt3 <- twoComp_mixt(n = 400, weight = 0.8,
 #'                       comp.dist = list("norm", "exp"),
 #'                       comp.param = list(list("mean" = 3, "sd" = 1),
 #'                                         list("rate" = 1)))
 #' data1 <- getmixtData(mixt1)
-#' data2 <- getmixtData(mixt2)
 #' data3 <- getmixtData(mixt3)
 #'
 #' ## Define the admixture models:
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                          knownComp_param = mixt1$comp.param[[2]])
-#' admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
-#'                          knownComp_param = mixt2$comp.param[[2]])
 #' admixMod3 <- admix_model(knownComp_dist = mixt3$comp.dist[[2]],
 #'                          knownComp_param = mixt3$comp.param[[2]])
 #'
-#' admix_estim(samples = list(data1,data2,data3),
-#'             admixMod = list(admixMod1,admixMod2,admixMod3),
+#' admix_estim(samples = list(data1,data3),
+#'             admixMod = list(admixMod1,admixMod3),
 #'             est.method = 'BVdk', sym.f = TRUE)
-#' admix_estim(samples = list(data1,data2,data3),
-#'             admixMod = list(admixMod1,admixMod2,admixMod3),
+#' admix_estim(samples = list(data1,data3),
+#'             admixMod = list(admixMod1,admixMod3),
 #'             est.method = 'PS')
-#' admix_estim(samples = list(data1,data2,data3),
-#'             admixMod = list(admixMod1,admixMod2,admixMod3),
+#' admix_estim(samples = list(data1,data3),
+#'             admixMod = list(admixMod1,admixMod3),
 #'             est.method = 'IBM')
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
@@ -92,12 +89,6 @@ admix_estim <- function(samples, admixMod, est.method = c("BVdk","PS","IBM"), sy
     }
     estim_weight <- sapply(X = estimate, "[[", "estimated_mixing_weights")
   } else if (meth == "IBM") {
-    message("    (IBM) Estimators of two unknown proportions are reliable only if
-    the two corresponding unknown component distributions have been tested equal
-    (see function 'admix_test').\n
-    Furthermore, when both the known and unknown component distributions of the mixture
-    models are identical, the IBM approach provides an estimation of the ratio of the
-    actual mixing weights rather than an estimation of the unknown weights themselves.\n")
     for (k in 2:n_samples) {
       estimate[[k]] <- estim_IBM(samples = list(samples[[1]],samples[[k]]), admixMod = list(admixMod[[1]],admixMod[[k]]), n.integ = 1000)
     }
@@ -106,12 +97,15 @@ admix_estim <- function(samples, admixMod, est.method = c("BVdk","PS","IBM"), sy
     colnames(estim_weight) <- paste("Samples 1 and ", 2:n_samples, "/", sep="")
   } else stop("Please choose appropriately the arguments of the function.")
 
-  estimators <- list(n_populations = n_samples,
-                     admixture_models = admixMod,
-                     population_sizes = n_obs,
-                     estimation_method = meth,
-                     estimated_mixing_weights = estim_weight
-                     )
+  estimators <- list(
+    n_populations = n_samples,
+    admixture_models = admixMod,
+    population_sizes = n_obs,
+    estimation_method = switch(meth, "BVdk" = "Bordes and Vandekerkhove (BVdk)",
+                               "PS" = "Patra and Sen (PS)",
+                               "IBM" = "Inversion Best-Matching (IBM)"),
+    estimated_mixing_weights = estim_weight
+    )
   if (meth == "BVdk") estimators$estimated_locations = estim_loc
   class(estimators) <- "admix_estim"
   estimators$call <- match.call()
@@ -170,19 +164,25 @@ summary.admix_estim <- function(object, ...)
   cat(paste("Size of sample ", 1:object$n_populations, ": ", object$population_sizes, sep = ""), sep = "\n")
   cat("\n-------- About contamination (admixture) models -------")
   cat("\n")
-  for (k in 1:object$n_populations) {
-    cat("-> Distribution and parameters of the known component \n for admixture model #", k, ": ", sep="")
-    cat(paste(sapply(object$admixture_models[[k]], "[[", "known")[1:2], collapse = " - "))
-    cat("\n")
+  if (object$n_populations == 1) {
+    cat("-> Distribution and parameters of the known component \n for the admixture model: ", sep="")
+    cat(object$admixture_models$comp.dist$known, "\n")
+    print(unlist(object$admixture_models$comp.param$known, use.names = TRUE))
+  } else {
+    for (k in 1:object$n_populations) {
+      cat("-> Distribution and parameters of the known component \n for admixture model #", k, ": ", sep="")
+      cat(paste(sapply(object$admixture_models[[k]], "[[", "known")[1:2], collapse = " - "))
+      cat("\n")
+    }
   }
   cat("\n-------- About estimation -------")
-  cat("\nEstimation approach: ", object$estimation_method,  "\n", sep = "")
+  cat("\nEstimation approach: ", object$estimation_method,  "\n\n", sep = "")
   cat("-> Mixing weights:\n")
   cat(paste("Estimated proportion of the unknown component in Sample ", 1:object$n_populations,
             ": ", round(object$estimated_mixing_weights,2), sep = ""), sep = "\n")
   cat("\n")
-  if (object$estimation_method == "BVdk") {
-    cat("=> Location parameters (symmetric density assumption):\n")
+  if (object$estimation_method == "Bordes and Vandekerkhove") {
+    cat("-> Location parameters (symmetric density assumption):\n")
     cat(paste("Estimated location parameters of the unknown distribution in Sample ", 1:object$n_populations,
               ": ", round(object$estimated_locations,2), sep = ""), sep = "\n")
   }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/orthobasis_test.R
 \name{print.orthobasis_test}
 \alias{print.orthobasis_test}
-\title{Print method for objects 'orthobasis_test'}
+\title{Print method for objects of class 'orthobasis_test'}
 \usage{
 \method{print}{orthobasis_test}(x, ...)
 }
@@ -12,7 +12,7 @@
 \item{...}{A list of additional parameters belonging to the default method.}
 }
 \description{
-Print method for objects 'orthobasis_test'
+Print method for objects of class 'orthobasis_test'
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

@@ -12,12 +12,12 @@
 #' @details The decontaminated density is obtained by inverting the admixture density, given by l = p*f + (1-p)*g, to isolate the
 #'          unknown component f after having estimated p.
 #'
-#' @return A list containing the decontaminated density of the admixture model (of class 'function'),
-#'         and the support of the observations (either discrete or continuous).
+#' @return An object of class 'decontaminated_density', containing 2 attributes: 1) the decontaminated density function;
+#'         2) the type of support for the underlying distribution (either discrete or continuous, useful for plots).
 #'
 #' @examples
 #' ## Simulate mixture data:
-#' mixt1 <- twoComp_mixt(n = 1300, weight = 0.4,
+#' mixt1 <- twoComp_mixt(n = 400, weight = 0.4,
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = -2, "sd" = 0.5),
 #'                                         list("mean" = 0, "sd" = 1)))
@@ -33,11 +33,11 @@
 #'                        admixMod = admixMod1)
 #'
 #' ####### Discrete support:
-#' mixt1 <- twoComp_mixt(n = 7000, weight = 0.6,
+#' mixt1 <- twoComp_mixt(n = 5000, weight = 0.6,
 #'                       comp.dist = list("pois", "pois"),
 #'                       comp.param = list(list("lambda" = 3),
 #'                                         list("lambda" = 2)))
-#' mixt2 <- twoComp_mixt(n = 6000, weight = 0.8,
+#' mixt2 <- twoComp_mixt(n = 4000, weight = 0.8,
 #'                       comp.dist = list("pois", "pois"),
 #'                       comp.param = list(list("lambda" = 3),
 #'                                         list("lambda" = 4)))
@@ -171,11 +171,11 @@ print.decontaminated_density <- function(x, ...)
 #' @examples
 #' ####### Continuous support:
 #' ## Simulate mixture data:
-#' mixt1 <- twoComp_mixt(n = 1300, weight = 0.4,
+#' mixt1 <- twoComp_mixt(n = 400, weight = 0.4,
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
 #'                                         list("mean" = 0, "sd" = 1)))
-#' mixt2 <- twoComp_mixt(n = 1000, weight = 0.6,
+#' mixt2 <- twoComp_mixt(n = 350, weight = 0.6,
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
 #'                                         list("mean" = 5, "sd" = 2)))
@@ -189,11 +189,10 @@ print.decontaminated_density <- function(x, ...)
 #' ## Estimation:
 #' est <- admix_estim(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
 #'                    est.method = 'PS')
+#' prop <- getmixingWeight(est)
 #' ## Determine the decontaminated version of the unknown density by inversion:
-#' res1 <- decontaminated_density(sample1 = data1, estim.p = est$estimated_mixing_weights[1],
-#'                                admixMod = admixMod1)
-#' res2 <- decontaminated_density(sample1 = data2, estim.p = est$estimated_mixing_weights[2],
-#'                                admixMod = admixMod2)
+#' res1 <- decontaminated_density(sample1 = data1, estim.p = prop[1], admixMod = admixMod1)
+#' res2 <- decontaminated_density(sample1 = data2, estim.p = prop[2], admixMod = admixMod2)
 #' ## Use appropriate sequence of x values:
 #' plot(x = res1, x_val = seq(from = 0, to = 6, length.out = 100), add_plot = FALSE)
 #' plot(x = res2, col = "red", x_val = seq(from = 0, to = 6, length.out = 100), add_plot = TRUE)
@@ -306,11 +305,11 @@ plot.decontaminated_density <- function(x, x_val, add_plot = FALSE, ...)
 #' @examples
 #' ####### Continuous support:
 #' ## Simulate mixture data:
-#' mixt1 <- twoComp_mixt(n = 1300, weight = 0.4,
+#' mixt1 <- twoComp_mixt(n = 400, weight = 0.4,
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
 #'                                         list("mean" = 0, "sd" = 1)))
-#' mixt2 <- twoComp_mixt(n = 1000, weight = 0.6,
+#' mixt2 <- twoComp_mixt(n = 300, weight = 0.6,
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
 #'                                         list("mean" = 5, "sd" = 2)))

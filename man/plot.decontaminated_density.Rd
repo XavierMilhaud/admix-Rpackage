@@ -30,11 +30,11 @@ unknown component f after having estimated p and l.
 \examples{
 ####### Continuous support:
 ## Simulate mixture data:
-mixt1 <- twoComp_mixt(n = 1300, weight = 0.4,
+mixt1 <- twoComp_mixt(n = 400, weight = 0.4,
                       comp.dist = list("norm", "norm"),
                       comp.param = list(list("mean" = 3, "sd" = 0.5),
                                         list("mean" = 0, "sd" = 1)))
-mixt2 <- twoComp_mixt(n = 1000, weight = 0.6,
+mixt2 <- twoComp_mixt(n = 350, weight = 0.6,
                       comp.dist = list("norm", "norm"),
                       comp.param = list(list("mean" = 3, "sd" = 0.5),
                                         list("mean" = 5, "sd" = 2)))
@@ -48,11 +48,10 @@ admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
 ## Estimation:
 est <- admix_estim(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
                    est.method = 'PS')
+prop <- getmixingWeight(est)
 ## Determine the decontaminated version of the unknown density by inversion:
-res1 <- decontaminated_density(sample1 = data1, estim.p = est$estimated_mixing_weights[1],
-                               admixMod = admixMod1)
-res2 <- decontaminated_density(sample1 = data2, estim.p = est$estimated_mixing_weights[2],
-                               admixMod = admixMod2)
+res1 <- decontaminated_density(sample1 = data1, estim.p = prop[1], admixMod = admixMod1)
+res2 <- decontaminated_density(sample1 = data2, estim.p = prop[2], admixMod = admixMod2)
 ## Use appropriate sequence of x values:
 plot(x = res1, x_val = seq(from = 0, to = 6, length.out = 100), add_plot = FALSE)
 plot(x = res2, col = "red", x_val = seq(from = 0, to = 6, length.out = 100), add_plot = TRUE)

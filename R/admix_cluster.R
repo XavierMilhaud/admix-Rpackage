@@ -10,7 +10,7 @@
 #' @param tune_penalty A boolean that allows to choose between a classical penalty term or an optimized penalty embedding some tuning parameters
 #'                     (automatically optimized) for k-sample tests used within the clustering procedure.
 #'                     Optimized penalty is particularly useful for low sample size.
-#' @param tabul_dist Only useful for comparisons of detected clusters at different confidence levels. Is a list of the tabulated distributions
+#' @param tabul_dist (Only useful for comparisons of detected clusters at different confidence levels) A list of the tabulated distributions
 #'                   of the stochastic integral for each cluster previously detected.
 #' @param echo (default to TRUE) Display the remaining computation time.
 #' @param parallel (default to FALSE) Boolean to indicate whether parallel computations are performed (speed-up the tabulation).
@@ -19,12 +19,13 @@
 #' @references
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2024b}{admix}
 #'
-#' @return A list with eleven elements: 1) the number of populations studied; 2) the number of detected clusters;
-#'         3) the list of p-values for each test performed; 4) the cluster affiliation for each population; 5) the chosen confidence
-#'         level of statistical tests; 6) the cluster components; 7) the size of clusters; 8) the estimated weights of the unknown
-#'         component distributions inside each cluster (remind that estimated weights are consistent only if unknown components are tested
-#'         to be identical); 9) the matrix of pairwise discrepancies across populations; 10) the tabulated distributions used for
-#'         statistical tests; 11) the initial call.
+#' @return An object of class 'admix_cluster', containing 12 attributes: 1) the number of samples under study; 2) the sizes of samples;
+#'         3) the information about mixture components in each sample (distributions and parameters); 4) the number of detected clusters;
+#'         5) the list of p-values for each k-sample test at the origin of detected clusters; 6) the cluster affiliation for each sample;
+#'         7) the confidence level of statistical tests; 8) which samples in which cluster; 9) the size of clusters; 10) the estimated
+#'         weights of the unknown component distributions inside each cluster (remind that estimated weights are consistent only if
+#'         unknown components are tested to be identical, which is the case inside clusters); 11) the matrix of pairwise discrepancies
+#'         across all samples; 12) the list of tabulated distributions used for statistical tests involved in building the clusters.
 #'
 #' @examples
 #' \donttest{
@@ -60,12 +61,10 @@
 #' admixMod4 <- admix_model(knownComp_dist = mixt4$comp.dist[[2]],
 #'                          knownComp_param = mixt4$comp.param[[2]])
 #'
-#' clusters <- admix_cluster(samples = list(data1, data2, data3, data4),
-#'                           admixMod = list(admixMod1, admixMod2, admixMod3, admixMod4),
-#'                           conf_level = 0.95, n_sim_tab = 30, tune_penalty = TRUE,
-#'                           tabul_dist = NULL, echo = FALSE,
-#'                           parallel = FALSE, n_cpu = 2)
-#' clusters
+#' admix_cluster(samples = list(data1, data2, data3, data4),
+#'               admixMod = list(admixMod1, admixMod2, admixMod3, admixMod4),
+#'               conf_level = 0.95, n_sim_tab = 30, tune_penalty = TRUE,
+#'               tabul_dist = NULL, echo = FALSE, parallel = FALSE, n_cpu = 2)
 #' }
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
@@ -75,6 +74,8 @@ admix_cluster <- function(samples, admixMod, conf_level = 0.95, n_sim_tab = 100,
                           tune_penalty = FALSE, tabul_dist = NULL, echo = TRUE,
                           parallel = FALSE, n_cpu = 2)
 {
+  if (length(sapply(samples, length)) == 1) return("One single sample, no clusters to be found.")
+
   ## Control whether parallel computations were asked for or not:
   if (parallel) {
     `%fun%` <- doRNG::`%dorng%`
@@ -302,7 +303,9 @@ admix_cluster <- function(samples, admixMod, conf_level = 0.95, n_sim_tab = 100,
   }
 
   obj <- list(
-    n_popu = length(samples),
+    n_populations = length(samples),
+    population_sizes = sapply(X = samples, FUN = length),
+    admixture_models = admixMod,
     n_clust = n_clust_final,
     pval_clust = round(p_value, 3),
     clusters = clusters_affiliation,
@@ -335,11 +338,11 @@ print.admix_cluster <- function(x, ...)
 {
   cat("Call:\n")
   print(x$call)
-  cat("\n\nThe number of detected clusters in these populations equals ", x$n_clust, ".", sep = "")
-  cat("\n\nThe list of clusters with populations belonging to them (in numeric format, i.e. inside c()) :\n",
+  cat("\nNumber of detected clusters across the samples provided: ", x$n_clust, ".\n", sep = "")
+  cat("\nList of samples involved in each built cluster (in numeric format, i.e. inside c()) :\n",
       paste("  - Cluster #", 1:length(x$clust_pop), ": vector of populations ", x$clust_pop, collapse="\n", sep = ""), sep="")
+  cat("\n")
 }
-
 
 
 #' Summary method for object of class 'admix_cluster'
@@ -357,24 +360,35 @@ summary.admix_cluster <- function(object, ...)
 {
   cat("Call:\n")
   print(object$call)
-  cat("\nThe number of populations/samples under study is ", object$n_popu, ".", sep = "")
-  cat("\nThe level of the underlying k-sample testing procedure is set to ", (1-object$confidence_level)*100, "%.", sep = "")
-  cat("\n\nThe number of detected clusters in these populations equals ", object$n_clust, ".", sep = "")
+  cat("\n--------- About samples ---------\n")
+  cat("The number of populations/samples under study is ", object$n_populations, ".\n", sep = "")
+  cat(paste("Size of sample ", 1:object$n_populations, ": ", object$population_sizes, sep = ""), sep = "\n")
+  cat("\n-------- About contamination (admixture) models -------")
+  cat("\n")
+  for (k in 1:object$n_populations) {
+    cat("-> Distribution and parameters of the known component \n for admixture model #", k, ": ", sep="")
+    cat(paste(sapply(object$admixture_models[[k]], "[[", "known")[1:2], collapse = " - "))
+    cat("\n")
+  }
+  cat("\n--------- About clustering ---------\n")
+  cat("The level of the underlying k-sample testing procedure is set to ", (1-object$confidence_level)*100, "%.", sep = "")
+  cat("\nNumber of detected clusters across the samples provided: ", object$n_clust, ".", sep = "")
   cat("\nThe p-values of the k-sample tests (showing when to close the clusters (i.e. p-value < ", (1-object$confidence_level), ") equal: ",
       paste(object$pval_clust, collapse=", "), ".", sep="")
-  cat("\n\nThe list of clusters with populations belonging to them (in numeric format, i.e. inside c()) :\n",
-      paste("  - Cluster #", 1:length(object$clust_pop), ": vector of populations ", object$clust_pop, collapse="\n", sep = ""))
+  cat("\n\nList of samples involved in each built cluster (in numeric format, i.e. inside c()) :\n",
+      paste("  - Cluster #", 1:length(object$clust_pop), ": vector of populations ", object$clust_pop, collapse="\n", sep = ""), sep="")
   weights.list <- vector(mode = "list", length = length(object$clust_weights))
   for (i in 1:length(object$clust_weights)) {
     if (object$clust_sizes[i] > 2) {
-      weights.list[[i]] <- c(object$clust_weights[[i]][cumsum(c(1,(object$clust_sizes[i]-1):2)),1], object$clust_weights[[i]][nrow(object$clust_weights[[i]]),2])
+      weights.list[[i]] <- c(round(object$clust_weights[[i]][cumsum(c(1,(object$clust_sizes[i]-1):2)),1], 2),
+                             round(object$clust_weights[[i]][nrow(object$clust_weights[[i]]),2], 2))
     } else {
-      weights.list[[i]] <- c(object$clust_weights[[i]])
+      weights.list[[i]] <- c(round(object$clust_weights[[i]], 2))
     }
   }
-  cat("\n\nThe list of estimated weights for the unknown component distributions in each detected cluster
-      (in the same format and order as listed populations for clusters just above) :\n",
-      paste("  - estimated weights of the unknown component distributions for cluster ", 1:length(object$clust_pop), ": ", weights.list, collapse="\n"))
-  cat("\n\nThe matrix giving the distances between populations, used in the clustering procedure through the k-sample tests:\n")
+  cat("\n\nList of estimated weights for the unknown component distributions in each detected cluster
+      (in the same order as listed samples in each detected clusters) :\n",
+      paste("  - estimated weights of the unknown component distributions for cluster ", 1:length(object$clust_pop), ": ", weights.list, collapse="\n"), sep="")
+  cat("\n\nMatrix providing the discrepancies between populations, used in the clustering procedure:\n")
   print(object$discrepancy_matrix)
 }

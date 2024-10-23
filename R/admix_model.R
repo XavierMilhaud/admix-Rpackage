@@ -9,7 +9,9 @@
 #' @param knownComp_param (Character) A vector of the names of the parameters (specified as in R glossary) involved in
 #'                        the chosen known distribution, with their values.
 #'
-#' @return An object of class 'admix_model', containing a list of three components...
+#' @return An object of class 'admix_model', containing 2 attributes: 1) a list that gives the information about the distributions
+#'         involved in the two-component mixture model (the unknown and the known ones); 2) a list that gives the information about
+#'         the corresponding parameters of those distributions.
 #'
 #' @examples
 #' admix_model(knownComp_dist = "norm", knownComp_param = list("mean"=0, "sd"=1))
@@ -49,11 +51,11 @@ admix_model <- function(knownComp_dist, knownComp_param)
 }
 
 
-#' Print method for objects 'admix_model'
+#' Print method for objects of class 'admix_model'
 #'
 #' Print an object of class 'admix_mod'. An admixture model has probability density function (pdf) l_i such that:
 #'    l_i = p_i * f_i + (1-p_i) * g_i, with g_i the known component density.
-#' The unknown quantities p_i and f_i are thus listed.
+#' The unknown quantities are therefore p_i and f_i.
 #'
 #' @param x An object of class 'admix_model'.
 #' @param ... A list of additional parameters belonging to the default method.

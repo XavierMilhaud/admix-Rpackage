@@ -6,16 +6,16 @@
 #' where g is the known component of the two-component mixture, p is the unknown proportion of the unknown component distribution f.
 #' More information in 'Details' below concerning the estimation method.
 #'
-#' @param data Sample where the known component density of the admixture model has been transformed into a Uniform(0,1) distribution.
-#' @param admixMod An object of class 'admix_model', containing the information about the known component distribution and its parameter(s).
-#' @param method Either 'fixed' or 'cv', depending on whether compute the estimate based on the value of 'c.n' or
-#'               use cross-validation for choosing 'c.n' (tuning parameter).
+#' @param data Sample to be studied.
+#' @param admixMod An object of class 'admix_model', containing information about the known component distribution and its parameter(s).
+#' @param method One of 'lwr.bnd', fixed' or 'cv': depending on whether compute some lower bound of the mixing proportion, the estimate
+#'               based on the value of 'c.n' or use cross-validation for choosing 'c.n' (tuning parameter).
 #' @param c.n A positive number, with default value equal to 0.1 log(log(n)), where 'n' is the length of the observed sample.
-#' @param folds Number of folds used for cross-validation, default is 10.
-#' @param reps Number of replications for cross-validation, default is 1.
-#' @param cn.s A sequence of 'c.n' to be used for cross-validation (vector of values). Default is equally
+#' @param folds (optional, default to 10) Number of folds used for cross-validation.
+#' @param reps (optional, default to 1) Number of replications for cross-validation.
+#' @param cn.s (optional) A sequence of 'c.n' to be used for cross-validation (vector of values). Default is equally
 #'            spaced grid of 100 values between .001 x log(log(n)) and 0.2 x log(log(n)).
-#' @param cn.length (default to 100) Number of equally spaced tuning parameter (between .001 x log(log(n)) and 0.2 x log(log(n))).
+#' @param cn.length (optional, default to 100) Number of equally spaced tuning parameter (between .001 x log(log(n)) and 0.2 x log(log(n))).
 #'                  Values to search from.
 #' @param gridsize (default to 600) Number of equally spaced points (between 0 and 1) to evaluate the distance function.
 #'                 Larger values are more computationally intensive but also lead to more accurate estimates.
@@ -23,14 +23,15 @@
 #' @references
 #' \insertRef{PatraSen2016}{admix}
 #'
-#' @return A list containing 'alp.hat' (estimate of the unknown component weight), 'Fs.hat' (list with elements 'x' and 'y' values for the function estimate
-#'         of the unknown cumulative distribution function), 'dist.out' which is an object of the class 'dist.fun'
-#'         using the complete data.gen, 'c.n' the value of the tuning parameter used to compute the final estimate,
-#'         and finally 'cv.out' which is an object of class 'cv.mixmodel'. The object is NULL if method is "fixed".
+#' @return An object of class 'estim_PS', containing 10 attributes: 1) the number of samples studied (1 in this case); 2) the sample
+#'         size; 3) the information about component distributions of the admixture model; 4) the estimation method 5patra and Sen here);
+#'         5) the estimated mixing weight (estimate of the unknown component proportion); 6) the estimated decontaminated CDF;
+#'         7) an object of the class 'dist.fun' (that gives the distance); 8) the tuning parameter 'c.n'; 9) the lower bound of the
+#'         estimated mixing proportion (if such an option has been chosen); 10) the number of observations.
 #'
 #' @examples
 #' ## Simulate mixture data:
-#' mixt1 <- twoComp_mixt(n = 1500, weight = 0.8,
+#' mixt1 <- twoComp_mixt(n = 800, weight = 0.2,
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
 #'                                         list("mean" = 0, "sd" = 1)))
@@ -87,7 +88,7 @@ estim_PS <- function(data, admixMod, method = c("lwr.bnd", "fixed", "cv"), c.n =
 		Fs.hat.fun$x <-  dist.out$F.n.x
 
 	} else if (method == "cv") {
-		out.cv <- PS_estimCV(data, admixMod, folds = folds, reps = reps,
+		out.cv <- estimCV_PS(data, admixMod, folds = folds, reps = reps,
 		                     cn.s = cn.s, cn.length = cn.length, gridsize = gridsize)
 		alp.hat <- out.cv$alp.hat
 		Fs.hat.fun <- out.cv$Fs.hat
@@ -97,8 +98,8 @@ estim_PS <- function(data, admixMod, method = c("lwr.bnd", "fixed", "cv"), c.n =
 
 	ret <- list(
 	  n_populations = 1,
-	  admixture_models = admixMod,
 	  population_sizes = length(data),
+	  admixture_models = admixMod,
 	  estimation_method = "Patra and Sen",
 	  estimated_mixing_weights = alp.hat,
 	  Fs.hat = Fs.hat.fun,
@@ -116,28 +117,6 @@ estim_PS <- function(data, admixMod, method = c("lwr.bnd", "fixed", "cv"), c.n =
 	return(ret)
 }
 
-
-#' Plots
-#'
-#' @param x An object of class 'estim_PS'.
-#' @param ... further arguments passed to or from other methods.
-#'
-#' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @export
-
-plot.estim_PS <- function(x, ...){
-  if(x$method != "lwr.bnd"){
-    plot(x$dist.out$grid.pts)
-    graphics::abline(h= {x$c.n /sqrt(x$n)}, col="red", lwd= 1.3)
-    graphics::abline(v= x$alp.hat, lty=2, lwd =1, col="black")
-  } else {
-    plot(x$dist.out$grid.pts)
-    graphics::abline(h = 0.6792/sqrt(x$n), col="red", lwd= 1.3)
-    graphics::abline(v= x$alp.Lwr, lty=2, lwd =1, col="black")
-  }
-}
-
-
 #' Print method for objects of class 'estim_PS'
 #'
 #' Print all the attributes of objects of class 'estim_PS'. Results of estimated quantities in an admixture
@@ -154,7 +133,7 @@ print.estim_PS <- function(x, ...){
   print(x$call)
   if(x$method != "lwr.bnd"){
     cat("\n", paste("Estimate of the mixing weight (proportion of the unknown component distribution) is" , x$estimated_mixing_weights))
-    cat("\n", paste(" The chosen value c_n is", x$c.n))
+    cat("\n", paste("The chosen value c_n is", x$c.n))
     if( !is.null(x$cv.out)){
       old_par <- graphics::par()$mfrow
       graphics::par(mfrow=c(1,2))
@@ -167,6 +146,44 @@ print.estim_PS <- function(x, ...){
     print (paste("The  '95%' lower confidence for alp_0 is ", x$alp.Lwr))
   }
 }
+
+
+#' Summary method for objects 'estim_PS'
+#'
+#' Summarizes the results stored in an object of class 'estim_PS'.
+#'
+#' @param object An object of class 'estim_PS'.
+#' @param ... A list of additional parameters belonging to the default method.
+#'
+#' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
+#' @export
+
+summary.estim_PS <- function(object, ...)
+{
+  cat("Call:")
+  print(object$call)
+  cat("\n")
+  cat("------- Sample -------\n")
+  cat("Sample size: ", object$population_sizes, "\n")
+  cat("-> Distribution and parameters of the known component \n in the admixture model: ", sep="")
+  cat(object$admixture_models$comp.dist$known, "\n")
+  print(unlist(object$admixture_models$comp.param$known, use.names = TRUE))
+  cat("\n------- Estimation results -------\n")
+  cat(paste("Estimate of the mixing weight (proportion of the unknown component distribution) is" , object$estimated_mixing_weights))
+  cat("\n", paste(" The chosen value c_n is", object$c.n))
+}
+
+#plot.estim_PS <- function(x, ...){
+#  if(x$method != "lwr.bnd"){
+#    plot(x$dist.out$grid.pts)
+#    graphics::abline(h= {x$c.n /sqrt(x$n)}, col="red", lwd= 1.3)
+#    graphics::abline(v= x$alp.hat, lty=2, lwd =1, col="black")
+#  } else {
+#    plot(x$dist.out$grid.pts)
+#    graphics::abline(h = 0.6792/sqrt(x$n), col="red", lwd= 1.3)
+#    graphics::abline(v= x$alp.Lwr, lty=2, lwd =1, col="black")
+#  }
+#}
 
 
 #' Cross-validation estimates in an admixture using Patra and Sen approach
@@ -198,7 +215,7 @@ print.estim_PS <- function(x, ...){
 #'
 #' @examples
 #' ## Simulate mixture data:
-#' mixt1 <- twoComp_mixt(n = 3000, weight = 0.2,
+#' mixt1 <- twoComp_mixt(n = 1000, weight = 0.2,
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
 #'                                         list("mean" = 0, "sd" = 1)))
@@ -208,13 +225,13 @@ print.estim_PS <- function(x, ...){
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                          knownComp_param = mixt1$comp.param[[2]])
 #' ## Estimate the proportion of the unknown component of the admixture model:
-#' PS_estimCV(data = data1, admixMod = admixMod1, folds = 10,
+#' estimCV_PS(data = data1, admixMod = admixMod1, folds = 10,
 #'            reps = 1, cn.s = NULL, cn.length = 3, gridsize = 100)$alp.hat
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @noRd
 
-PS_estimCV <- function(data, admixMod, folds = 10, reps = 1, cn.s = NULL, cn.length = NULL, gridsize = 200)
+estimCV_PS <- function(data, admixMod, folds = 10, reps = 1, cn.s = NULL, cn.length = NULL, gridsize = 200)
 {
   if (!is.vector(data)) stop("'data' has to be a vector.")
   n <- length(data)
@@ -273,21 +290,21 @@ PS_estimCV <- function(data, admixMod, folds = 10, reps = 1, cn.s = NULL, cn.len
                data = data,
                dist.out = tot.out)
   ret$call <- match.call()
-  class(ret)  <- "PS_estimCV"
+  class(ret)  <- "estimCV_PS"
 
   return(ret)
 }
 
 
-#' Print object of class 'PS_estimCV'
+#' Print object of class 'estimCV_PS'
 #'
-#' @param x An object of class 'PS_estimCV'.
+#' @param x An object of class 'estimCV_PS'.
 #' @param ... Arguments to be passed to print default method.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @noRd
 
-print.PS_estimCV <- function(x,...)
+print.estimCV_PS <- function(x,...)
 {
   cat("Call:")
   print(x$call)
@@ -296,9 +313,9 @@ print.PS_estimCV <- function(x,...)
 }
 
 
-#' Plot object of class 'PS_estimCV'
+#' Plot object of class 'estimCV_PS'
 #'
-#' @param x An object of class 'PS_estimCV'.
+#' @param x An object of class 'estimCV_PS'.
 #' @param ... Arguments to be passed to plot default method.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
@@ -354,7 +371,7 @@ cv.score <- function(tr.data, test.data, c.n)
 #'
 #' @examples
 #' ## Simulate mixture data:
-#' mixt1 <- twoComp_mixt(n = 3000, weight = 0.6,
+#' mixt1 <- twoComp_mixt(n = 1000, weight = 0.6,
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
 #'                                         list("mean" = 0, "sd" = 1)))
@@ -466,7 +483,7 @@ print.PS_dist_fun <- function(x,...){
 #'
 #' @examples
 #' ## Simulate mixture data:
-#' mixt1 <- twoComp_mixt(n = 3000, weight = 0.6,
+#' mixt1 <- twoComp_mixt(n = 1000, weight = 0.6,
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
 #'                                         list("mean" = 0, "sd" = 1)))
@@ -475,7 +492,7 @@ print.PS_dist_fun <- function(x,...){
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                          knownComp_param = mixt1$comp.param[[2]])
 #' ## Estimate the proportion of the unknown component of the admixture model:
-#' res <- PS_estim(data = data1, admixMod = admixMod1, method = 'fixed',
+#' res <- estim_PS(data = data1, admixMod = admixMod1, method = 'fixed',
 #'          c.n = 0.1*log(log(length(data1))), gridsize = 1000)
 #' PS_unknownDensity_estim(res, dec.density = TRUE)
 #'
@@ -484,11 +501,11 @@ print.PS_dist_fun <- function(x,...){
 
 PS_unknownDensity_estim <- function(input, dec.density = TRUE)
 {
-  if (inherits(input, "PS_estim") || inherits(input, "PS_estimCV")) {
+  if (inherits(input, "estim_PS") || inherits(input, "estimCV_PS")) {
     ## CDF:
     Fs.hat <- input$Fs.hat
   } else {
-    stop("This function only works on objects of class 'PS_estim' or 'PS_estimCV'. See functions 'PS_estim' or 'PS_estimCV'.")
+    stop("This function only works on objects of class 'estim_PS' or 'estimCV_PS'. See functions 'estim_PS' or 'estimCV_PS'.")
   }
   if (dec.density == TRUE){
     ll <- fdrtool::gcmlcm(Fs.hat$x, Fs.hat$y, type = "lcm")

@@ -15,8 +15,8 @@ in the admixture model studied.}
 \item{admixMod}{An object of class 'admix_model', containing useful information about distributions and parameters.}
 }
 \value{
-A list containing the decontaminated density of the admixture model (of class 'function'),
-and the support of the observations (either discrete or continuous).
+An object of class 'decontaminated_density', containing 2 attributes: 1) the decontaminated density function;
+2) the type of support for the underlying distribution (either discrete or continuous, useful for plots).
 }
 \description{
 Estimate the decontaminated density of the unknown component in the admixture model under study, after inversion of the admixture
@@ -29,7 +29,7 @@ unknown component f after having estimated p.
 }
 \examples{
 ## Simulate mixture data:
-mixt1 <- twoComp_mixt(n = 1300, weight = 0.4,
+mixt1 <- twoComp_mixt(n = 400, weight = 0.4,
                       comp.dist = list("norm", "norm"),
                       comp.param = list(list("mean" = -2, "sd" = 0.5),
                                         list("mean" = 0, "sd" = 1)))
@@ -45,11 +45,11 @@ decontaminated_density(sample1 = data1, estim.p = est$estimated_mixing_weights[1
                        admixMod = admixMod1)
 
 ####### Discrete support:
-mixt1 <- twoComp_mixt(n = 7000, weight = 0.6,
+mixt1 <- twoComp_mixt(n = 5000, weight = 0.6,
                       comp.dist = list("pois", "pois"),
                       comp.param = list(list("lambda" = 3),
                                         list("lambda" = 2)))
-mixt2 <- twoComp_mixt(n = 6000, weight = 0.8,
+mixt2 <- twoComp_mixt(n = 4000, weight = 0.8,
                       comp.dist = list("pois", "pois"),
                       comp.param = list(list("lambda" = 3),
                                         list("lambda" = 4)))

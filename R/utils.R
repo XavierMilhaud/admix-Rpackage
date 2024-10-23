@@ -27,9 +27,9 @@ admixStartupMessage <- function()
   base::invisible()
 }
 
-#' Detect the support of some random variables
+#' Detect the type of support of some random variables
 #'
-#' Given one or two sets of observations (two samples), the function provides with the most plausible type of support for the
+#' Given one or two sets of observations (samples), the function provides with the most plausible type of support for the
 #' underlying random variables to be studied. If less than 3 percents of the observations have different values,
 #' we consider that the support is discrete. Otherwise, we consider it as a continuous support.
 #'
@@ -74,7 +74,7 @@ detect_support_type <- function(sample1, sample2 = NULL)
 #'
 #' Simulate the trajectory of a Gaussian process, given a mean vector and a variance-covariance structure.
 #'
-#' @param mean_vec Vector (if multimensional) of means for the increments following gaussian distribution.
+#' @param mean_vec Vector (if multimensional) of means for the increments following Gaussian distribution.
 #' @param varCov_mat Corresponding variance-covariance structure.
 #' @param from Initial time point at which the process is simulated.
 #' @param to Last time point at which the process is simulated.
@@ -134,18 +134,6 @@ sim_gaussianProcess <- function(mean_vec, varCov_mat, from = 0, to = 1, start = 
 #'                          knownComp_param = list("mean"=0, "sd"=1))
 #' admixMod2 <- admix_model(knownComp_dist = "norm",
 #'                          knownComp_param = list("mean"=0, "sd"=1))
-#' is_equal_knownComp(admixMod1, admixMod2)
-#'
-#' admixMod1 <- admix_model(knownComp_dist = "norm",
-#'                          knownComp_param = list("mean"=0, "sd"=1))
-#' admixMod2 <- admix_model(knownComp_dist = "norm",
-#'                          knownComp_param = list("mean"=0, "sd"=0.5))
-#' is_equal_knownComp(admixMod1, admixMod2)
-#'
-#' admixMod1 <- admix_model(knownComp_dist = "multinom",
-#'                          knownComp_param = list("size"=1, "prob"=c(0.2,0.5,0.3)))
-#' admixMod2 <- admix_model(knownComp_dist = "multinom",
-#'                          knownComp_param = list("size"=1, "prob"=c(0.2,0.5,0.3)))
 #' is_equal_knownComp(admixMod1, admixMod2)
 #'
 #' admixMod1 <- admix_model(knownComp_dist = "multinom",
@@ -212,11 +200,11 @@ kernel_density <- function(u, h)
 }
 
 
-#' Transforms the known component distribution to a Uniform
+#' Transforms the known component distribution to a Uniform distribution
 #'
 #' In an admixture such that the probability density function (pdf) follows l = p*f + (1-p)*g, where p is the unknown
-#' weight and f is the unknown component distribution: transforms the distribution g to a Uniform distribution.
-#' Useful to use Patra and Sen estimator for the estimation of the unknown weight p.
+#' weight and f is the unknown component distribution: transforms the known distribution g to a Uniform distribution.
+#' Useful when dealing with the Patra and Sen estimator (for the estimation of the unknown weight p).
 #'
 #' @param data Observations of the sample under study, following an admixture distribution.
 #' @param admixMod An object of class 'admix_model', containing useful information about the known components and their parameter(s).

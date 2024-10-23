@@ -17,33 +17,34 @@ estim_PS(
 )
 }
 \arguments{
-\item{data}{Sample where the known component density of the admixture model has been transformed into a Uniform(0,1) distribution.}
+\item{data}{Sample to be studied.}
 
-\item{admixMod}{An object of class 'admix_model', containing the information about the known component distribution and its parameter(s).}
+\item{admixMod}{An object of class 'admix_model', containing information about the known component distribution and its parameter(s).}
 
-\item{method}{Either 'fixed' or 'cv', depending on whether compute the estimate based on the value of 'c.n' or
-use cross-validation for choosing 'c.n' (tuning parameter).}
+\item{method}{One of 'lwr.bnd', fixed' or 'cv': depending on whether compute some lower bound of the mixing proportion, the estimate
+based on the value of 'c.n' or use cross-validation for choosing 'c.n' (tuning parameter).}
 
 \item{c.n}{A positive number, with default value equal to 0.1 log(log(n)), where 'n' is the length of the observed sample.}
 
-\item{folds}{Number of folds used for cross-validation, default is 10.}
+\item{folds}{(optional, default to 10) Number of folds used for cross-validation.}
 
-\item{reps}{Number of replications for cross-validation, default is 1.}
+\item{reps}{(optional, default to 1) Number of replications for cross-validation.}
 
-\item{cn.s}{A sequence of 'c.n' to be used for cross-validation (vector of values). Default is equally
+\item{cn.s}{(optional) A sequence of 'c.n' to be used for cross-validation (vector of values). Default is equally
 spaced grid of 100 values between .001 x log(log(n)) and 0.2 x log(log(n)).}
 
-\item{cn.length}{(default to 100) Number of equally spaced tuning parameter (between .001 x log(log(n)) and 0.2 x log(log(n))).
+\item{cn.length}{(optional, default to 100) Number of equally spaced tuning parameter (between .001 x log(log(n)) and 0.2 x log(log(n))).
 Values to search from.}
 
 \item{gridsize}{(default to 600) Number of equally spaced points (between 0 and 1) to evaluate the distance function.
 Larger values are more computationally intensive but also lead to more accurate estimates.}
 }
 \value{
-A list containing 'alp.hat' (estimate of the unknown component weight), 'Fs.hat' (list with elements 'x' and 'y' values for the function estimate
-of the unknown cumulative distribution function), 'dist.out' which is an object of the class 'dist.fun'
-using the complete data.gen, 'c.n' the value of the tuning parameter used to compute the final estimate,
-and finally 'cv.out' which is an object of class 'cv.mixmodel'. The object is NULL if method is "fixed".
+An object of class 'estim_PS', containing 10 attributes: 1) the number of samples studied (1 in this case); 2) the sample
+size; 3) the information about component distributions of the admixture model; 4) the estimation method 5patra and Sen here);
+5) the estimated mixing weight (estimate of the unknown component proportion); 6) the estimated decontaminated CDF;
+7) an object of the class 'dist.fun' (that gives the distance); 8) the tuning parameter 'c.n'; 9) the lower bound of the
+estimated mixing proportion (if such an option has been chosen); 10) the number of observations.
 }
 \description{
 Estimation of both the weight and the distribution of the unknown component in an admixture model, by Patra and Sen approach.
@@ -54,7 +55,7 @@ More information in 'Details' below concerning the estimation method.
 }
 \examples{
 ## Simulate mixture data:
-mixt1 <- twoComp_mixt(n = 1500, weight = 0.8,
+mixt1 <- twoComp_mixt(n = 800, weight = 0.2,
                       comp.dist = list("norm", "norm"),
                       comp.param = list(list("mean" = 3, "sd" = 0.5),
                                         list("mean" = 0, "sd" = 1)))

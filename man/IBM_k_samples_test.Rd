@@ -27,20 +27,22 @@ IBM_k_samples_test(
 \item{conf_level}{The confidence level of the K-sample test.}
 
 \item{tune_penalty}{A boolean that allows to choose between a classical penalty term or an optimized penalty embedding some tuning parameters
-(automatically optimized). Optimized penalty is particularly useful for low sample size.}
+(automatically optimized). Optimized penalty is particularly useful for low sample size to detect alternatives.}
 
 \item{parallel}{(default to FALSE) Boolean indicating whether parallel computations are performed.}
 
 \item{n_cpu}{(default to 2) Number of cores used when parallelizing.}
 }
 \value{
-A list of 13 elements, containing: 1) the rejection decision; 2) the confidence level of the test (1-alpha, where alpha
-refers to the first-type error); 3) the test p-value; 4) the 95th-quantile of the contrast distribution; 5) the test
-statistic value; 6) the selected rank (number of terms involved in the test statistic); 7) the terms involved in
-the test statistic; 8) A boolean indicating whether the penalization corresponds to the null hypothesis has been considered;
-9) the value of the penalized (potential) test statistics; 10) the selected optimal 'gamma'; 11) the selected optimal constant
-'constant' involved in the penalization process; 12) the tabulated distribution of the contrast; 13) the matrix of
-pairwise contrasts (distance between two samples).
+An object of class 'IBM_test', containing 17 attributes: 1) the number of samples for the test; 2) the sizes of each sample;
+3) the information about component distributions for each sample; 4) the reject decision of the test; 5) the confidence level
+of the test (1-alpha, where alpha refers to the first-type error); 6) the test p-value; 7) the 95th-percentile of the contrast
+tabulated distribution; 8) the test statistic value; 9) the selected rank (number of terms involved in the test statistic);
+10) the terms (pairwise contrasts) involved in the test statistic; 11) A boolean indicating whether the penalization corresponds
+to the null hypothesis has been considered; 12) the value of penalized test statistics; 13) the selected optimal 'gamma' parameter
+(see reference below); 14) the selected optimal constant involved in the penalization process (see also the reference); 15) the
+tabulated distribution of the contrast; 16) the estimated mixing proportions (not implemented yet, since that makes sense only
+in case of equal unknown component distributions); 17) the matrix of pairwise contrasts (distance between two samples).
 }
 \description{
 Equality test of the unknown component distributions coming from K (K > 1) admixture models, based on the Inversion - Best
@@ -77,39 +79,10 @@ admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
 admixMod3 <- admix_model(knownComp_dist = mixt3$comp.dist[[2]],
                          knownComp_param = mixt3$comp.param[[2]])
 ## Perform the 3-samples test:
-k_test <- IBM_k_samples_test(samples = list(data1, data2, data3),
-                             admixMod = list(admixMod1, admixMod2, admixMod3),
-                             sim_U = NULL, n_sim_tab = 20, conf_level = 0.95,
-                             tune_penalty = FALSE, parallel = FALSE, n_cpu = 2)
-
-####### Now under the alternative H1:
-mixt1 <- twoComp_mixt(n = 450, weight = 0.4,
-                      comp.dist = list("norm", "norm"),
-                      comp.param = list(list("mean" = -2, "sd" = 0.5),
-                                        list("mean" = 0, "sd" = 1)))
-mixt2 <- twoComp_mixt(n = 380, weight = 0.7,
-                      comp.dist = list("norm", "norm"),
-                      comp.param = list(list("mean" = -2, "sd" = 0.5),
-                                        list("mean" = 1, "sd" = 1)))
-mixt3 <- twoComp_mixt(n = 400, weight = 0.8,
-                      comp.dist = list("norm", "exp"),
-                      comp.param = list(list("mean" = 3, "sd" = 1),
-                                        list("rate" = 1)))
-data1 <- getmixtData(mixt1)
-data2 <- getmixtData(mixt2)
-data3 <- getmixtData(mixt3)
-
-## Define the admixture models:
-admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
-                         knownComp_param = mixt1$comp.param[[2]])
-admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
-                         knownComp_param = mixt2$comp.param[[2]])
-admixMod3 <- admix_model(knownComp_dist = mixt3$comp.dist[[2]],
-                         knownComp_param = mixt3$comp.param[[2]])
-k_test <- IBM_k_samples_test(samples = list(data1, data2, data3),
-                             admixMod = list(admixMod1, admixMod2, admixMod3),
-                             sim_U = NULL, n_sim_tab = 20, conf_level = 0.95,
-                             tune_penalty = FALSE, parallel = FALSE, n_cpu = 2)
+IBM_k_samples_test(samples = list(data1, data2, data3),
+                   admixMod = list(admixMod1, admixMod2, admixMod3),
+                   sim_U = NULL, n_sim_tab = 8, conf_level = 0.95,
+                   tune_penalty = FALSE, parallel = FALSE, n_cpu = 2)
 }
 
 }

@@ -24,7 +24,11 @@ previously the test hypothesis between the pairs of samples. For further details
 \item{sym.f}{A boolean indicating whether the unknown component densities are assumed to be symmetric or not.}
 }
 \value{
-A list containing the estimated weight of every unknown component distribution among admixture samples.
+An object of class 'admix_estim', containing at least 5 attributes: 1) the number of samples under study; 2) the information
+about the mixture components (distributions and parameters); 3) the sizes of the samples; 4) the chosen estimation technique
+(one of 'BVdk', 'PS' or 'IBM'); 5) the estimated mixing proportions (weights of the unknown component distributions in the
+mixture model). In case of 'BVdk' estimation, one additional attribute corresponding to the estimated location shift parameter
+is included.
 }
 \description{
 Estimate the component weights, the location shift parameter (in case of a symmetric unknown component density),
@@ -43,34 +47,27 @@ mixt1 <- twoComp_mixt(n = 450, weight = 0.4,
                       comp.dist = list("norm", "norm"),
                       comp.param = list(list("mean" = -2, "sd" = 0.5),
                                         list("mean" = 0, "sd" = 1)))
-mixt2 <- twoComp_mixt(n = 380, weight = 0.7,
-                      comp.dist = list("norm", "norm"),
-                      comp.param = list(list("mean" = -2, "sd" = 0.5),
-                                        list("mean" = 1, "sd" = 1)))
 mixt3 <- twoComp_mixt(n = 400, weight = 0.8,
                       comp.dist = list("norm", "exp"),
                       comp.param = list(list("mean" = 3, "sd" = 1),
                                         list("rate" = 1)))
 data1 <- getmixtData(mixt1)
-data2 <- getmixtData(mixt2)
 data3 <- getmixtData(mixt3)
 
 ## Define the admixture models:
 admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
                          knownComp_param = mixt1$comp.param[[2]])
-admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
-                         knownComp_param = mixt2$comp.param[[2]])
 admixMod3 <- admix_model(knownComp_dist = mixt3$comp.dist[[2]],
                          knownComp_param = mixt3$comp.param[[2]])
 
-admix_estim(samples = list(data1,data2,data3),
-            admixMod = list(admixMod1,admixMod2,admixMod3),
+admix_estim(samples = list(data1,data3),
+            admixMod = list(admixMod1,admixMod3),
             est.method = 'BVdk', sym.f = TRUE)
-admix_estim(samples = list(data1,data2,data3),
-            admixMod = list(admixMod1,admixMod2,admixMod3),
+admix_estim(samples = list(data1,data3),
+            admixMod = list(admixMod1,admixMod3),
             est.method = 'PS')
-admix_estim(samples = list(data1,data2,data3),
-            admixMod = list(admixMod1,admixMod2,admixMod3),
+admix_estim(samples = list(data1,data3),
+            admixMod = list(admixMod1,admixMod3),
             est.method = 'IBM')
 
 }

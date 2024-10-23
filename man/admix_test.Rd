@@ -10,7 +10,7 @@ admix_test(
   test_method = c("poly", "icv"),
   sim_U = NULL,
   n_sim_tab = 50,
-  ICV_tunePenalty = TRUE,
+  ICV_tunePenalty = FALSE,
   ask_poly_param = FALSE,
   support = c("Real", "Integer", "Positive", "Bounded.continuous"),
   conf_level = 0.95,
@@ -19,7 +19,7 @@ admix_test(
 )
 }
 \arguments{
-\item{samples}{(list) A list of the K (K>0) samples to be studied, each one assumed to follow a mixture distributions.}
+\item{samples}{(list) A list of the K (K > 0) samples to be studied, each one assumed to follow a mixture distribution.}
 
 \item{admixMod}{(list) A list of objects of class 'admix_model', containing useful information about distributions and parameters.}
 
@@ -33,9 +33,10 @@ as defined in the IBM approach (see 'Details' below).}
 \item{n_sim_tab}{(Only with 'icv' testing method, otherwise useless) Number of simulated gaussian processes used in the
 tabulation of the inner convergence distribution in the IBM approach.}
 
-\item{ICV_tunePenalty}{(Only with 'icv' testing method, otherwise useless. Default to TRUE) Boolean used to tune the penalty term in the
-k-sample test (k=2,3,...,K) when using Inversion Best Matching (IBM) approach coupled to Inner ConVergence (icv)
-property. Particularly useful when studying unbalanced samples (in terms of sample size) or small-sized samples.}
+\item{ICV_tunePenalty}{(Only with 'icv' testing with at least 3 samples to deal with, otherwise useless. Default to FALSE) Boolean used
+to tune the penalty term in the k-sample test (k = 3,...,K) when using Inversion Best Matching (IBM) approach coupled
+to Inner ConVergence (icv) property. Particularly useful when studying unbalanced samples (in terms of sample size)
+or small-sized samples.}
 
 \item{ask_poly_param}{(Only with 'poly' testing method, otherwise useless. Boolean, default to FALSE) If TRUE, ask the user to choose
 both the order 'K' of expansion coefficients in the orthonormal polynomial basis, and the penalization rate 's'
@@ -46,14 +47,18 @@ involved on the penalization rule for the test. Default values for these two par
 
 \item{conf_level}{The confidence level of the K-sample test.}
 
-\item{parallel}{(default to FALSE) Boolean indicating whether parallel computations are performed (speed-up the tabulation).}
+\item{parallel}{(default to FALSE, only used with 'icv' testing) Boolean indicating whether parallel computations are performed
+(to speed-up the tabulation).}
 
-\item{n_cpu}{(default to 2) Number of cores used when parallelizing.}
+\item{n_cpu}{(default to 2, only used with 'icv' testing) Number of cores used when parallelizing.}
 }
 \value{
-A list containing the decision of the test (reject or not), the confidence level at which the test is performed,
-the p-value of the test, and the value of the test statistic (following a chi2 distribution with one degree of freedom
-under the null).
+An object of class 'admix_test', containing 8 attributes: 1) the test decision (reject the null hypothesis or not);
+2) the p-value of the test; 3) the confidence level of the test (1-alpha, where alpha denotes the level of the test
+or equivalently the type-I error); 4) the value of the test statistic; 5) the number of samples under study; 6) the
+respective size of each sample; 7) the information about mixture components (distributions and parameters); 8) the
+chosen testing method (either based on polynomial basis expansions, or on the inner convergence property; see given
+references).
 }
 \description{
 Perform hypothesis test between unknown components of a list of admixture models, where we remind that the i-th admixture
@@ -65,7 +70,7 @@ The test can be performed using two methods, either the comparison of coefficien
 of the component densities, or by the inner-convergence property obtained using the IBM approach. See 'Details' below for further information.
 }
 \details{
-For further details on hypothesis tests, see i) Inner convergence through IBM approach ; ii) Polynomial expansions.
+For further details on implemented hypothesis tests, see the references hereafter.
 .
 }
 \examples{
@@ -100,37 +105,9 @@ admix_test(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
            test_method = "poly", ask_poly_param = FALSE, support = "Real",
            conf_level = 0.95, parallel = FALSE, n_cpu = 2)
 
-####### Example with 3 samples
-mixt1 <- twoComp_mixt(n = 450, weight = 0.4,
-                      comp.dist = list("norm", "norm"),
-                      comp.param = list(c("mean" = -2, "sd" = 0.5),
-                                        c("mean" = 0, "sd" = 1)))
-mixt2 <- twoComp_mixt(n = 600, weight = 0.24,
-                      comp.dist = list("norm", "norm"),
-                      comp.param = list(c("mean" = -2, "sd" = 0.5),
-                                        c("mean" = -1, "sd" = 1)))
-mixt3 <- twoComp_mixt(n = 400, weight = 0.53,
-                      comp.dist = list("norm", "norm"),
-                      comp.param = list(c("mean" = -2, "sd" = 0.5),
-                                        c("mean" = 2, "sd" = 1)))
-data1 <- getmixtData(mixt1)
-data2 <- getmixtData(mixt2)
-data3 <- getmixtData(mixt3)
-admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
-                         knownComp_param = mixt1$comp.param[[2]])
-admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
-                         knownComp_param = mixt2$comp.param[[2]])
-admixMod3 <- admix_model(knownComp_dist = mixt3$comp.dist[[2]],
-                         knownComp_param = mixt3$comp.param[[2]])
-
-admix_test(samples = list(data1, data2, data3),
-           admixMod = list(admixMod1, admixMod2, admixMod3),
-           test_method = "icv", n_sim_tab = 10, ICV_tunePenalty = FALSE,
-           conf_level = 0.95, parallel = FALSE, n_cpu = 2)
-
 }
 \references{
-\insertRef{MilhaudPommeretSalhiVandekerkhove2024a}{admix}
+\insertRef{MilhaudPommeretSalhiVandekerkhove2024b}{admix}
 \insertRef{MilhaudPommeretSalhiVandekerkhove2022}{admix}
 \insertRef{PommeretVandekerkhove2019}{admix}
 }

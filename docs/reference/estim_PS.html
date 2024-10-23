@@ -34,7 +34,6 @@ More information in 'Details' below concerning the estimation method."><!-- math
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/admixture-clustering.html">Clustering of unknown subpopulations in admixture models</a>
     <a class="dropdown-item" href="../articles/admixture-weight-estimation.html">Estimation of unknown elements in admixture models</a>
-    <a class="dropdown-item" href="../articles/covid19-example-pairwiseTesting.html">covid19-pairwise-testing</a>
     <a class="dropdown-item" href="../articles/test-hypothesis.html">Hypothesis test in admixture models</a>
   </div>
 </li>
@@ -85,16 +84,16 @@ More information in 'Details' below concerning the estimation method.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>data</dt>
-<dd><p>Sample where the known component density of the admixture model has been transformed into a Uniform(0,1) distribution.</p></dd>
+<dd><p>Sample to be studied.</p></dd>
 
 
 <dt>admixMod</dt>
-<dd><p>An object of class 'admix_model', containing the information about the known component distribution and its parameter(s).</p></dd>
+<dd><p>An object of class 'admix_model', containing information about the known component distribution and its parameter(s).</p></dd>
 
 
 <dt>method</dt>
-<dd><p>Either 'fixed' or 'cv', depending on whether compute the estimate based on the value of 'c.n' or
-use cross-validation for choosing 'c.n' (tuning parameter).</p></dd>
+<dd><p>One of 'lwr.bnd', fixed' or 'cv': depending on whether compute some lower bound of the mixing proportion, the estimate
+based on the value of 'c.n' or use cross-validation for choosing 'c.n' (tuning parameter).</p></dd>
 
 
 <dt>c.n</dt>
@@ -102,20 +101,20 @@ use cross-validation for choosing 'c.n' (tuning parameter).</p></dd>
 
 
 <dt>folds</dt>
-<dd><p>Number of folds used for cross-validation, default is 10.</p></dd>
+<dd><p>(optional, default to 10) Number of folds used for cross-validation.</p></dd>
 
 
 <dt>reps</dt>
-<dd><p>Number of replications for cross-validation, default is 1.</p></dd>
+<dd><p>(optional, default to 1) Number of replications for cross-validation.</p></dd>
 
 
 <dt>cn.s</dt>
-<dd><p>A sequence of 'c.n' to be used for cross-validation (vector of values). Default is equally
+<dd><p>(optional) A sequence of 'c.n' to be used for cross-validation (vector of values). Default is equally
 spaced grid of 100 values between .001 x log(log(n)) and 0.2 x log(log(n)).</p></dd>
 
 
 <dt>cn.length</dt>
-<dd><p>(default to 100) Number of equally spaced tuning parameter (between .001 x log(log(n)) and 0.2 x log(log(n))).
+<dd><p>(optional, default to 100) Number of equally spaced tuning parameter (between .001 x log(log(n)) and 0.2 x log(log(n))).
 Values to search from.</p></dd>
 
 
@@ -128,10 +127,11 @@ Larger values are more computationally intensive but also lead to more accurate 
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A list containing 'alp.hat' (estimate of the unknown component weight), 'Fs.hat' (list with elements 'x' and 'y' values for the function estimate
-of the unknown cumulative distribution function), 'dist.out' which is an object of the class 'dist.fun'
-using the complete data.gen, 'c.n' the value of the tuning parameter used to compute the final estimate,
-and finally 'cv.out' which is an object of class 'cv.mixmodel'. The object is NULL if method is "fixed".</p>
+<p>An object of class 'estim_PS', containing 10 attributes: 1) the number of samples studied (1 in this case); 2) the sample
+size; 3) the information about component distributions of the admixture model; 4) the estimation method 5patra and Sen here);
+5) the estimated mixing weight (estimate of the unknown component proportion); 6) the estimated decontaminated CDF;
+7) an object of the class 'dist.fun' (that gives the distance); 8) the tuning parameter 'c.n'; 9) the lower bound of the
+estimated mixing proportion (if such an option has been chosen); 10) the number of observations.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -147,7 +147,7 @@ and finally 'cv.out' which is an object of class 'cv.mixmodel'. The object is NU
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Simulate mixture data:</span></span></span>
-<span class="r-in"><span><span class="va">mixt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1500</span>, weight <span class="op">=</span> <span class="fl">0.8</span>,</span></span>
+<span class="r-in"><span><span class="va">mixt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">800</span>, weight <span class="op">=</span> <span class="fl">0.2</span>,</span></span>
 <span class="r-in"><span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"norm"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">3</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                                        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">0</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -163,8 +163,8 @@ and finally 'cv.out' which is an object of class 'cv.mixmodel'. The object is NU
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:estim_PS(data = data1, admixMod = admixMod1, method = "fixed", </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     c.n = 0.1 * log(log(length(data1))), gridsize = 1000)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Estimate of the mixing weight (proportion of the unknown component distribution) is 0.8</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   The chosen value c_n is 0.198968372217963</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Estimate of the mixing weight (proportion of the unknown component distribution) is 0.197</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  The chosen value c_n is 0.189980812774042</span>
 <span class="r-plt img"><img src="estim_PS-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

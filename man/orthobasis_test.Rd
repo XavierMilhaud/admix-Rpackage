@@ -39,8 +39,11 @@ following: list( list(min.f1,min.g1,min.f2,min.g2) , list(max.f1,max.g1,max.f2,m
 \item{support}{support of the densities under consideration, useful to choose the polynomial orthonormal basis.}
 }
 \value{
-A list with six elements containing: 1) the rejection decision; 2) the p-value of the test; 3) the test statistic; 4) the
-variance-covariance matrix of the test statistic; 5) selected rank for testing, and 6) estimates of the two component weights.
+An object of class 'orthobasis_test', containing ten attributes: 1) the number of populations under study (2 in this case);
+2) the sizes of samples; 3) the information about the known component distribution; 4) the reject decision of the test; 5) the
+confidence level of the test, 6) the p-value of the test; 7) the value of the test statistic; 8) the variance of the test
+statistic at each order in the polynomial orthobasis expansion; 9) the selected rank (order) for the test statistic;
+10) a vector of estimates, related to the estimated mixing proportions in the two samples.
 }
 \description{
 Tests the null hypothesis (H0: f1=f2) using the decomposition of unknown component densities of two admixture distributions in
@@ -50,28 +53,26 @@ are observed. The admixture weights p1 and p2 thus have to be estimated. For fur
 }
 \examples{
 \donttest{
-###### Using BVdk estimation (valid if symmetric unknown component densities).
 #### Under the null hypothesis H0.
-mixt1 <- twoComp_mixt(n = 1700, weight = 0.25,
+mixt1 <- twoComp_mixt(n = 300, weight = 0.77,
                       comp.dist = list("norm", "norm"),
                       comp.param = list(list("mean" = 1, "sd" = 1),
                                         list("mean" = 4, "sd" = 1)))
 data1 <- getmixtData(mixt1)
 admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
                         knownComp_param = mixt1$comp.param[[2]])
-
-mixt2 <- twoComp_mixt(n = 2000, weight = 0.15,
+mixt2 <- twoComp_mixt(n = 500, weight = 0.62,
                       comp.dist = list("norm", "norm"),
                       comp.param = list(list("mean" = 1, "sd" = 1),
-                                        list("mean" = 5, "sd" = 0.5)))
+                                        list("mean" = -2, "sd" = 0.5)))
 data2 <- getmixtData(mixt2)
 admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
                         knownComp_param = mixt2$comp.param[[2]])
 
-ortho_test <- orthobasis_test(samples = list(data1,data2),
-                              admixMod = list(admixMod1,admixMod2),
-                              K = 3, s = 0.49, nb_echBoot = NULL, support = 'Real',
-                              bounds_supp = NULL, est_method = 'BVdk')
+orthobasis_test(samples = list(data1,data2),
+                admixMod = list(admixMod1,admixMod2),
+                K = 3, s = 0.49, nb_echBoot = NULL, support = 'Real',
+                bounds_supp = NULL, est_method = 'BVdk')
 }
 
 }

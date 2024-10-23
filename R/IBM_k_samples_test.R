@@ -12,20 +12,22 @@
 #' @param n_sim_tab Number of simulated gaussian processes when tabulating the inner convergence distribution in the IBM approach.
 #' @param conf_level The confidence level of the K-sample test.
 #' @param tune_penalty A boolean that allows to choose between a classical penalty term or an optimized penalty embedding some tuning parameters
-#'                     (automatically optimized). Optimized penalty is particularly useful for low sample size.
+#'                     (automatically optimized). Optimized penalty is particularly useful for low sample size to detect alternatives.
 #' @param parallel (default to FALSE) Boolean indicating whether parallel computations are performed.
 #' @param n_cpu (default to 2) Number of cores used when parallelizing.
 #'
 #' @references
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2024b}{admix}
 #'
-#' @return A list of 13 elements, containing: 1) the rejection decision; 2) the confidence level of the test (1-alpha, where alpha
-#'         refers to the first-type error); 3) the test p-value; 4) the 95th-quantile of the contrast distribution; 5) the test
-#'         statistic value; 6) the selected rank (number of terms involved in the test statistic); 7) the terms involved in
-#'         the test statistic; 8) A boolean indicating whether the penalization corresponds to the null hypothesis has been considered;
-#'         9) the value of the penalized (potential) test statistics; 10) the selected optimal 'gamma'; 11) the selected optimal constant
-#'         'constant' involved in the penalization process; 12) the tabulated distribution of the contrast; 13) the matrix of
-#'         pairwise contrasts (distance between two samples).
+#' @return An object of class 'IBM_test', containing 17 attributes: 1) the number of samples for the test; 2) the sizes of each sample;
+#'         3) the information about component distributions for each sample; 4) the reject decision of the test; 5) the confidence level
+#'         of the test (1-alpha, where alpha refers to the first-type error); 6) the test p-value; 7) the 95th-percentile of the contrast
+#'         tabulated distribution; 8) the test statistic value; 9) the selected rank (number of terms involved in the test statistic);
+#'         10) the terms (pairwise contrasts) involved in the test statistic; 11) A boolean indicating whether the penalization corresponds
+#'         to the null hypothesis has been considered; 12) the value of penalized test statistics; 13) the selected optimal 'gamma' parameter
+#'         (see reference below); 14) the selected optimal constant involved in the penalization process (see also the reference); 15) the
+#'         tabulated distribution of the contrast; 16) the estimated mixing proportions (not implemented yet, since that makes sense only
+#'         in case of equal unknown component distributions); 17) the matrix of pairwise contrasts (distance between two samples).
 #'
 #' @examples
 #' \donttest{
@@ -55,39 +57,10 @@
 #' admixMod3 <- admix_model(knownComp_dist = mixt3$comp.dist[[2]],
 #'                          knownComp_param = mixt3$comp.param[[2]])
 #' ## Perform the 3-samples test:
-#' k_test <- IBM_k_samples_test(samples = list(data1, data2, data3),
-#'                              admixMod = list(admixMod1, admixMod2, admixMod3),
-#'                              sim_U = NULL, n_sim_tab = 20, conf_level = 0.95,
-#'                              tune_penalty = FALSE, parallel = FALSE, n_cpu = 2)
-#'
-#' ####### Now under the alternative H1:
-#' mixt1 <- twoComp_mixt(n = 450, weight = 0.4,
-#'                       comp.dist = list("norm", "norm"),
-#'                       comp.param = list(list("mean" = -2, "sd" = 0.5),
-#'                                         list("mean" = 0, "sd" = 1)))
-#' mixt2 <- twoComp_mixt(n = 380, weight = 0.7,
-#'                       comp.dist = list("norm", "norm"),
-#'                       comp.param = list(list("mean" = -2, "sd" = 0.5),
-#'                                         list("mean" = 1, "sd" = 1)))
-#' mixt3 <- twoComp_mixt(n = 400, weight = 0.8,
-#'                       comp.dist = list("norm", "exp"),
-#'                       comp.param = list(list("mean" = 3, "sd" = 1),
-#'                                         list("rate" = 1)))
-#' data1 <- getmixtData(mixt1)
-#' data2 <- getmixtData(mixt2)
-#' data3 <- getmixtData(mixt3)
-#'
-#' ## Define the admixture models:
-#' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
-#'                          knownComp_param = mixt1$comp.param[[2]])
-#' admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
-#'                          knownComp_param = mixt2$comp.param[[2]])
-#' admixMod3 <- admix_model(knownComp_dist = mixt3$comp.dist[[2]],
-#'                          knownComp_param = mixt3$comp.param[[2]])
-#' k_test <- IBM_k_samples_test(samples = list(data1, data2, data3),
-#'                              admixMod = list(admixMod1, admixMod2, admixMod3),
-#'                              sim_U = NULL, n_sim_tab = 20, conf_level = 0.95,
-#'                              tune_penalty = FALSE, parallel = FALSE, n_cpu = 2)
+#' IBM_k_samples_test(samples = list(data1, data2, data3),
+#'                    admixMod = list(admixMod1, admixMod2, admixMod3),
+#'                    sim_U = NULL, n_sim_tab = 8, conf_level = 0.95,
+#'                    tune_penalty = FALSE, parallel = FALSE, n_cpu = 2)
 #' }
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
@@ -321,6 +294,9 @@ IBM_k_samples_test <- function(samples, admixMod, sim_U = NULL, n_sim_tab = 100,
     p_value <- 1 - CDF_U(finalStat_value)
 
     obj <- list(
+      n_populations = length(samples),
+      population_sizes = sapply(X = samples, FUN = length),
+      admixture_models = admixMod,
       reject_decision = final_test,
       confidence_level = conf_level,
       p_value = p_value,
@@ -338,6 +314,7 @@ IBM_k_samples_test <- function(samples, admixMod, sim_U = NULL, n_sim_tab = 100,
     )
     class(obj) <- c("IBM_test", "admix_test")
     obj$call <- match.call()
+
     return(obj)
   }
 
@@ -356,7 +333,57 @@ print.IBM_test <- function(x, ...)
   cat("Call:")
   print(x$call)
   cat("\n")
-  print(x)
+  cat("Is the null hypothesis (gaussian unknown component distribution) rejected? ",
+      ifelse(x$reject_decision, "Yes", "No"), sep="")
+  cat("\nTest p-value: ", round(x$p_value,3), "\n", sep="")
+}
+
+
+#' Summary method for objects 'IBM_test'
+#'
+#' @param object An object of class 'IBM_test'.
+#' @param ... A list of additional parameters belonging to the default method.
+#'
+#' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
+#' @export
+
+summary.IBM_test <- function(object, ...)
+{
+  cat("Call:")
+  print(object$call)
+  cat("\n--------- About samples ---------\n")
+  cat(paste("Size of sample ", 1:object$n_populations, ": ", object$population_sizes, sep = ""), sep = "\n")
+  cat("\n-------- About contamination (admixture) models -------")
+  cat("\n")
+  if (object$n_populations == 1) {
+    cat("-> Distribution and parameters of the known component \n for the admixture model: ", sep="")
+    cat(object$admixture_models$comp.dist$known, "\n")
+    print(unlist(object$admixture_models$comp.param$known, use.names = TRUE))
+  } else {
+    for (k in 1:object$n_populations) {
+      cat("-> Distribution and parameters of the known component \n for admixture model #", k, ": ", sep="")
+      cat(paste(sapply(object$admixture_models[[k]], "[[", "known")[1:2], collapse = " - "))
+      cat("\n")
+    }
+  }
+  cat("\n------- Test decision -------\n")
+  cat("Is the null hypothesis (equality of unknown component distributions) rejected? ",
+      ifelse(object$reject_decision, "Yes", "No"), sep="")
+  cat("\nConfidence level of the test: ", object$confidence_level, sep="")
+  cat("\nTest p-value: ", round(object$p_value,3), sep="")
+  cat("\n\n------- Test statistic -------\n")
+  cat("Selected rank of the test statistic (following the penalization rule): ", object$selected_rank, sep="")
+  cat("\nValue of the test statistic: ", round(object$test_statistic_value,2), "\n", sep="")
+  cat("Discrepancy terms involved in the statistic: ", paste(object$statistic_name, sep = ""), "\n", sep = "")
+  cat("Optimal tuning parameters involved in the test statistic (if argument 'tune.penalty' is true):\n")
+  cat("Gamma: ", object$tuned_gamma, "\n", sep = "")
+  cat("Constant: ", object$tuned_constant, "\n", sep = "")
+  cat("Chosen penalty rule: ", ifelse(object$penalty_nullHyp, "H0", "H1"), sep = "")
+  cat("\n\n------- Tabulated test statistic distribution -------\n")
+  cat("Quantile at level ", object$confidence_level*100, "%: ", round(object$extreme_quantile_tabul, 3), "\n", sep = "")
+  cat("Tabulated distribution: ", paste(utils::head(round(sort(object$tabulated_dist),2),3), collapse = " "), "....",
+      paste(utils::tail(round(sort(object$tabulated_dist),2),3), collapse = " "), "\n", sep = "")
+  cat("\n")
 }
 
 
@@ -384,32 +411,7 @@ print.IBM_test <- function(x, ...)
 #'         this distribution; 6) the estimated weights of the unknown components for each of the two admixture models.
 #'
 #' @examples
-#' \donttest{
-#' ####### Under the null hypothesis H0 (with K=3 populations):
-#' ## Simulate mixture data:
-#' mixt1 <- twoComp_mixt(n = 1200, weight = 0.4,
-#'                       comp.dist = list("norm", "norm"),
-#'                       comp.param = list(list("mean" = -2, "sd" = 0.5),
-#'                                         list("mean" = 0, "sd" = 1)))
-#' mixt2 <- twoComp_mixt(n = 1000, weight = 0.7,
-#'                       comp.dist = list("norm", "norm"),
-#'                       comp.param = list(list("mean" = -2, "sd" = 0.5),
-#'                                         list("mean" = 1, "sd" = 1)))
-#' data1 <- getmixtData(mixt1)
-#' data2 <- getmixtData(mixt2)
-#'
-#' ## Define the admixture models:
-#' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
-#'                          knownComp_param = mixt1$comp.param[[2]])
-#' admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
-#'                          knownComp_param = mixt2$comp.param[[2]])
-#' ## Perform the 2-sample test:
-#' twoSample_test <- IBM_2samples_test(samples = list(data1, data2),
-#'                                     admixMod = list(admixMod1, admixMod2), sim_U = NULL,
-#'                                     n_sim_tab = 10, conf_level = 0.95,
-#'                                     parallel = FALSE, n_cpu = 2)
-#'
-#' ####### Now under the alternative H1:
+#' ####### Under the alternative H1:
 #' mixt1 <- twoComp_mixt(n = 450, weight = 0.4,
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = -2, "sd" = 0.5),
@@ -426,11 +428,10 @@ print.IBM_test <- function(x, ...)
 #'                          knownComp_param = mixt1$comp.param[[2]])
 #' admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
 #'                          knownComp_param = mixt2$comp.param[[2]])
-#' twoSample_test <- IBM_2samples_test(samples = list(data1, data2),
-#'                                     admixMod = list(admixMod1, admixMod2), sim_U = NULL,
-#'                                     n_sim_tab = 10, conf_level = 0.95,
-#'                                     parallel = FALSE, n_cpu = 2)
-#' }
+#' IBM_2samples_test(samples = list(data1, data2),
+#'                   admixMod = list(admixMod1, admixMod2), sim_U = NULL,
+#'                   n_sim_tab = 10, conf_level = 0.95,
+#'                   parallel = FALSE, n_cpu = 2)
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @noRd
@@ -507,8 +508,6 @@ IBM_2samples_test <- function(samples, admixMod, sim_U = NULL, n_sim_tab = 50,
     estimated_mix_proportions = estim.weights,
     contrast_matrix = NA
   )
-  class(obj) <- "IBM_test"
-  obj$call <- match.call()
   return(obj)
 }
 
@@ -523,18 +522,18 @@ IBM_2samples_test <- function(samples, admixMod, sim_U = NULL, n_sim_tab = 50,
 #'                  proportions of the unknown component in each of the two admixture models studied.
 #' @param samples (list) A list of the two samples under study.
 #' @param admixMod (list) A list of two objects of class 'admix_model', containing useful information about distributions and parameters.
-#' @param alpha Confidence level at which the criterion is assessed (used to compute the confidence bands of the estimators
-#'              of the unknown component weights).
+#' @param alpha Confidence region is defined by the probability (1-alpha), used to compute the confidence bands of the estimators
+#'              of the unknown component weights.
 #'
 #' @references
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2024a}{admix}
 #'
-#' @return A boolean indicating whether it is useful or useless to tabulate the contrast distribution in order to answer
-#'         the testing problem (f1 = f2).
+#' @return A boolean indicating whether it is useful or not to tabulate the contrast distribution in order to answer
+#'         the testing problem (H0: f1 = f2).
 #'
 #' @examples
 #' \donttest{
-#' #' ####### Under the null hypothesis H0 (with K=3 populations):
+#' ####### Under the null hypothesis H0 (with K=3 populations):
 #' ## Simulate mixture data:
 #' mixt1 <- twoComp_mixt(n = 1200, weight = 0.4,
 #'                       comp.dist = list("norm", "norm"),
@@ -601,10 +600,10 @@ IBM_greenLight_criterion <- function(estim_obj, samples, admixMod, alpha = 0.05)
 #' processes and applying some transformations. Useful to perform the test hypothesis, by retrieving the (1-alpha)-quantile
 #' of interest. See 'Details' below and the cited paper therein for further information.
 #'
-#' @param n.sim Number of trajectories of simulated gaussian processes (number of random draws for tabulation).
-#' @param n.varCovMat Number of time points on which gaussian processes are simulated.
+#' @param n.sim Number of trajectories for the simulated Gaussian processes (number of random draws for tabulation).
+#' @param n.varCovMat Number of time points at which the Gaussian processes are simulated.
 #' @param samples (list) A list of the two samples under study.
-#' @param admixMod (list) A list of two objects of class 'admix_model', containing useful information about distributions and parameters.
+#' @param admixMod (list) A list of two objects of class 'admix_model', with information about distributions and parameters.
 #' @param min_size (optional, NULL by default) In the k-sample case, useful to provide the minimal size among all samples
 #'                 (needed to take into account the correction factor for variance-covariance assessment). Otherwise, useless.
 #' @param parallel (default to FALSE) Boolean to indicate whether parallel computations are performed (speed-up the tabulation).
@@ -613,10 +612,9 @@ IBM_greenLight_criterion <- function(estim_obj, samples, admixMod, alpha = 0.05)
 #' @references
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2024a}{admix}
 #'
-#' @return A list with four elements, containing: 1) random draws of the quantity 'sample size times the empirical contrast',
-#'         as defined in the IBM approach (see 'Details' above); 2) the estimated unknown component weights for the two admixture
-#'         models; 3) the value of the quantity 'sample size times the empirical contrast'; 4) the sequence of points in the
-#'         support that were used to evaluate the variance-covariance matrix of empirical processes.
+#' @return A list with four elements, containing: 1) random draws of the contrast as defined in the reference given here;
+#'         2) estimated unknown component weights for the two admixture models; 3) the value of the the empirical contrast;
+#'         4) support that was used to evaluate the variance-covariance matrix of the empirical processes.
 #'
 #' @examples
 #' \donttest{

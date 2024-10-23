@@ -21,33 +21,34 @@
 #' @references
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2022}{admix}
 #'
-#' @return A list with six elements containing: 1) the rejection decision; 2) the p-value of the test; 3) the test statistic; 4) the
-#'         variance-covariance matrix of the test statistic; 5) selected rank for testing, and 6) estimates of the two component weights.
+#' @return An object of class 'orthobasis_test', containing ten attributes: 1) the number of populations under study (2 in this case);
+#'         2) the sizes of samples; 3) the information about the known component distribution; 4) the reject decision of the test; 5) the
+#'         confidence level of the test, 6) the p-value of the test; 7) the value of the test statistic; 8) the variance of the test
+#'         statistic at each order in the polynomial orthobasis expansion; 9) the selected rank (order) for the test statistic;
+#'         10) a vector of estimates, related to the estimated mixing proportions in the two samples.
 #'
 #' @examples
 #' \donttest{
-#' ###### Using BVdk estimation (valid if symmetric unknown component densities).
 #' #### Under the null hypothesis H0.
-#' mixt1 <- twoComp_mixt(n = 1700, weight = 0.25,
+#' mixt1 <- twoComp_mixt(n = 300, weight = 0.77,
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 1, "sd" = 1),
 #'                                         list("mean" = 4, "sd" = 1)))
 #' data1 <- getmixtData(mixt1)
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                         knownComp_param = mixt1$comp.param[[2]])
-#'
-#' mixt2 <- twoComp_mixt(n = 2000, weight = 0.15,
+#' mixt2 <- twoComp_mixt(n = 500, weight = 0.62,
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 1, "sd" = 1),
-#'                                         list("mean" = 5, "sd" = 0.5)))
+#'                                         list("mean" = -2, "sd" = 0.5)))
 #' data2 <- getmixtData(mixt2)
 #' admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
 #'                         knownComp_param = mixt2$comp.param[[2]])
 #'
-#' ortho_test <- orthobasis_test(samples = list(data1,data2),
-#'                               admixMod = list(admixMod1,admixMod2),
-#'                               K = 3, s = 0.49, nb_echBoot = NULL, support = 'Real',
-#'                               bounds_supp = NULL, est_method = 'BVdk')
+#' orthobasis_test(samples = list(data1,data2),
+#'                 admixMod = list(admixMod1,admixMod2),
+#'                 K = 3, s = 0.49, nb_echBoot = NULL, support = 'Real',
+#'                 bounds_supp = NULL, est_method = 'BVdk')
 #' }
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
@@ -105,16 +106,17 @@ orthobasis_test <- function(samples, admixMod, K = 3, s = 0.49, est_method = c("
 
   ##---- Estimate nonparametrically the mixture weights (and the estimators variance) ----##
   if (meth == "PS") {
-    ## Despite Patra & Sen estimator is not square-root-n consistent, it can be useful when working with asymetric unknown distributions:
+    ## Despite Patra & Sen estimator is not square-root-n consistent, it can be useful when working with
+    ## asymetric unknown distributions:
     hat.p1 <- estim_PS(samples[[1]], admixMod = admixMod[[1]], method = 'fixed',
                        c.n = 0.1*log(log(length(samples[[1]]))), gridsize = 1000)$alp.hat
     hat.p2 <- estim_PS(samples[[2]], admixMod = admixMod[[2]], method = 'fixed',
                        c.n = 0.1*log(log(length(samples[[2]]))), gridsize = 1000)$alp.hat
 
   } else {
-    message("   Remind that choosing 'BVdk' for the estimation
-    method is consistent only if the unknown component distribution
-    has a symmetric density function.")
+    message("    Remind that choosing 'BVdk' for the estimation method
+    is consistent only if the unknown component distributions
+    have a symmetric density function.")
     p1.estim <- estim_BVdk(data = data.p1, admixMod = admixMod[[1]], method = "L-BFGS-B")
     p2.estim <- estim_BVdk(data = data.p2, admixMod = admixMod[[2]], method = "L-BFGS-B")
     hat.p1 <- p1.estim$estimated_mixing_weights
@@ -136,7 +138,7 @@ orthobasis_test <- function(samples, admixMod, K = 3, s = 0.49, est_method = c("
   ## With Patra & Sen estimator, we do not have the explicit expression of the variance of the estimators.
   ## With Bordes & Vandekerkhove estimator, we already computed them above.
   if (meth == "PS") {
-    message("Testing using Patra & Sen estimator is implemented
+    message("Testing using Patra & Sen estimator is implemented,
     but is likely to lead to wrong conclusions since the estimator
     variance remains unknown (and so the variance of the test
     statistic). The variance of the test statistic is thus recovered
@@ -210,6 +212,9 @@ orthobasis_test <- function(samples, admixMod, K = 3, s = 0.49, est_method = c("
   rm(moy.coef1) ; rm(moy.coef2) ; rm(var.coef1) ; rm(var.coef2)
 
   obj <- list(
+    n_populations = 2,
+    population_sizes = c(n1,n2),
+    admixture_models = admixMod,
     reject_decision = rej,
     confidence_level = conf_level,
     p_value = pvalu,
@@ -225,7 +230,7 @@ orthobasis_test <- function(samples, admixMod, K = 3, s = 0.49, est_method = c("
 }
 
 
-#' Print method for objects 'orthobasis_test'
+#' Print method for objects of class 'orthobasis_test'
 #'
 #' @param x An object of class 'orthobasis_test'.
 #' @param ... A list of additional parameters belonging to the default method.
@@ -238,5 +243,44 @@ print.orthobasis_test <- function(x, ...)
   cat("Call:")
   print(x$call)
   cat("\n")
-  print(x)
+  cat("Is the null hypothesis (gaussian unknown component distribution) rejected? ",
+      ifelse(x$reject_decision, "Yes", "No"), sep="")
+  cat("\nTest p-value: ", round(x$p_value,3), sep="")
+}
+
+
+#' Summary method for objects of class 'orthobasis_test'
+#'
+#' @param object An object of class 'orthobasis_test'.
+#' @param ... A list of additional parameters belonging to the default method.
+#'
+#' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
+#' @export
+
+summary.orthobasis_test <- function(object, ...)
+{
+  cat("Call:")
+  print(object$call)
+  cat("\n--------- About samples ---------\n")
+  cat(paste("Size of sample ", 1:object$n_populations, ": ", object$population_sizes, sep = ""), sep = "\n")
+  cat("\n-------- About contamination (admixture) models -------")
+  cat("\n")
+  for (k in 1:object$n_populations) {
+    cat("-> Distribution and parameters of the known component \n for admixture model #", k, ": ", sep="")
+    cat(paste(sapply(object$admixture_models[[k]], "[[", "known")[1:2], collapse = " - "))
+    cat("\n")
+  }
+  cat("------- Test decision -------\n")
+  cat("Is the null hypothesis (equality of unknown component distributions) rejected? ",
+      ifelse(object$reject_decision, "Yes", "No"), sep="")
+  cat("\nConfidence level of the test: ", object$confidence_level, sep="")
+  cat("\nTest p-value: ", round(object$p_value,3), sep="")
+  cat("\n\n------- Test statistic -------\n")
+  cat("Selected rank of the test statistic (following the penalization rule): ", object$selected_rank, sep="")
+  cat("\nValue of the test statistic: ", round(object$test_statistic_value,4), "\n", sep="")
+  cat("Variance-covariance matrix of the test statistic (at each order of expansion):\n", sep = "")
+  print(object$varCov_matrix)
+  cat("\n------- Estimates -------\n")
+  cat("Estimated mixing proportion (listed in the same order as samples): ",
+      paste(round(object$estimated_mix_proportions,3), collapse = " "), "\n", sep = "")
 }

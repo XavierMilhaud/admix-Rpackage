@@ -29,7 +29,7 @@ admix_cluster(
 (automatically optimized) for k-sample tests used within the clustering procedure.
 Optimized penalty is particularly useful for low sample size.}
 
-\item{tabul_dist}{Only useful for comparisons of detected clusters at different confidence levels. Is a list of the tabulated distributions
+\item{tabul_dist}{(Only useful for comparisons of detected clusters at different confidence levels) A list of the tabulated distributions
 of the stochastic integral for each cluster previously detected.}
 
 \item{echo}{(default to TRUE) Display the remaining computation time.}
@@ -39,12 +39,13 @@ of the stochastic integral for each cluster previously detected.}
 \item{n_cpu}{(default to 2) Number of cores used when parallelizing.}
 }
 \value{
-A list with eleven elements: 1) the number of populations studied; 2) the number of detected clusters;
-3) the list of p-values for each test performed; 4) the cluster affiliation for each population; 5) the chosen confidence
-level of statistical tests; 6) the cluster components; 7) the size of clusters; 8) the estimated weights of the unknown
-component distributions inside each cluster (remind that estimated weights are consistent only if unknown components are tested
-to be identical); 9) the matrix of pairwise discrepancies across populations; 10) the tabulated distributions used for
-statistical tests; 11) the initial call.
+An object of class 'admix_cluster', containing 12 attributes: 1) the number of samples under study; 2) the sizes of samples;
+3) the information about mixture components in each sample (distributions and parameters); 4) the number of detected clusters;
+5) the list of p-values for each k-sample test at the origin of detected clusters; 6) the cluster affiliation for each sample;
+7) the confidence level of statistical tests; 8) which samples in which cluster; 9) the size of clusters; 10) the estimated
+weights of the unknown component distributions inside each cluster (remind that estimated weights are consistent only if
+unknown components are tested to be identical, which is the case inside clusters); 11) the matrix of pairwise discrepancies
+across all samples; 12) the list of tabulated distributions used for statistical tests involved in building the clusters.
 }
 \description{
 Create clusters on the unknown components related to the K populations following admixture models. Based on the K-sample test
@@ -84,12 +85,10 @@ admixMod3 <- admix_model(knownComp_dist = mixt3$comp.dist[[2]],
 admixMod4 <- admix_model(knownComp_dist = mixt4$comp.dist[[2]],
                          knownComp_param = mixt4$comp.param[[2]])
 
-clusters <- admix_cluster(samples = list(data1, data2, data3, data4),
-                          admixMod = list(admixMod1, admixMod2, admixMod3, admixMod4),
-                          conf_level = 0.95, n_sim_tab = 30, tune_penalty = TRUE,
-                          tabul_dist = NULL, echo = FALSE,
-                          parallel = FALSE, n_cpu = 2)
-clusters
+admix_cluster(samples = list(data1, data2, data3, data4),
+              admixMod = list(admixMod1, admixMod2, admixMod3, admixMod4),
+              conf_level = 0.95, n_sim_tab = 30, tune_penalty = TRUE,
+              tabul_dist = NULL, echo = FALSE, parallel = FALSE, n_cpu = 2)
 }
 
 }

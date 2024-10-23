@@ -1,17 +1,17 @@
 #' Simulation of a two-component mixture model
 #'
 #' Simulate a two-component mixture model following the probability density function (pdf) l such that l = p*f + (1-p)*g,
-#' with f and g mixture component distributions, and p the mixing weight.
+#' with f and g the mixture component distributions, and p the mixing weight.
 #'
 #' @param n Number of observations to be simulated.
 #' @param weight Weight of the first component distribution (distribution f) in the mixture.
 #' @param comp.dist A list of two elements corresponding to the component distributions (specified with R native names)
-#'                  involved in the mixture model. These elements respectively refer to the two components f and g.
+#'                  involved in the mixture model. These elements respectively refer to the two component distributions f and g.
 #' @param comp.param A list of two elements corresponding to the parameters of the component distributions, each element being a list
-#'                   itself. The names used in this list must correspond to the native R argument names for these distributions.
+#'                   itself. The names used in each list must correspond to the native R argument names for these distributions.
 #'                   These elements respectively refer to the parameters of f and g distributions of the mixture model.
 #'
-#' @return An object of class 'twoComp_mixt', containing 8 elements: 1) the number of simulated observations, 2) the simulated mixture
+#' @return An object of class 'twoComp_mixt', containing eight attributes: 1) the number of simulated observations, 2) the simulated mixture
 #'         data, 3) the support of the distributions, 4) the name of the component distributions, 5) the name of the parameters of the
 #'         component distributions and their values, 6) the mixing proportion, 7) the observations coming from the first component,
 #'         8) the observations coming from the second component.
