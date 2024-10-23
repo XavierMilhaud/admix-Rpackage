@@ -35,7 +35,6 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/admixture-clustering.html">Clustering of unknown subpopulations in admixture models</a></li>
     <li><a class="dropdown-item" href="../articles/admixture-weight-estimation.html">Estimation of unknown elements in admixture models</a></li>
-    <li><a class="dropdown-item" href="../articles/covid19-example-pairwiseTesting.html">covid19-pairwise-testing</a></li>
     <li><a class="dropdown-item" href="../articles/test-hypothesis.html">Hypothesis test in admixture models</a></li>
   </ul>
 </li>
@@ -84,8 +83,8 @@ is a mixture component whose distribution is perfectly known, whereas
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>F</mi><annotation encoding="application/x-tex">F</annotation></semantics></math>
-are unknown.\ In this setting, if no parametric assumption is made on
-the unknown component distribution
+are unknown. In this setting, if no parametric assumption is made on the
+unknown component distribution
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>F</mi><annotation encoding="application/x-tex">F</annotation></semantics></math>,
 the mixture is considered as a semiparametric mixture. For an overview
 on semiparametric extensions of finite mixture models, see <span class="citation">(Xiang and Yang 2018)</span>.</p>
@@ -94,8 +93,8 @@ enable to perform hypothesis tests on the unknown component distribution
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>F</mi><annotation encoding="application/x-tex">F</annotation></semantics></math>.
 We aim to test whether
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>F</mi><annotation encoding="application/x-tex">F</annotation></semantics></math>
-belongs to certain parametric family with specified parameters in a
-one-sample case, or if two different decontaminated versions of
+belongs to certain parametric family (e.g. the Gaussian one) in a
+1-sample case, or if two different decontaminated versions of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>F</mi><mn>1</mn></msub><annotation encoding="application/x-tex">F_1</annotation></semantics></math>
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>F</mi><mn>2</mn></msub><annotation encoding="application/x-tex">F_2</annotation></semantics></math>
@@ -108,7 +107,7 @@ are similar in the K-sample case
 All the specific tests presented hereafter can be performed using one
 single generic function for testing with appropriate arguments, the
 so-called
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mi>d</mi><mi>m</mi><mi>i</mi><msub><mi>x</mi><mi>t</mi></msub><mi>e</mi><mi>s</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">admix_test</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mi>d</mi><mi>m</mi><mi>i</mi><mi>x</mi><mi>_</mi><mi>t</mi><mi>e</mi><mi>s</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">admix\_test</annotation></semantics></math>
 function.</p>
 <div class="section level2">
 <h2 id="the-one-sample-case-only-available-to-symmetric-unknown-density">The one-sample case only available to symmetric unknown density<a class="anchor" aria-label="anchor" href="#the-one-sample-case-only-available-to-symmetric-unknown-density"></a>
@@ -118,16 +117,15 @@ testing, i.e.
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mn>0</mn></msub><mo>:</mo><mspace width="0.167em"></mspace><mi>F</mi><mo>∈</mo><mi>ℱ</mi><mspace width="2.0em"></mspace><mtext mathvariant="normal">against</mtext><mspace width="2.0em"></mspace><msub><mi>H</mi><mn>1</mn></msub><mo>:</mo><mspace width="0.167em"></mspace><mi>F</mi><mo>∉</mo><mi>ℱ</mi><mo>,</mo></mrow><annotation encoding="application/x-tex">H_0: \, F\in \mathcal{F} \qquad \mbox{against} \qquad  H_1: \, F\notin \mathcal{F},</annotation></semantics></math>
 where
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ℱ</mi><mo>=</mo><mrow><mo stretchy="true" form="prefix">{</mo><msub><mi>F</mi><mi>θ</mi></msub><mo>:</mo><mspace width="0.222em"></mspace><mi>θ</mi><mo>∈</mo><mi>Θ</mi><mo stretchy="true" form="postfix">}</mo></mrow></mrow><annotation encoding="application/x-tex">\mathcal{F}=\left\{F_\theta:~\theta\in \Theta \right\}</annotation></semantics></math>.</p>
-<p>The support of the known component density has to be identical to the
+<p>The support of the known component density has to be in line with the
 one of the unknown component density. Such tests have been introduced in
-<span class="citation">(Pommeret and Vandekerkhove 2019)</span>. The
-idea underlying the hypothesis test in the one-sample case is basically
-always the same:</p>
+<span class="citation">(Pommeret and Vandekerkhove 2019)</span>, and the
+idea underlying this hypothesis test follows these steps:</p>
 <ol style="list-style-type: decimal">
-<li>decompose the observed or known densities in an orthonormal
-polynomial basis,</li>
+<li>decompose the observed density and the known density in an
+orthonormal polynomial basis,</li>
 <li>get the expansion coefficients of such densities,</li>
-<li>reformulate the null hypothesis of the test with these
+<li>reformulate the null hypothesis of the test using these
 coefficients,</li>
 <li>adopt a
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>χ</mi><mn>2</mn></msup><annotation encoding="application/x-tex">\chi^2</annotation></semantics></math>
@@ -136,23 +134,25 @@ estimators of the (unknown) weight related to the unknown component
 distribution
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>F</mi><annotation encoding="application/x-tex">F</annotation></semantics></math>.</li>
 </ol>
-<p>Taking into account this, it is not possible to use the estimator
-provided in <span class="citation">(Patra and Sen 2016)</span> to
-perform hypothesis testing. On the contrary, <span class="citation">Bordes and Vandekerkhove (2010)</span> propose an
-asymptotically normal estimator that can be used if the unknown
-component density is assumed to be symmetric. More generally, <span class="citation">Pommeret and Vandekerkhove (2019)</span> give more
-details about the statistic distribution under the null hypothesis
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>0</mn></msub><annotation encoding="application/x-tex">H_0</annotation></semantics></math>
+<p>Because of the use of asymptotically normal estimators, it is not
+possible to use the estimator provided in <span class="citation">(Patra
+and Sen 2016)</span> to perform hypothesis testing. On the contrary,
+<span class="citation">Bordes and Vandekerkhove (2010)</span> propose an
+estimator that can be used if the unknown component density is assumed
+to be symmetric. More generally, <span class="citation">Pommeret and
+Vandekerkhove (2019)</span> give more details about the distribution of
+the test statistic under the null (hypothesis
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>0</mn></msub><annotation encoding="application/x-tex">H_0</annotation></semantics></math>),
 and under the alternative
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>1</mn></msub><annotation encoding="application/x-tex">H_1</annotation></semantics></math>.</p>
 <p>Here, the implemented function allows to perform the so-called
-gaussianity test, meaning that the parametric family against with the
+Gaussianity test, meaning that the parametric family against which the
 unknown component is tested belongs to Gaussian distributions. Below is
-an example of hypothesis testing in the one-sample case:</p>
+an example of hypothesis testing in this 1-sample case:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">####### Under the null hypothesis H0.</span></span>
 <span><span class="co">## Simulate mixture data:</span></span>
-<span><span class="va">mixt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">700</span>, weight <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span><span class="va">mixt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">300</span>, weight <span class="op">=</span> <span class="fl">0.6</span>,</span>
 <span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"norm"</span><span class="op">)</span>,</span>
 <span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">2</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span>
 <span>                                        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">0</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
@@ -163,25 +163,20 @@ an example of hypothesis testing in the one-sample case:</p>
 <span><span class="fu"><a href="../reference/admix_test.html">admix_test</a></span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span><span class="op">)</span>, admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod</span><span class="op">)</span>,</span>
 <span>           test_method <span class="op">=</span> <span class="st">"poly"</span>, ask_poly_param <span class="op">=</span> <span class="cn">FALSE</span>, support <span class="op">=</span> <span class="st">"Real"</span>,</span>
 <span>           conf_level <span class="op">=</span> <span class="fl">0.95</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span>, n_cpu <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="co">#&gt; $reject_decision</span></span>
-<span><span class="co">#&gt; [1] FALSE</span></span>
+<span><span class="co">#&gt; Call:admix_test(samples = list(data1), admixMod = list(admixMod), </span></span>
+<span><span class="co">#&gt;     test_method = "poly", ask_poly_param = FALSE, support = "Real", </span></span>
+<span><span class="co">#&gt;     conf_level = 0.95, parallel = FALSE, n_cpu = 2)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $p_value</span></span>
-<span><span class="co">#&gt; [1] 0.9456055</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $confidence_level</span></span>
-<span><span class="co">#&gt; [1] 0.95</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $test_statistic_value</span></span>
-<span><span class="co">#&gt; [1] 0.004654834</span></span></code></pre></div>
+<span><span class="co">#&gt; Do we reject the null hypothesis? No</span></span>
+<span><span class="co">#&gt; Here is the associated p-value of the test: 0.916</span></span></code></pre></div>
 <p>The result of the test is that we cannot reject the null hypothesis
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>0</mn></msub><annotation encoding="application/x-tex">H_0</annotation></semantics></math>,
-which is in line with the specified parameters of the unknown
-components. Indeed, simulated data have a normally-distributed unknown
-component,
+which is in line with the specified distribution for the unknown
+component. Indeed, simulated data is a Gaussian mixture with two
+components,
 i.e. <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>F</mi><mo>∼</mo><mi>𝒩</mi><mrow><mo stretchy="true" form="prefix">(</mo><mi>μ</mi><mo>,</mo><mi>σ</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">F \sim \mathcal{N}(\mu,\sigma)</annotation></semantics></math>
 where
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">\mu=3</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>μ</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">\mu=2</annotation></semantics></math>
 and
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>σ</mi><mo>=</mo><mn>0.5</mn></mrow><annotation encoding="application/x-tex">\sigma=0.5</annotation></semantics></math>.</p>
 </div>
@@ -224,13 +219,11 @@ coefficients is duplicated on each of the two samples under study.</p>
 <p>In what follows, we simulate two samples under the null and check
 whether the test provides satisfactory results.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co">##### Under the null hypothesis H0.</span></span>
-<span><span class="co">## Simulate mixture data:</span></span>
-<span><span class="va">mixt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1000</span>, weight <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<code class="sourceCode R"><span><span class="va">mixt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">350</span>, weight <span class="op">=</span> <span class="fl">0.8</span>,</span>
 <span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"norm"</span><span class="op">)</span>,</span>
 <span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">3</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span>
 <span>                                        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">0</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">mixt2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1100</span>, weight <span class="op">=</span> <span class="fl">0.7</span>,</span>
+<span><span class="va">mixt2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">450</span>, weight <span class="op">=</span> <span class="fl">0.7</span>,</span>
 <span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"norm"</span><span class="op">)</span>,</span>
 <span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">3</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span>
 <span>                                        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">6</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
@@ -243,23 +236,14 @@ whether the test provides satisfactory results.</p>
 <span>                         knownComp_param <span class="op">=</span> <span class="va">mixt2</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">## Using expansion coefficients in orthonormal polynomial basis:</span></span>
 <span><span class="fu"><a href="../reference/admix_test.html">admix_test</a></span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>,<span class="va">data2</span><span class="op">)</span>, admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>,<span class="va">admixMod2</span><span class="op">)</span>,</span>
-<span>           test_method <span class="op">=</span> <span class="st">"poly"</span>, ask_poly_param <span class="op">=</span> <span class="cn">FALSE</span>, support <span class="op">=</span> <span class="st">"Real"</span>,</span>
-<span>           conf_level <span class="op">=</span> <span class="fl">0.95</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span>, n_cpu <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="co">#&gt; $pairs_test_order</span></span>
-<span><span class="co">#&gt; [1] "Sample 1 / Sample 2"</span></span>
+<span>           test_method <span class="op">=</span> <span class="st">"poly"</span>, ask_poly_param <span class="op">=</span> <span class="cn">FALSE</span>, support <span class="op">=</span> <span class="st">"Real"</span>, conf_level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Call:admix_test(samples = list(data1, data2), admixMod = list(admixMod1, </span></span>
+<span><span class="co">#&gt;     admixMod2), test_method = "poly", ask_poly_param = FALSE, </span></span>
+<span><span class="co">#&gt;     support = "Real", conf_level = 0.95)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $reject_decision</span></span>
-<span><span class="co">#&gt; [1] FALSE</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $p_value</span></span>
-<span><span class="co">#&gt; [1] 0.7725612</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $confidence_level</span></span>
-<span><span class="co">#&gt; [1] 0.95</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $test_statistic_value</span></span>
-<span><span class="co">#&gt; [1] 0.08353623</span></span></code></pre></div>
-<p>The hypothesis test conclude that the null hypothesis cannot be
+<span><span class="co">#&gt; Do we reject the null hypothesis? No</span></span>
+<span><span class="co">#&gt; Here is the associated p-value of the test: 0.605</span></span></code></pre></div>
+<p>The hypothesis test concludes that the null hypothesis cannot be
 rejected, once again in line with what was expected given the specified
 parameters when simulating the data.</p>
 <p>Note that the following arguments, involved in subroutines, were set
@@ -274,14 +258,18 @@ and
 using the estimator proposed in <span class="citation">(Bordes and
 Vandekerkhove 2010)</span>,</li>
 <li>‘K’ equals 3 to mention that such expansions are computed up to the
-third order of the decomposition,</li>
+third order of the decomposition in the polynomial basis,</li>
 <li>‘s’ equals 0.25 as the penalization rate involved in the
 penalization rule used in <span class="citation">(Milhaud et al.
 2022)</span>.</li>
 </ul>
 <p>When the unknown component distributions are not supposed to have
-symmetric densities, another solution is to use the IBM method (see
-below).</p>
+symmetric densities, another solution to perform the test is to set
+‘est.method’ to ‘PS’ following ‘ask_poly_param’ set to TRUE, but keeping
+in mind that plugging in such estimators for the test procedure should
+not be allowed in theory. However, that works quite well in practice.
+Another solution to perform this test in full generality is to use the
+IBM method (see below).</p>
 </div>
 <div class="section level3">
 <h3 id="case-of-fully-unknown-densities">Case of fully unknown densities<a class="anchor" aria-label="anchor" href="#case-of-fully-unknown-densities"></a>
@@ -289,10 +277,9 @@ below).</p>
 <p>Estimation of the unknown quantities is made by the Inversion - Best
 Matching approach, see <span class="citation">(Milhaud et al.
 2024b)</span>. In this case, one can still use the function with same
-first arguments except
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mi>e</mi><mi>t</mi><mi>h</mi><mi>o</mi><mi>d</mi><mo>=</mo></mrow><annotation encoding="application/x-tex">method=</annotation></semantics></math>’icv’.
+first arguments except ‘method’, and ‘method’ should be set to ‘icv’.
 The user also has to define the number of simulated gaussian processes
-used to tabulate the test statistic distribution (n-sim-tab), and can
+used to tabulate the test statistic distribution (‘n_sim_tab’), and can
 accelerate computations using parallel computations and choosing an
 adequate number of cpus. Other arguments such as
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mi>u</mi><mi>p</mi><mi>p</mi><mi>o</mi><mi>r</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">support</annotation></semantics></math>
@@ -322,8 +309,8 @@ follows
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>L</mi><mi>i</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>=</mo><msub><mi>p</mi><mi>i</mi></msub><msub><mi>F</mi><mi>i</mi></msub><mrow><mo stretchy="true" form="prefix">(</mo><mi>x</mi><mo stretchy="true" form="postfix">)</mo></mrow><mo>+</mo><mrow><mo stretchy="true" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>p</mi><mi>i</mi></msub><mo stretchy="true" form="postfix">)</mo></mrow><msub><mi>G</mi><mi>i</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><mi>x</mi><mo>∈</mo><mi>ℝ</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">L_i(x) = p_i F_i(x) + (1-p_i) G_i, \qquad x \in \mathbb{R}.</annotation></semantics></math>
 The test to perform is given by
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mn>0</mn></msub><mo>:</mo><mspace width="0.278em"></mspace><msub><mi>F</mi><mn>1</mn></msub><mo>=</mo><mi>.</mi><mi>.</mi><mi>.</mi><mo>=</mo><msub><mi>F</mi><mi>K</mi></msub><mspace width="2.0em"></mspace><mtext mathvariant="normal">against</mtext><mspace width="2.0em"></mspace><msub><mi>H</mi><mn>1</mn></msub><mo>:</mo><mspace width="0.278em"></mspace><msub><mi>F</mi><mi>i</mi></msub><mo>≠</mo><msub><mi>F</mi><mi>j</mi></msub><mspace width="1.0em"></mspace><mtext mathvariant="normal">for some</mtext><mspace width="1.0em"></mspace><mi>i</mi><mo>≠</mo><mi>j</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">H_0 : \; F_1 = ... = F_K \qquad \mbox{against} \qquad H_1: \; F_i \neq F_j \quad \mbox{for some} \quad i \neq j.</annotation></semantics></math>
-We use IBM approach to do so, where assumptions are (straightforwardly)
-adapted to deal with the
+We use the IBM approach to do so, where assumptions are
+(straightforwardly) adapted to deal with the
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>K</mi><annotation encoding="application/x-tex">K</annotation></semantics></math>
 samples.</p>
 <p>Basically, we apply the theoretical results of IBM for each pair of
@@ -379,9 +366,10 @@ case. Finally, we thus consider the
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>0</mn></msub><annotation encoding="application/x-tex">H_0</annotation></semantics></math>-rejection
 rule:
 <math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>U</mi><mo accent="true">̃</mo></mover><mi>n</mi></msub><mspace width="1.0em"></mspace><mo>≥</mo><mspace width="1.0em"></mspace><msub><mover><mi>q</mi><mo accent="true">̂</mo></mover><mrow><mn>1</mn><mo>−</mo><mi>α</mi></mrow></msub><mspace width="2.0em"></mspace><mo>⇒</mo><mspace width="2.0em"></mspace><msub><mi>H</mi><mn>0</mn></msub><mspace width="0.278em"></mspace><mtext mathvariant="normal">is rejected</mtext><mi>.</mi></mrow><annotation encoding="application/x-tex">\tilde{U}_n \quad \geq \quad \hat q_{1-\alpha} \qquad \Rightarrow \qquad H_0 \; \mbox{is rejected}.</annotation></semantics></math></p>
-<p>We now provide the way to perform this test with the package admix
-with gaussian mixture models. First, let us study the case where we are
-under the null hypothesis
+<p>We now provide the way to perform this test with the package
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mi>d</mi><mi>m</mi><mi>i</mi><mi>x</mi></mrow><annotation encoding="application/x-tex">admix</annotation></semantics></math>
+with Gaussian mixtures. First, let us study the case where we are under
+the null hypothesis
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>H</mi><mn>0</mn></msub><annotation encoding="application/x-tex">H_0</annotation></semantics></math>,
 considering
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mo>=</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">K=3</annotation></semantics></math>
@@ -410,20 +398,15 @@ different populations.</p>
 <span>                         knownComp_param <span class="op">=</span> <span class="va">mixt3</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/admix_test.html">admix_test</a></span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>, <span class="va">data2</span>, <span class="va">data3</span><span class="op">)</span>,</span>
 <span>           admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>, <span class="va">admixMod2</span>, <span class="va">admixMod3</span><span class="op">)</span>,</span>
-<span>           test_method <span class="op">=</span> <span class="st">"icv"</span>, n_sim_tab <span class="op">=</span> <span class="fl">10</span>, ICV_tunePenalty <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>           test_method <span class="op">=</span> <span class="st">"icv"</span>, n_sim_tab <span class="op">=</span> <span class="fl">8</span>, ICV_tunePenalty <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>           conf_level <span class="op">=</span> <span class="fl">0.95</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span>, n_cpu <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="co">#&gt; $reject_decision</span></span>
-<span><span class="co">#&gt;   95% </span></span>
-<span><span class="co">#&gt; FALSE </span></span>
+<span><span class="co">#&gt; Call:admix_test(samples = list(data1, data2, data3), admixMod = list(admixMod1, </span></span>
+<span><span class="co">#&gt;     admixMod2, admixMod3), test_method = "icv", n_sim_tab = 8, </span></span>
+<span><span class="co">#&gt;     ICV_tunePenalty = FALSE, conf_level = 0.95, parallel = FALSE, </span></span>
+<span><span class="co">#&gt;     n_cpu = 2)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $p_value</span></span>
-<span><span class="co">#&gt; [1] 0.9</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $confidence_level</span></span>
-<span><span class="co">#&gt; [1] 0.95</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $test_statistic_value</span></span>
-<span><span class="co">#&gt; [1] 0.1906989</span></span></code></pre></div>
+<span><span class="co">#&gt; Do we reject the null hypothesis? No</span></span>
+<span><span class="co">#&gt; Here is the associated p-value of the test: 0.625</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>

@@ -3,13 +3,11 @@
 <url><loc>/LICENSE.html</loc></url>
 <url><loc>/articles/admixture-clustering.html</loc></url>
 <url><loc>/articles/admixture-weight-estimation.html</loc></url>
-<url><loc>/articles/covid19-example-pairwiseTesting.html</loc></url>
 <url><loc>/articles/index.html</loc></url>
 <url><loc>/articles/test-hypothesis.html</loc></url>
 <url><loc>/authors.html</loc></url>
 <url><loc>/index.html</loc></url>
 <url><loc>/reference/BVdk_varCov_estimators.html</loc></url>
-<url><loc>/reference/IBM_estimVarCov_gaussVect.html</loc></url>
 <url><loc>/reference/IBM_k_samples_test.html</loc></url>
 <url><loc>/reference/IBM_tabul_stochasticInteg.html</loc></url>
 <url><loc>/reference/admix-package.html</loc></url>
@@ -30,7 +28,6 @@
 <url><loc>/reference/mortality_sample.html</loc></url>
 <url><loc>/reference/orthobasis_test.html</loc></url>
 <url><loc>/reference/plot.decontaminated_density.html</loc></url>
-<url><loc>/reference/plot.estim_PS.html</loc></url>
 <url><loc>/reference/plot.twoComp_mixt.html</loc></url>
 <url><loc>/reference/print.IBM_test.html</loc></url>
 <url><loc>/reference/print.admix_cluster.html</loc></url>
@@ -45,10 +42,15 @@
 <url><loc>/reference/print.orthobasis_test.html</loc></url>
 <url><loc>/reference/print.twoComp_mixt.html</loc></url>
 <url><loc>/reference/stmf_small.html</loc></url>
+<url><loc>/reference/summary.IBM_test.html</loc></url>
 <url><loc>/reference/summary.admix_cluster.html</loc></url>
 <url><loc>/reference/summary.admix_estim.html</loc></url>
 <url><loc>/reference/summary.admix_test.html</loc></url>
+<url><loc>/reference/summary.estim_BVdk.html</loc></url>
+<url><loc>/reference/summary.estim_IBM.html</loc></url>
+<url><loc>/reference/summary.estim_PS.html</loc></url>
 <url><loc>/reference/summary.gaussianity_test.html</loc></url>
+<url><loc>/reference/summary.orthobasis_test.html</loc></url>
 <url><loc>/reference/twoComp_mixt.html</loc></url>
 </urlset>
 
