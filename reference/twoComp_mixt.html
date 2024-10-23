@@ -22,6 +22,7 @@ with f and g the mixture component distributions, and p the mixing weight."></he
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/admixture-clustering.html">Clustering of unknown subpopulations in admixture models</a></li>
     <li><a class="dropdown-item" href="../articles/admixture-weight-estimation.html">Estimation of unknown elements in admixture models</a></li>
+    <li><a class="dropdown-item" href="../articles/covid19-example-pairwiseTesting.html">covid19-pairwise-testing</a></li>
     <li><a class="dropdown-item" href="../articles/test-hypothesis.html">Hypothesis test in admixture models</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -115,13 +116,13 @@ component distributions and their values, 6) the mixing proportion, 7) the obser
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of observations:  2000 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simulated data (first 10 obs.): </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2.404776 1.523936 2.478992 2.608016 2.767285 3.395009 3.235814 2.742594 2.727418 2.196749 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.1852015 3.400732 3.04037 3.126647 -0.7691044 2.828539 3.919518 -0.1359485 3.183594 2.56097 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simulated observations coming from the 1st component (first 10 obs.): </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2.404776 1.523936 2.478992 2.608016 2.767285 3.395009 3.235814 2.742594 2.727418 2.196749 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3.400732 3.04037 3.126647 2.828539 3.919518 3.183594 2.56097 3.827864 3.298944 2.711018 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simulated observations coming from the 2nd component (first 10 obs.): </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1.662791 -2.645066 -0.595171 -0.2443094 0.8356853 0.5734202 1.020909 -0.4461636 1.417783 0.6824188 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.1852015 -0.7691044 -0.1359485 0.8250143 -0.7943316 0.03236525 1.083445 -0.3744158 0.7805614 1.416231 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">sim.Y</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -140,13 +141,13 @@ component distributions and their values, 6) the mixing proportion, 7) the obser
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of observations:  1200 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simulated data (first 10 obs.): </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  -2.349471 -3.266282 -4.033745 0.4149465 -2.420383 -3.466967 1.944426 -2.945289 -2.863127 -3.848281 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -3.028769 1.755289 -2.489568 0.9428295 2.478147 0.6457034 -2.233044 -3.027643 0.1617304 -2.918966 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simulated observations coming from the 1st component (first 10 obs.): </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  -2.349471 -3.266282 -4.033745 -2.420383 -3.466967 -2.945289 -2.863127 -3.848281 -3.603201 -3.009525 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -3.028769 -2.489568 -2.233044 -3.027643 -2.918966 -3.406173 -2.737632 -3.051826 -2.963613 -3.001194 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simulated observations coming from the 2nd component (first 10 obs.): </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.4149465 1.944426 1.59184 0.3387849 0.3489278 0.2237389 1.485944 0.5651851 2.117699 0.1661796 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  1.755289 0.9428295 2.478147 0.6457034 0.1617304 2.051182 0.07798575 0.2173358 0.5971777 0.5620474 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sim.X</span>, xlim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>,<span class="fl">5</span><span class="op">)</span>, ylim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sim.Y</span>, add.plot <span class="op">=</span> <span class="cn">TRUE</span>, xlim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>,<span class="fl">5</span><span class="op">)</span>, ylim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0.5</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></span>
@@ -174,7 +175,7 @@ component distributions and their values, 6) the mixing proportion, 7) the obser
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of observations:  2000 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Obtained multinomial mixture distribution: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  407 573 1020 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  403 620 977 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sim.X</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="twoComp_mixt-2.png" alt="" width="700" height="433"></span>

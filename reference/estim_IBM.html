@@ -26,6 +26,7 @@ For further details about IBM approach, see 'Details' below."></head><body>
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/admixture-clustering.html">Clustering of unknown subpopulations in admixture models</a></li>
     <li><a class="dropdown-item" href="../articles/admixture-weight-estimation.html">Estimation of unknown elements in admixture models</a></li>
+    <li><a class="dropdown-item" href="../articles/covid19-example-pairwiseTesting.html">covid19-pairwise-testing</a></li>
     <li><a class="dropdown-item" href="../articles/test-hypothesis.html">Hypothesis test in admixture models</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -120,8 +121,8 @@ unknown component distributions in each sample); 6) the arbitrary value of the m
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:estim_IBM(samples = list(data1, data2), admixMod = list(admixMod1, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     admixMod2), n.integ = 1000)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 1st sample:  0.4891204 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 2nd sample:  0.6986493 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 1st sample:  0.4956636 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 2nd sample:  0.6882245 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 2: multinomial distribution:</span></span></span>
 <span class="r-in"><span><span class="va">mixt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1500</span>, weight <span class="op">=</span> <span class="fl">0.8</span>,</span></span>
@@ -151,8 +152,8 @@ unknown component distributions in each sample); 6) the arbitrary value of the m
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:estim_IBM(samples = list(data1, data2), admixMod = list(admixMod1, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     admixMod2))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 1st sample:  0.6900711 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 2nd sample:  0.3256461 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 1st sample:  0.7174592 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 2nd sample:  0.3025314 </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
