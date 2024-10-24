@@ -5,10 +5,10 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/XavierMilhaud/admix/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/XavierMilhaud/admix/actions/workflows/R-CMD-check.yaml)
-[![test-coverage](https://github.com/XavierMilhaud/admix/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/XavierMilhaud/admix/actions/workflows/test-coverage.yaml)
-[![pkgdown](https://github.com/XavierMilhaud/admix/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/XavierMilhaud/admix/actions/workflows/pkgdown.yaml)
-[![pages-build-deployment](https://github.com/XavierMilhaud/admix/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/XavierMilhaud/admix/actions/workflows/pages/pages-build-deployment)
+[![R-CMD-check](https://github.com/XavierMilhaud/admix-Rpackage/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/XavierMilhaud/admix/actions/workflows/R-CMD-check.yaml)
+[![test-coverage](https://github.com/XavierMilhaud/admix-Rpackage/actions/workflows/test-coverage.yaml/badge.svg)](https://github.com/XavierMilhaud/admix/actions/workflows/test-coverage.yaml)
+[![pkgdown](https://github.com/XavierMilhaud/admix-Rpackage/actions/workflows/pkgdown.yaml/badge.svg)](https://github.com/XavierMilhaud/admix/actions/workflows/pkgdown.yaml)
+[![pages-build-deployment](https://github.com/XavierMilhaud/admix-Rpackage/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/XavierMilhaud/admix-Rpackage/actions/workflows/pages/pages-build-deployment)
 
 The goal of admix is to provide code for estimation, hypothesis testing
 and clustering methods in admixture models.
@@ -37,7 +37,7 @@ package is suited to one-sample as well as multi-samples analysis.
 <!-- You can install the released version of admix from [CRAN](https://CRAN.R-project.org) with: -->
 
 You can install the released version of admix from
-[Github](https://github.com/XavierMilhaud/admix) with:
+[Github](https://github.com/XavierMilhaud/admix-Rpackage) with:
 
 ``` r
 #once on CRAN with : install.package("admix")
@@ -56,7 +56,7 @@ help(package = 'admix')
 ```
 
 More details can also be found through the vignettes, available in admix
-github-pages (see <https://xaviermilhaud.github.io/admix/>, in Menu
+github-pages (see <https://xaviermilhaud.github.io/admix-Rpackage/>, in Menu
 Articles).
 
 ## Example

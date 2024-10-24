@@ -1,5 +1,5 @@
 Package: admix
-Title: Package admix for admixture (aka contamination) models
+Title: Package Admix for Admixture (aka Contamination) Models
 Version: 2.3.1
 Authors@R: c(
     person("Xavier", "Milhaud", , "xavier.milhaud.research@gmail.com", role = c("aut", "cre")),
@@ -23,10 +23,11 @@ Description: Implements techniques to estimate the unknown quantities
     <doi:10.1016/j.jspi.2021.05.010>, and Milhaud, Pommeret, Salhi,
     Vandekerkhove (2024) <doi:10.3150/23-BEJ1593>). Finally, clustering of
     unknown mixture components is also feasible in a K-sample setting (see
-    Milhaud, Pommeret, Salhi, Vandekerkhove (2024) <hal-04129130v2>).
+    Milhaud, Pommeret, Salhi, Vandekerkhove (2024) 
+    <https://jmlr.org/papers/v25/23-0914.html>).
 License: GPL (>= 3)
-URL: https://github.com/XavierMilhaud/admix
-BugReports: https://github.com/XavierMilhaud/admix/issues
+URL: https://github.com/XavierMilhaud/admix-Rpackage
+BugReports: https://github.com/XavierMilhaud/admix-Rpackage/issues
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2

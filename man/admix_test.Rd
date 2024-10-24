@@ -74,24 +74,12 @@ For further details on implemented hypothesis tests, see the references hereafte
 .
 }
 \examples{
-####### Example with 1 sample (gaussianity test):
-mixt1 <- twoComp_mixt(n = 450, weight = 0.4,
-                      comp.dist = list("norm", "norm"),
-                      comp.param = list(c("mean" = -2, "sd" = 0.5),
-                                        c("mean" = 0, "sd" = 1)))
-data1 <- getmixtData(mixt1)
-admixMod <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
-                         knownComp_param = mixt1$comp.param[[2]])
-admix_test(samples = list(data1), admixMod = list(admixMod),
-           test_method = "poly", ask_poly_param = FALSE, support = "Real",
-           conf_level = 0.95, parallel = FALSE, n_cpu = 2)
-
 ####### Example with 2 samples
-mixt1 <- twoComp_mixt(n = 450, weight = 0.4,
+mixt1 <- twoComp_mixt(n = 280, weight = 0.7,
                       comp.dist = list("norm", "norm"),
                       comp.param = list(c("mean" = -2, "sd" = 0.5),
                                         c("mean" = 0, "sd" = 1)))
-mixt2 <- twoComp_mixt(n = 450, weight = 0.24,
+mixt2 <- twoComp_mixt(n = 250, weight = 0.85,
                       comp.dist = list("norm", "norm"),
                       comp.param = list(c("mean" = -2, "sd" = 0.5),
                                         c("mean" = -1, "sd" = 1)))
