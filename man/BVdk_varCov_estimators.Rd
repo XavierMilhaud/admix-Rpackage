@@ -33,8 +33,8 @@ See formulas pp.28--30 in Appendix of Bordes, L. and Vandekerkhove, P. (2010).
 ## Simulate mixture data:
 mixt1 <- twoComp_mixt(n = 200, weight = 0.4,
                       comp.dist = list("norm", "norm"),
-                      comp.param = list(c("mean" = -2, "sd" = 0.5),
-                                        c("mean" = 0, "sd" = 1)))
+                      comp.param = list(list("mean" = -2, "sd" = 0.5),
+                                        list("mean" = 0, "sd" = 1)))
 data1 <- getmixtData(mixt1)
 ## Define the admixture model:
 admixMod <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],

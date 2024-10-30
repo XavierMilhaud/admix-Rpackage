@@ -42,13 +42,13 @@ admixStartupMessage <- function()
 #' ## Simulate mixture data:
 #' mixt1 <- twoComp_mixt(n = 1500, weight = 0.5,
 #'                       comp.dist = list("norm", "norm"),
-#'                       comp.param = list(c("mean" = 3, "sd" = 0.5),
-#'                                         c("mean" = 0, "sd" = 1)))
+#'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
+#'                                         list("mean" = 0, "sd" = 1)))
 #' data1 <- getmixtData(mixt1)
 #' mixt2 <- twoComp_mixt(n = 2000, weight = 0.7,
 #'                       comp.dist = list("norm", "norm"),
-#'                       comp.param = list(c("mean" = 3, "sd" = 0.5),
-#'                                         c("mean" = 5, "sd" = 2)))
+#'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
+#'                                         list("mean" = 5, "sd" = 2)))
 #' data2 <- getmixtData(mixt2)
 #' ## Test the type of support:
 #' detect_support_type(data1, data2)

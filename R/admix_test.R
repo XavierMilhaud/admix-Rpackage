@@ -49,12 +49,12 @@
 #' ####### Example with 2 samples
 #' mixt1 <- twoComp_mixt(n = 280, weight = 0.7,
 #'                       comp.dist = list("norm", "norm"),
-#'                       comp.param = list(c("mean" = -2, "sd" = 0.5),
-#'                                         c("mean" = 0, "sd" = 1)))
+#'                       comp.param = list(list("mean" = -2, "sd" = 0.5),
+#'                                         list("mean" = 0, "sd" = 1)))
 #' mixt2 <- twoComp_mixt(n = 250, weight = 0.85,
 #'                       comp.dist = list("norm", "norm"),
-#'                       comp.param = list(c("mean" = -2, "sd" = 0.5),
-#'                                         c("mean" = -1, "sd" = 1)))
+#'                       comp.param = list(list("mean" = -2, "sd" = 0.5),
+#'                                         list("mean" = -1, "sd" = 1)))
 #' data1 <- getmixtData(mixt1)
 #' data2 <- getmixtData(mixt2)
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],

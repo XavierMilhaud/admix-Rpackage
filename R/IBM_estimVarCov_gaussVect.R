@@ -894,7 +894,8 @@ IBM_gap <- function(z, par, samples, admixMod)
 IBM_theoretical_gap <- function(z, par, known.p, mixtMod)
 {
   if (is.null(known.p)) stop("In 'IBM_theoretical_gap': argument 'known.p' must be specified.")
-  stopifnot("In 'IBM_theoretical_gap', wrong class for argument 'mixtMod'" = all(sapply(X = mixtMod, FUN = "class") == c("twoComp_mixt","twoComp_mixt")))
+  stopifnot("In 'IBM_theoretical_gap', wrong class for argument 'mixtMod'" =
+              all(sapply(X = mixtMod, FUN = "class") == c("twoComp_mixt","twoComp_mixt")))
 
   ## Extract the information on component distributions:
   CDF_comp.dist <- paste0("p", unlist(sapply(mixtMod, '[[', 'comp.dist')))
