@@ -221,7 +221,7 @@ orthobasis_test <- function(samples, admixMod, K = 3, s = 0.49, est_method = c("
     test_statistic_value = stat.test.final,
     varCov_matrix = var.T,
     selected_rank = indice.opt,
-    estimated_mix_proportions = c(hat.p1,hat.p2)
+    estimated_mixing_weights = c(hat.p1,hat.p2)
     )
   obj$call <- match.call()
   class(obj) <- c("orthobasis_test", "admix_test")
@@ -282,5 +282,5 @@ summary.orthobasis_test <- function(object, ...)
   print(object$varCov_matrix)
   cat("\n------- Estimates -------\n")
   cat("Estimated mixing proportion (listed in the same order as samples): ",
-      paste(round(object$estimated_mix_proportions,3), collapse = " "), "\n", sep = "")
+      paste(round(object$estimated_mixing_weights,3), collapse = " "), "\n", sep = "")
 }

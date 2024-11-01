@@ -87,11 +87,10 @@ admix_test <- function(samples, admixMod, test_method = c("poly","icv"), sim_U =
     options(warn = -1)
     if (n_samples == 2) {
       test_res <- IBM_k_samples_test(samples = samples, admixMod = admixMod, sim_U = NULL, n_sim_tab = n_sim_tab,
-                                    conf_level = conf_level, parallel = parallel, n_cpu = n_cpu)
+                                     conf_level = conf_level, tune_penalty = FALSE, parallel = parallel, n_cpu = n_cpu)
     } else if (n_samples > 2) {
-      test_res <- IBM_k_samples_test(samples = samples, admixMod = admixMod, sim_U = NULL, n_sim_tab = n_sim_tab,
-                                     conf_level = conf_level, tune_penalty = ICV_tunePenalty,
-                                     parallel = parallel, n_cpu = n_cpu)
+      test_res <- IBM_k_samples_test(samples = samples, admixMod = admixMod, sim_U = sim_U, n_sim_tab = n_sim_tab,
+                                     conf_level = conf_level, tune_penalty = ICV_tunePenalty, parallel = parallel, n_cpu = n_cpu)
     } else stop("Incorrect number of samples under study (should be > 1).")
 
   } else if (meth == "poly") {

@@ -197,6 +197,7 @@ summary.admix_estim <- function(object, ...)
 
 getmixingWeight <- function(x)
 {
-  if (!inherits(x, "admix_estim")) stop("This function must be used with objects of class 'admix_estim'")
+  if (!inherits(x, "admix_estim") & !inherits(x, "admix_test") )
+    stop("This function must be used with objects of class 'admix_estim' or 'admix_test'")
   x$estimated_mixing_weights
 }
