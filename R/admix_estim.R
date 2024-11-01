@@ -8,11 +8,11 @@
 #'
 #' @param samples (list) A list of the K (K>0) samples to be studied, all following admixture distributions.
 #' @param admixMod (list) A list of objects of class 'admix_model', containing useful information about distributions and parameters.
-#' @param est.method The estimation method to be applied. Can be one of 'BVdk' (Bordes and Vandekerkhove estimator), 'PS' (Patra and Sen
+#' @param est_method The estimation method to be applied. Can be one of 'BVdk' (Bordes and Vandekerkhove estimator), 'PS' (Patra and Sen
 #'         estimator), or 'IBM' (Inversion Best-Matching approach). The same estimation method is performed on each sample.
 #'         Important note: estimation by 'IBM' is unbiased only under H0, meaning that choosing this method requires to perform
 #'         previously the test hypothesis between the pairs of samples. For further details, see section 'Details' below.
-#' @param sym.f A boolean indicating whether the unknown component densities are assumed to be symmetric or not.
+#' @param sym_f A boolean indicating whether the unknown component densities are assumed to be symmetric or not.
 #'
 #' @details For further details on the different estimation techniques, see references below i) Patra and Sen estimator ;
 #'          ii) BVdk estimator ; iii) IBM approach.
@@ -48,17 +48,17 @@
 #' admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
 #'                          knownComp_param = mixt2$comp.param[[2]])
 #' admix_estim(samples = list(data1), admixMod = list(admixMod1),
-#'             est.method = 'BVdk', sym.f = TRUE)
+#'             est_method = 'BVdk', sym_f = TRUE)
 #' admix_estim(samples = list(data1,data2),
 #'             admixMod = list(admixMod1,admixMod2),
-#'             est.method = 'PS')
+#'             est_method = 'PS')
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-admix_estim <- function(samples, admixMod, est.method = c("BVdk","PS","IBM"), sym.f = FALSE)
+admix_estim <- function(samples, admixMod, est_method = c("BVdk","PS","IBM"), sym_f = FALSE)
 {
-  meth <- match.arg(est.method)
+  meth <- match.arg(est_method)
   supp <- detect_support_type(unlist(samples))
   if ((supp != "Continuous") & (meth != "IBM"))
     stop("'BVdk' or 'PS' estimation methods are not suitable to discrete random variables.")
@@ -66,8 +66,8 @@ admix_estim <- function(samples, admixMod, est.method = c("BVdk","PS","IBM"), sy
   n_samples <- length(samples)
   ## Check right specification of arguments:
   if ((n_samples == 1) & (meth == "IBM")) stop("Estimation by IBM requires (at least) two samples.")
-  if ((sym.f == FALSE) & (meth == "BVdk")) stop("Estimation by BVdk assumes the unknown component density
-                                                to be symmetric, thus set argument 'sym.f' to TRUE.")
+  if ((sym_f == FALSE) & (meth == "BVdk")) stop("Estimation by BVdk assumes the unknown component density
+                                                to be symmetric, thus set argument 'sym_f' to TRUE.")
 
   n_obs <- sapply(X = samples, FUN = length)
   estimate <- vector(mode = "list", length = n_samples)

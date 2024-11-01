@@ -7,8 +7,8 @@
 admix_estim(
   samples,
   admixMod,
-  est.method = c("BVdk", "PS", "IBM"),
-  sym.f = FALSE
+  est_method = c("BVdk", "PS", "IBM"),
+  sym_f = FALSE
 )
 }
 \arguments{
@@ -16,12 +16,12 @@ admix_estim(
 
 \item{admixMod}{(list) A list of objects of class 'admix_model', containing useful information about distributions and parameters.}
 
-\item{est.method}{The estimation method to be applied. Can be one of 'BVdk' (Bordes and Vandekerkhove estimator), 'PS' (Patra and Sen
+\item{est_method}{The estimation method to be applied. Can be one of 'BVdk' (Bordes and Vandekerkhove estimator), 'PS' (Patra and Sen
 estimator), or 'IBM' (Inversion Best-Matching approach). The same estimation method is performed on each sample.
 Important note: estimation by 'IBM' is unbiased only under H0, meaning that choosing this method requires to perform
 previously the test hypothesis between the pairs of samples. For further details, see section 'Details' below.}
 
-\item{sym.f}{A boolean indicating whether the unknown component densities are assumed to be symmetric or not.}
+\item{sym_f}{A boolean indicating whether the unknown component densities are assumed to be symmetric or not.}
 }
 \value{
 An object of class 'admix_estim', containing at least 5 attributes: 1) the number of samples under study; 2) the information
@@ -60,10 +60,10 @@ admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
                          knownComp_param = mixt2$comp.param[[2]])
 admix_estim(samples = list(data1), admixMod = list(admixMod1),
-            est.method = 'BVdk', sym.f = TRUE)
+            est_method = 'BVdk', sym_f = TRUE)
 admix_estim(samples = list(data1,data2),
             admixMod = list(admixMod1,admixMod2),
-            est.method = 'PS')
+            est_method = 'PS')
 
 }
 \references{

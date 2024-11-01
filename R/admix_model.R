@@ -36,8 +36,12 @@ admix_model <- function(knownComp_dist, knownComp_param)
   if (knownComp_dist == "multinom") {
     stopifnot("Name of parameters not appropriate" = all(names(knownComp_param) == c("size","prob")))
   } else {
-    stopifnot("Name of parameters not appropriate" =
-                all(as.character(dist_table[rownames(dist_table) == knownComp_dist, 4:(4+nparam_theo-1)]) == names(knownComp_param)))
+    if (!all(as.character(dist_table[rownames(dist_table) == knownComp_dist, 4:(4+nparam_theo-1)]) == names(knownComp_param))) {
+      cat("Name of parameters not appropriate, please provide the following parameters /",
+          as.character(dist_table[rownames(dist_table) == knownComp_dist, 4:(4+nparam_theo-1)]), sep = " / ")
+      cat("\n")
+      stop()
+    }
   }
 
   ## Create object:

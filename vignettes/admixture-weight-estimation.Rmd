@@ -55,7 +55,7 @@ data1 <- getmixtData(mixt1)
 admixMod <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
                         knownComp_param = mixt1$comp.param[[2]])
 admix_estim(samples = list(data1), admixMod = list(admixMod),
-            est.method = 'BVdk', sym.f = TRUE)
+            est_method = 'BVdk', sym_f = TRUE)
 ```
 Because this estimation method relies on the symmetry of the unknown component density, the estimator provides both the estimated mixing weight of the unknown component distribution and the estimated location shift parameter.
 
@@ -65,7 +65,7 @@ In full generality (no assumptions made on the unknown component distribution), 
 
 ```{r}
 admix_estim(samples = list(data1), admixMod = list(admixMod),
-            est.method = 'PS')
+            est_method = 'PS')
 ```
 In this case, the only estimated parameter is the mixing proportion related to the unknown component distribution.
 
@@ -95,7 +95,7 @@ admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
                          knownComp_param = mixt2$comp.param[[2]])
 admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, admixMod2),
-            est.method = 'IBM')
+            est_method = 'IBM')
 ```
 
 Indeed, one can see that the two unknown proportions were consistently estimated.
@@ -124,14 +124,14 @@ admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
                          knownComp_param = mixt2$comp.param[[2]])
 ## Estimate the mixture weights of the two admixture models (provide only hat(theta)_n):
 admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, admixMod2),
-            est.method = 'IBM')
+            est_method = 'IBM')
 ```
 
 In such a framework, it is therefore better to use the estimator by [@PatraSen2016], which shows better performance:
 
 ```{r}
 admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, admixMod2),
-            est.method = 'PS')
+            est_method = 'PS')
 ```
 
 
@@ -161,7 +161,7 @@ admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
                          knownComp_param = mixt2$comp.param[[2]])
 ## Estimation:
 est <- admix_estim(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
-                   est.method = 'PS')
+                   est_method = 'PS')
 prop <- getmixingWeight(est)
 ## Determine the decontaminated version of the unknown density by inversion:
 res1 <- decontaminated_density(sample1 = data1, estim.p = prop[1], admixMod = admixMod1)

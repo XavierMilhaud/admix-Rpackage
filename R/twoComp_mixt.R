@@ -69,8 +69,12 @@ twoComp_mixt <- function(n = 1000, weight = 0.5, comp.dist = list("norm", "norm"
     if (any(comp.dist == "multinom")) {
       stopifnot("Name of parameters not appropriate" = all(names(comp.param[[k]]) == c("size","prob")))
     } else {
-      stopifnot("Name of parameters not appropriate" =
-        all(as.character(dist_table[rownames(dist_table) == comp.dist[[k]], 4:(4+nparam_theo[k]-1)]) == names(comp.param[[k]])))
+      if (!all(as.character(dist_table[rownames(dist_table) == comp.dist[[k]], 4:(4+nparam_theo[k]-1)]) == names(comp.param[[k]]))) {
+        cat("Name of parameters not appropriate, please provide the following parameters /",
+              as.character(dist_table[rownames(dist_table) == comp.dist[[k]], 4:(4+nparam_theo[k]-1)]), sep = " / ")
+        cat("\n")
+        stop()
+      }
     }
   }
 

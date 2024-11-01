@@ -47,7 +47,7 @@ admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
                          knownComp_param = mixt2$comp.param[[2]])
 ## Estimation:
 est <- admix_estim(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
-                   est.method = 'PS')
+                   est_method = 'PS')
 prop <- getmixingWeight(est)
 ## Determine the decontaminated version of the unknown density by inversion:
 res1 <- decontaminated_density(sample1 = data1, estim.p = prop[1], admixMod = admixMod1)
@@ -74,7 +74,7 @@ admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
                          knownComp_param = mixt2$comp.param[[2]])
 ## Estimation:
 est <- admix_estim(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
-                   est.method = "IBM")
+                   est_method = "IBM")
 prop <- getmixingWeight(est)
 ## Determine the decontaminated version of the unknown density by inversion:
 res1 <- decontaminated_density(sample1 = data1, estim.p = prop[1],
@@ -103,7 +103,7 @@ admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
                          knownComp_param = mixt2$comp.param[[2]])
 ## Estimation:
 est <- admix_estim(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
-                   est.method = "IBM")
+                   est_method = "IBM")
 prop <- getmixingWeight(est)
 ## Determine the decontaminated version of the unknown density by inversion:
 res1 <- decontaminated_density(sample1 = data1, estim.p = prop[1],

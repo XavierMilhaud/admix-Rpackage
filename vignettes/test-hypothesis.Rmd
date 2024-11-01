@@ -109,11 +109,11 @@ The hypothesis test concludes that the null hypothesis cannot be rejected, once 
 
 Note that the following arguments, involved in subroutines, were set to default values (but that the user can choose them setting parameter 'ask_poly_param' to TRUE):
 
-* 'est.method' is set to 'BVdk' to tell the program to estimate the unknown proportions $p_1$ and $p_2$ using the estimator proposed in [@BordesVandekerkhove2010],
+* 'est_method' is set to 'BVdk' to tell the program to estimate the unknown proportions $p_1$ and $p_2$ using the estimator proposed in [@BordesVandekerkhove2010],
 * 'K' equals 3 to mention that such expansions are computed up to the third order of the decomposition in the polynomial basis,
 * 's' equals 0.25 as the penalization rate involved in the penalization rule used in [@MilhaudPommeretSalhiVandekerkhove2022].
 
-When the unknown component distributions are not supposed to have symmetric densities, another solution to perform the test is to set 'est.method' to 'PS' following 'ask_poly_param' set to TRUE, but keeping in mind that plugging in such estimators for the test procedure should not be allowed in theory. However, that works quite well in practice. Another solution to perform this test in full generality is to use the IBM method (see below).
+When the unknown component distributions are not supposed to have symmetric densities, another solution to perform the test is to set 'est_method' to 'PS' following 'ask_poly_param' set to TRUE, but keeping in mind that plugging in such estimators for the test procedure should not be allowed in theory. However, that works quite well in practice. Another solution to perform this test in full generality is to use the IBM method (see below).
 
 
 ## Case of fully unknown densities
