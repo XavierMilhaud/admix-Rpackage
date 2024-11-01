@@ -250,7 +250,7 @@ parameters when simulating the data.</p>
 to default values (but that the user can choose them setting parameter
 ‘ask_poly_param’ to TRUE):</p>
 <ul>
-<li>‘est.method’ is set to ‘BVdk’ to tell the program to estimate the
+<li>‘est_method’ is set to ‘BVdk’ to tell the program to estimate the
 unknown proportions
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>p</mi><mn>1</mn></msub><annotation encoding="application/x-tex">p_1</annotation></semantics></math>
 and
@@ -265,7 +265,7 @@ penalization rule used in <span class="citation">(Milhaud et al.
 </ul>
 <p>When the unknown component distributions are not supposed to have
 symmetric densities, another solution to perform the test is to set
-‘est.method’ to ‘PS’ following ‘ask_poly_param’ set to TRUE, but keeping
+‘est_method’ to ‘PS’ following ‘ask_poly_param’ set to TRUE, but keeping
 in mind that plugging in such estimators for the test procedure should
 not be allowed in theory. However, that works quite well in practice.
 Another solution to perform this test in full generality is to use the

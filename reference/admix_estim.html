@@ -59,8 +59,8 @@ The unknown quantities p_i and f_i then have to be estimated.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">admix_estim</span><span class="op">(</span></span>
 <span>  <span class="va">samples</span>,</span>
 <span>  <span class="va">admixMod</span>,</span>
-<span>  est.method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"BVdk"</span>, <span class="st">"PS"</span>, <span class="st">"IBM"</span><span class="op">)</span>,</span>
-<span>  sym.f <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  est_method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"BVdk"</span>, <span class="st">"PS"</span>, <span class="st">"IBM"</span><span class="op">)</span>,</span>
+<span>  sym_f <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -76,14 +76,14 @@ The unknown quantities p_i and f_i then have to be estimated.</p>
 <dd><p>(list) A list of objects of class 'admix_model', containing useful information about distributions and parameters.</p></dd>
 
 
-<dt id="arg-est-method">est.method<a class="anchor" aria-label="anchor" href="#arg-est-method"></a></dt>
+<dt id="arg-est-method">est_method<a class="anchor" aria-label="anchor" href="#arg-est-method"></a></dt>
 <dd><p>The estimation method to be applied. Can be one of 'BVdk' (Bordes and Vandekerkhove estimator), 'PS' (Patra and Sen
 estimator), or 'IBM' (Inversion Best-Matching approach). The same estimation method is performed on each sample.
 Important note: estimation by 'IBM' is unbiased only under H0, meaning that choosing this method requires to perform
 previously the test hypothesis between the pairs of samples. For further details, see section 'Details' below.</p></dd>
 
 
-<dt id="arg-sym-f">sym.f<a class="anchor" aria-label="anchor" href="#arg-sym-f"></a></dt>
+<dt id="arg-sym-f">sym_f<a class="anchor" aria-label="anchor" href="#arg-sym-f"></a></dt>
 <dd><p>A boolean indicating whether the unknown component densities are assumed to be symmetric or not.</p></dd>
 
 </dl></div>
@@ -132,19 +132,19 @@ MilhaudPommeretSalhiVandekerkhove2024aadmix</p>
 <span class="r-in"><span><span class="va">admixMod2</span> <span class="op">&lt;-</span> <span class="fu"><a href="admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt2</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>                         knownComp_param <span class="op">=</span> <span class="va">mixt2</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">admix_estim</span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span><span class="op">)</span>, admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>            est.method <span class="op">=</span> <span class="st">'BVdk'</span>, sym.f <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>            est_method <span class="op">=</span> <span class="st">'BVdk'</span>, sym_f <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> admix_estim(samples = list(data1), admixMod = list(admixMod1), </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     est.method = "BVdk", sym.f = TRUE)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     est_method = "BVdk", sym_f = TRUE)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing weight of the unknown component distribution in Sample 1: 0.69</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">admix_estim</span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>,<span class="va">data2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>            admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>,<span class="va">admixMod2</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>            est.method <span class="op">=</span> <span class="st">'PS'</span><span class="op">)</span></span></span>
+<span class="r-in"><span>            est_method <span class="op">=</span> <span class="st">'PS'</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     admixMod2), est.method = "PS")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     admixMod2), est_method = "PS")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing weight of the unknown component distribution in Sample 1: 0.65</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing weight of the unknown component distribution in Sample 2: 0.76</span>
