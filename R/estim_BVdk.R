@@ -7,7 +7,7 @@
 #' The localization shift parameter is denoted mu, and the component weight p.
 #' See 'Details' below for further information.
 #'
-#' @param data The observed sample under study.
+#' @param samples The observed sample under study.
 #' @param admixMod An object of class 'admix_model', containing useful information about distributions and parameters.
 #' @param method The method used throughout the optimization process, either 'L-BFGS-B' or 'Nelder-Mead' (see ?optim).
 #'
@@ -33,7 +33,7 @@
 #'                         knownComp_param = mixt1$comp.param[[2]])
 #'
 #' ## Perform the estimation of parameters in real-life:
-#' estim_BVdk(data = data1, admixMod = admixMod, method = 'L-BFGS-B')
+#' estim_BVdk(samples = data1, admixMod = admixMod, method = 'L-BFGS-B')
 #'
 #' ## Second example:
 #' mixt2 <- twoComp_mixt(n = 200, weight = 0.65,
@@ -45,13 +45,15 @@
 #'                         knownComp_param = mixt2$comp.param[[2]])
 #'
 #' ## Perform the estimation of parameters in real-life:
-#' estim_BVdk(data = data2, admixMod = admixMod2, method = 'L-BFGS-B')
+#' estim_BVdk(samples = data2, admixMod = admixMod2, method = 'L-BFGS-B')
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-estim_BVdk <- function(data, admixMod, method = c("L-BFGS-B","Nelder-Mead"))
+estim_BVdk <- function(samples, admixMod, method = c("L-BFGS-B","Nelder-Mead"))
 {
+  warning("Estimation by 'BVdk' assumes the unknown component distribution
+  to be a standard Gaussian distribution.\n")
   ## Extract useful information about known component distribution:
   comp.dist.sim <- paste0("r", admixMod$comp.dist$known)
   comp.sim <- sapply(X = comp.dist.sim, FUN = get, mode = "function")
@@ -60,26 +62,27 @@ estim_BVdk <- function(data, admixMod, method = c("L-BFGS-B","Nelder-Mead"))
                     "=", admixMod$comp.param$known, sep = "", collapse = ","), ")", sep="")
   ## Initialization of the parameters: localization parameter is initialized depending on whether the global mean
   ## of the sample is lower than the mean of the known component (or not).
-  if (mean(data) > mean(eval(parse(text = expr.sim)))) {
-    init.param <- c(0.5, 0.99 * max(data))
+  if (mean(samples) > mean(eval(parse(text = expr.sim)))) {
+    init.param <- c(0.5, 0.99 * max(samples))
   } else {
-    init.param <- c(0.5, (min(data) + 0.01 * abs(min(data))))
+    init.param <- c(0.5, (min(samples) + 0.01 * abs(min(samples))))
   }
 
   ## Select the bandwith :
-  bandw <- stats::density(data)$bw
+  bandw <- stats::density(samples)$bw
 
+  method <- match.arg(method)
   if (method == "Nelder-Mead") {
-    sol <- stats::optim(par = init.param, fn = BVdk_contrast, gr = BVdk_contrast_gradient, data = data,
+    sol <- stats::optim(par = init.param, fn = BVdk_contrast, gr = BVdk_contrast_gradient, data = samples,
                         admixMod = admixMod, h = bandw, method = "Nelder-Mead")
   } else {
-    sol <- stats::optim(par = init.param, fn = BVdk_contrast, gr = BVdk_contrast_gradient, data = data, admixMod = admixMod,
-                        h = bandw, method = "L-BFGS-B", lower = c(0.001,min(data)), upper = c(0.999,max(data)))
+    sol <- stats::optim(par = init.param, fn = BVdk_contrast, gr = BVdk_contrast_gradient, data = samples, admixMod = admixMod,
+                        h = bandw, method = "L-BFGS-B", lower = c(0.001,min(samples)), upper = c(0.999,max(samples)))
   }
 
   obj <- list(
     n_populations = 1,
-    population_sizes = length(data),
+    population_sizes = length(samples),
     admixture_models = admixMod,
     estimation_method = "Bordes and Vandekerkhove",
     estimated_mixing_weights = sol$par[1],

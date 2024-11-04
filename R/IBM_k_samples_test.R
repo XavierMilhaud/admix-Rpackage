@@ -6,15 +6,16 @@
 #' observed sample. Perform the following hypothesis test:
 #'    H0 : f_1 = ... = f_K  against  H1 : f_i differs from f_j (i different from j, and i,j in 1,...,K).
 #'
-#' @param samples (list) A list of the K samples to be studied, all following admixture distributions.
-#' @param admixMod (list) A list of objects of class 'admix_model', containing useful information about distributions and parameters.
-#' @param sim_U (default to NULL) Random draws of the inner convergence part of the contrast as defined in the IBM approach (see 'Details' below).
-#' @param n_sim_tab Number of simulated gaussian processes when tabulating the inner convergence distribution in the IBM approach.
+#' @param samples A list of the K samples to be studied, all following admixture distributions.
+#' @param admixMod A list of objects of class 'admix_model', containing useful information about distributions and parameters.
 #' @param conf_level The confidence level of the K-sample test.
-#' @param tune_penalty A boolean that allows to choose between a classical penalty term or an optimized penalty embedding some tuning parameters
-#'                     (automatically optimized). Optimized penalty is particularly useful for low sample size to detect alternatives.
+#' @param sim_U (default to NULL) Random draws of the inner convergence part of the contrast as defined in the IBM approach (see 'Details' below).
+#' @param n_sim_tab (default to 100) Number of simulated Gaussian processes when tabulating the inner convergence distribution in the IBM approach.
+#' @param tune_penalty (default to FALSE) A boolean that allows to choose between a classical penalty term or an optimized penalty (embedding
+#'                     some tuning parameters, automatically optimized). Optimized penalty is particularly useful for low or unbalanced sample sizes
+#'                     to detect alternatives to the null hypothesis (H0).
 #' @param parallel (default to FALSE) Boolean indicating whether parallel computations are performed.
-#' @param n_cpu (default to 2) Number of cores used when parallelizing.
+#' @param n_cpu (default to 2) Number of cores used when paralleling the computations.
 #'
 #' @references
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2024b}{admix}
@@ -66,8 +67,8 @@
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-IBM_k_samples_test <- function(samples, admixMod, sim_U = NULL, n_sim_tab = 100,
-                               conf_level = 0.95, tune_penalty = TRUE, parallel = FALSE, n_cpu = 2)
+IBM_k_samples_test <- function(samples, admixMod, conf_level = 0.95, sim_U = NULL, n_sim_tab = 100,
+                               tune_penalty = FALSE, parallel = FALSE, n_cpu = 2)
 {
   ## Control whether parallel computations were asked for or not:
   if (parallel) {

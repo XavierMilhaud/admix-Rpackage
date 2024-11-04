@@ -8,49 +8,23 @@ admix_test(
   samples,
   admixMod,
   test_method = c("poly", "icv"),
-  sim_U = NULL,
-  n_sim_tab = 50,
-  ICV_tunePenalty = FALSE,
-  ask_poly_param = FALSE,
-  support = c("Real", "Integer", "Positive", "Bounded.continuous"),
   conf_level = 0.95,
-  parallel = FALSE,
-  n_cpu = 2
+  ...
 )
 }
 \arguments{
-\item{samples}{(list) A list of the K (K > 0) samples to be studied, each one assumed to follow a mixture distribution.}
+\item{samples}{A list of the K (K > 0) samples to be studied, each one assumed to follow a mixture distribution.}
 
-\item{admixMod}{(list) A list of objects of class 'admix_model', containing useful information about distributions and parameters.}
+\item{admixMod}{A list of objects of class 'admix_model', containing useful information about distributions and parameters.}
 
 \item{test_method}{The testing method to be applied. Can be either 'poly' (polynomial basis expansion) or 'icv' (inner
 convergence from IBM). The same testing method is performed between all samples. In the one-sample case,
 only 'Poly' is available and the test is a gaussianity test. For further details, see section 'Details' below.}
 
-\item{sim_U}{(Only with 'icv' testing method, otherwise useless) Random draws of the inner convergence part of the contrast
-as defined in the IBM approach (see 'Details' below).}
-
-\item{n_sim_tab}{(Only with 'icv' testing method, otherwise useless) Number of simulated gaussian processes used in the
-tabulation of the inner convergence distribution in the IBM approach.}
-
-\item{ICV_tunePenalty}{(Only with 'icv' testing with at least 3 samples to deal with, otherwise useless. Default to FALSE) Boolean used
-to tune the penalty term in the k-sample test (k = 3,...,K) when using Inversion Best Matching (IBM) approach coupled
-to Inner ConVergence (icv) property. Particularly useful when studying unbalanced samples (in terms of sample size)
-or small-sized samples.}
-
-\item{ask_poly_param}{(Only with 'poly' testing method, otherwise useless. Boolean, default to FALSE) If TRUE, ask the user to choose
-both the order 'K' of expansion coefficients in the orthonormal polynomial basis, and the penalization rate 's'
-involved on the penalization rule for the test. Default values for these two parameters are 'K=3' and 's=0.25'.}
-
-\item{support}{(Used with 'poly' testing method, otherwise useless) The support of the observations; one of "Real",
-"Integer", "Positive", or "Bounded.continuous".}
-
 \item{conf_level}{The confidence level of the K-sample test.}
 
-\item{parallel}{(default to FALSE, only used with 'icv' testing) Boolean indicating whether parallel computations are performed
-(to speed-up the tabulation).}
-
-\item{n_cpu}{(default to 2, only used with 'icv' testing) Number of cores used when parallelizing.}
+\item{...}{Optional arguments to 'gaussianity_test', 'IBM_k_samples_test' or 'orthobasis_test' depending on the choice made by the user
+for the estimation method.}
 }
 \value{
 An object of class 'admix_test', containing 8 attributes: 1) the test decision (reject the null hypothesis or not);
@@ -90,8 +64,8 @@ admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
                          knownComp_param = mixt2$comp.param[[2]])
 admix_test(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
-           test_method = "poly", ask_poly_param = FALSE, support = "Real",
-           conf_level = 0.95, parallel = FALSE, n_cpu = 2)
+           conf_level = 0.95, test_method = "poly", ask_poly_param = FALSE,
+           support = "Real")
 
 }
 \references{

@@ -16,7 +16,7 @@ are observed. The admixture weights p1 and p2 thus have to be estimated. For fur
     
     <a class="navbar-brand me-2" href="../index.html">admix</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,20 +68,22 @@ are observed. The admixture weights p1 and p2 thus have to be estimated. For fur
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">orthobasis_test</span><span class="op">(</span></span>
 <span>  <span class="va">samples</span>,</span>
 <span>  <span class="va">admixMod</span>,</span>
+<span>  conf_level <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  est_method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"BVdk"</span>, <span class="st">"PS"</span><span class="op">)</span>,</span>
+<span>  ask_poly_param <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  K <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  s <span class="op">=</span> <span class="fl">0.49</span>,</span>
-<span>  est_method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"BVdk"</span>, <span class="st">"PS"</span><span class="op">)</span>,</span>
-<span>  conf_level <span class="op">=</span> <span class="fl">0.95</span>,</span>
-<span>  nb_echBoot <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  nb_echBoot <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  support <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Real"</span>, <span class="st">"Integer"</span>, <span class="st">"Positive"</span>, <span class="st">"Bounded.continuous"</span>, <span class="st">"Bounded.discrete"</span><span class="op">)</span>,</span>
 <span>  bounds_supp <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  support <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Real"</span>, <span class="st">"Integer"</span>, <span class="st">"Positive"</span>, <span class="st">"Bounded.continuous"</span>, <span class="st">"Bounded.discrete"</span><span class="op">)</span></span>
+<span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>samples</dt>
-<dd><p>(List) List of the two samples, each one following the mixture distribution given by l = p*f + (1-p)*g,
+<dd><p>List of the two samples, each one following the mixture distribution given by l = p*f + (1-p)*g,
 with f and p unknown and g known.</p></dd>
 
 
@@ -89,12 +91,8 @@ with f and p unknown and g known.</p></dd>
 <dd><p>An object of class 'admix_model', containing useful information about distributions and parameters.</p></dd>
 
 
-<dt>K</dt>
-<dd><p>Number of coefficients considered for the polynomial basis expansion.</p></dd>
-
-
-<dt>s</dt>
-<dd><p>Rate at which the normalization factor is set in the penalization rule for model selection (in ]0,1/2[), see 'Details'.</p></dd>
+<dt>conf_level</dt>
+<dd><p>The confidence level, default to 95 percent. Equals 1-alpha, where alpha is the level of the test (type-I error).</p></dd>
 
 
 <dt>est_method</dt>
@@ -102,21 +100,38 @@ with f and p unknown and g known.</p></dd>
 (Bordes and Vendekerkhove estimation). Choosing 'PS' requires to specify the number of bootstrap samples.</p></dd>
 
 
-<dt>conf_level</dt>
-<dd><p>The confidence level, default to 95 percent. Equals 1-alpha, where alpha is the level of the test (type-I error).</p></dd>
+<dt>ask_poly_param</dt>
+<dd><p>(default to FALSE) If TRUE, ask the user to choose both the order 'K' of expansion coefficients in the
+orthonormal polynomial basis, and the penalization rate 's' involved on the penalization rule for the test.</p></dd>
+
+
+<dt>K</dt>
+<dd><p>(K &gt; 0, default to 3) If not asked (see the previous argument), number of coefficients considered for the polynomial basis expansion.</p></dd>
+
+
+<dt>s</dt>
+<dd><p>(in ]0,1/2[, default to 0.49) If not asked (see the previous argument), rate at which the normalization factor is set in
+the penalization rule for model selection (in ]0,1/2[). See reference below.</p>
+<p>[, default to 0.49) If not asked (see the previous argument), rate at which the normalization factor is set in
+the penalization rule for model selection (in ]: R:,%20default%20to%200.49)%20If%20not%20asked%20(see%20the%20previous%20argument),%20rate%20at%20which%20the%20normalization%20factor%20is%20set%20in%0A%20%20%20%20%20%20%20%20%20%20the%20penalization%20rule%20for%20model%20selection%20(in%20</p></dd>
 
 
 <dt>nb_echBoot</dt>
-<dd><p>(default to NULL) Number of bootstrap samples, useful when choosing 'PS' estimation method.</p></dd>
-
-
-<dt>bounds_supp</dt>
-<dd><p>(default to NULL) useful if support = 'bounded', a list of minimum and maximum bounds, specified as
-following: list( list(min.f1,min.g1,min.f2,min.g2) , list(max.f1,max.g1,max.f2,max.g2) )</p></dd>
+<dd><p>(default to 100) Number of bootstrap samples, useful when choosing 'PS' estimation method.</p></dd>
 
 
 <dt>support</dt>
-<dd><p>support of the densities under consideration, useful to choose the polynomial orthonormal basis.</p></dd>
+<dd><p>Support of the probability distributions, useful to choose the appropriate polynomial orthonormal basis. One of 'Real',
+'Integer', 'Positive', or 'Bounded.continuous'.</p></dd>
+
+
+<dt>bounds_supp</dt>
+<dd><p>(default to NULL) Useful if support = 'Bounded.continuous', a list of minimum and maximum bounds, specified as
+following: list( list(min.f1,min.g1,min.f2,min.g2) , list(max.f1,max.g1,max.f2,max.g2) )</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Optional arguments to 'estim_BVdk' or 'estim_PS', depending on the chosen argument 'est_method' (see above).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -161,16 +176,14 @@ ISSN 0378-3758, <a href="https://doi.org/10.1016/j.jspi.2021.05.010" class="exte
 <span class="r-in"><span><span class="va">admixMod2</span> <span class="op">&lt;-</span> <span class="fu"><a href="admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt2</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>                        knownComp_param <span class="op">=</span> <span class="va">mixt2</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu">orthobasis_test</span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>,<span class="va">data2</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>,<span class="va">admixMod2</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                K <span class="op">=</span> <span class="fl">3</span>, s <span class="op">=</span> <span class="fl">0.49</span>, nb_echBoot <span class="op">=</span> <span class="cn">NULL</span>, support <span class="op">=</span> <span class="st">'Real'</span>,</span></span>
-<span class="r-in"><span>                bounds_supp <span class="op">=</span> <span class="cn">NULL</span>, est_method <span class="op">=</span> <span class="st">'BVdk'</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>     Remind that choosing 'BVdk' for the estimation method</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>     is consistent only if the unknown component distributions</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>     have a symmetric density function.</span>
+<span class="r-in"><span><span class="fu">orthobasis_test</span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>,<span class="va">data2</span><span class="op">)</span>, admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>,<span class="va">admixMod2</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                conf_level <span class="op">=</span> <span class="fl">0.95</span>, est_method <span class="op">=</span> <span class="st">'BVdk'</span>, support <span class="op">=</span> <span class="st">'Real'</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Estimation by 'BVdk' assumes the unknown component distribution</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   to be a standard Gaussian distribution.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Estimation by 'BVdk' assumes the unknown component distribution</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   to be a standard Gaussian distribution.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:orthobasis_test(samples = list(data1, data2), admixMod = list(admixMod1, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     admixMod2), K = 3, s = 0.49, est_method = "BVdk", nb_echBoot = NULL, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     bounds_supp = NULL, support = "Real")</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     admixMod2), conf_level = 0.95, est_method = "BVdk", support = "Real")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Is the null hypothesis (gaussian unknown component distribution) rejected? No</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Test p-value: 0.605</span>

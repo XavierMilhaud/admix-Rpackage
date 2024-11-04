@@ -32,7 +32,7 @@
 #'                         knownComp_param = mixt1$comp.param[[2]])
 #'
 #' ## Perform the estimation of parameters in real-life:
-#' estim <- estim_BVdk(data = data1, admixMod = admixMod, method = 'L-BFGS-B')
+#' estim <- estim_BVdk(samples = data1, admixMod = admixMod, method = 'L-BFGS-B')
 #' BVdk_varCov_estimators(estim = estim, data = data1, admixMod = admixMod)
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>

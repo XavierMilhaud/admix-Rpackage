@@ -7,36 +7,48 @@
 orthobasis_test(
   samples,
   admixMod,
+  conf_level = 0.95,
+  est_method = c("BVdk", "PS"),
+  ask_poly_param = FALSE,
   K = 3,
   s = 0.49,
-  est_method = c("BVdk", "PS"),
-  conf_level = 0.95,
-  nb_echBoot = NULL,
+  nb_echBoot = 100,
+  support = c("Real", "Integer", "Positive", "Bounded.continuous", "Bounded.discrete"),
   bounds_supp = NULL,
-  support = c("Real", "Integer", "Positive", "Bounded.continuous", "Bounded.discrete")
+  ...
 )
 }
 \arguments{
-\item{samples}{(List) List of the two samples, each one following the mixture distribution given by l = p*f + (1-p)*g,
+\item{samples}{List of the two samples, each one following the mixture distribution given by l = p*f + (1-p)*g,
 with f and p unknown and g known.}
 
 \item{admixMod}{An object of class 'admix_model', containing useful information about distributions and parameters.}
 
-\item{K}{Number of coefficients considered for the polynomial basis expansion.}
-
-\item{s}{Rate at which the normalization factor is set in the penalization rule for model selection (in ]0,1/2[), see 'Details'.}
+\item{conf_level}{The confidence level, default to 95 percent. Equals 1-alpha, where alpha is the level of the test (type-I error).}
 
 \item{est_method}{Estimation method to get the component weights, either 'PS' (Patra and Sen estimation) or 'BVdk'
 (Bordes and Vendekerkhove estimation). Choosing 'PS' requires to specify the number of bootstrap samples.}
 
-\item{conf_level}{The confidence level, default to 95 percent. Equals 1-alpha, where alpha is the level of the test (type-I error).}
+\item{ask_poly_param}{(default to FALSE) If TRUE, ask the user to choose both the order 'K' of expansion coefficients in the
+orthonormal polynomial basis, and the penalization rate 's' involved on the penalization rule for the test.}
 
-\item{nb_echBoot}{(default to NULL) Number of bootstrap samples, useful when choosing 'PS' estimation method.}
+\item{K}{(K > 0, default to 3) If not asked (see the previous argument), number of coefficients considered for the polynomial basis expansion.}
 
-\item{bounds_supp}{(default to NULL) useful if support = 'bounded', a list of minimum and maximum bounds, specified as
+\item{s}{(in ]0,1/2[, default to 0.49) If not asked (see the previous argument), rate at which the normalization factor is set in
+the penalization rule for model selection (in ]0,1/2[). See reference below.
+
+[, default to 0.49) If not asked (see the previous argument), rate at which the normalization factor is set in
+the penalization rule for model selection (in ]: R:,\%20default\%20to\%200.49)\%20If\%20not\%20asked\%20(see\%20the\%20previous\%20argument),\%20rate\%20at\%20which\%20the\%20normalization\%20factor\%20is\%20set\%20in\%0A\%20\%20\%20\%20\%20\%20\%20\%20\%20\%20the\%20penalization\%20rule\%20for\%20model\%20selection\%20(in\%20}
+
+\item{nb_echBoot}{(default to 100) Number of bootstrap samples, useful when choosing 'PS' estimation method.}
+
+\item{support}{Support of the probability distributions, useful to choose the appropriate polynomial orthonormal basis. One of 'Real',
+'Integer', 'Positive', or 'Bounded.continuous'.}
+
+\item{bounds_supp}{(default to NULL) Useful if support = 'Bounded.continuous', a list of minimum and maximum bounds, specified as
 following: list( list(min.f1,min.g1,min.f2,min.g2) , list(max.f1,max.g1,max.f2,max.g2) )}
 
-\item{support}{support of the densities under consideration, useful to choose the polynomial orthonormal basis.}
+\item{...}{Optional arguments to 'estim_BVdk' or 'estim_PS', depending on the chosen argument 'est_method' (see above).}
 }
 \value{
 An object of class 'orthobasis_test', containing ten attributes: 1) the number of populations under study (2 in this case);
@@ -69,10 +81,8 @@ data2 <- getmixtData(mixt2)
 admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
                         knownComp_param = mixt2$comp.param[[2]])
 
-orthobasis_test(samples = list(data1,data2),
-                admixMod = list(admixMod1,admixMod2),
-                K = 3, s = 0.49, nb_echBoot = NULL, support = 'Real',
-                bounds_supp = NULL, est_method = 'BVdk')
+orthobasis_test(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
+                conf_level = 0.95, est_method = 'BVdk', support = 'Real')
 }
 
 }

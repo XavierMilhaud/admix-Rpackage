@@ -14,7 +14,7 @@ L = p*F + (1-p)*G, with g a known CDF and p and f unknown quantities."><!-- math
     
     <a class="navbar-brand me-2" href="../index.html">admix</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -111,6 +111,8 @@ unknown component f after having estimated p.</p>
 <span class="r-in"><span><span class="co">## Estimation:</span></span></span>
 <span class="r-in"><span><span class="va">est</span> <span class="op">&lt;-</span> <span class="fu"><a href="admix_estim.html">admix_estim</a></span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span><span class="op">)</span>, admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                   est_method <span class="op">=</span> <span class="st">'PS'</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> 'c.n' is not given. Fixing it to be '0.1*log(log(n))</span>
 <span class="r-in"><span><span class="co">## Determine the decontaminated version of the unknown density by inversion:</span></span></span>
 <span class="r-in"><span><span class="fu">decontaminated_density</span><span class="op">(</span>sample1 <span class="op">=</span> <span class="va">data1</span>, estim.p <span class="op">=</span> <span class="va">est</span><span class="op">$</span><span class="va">estimated_mixing_weights</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>                       admixMod <span class="op">=</span> <span class="va">admixMod1</span><span class="op">)</span></span></span>
@@ -119,8 +121,8 @@ unknown component f after having estimated p.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function (x) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (1/estim.p) * (l1_emp(x) - (1 - estim.p) * g1(x))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x7fdd8a4f02c0&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x7fdd8a4ecff0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x7fed6489f020&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x7fed6487e2f0&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Type of support: Continuous</span>
 <span class="r-in"><span></span></span>
@@ -156,8 +158,8 @@ unknown component f after having estimated p.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function (x) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (1/estim.p) * (l1_emp(x) - (1 - estim.p) * g1(x))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x7fdd8a4f02c0&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x7fdd9023f4f8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x7fed6489f020&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x7fed65055860&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Type of support: Discrete</span>
 <span class="r-in"><span></span></span>
@@ -193,8 +195,8 @@ unknown component f after having estimated p.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function (x) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (1/estim.p) * (l1_emp(x) - (1 - estim.p) * g1(x))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x7fdd8a4f02c0&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x7fdd8479ec98&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x7fed6489f020&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x7fed65121530&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Type of support: Discrete</span>
 <span class="r-in"><span></span></span>

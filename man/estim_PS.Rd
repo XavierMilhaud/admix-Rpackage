@@ -5,26 +5,26 @@
 \title{Estimates in an admixture using Patra and Sen approach}
 \usage{
 estim_PS(
-  data,
+  samples,
   admixMod,
-  method = c("lwr.bnd", "fixed", "cv"),
+  method = c("fixed", "lwr.bnd", "cv"),
   c.n = NULL,
   folds = 10,
   reps = 1,
   cn.s = NULL,
   cn.length = 100,
-  gridsize = 600
+  gridsize = 1200
 )
 }
 \arguments{
-\item{data}{Sample to be studied.}
+\item{samples}{Sample to be studied.}
 
 \item{admixMod}{An object of class 'admix_model', containing information about the known component distribution and its parameter(s).}
 
 \item{method}{One of 'lwr.bnd', fixed' or 'cv': depending on whether compute some lower bound of the mixing proportion, the estimate
 based on the value of 'c.n' or use cross-validation for choosing 'c.n' (tuning parameter).}
 
-\item{c.n}{A positive number, with default value equal to 0.1 log(log(n)), where 'n' is the length of the observed sample.}
+\item{c.n}{(default to NULL) A positive number for the penalization, see reference below.}
 
 \item{folds}{(optional, default to 10) Number of folds used for cross-validation.}
 
@@ -66,8 +66,8 @@ admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
                          knownComp_param = mixt1$comp.param[[2]])
 
 ## Transform the known component of the admixture model into a Uniform(O,1) distribution:
-estim_PS(data = data1, admixMod = admixMod1, method = 'fixed',
-         c.n = 0.1*log(log(length(data1))), gridsize = 1000)
+estim_PS(samples = data1, admixMod = admixMod1, method = 'fixed', c.n = NULL)
+
 
 }
 \references{

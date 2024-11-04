@@ -140,6 +140,7 @@ estim_IBM <- function(samples, admixMod, n.integ = 1000)
     admixture_models = admixMod,
     estimation_method = "Inversion Best Matching (IBM)",
     estimated_mixing_weights = estim.weights,
+    equal.knownComp = G1equalG2,
     p.X.fixed = fixed.p.X,
     integ.supp = sort(G)
     )
@@ -164,10 +165,13 @@ print.estim_IBM <- function(x, ...)
   cat("Call:")
   print(x$call)
   cat("\n")
-  cat("Estimated mixing proportion (of the unknown component) in the 1st sample: ", x$estimated_mixing_weights[1], "\n")
-  cat("Estimated mixing proportion (of the unknown component) in the 2nd sample: ", x$estimated_mixing_weights[2], "\n")
-  if (!is.null(x$p.X.fixed))
-    cat("\nFixed value for the mixing weight in the 1st sample (case of identical known components in the 2 samples):", x$p.X.fixed, "\n\n")
+  if (x$equal.knownComp) {
+    cat("Fixed proportion (of the unknown component) in the 1st sample (since equal unknown components): ", x$p.X.fixed, "\n")
+    cat("Estimated mixing proportion (of the unknown component) in the 2nd sample: ", x$estimated_mixing_weights, "\n")
+  } else {
+    cat("Estimated mixing proportion (of the unknown component) in the 1st sample: ", x$estimated_mixing_weights[1], "\n")
+    cat("Estimated mixing proportion (of the unknown component) in the 2nd sample: ", x$estimated_mixing_weights[2], "\n")
+  }
 }
 
 
@@ -194,12 +198,16 @@ summary.estim_IBM <- function(object, ...)
     cat(paste(sapply(object$admixture_models[[k]], "[[", "known")[1:2], collapse = " - "))
     cat("\n")
   }
+  cat("Are the known component distributions equal? ", object$equal.knownComp,"\n")
   cat("\n------- Estimation results -------\n")
-  cat("Estimated mixing proportion (of the unknown component) in the 1st sample: ", object$estimated_mixing_weights[1], "\n")
-  cat("Estimated mixing proportion (of the unknown component) in the 2nd sample: ", object$estimated_mixing_weights[2], "\n\n")
-  if (!is.null(object$p.X.fixed))
-    cat("\nFixed value for the mixing weight in the 1st sample (case of identical known components in the 2 samples):", object$p.X.fixed, "\n\n")
-  cat("------- Support -------\n")
+  if (object$equal.knownComp) {
+    cat("Fixed proportion (of the unknown component) in the 1st sample (since equal unknown components): ", object$p.X.fixed, "\n")
+    cat("Estimated mixing proportion (of the unknown component) in the 2nd sample: ", object$estimated_mixing_weights, "\n")
+  } else {
+    cat("Estimated mixing proportion (of the unknown component) in the 1st sample: ", object$estimated_mixing_weights[1], "\n")
+    cat("Estimated mixing proportion (of the unknown component) in the 2nd sample: ", object$estimated_mixing_weights[2], "\n")
+  }
+  cat("\n------- Support -------\n")
   cat("Integration support: ", paste(utils::head(object$integ.supp,3), collapse=" "), "...",
       paste(utils::tail(object$integ.supp,3), collapse = " "), "\n\n", sep="")
 }

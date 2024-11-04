@@ -5,27 +5,35 @@
 \title{Gaussianity test in an admixture model}
 \usage{
 gaussianity_test(
-  sample1,
+  samples,
   admixMod,
   conf_level = 0.95,
+  ask_poly_param = FALSE,
   K = 3,
   s = 0.25,
-  support = c("Real", "Integer", "Positive", "Bounded.continuous")
+  support = c("Real", "Integer", "Positive", "Bounded.continuous"),
+  ...
 )
 }
 \arguments{
-\item{sample1}{Sample under study.}
+\item{samples}{Sample under study.}
 
 \item{admixMod}{An object of class 'admix_model', containing useful information about distributions and parameters.}
 
 \item{conf_level}{(default to 0.95) The confidence level. Equals 1-alpha, where alpha is the level of the test (type-I error).}
 
-\item{K}{(K > 0) Number of coefficients considered for the polynomial basis expansion.}
+\item{ask_poly_param}{(default to FALSE) If TRUE, ask the user to choose both the order 'K' of expansion coefficients in the
+orthonormal polynomial basis, and the penalization rate 's' involved on the penalization rule for the test.}
 
-\item{s}{Normalization rate involved in the penalization rule for model selection (in ]0,1/2[). See the reference below.}
+\item{K}{(K > 0, default to 3) If not asked (see the previous argument), number of coefficients considered for the polynomial basis expansion.}
 
-\item{support}{Support of the probability density functions, useful to choose the polynomial orthonormal basis. One of 'Real',
+\item{s}{(in ]0,1/2[, default to 0.25) If not asked (see the previous argument), normalization rate involved in the penalization rule
+for model selection. See the reference below.}
+
+\item{support}{Support of the probability distributions, useful to choose the appropriate polynomial orthonormal basis. One of 'Real',
 'Integer', 'Positive', or 'Bounded.continuous'.}
+
+\item{...}{Optional arguments to 'estim_BVdk'.}
 }
 \value{
 An object of class 'gaussianity_test', containing 10 elements: 1) the number of populations under study (1 in this case);
@@ -56,8 +64,8 @@ data1 <- getmixtData(mixt1)
 admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
                          knownComp_param = mixt1$comp.param[[2]])
 ## Performs the test:
-gaussianity_test(sample1 = data1, admixMod = admixMod1,
-                 conf_level = 0.95, K = 3, s = 0.1, support = 'Real')
+gaussianity_test(samples = data1, admixMod = admixMod1,
+                 conf_level = 0.95, K = 3, s = 0.1, support = "Real")
 
 }
 \references{

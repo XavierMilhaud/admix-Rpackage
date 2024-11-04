@@ -273,6 +273,7 @@ admix_cluster <- function(samples, admixMod, conf_level = 0.95, n_sim_tab = 100,
     indexesSamples_to_consider <- indexesSamples_to_consider_new
     if (echo) utils::setTxtProgressBar(prog_bar, length(alreadyGrouped_samples))
   } # End of While
+
   if (echo) base::close(prog_bar)
 
   ## Define function that copies upper triangle to lower triangle to make the matrix become symmetric:

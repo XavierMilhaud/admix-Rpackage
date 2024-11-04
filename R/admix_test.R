@@ -8,28 +8,14 @@
 #' The test can be performed using two methods, either the comparison of coefficients obtained through polynomial basis expansions
 #' of the component densities, or by the inner-convergence property obtained using the IBM approach. See 'Details' below for further information.
 #'
-#' @param samples (list) A list of the K (K > 0) samples to be studied, each one assumed to follow a mixture distribution.
-#' @param admixMod (list) A list of objects of class 'admix_model', containing useful information about distributions and parameters.
+#' @param samples A list of the K (K > 0) samples to be studied, each one assumed to follow a mixture distribution.
+#' @param admixMod A list of objects of class 'admix_model', containing useful information about distributions and parameters.
 #' @param test_method The testing method to be applied. Can be either 'poly' (polynomial basis expansion) or 'icv' (inner
 #'                    convergence from IBM). The same testing method is performed between all samples. In the one-sample case,
 #'                    only 'Poly' is available and the test is a gaussianity test. For further details, see section 'Details' below.
-#' @param sim_U (Only with 'icv' testing method, otherwise useless) Random draws of the inner convergence part of the contrast
-#'               as defined in the IBM approach (see 'Details' below).
-#' @param n_sim_tab (Only with 'icv' testing method, otherwise useless) Number of simulated gaussian processes used in the
-#'                   tabulation of the inner convergence distribution in the IBM approach.
-#' @param ICV_tunePenalty (Only with 'icv' testing with at least 3 samples to deal with, otherwise useless. Default to FALSE) Boolean used
-#'                        to tune the penalty term in the k-sample test (k = 3,...,K) when using Inversion Best Matching (IBM) approach coupled
-#'                        to Inner ConVergence (icv) property. Particularly useful when studying unbalanced samples (in terms of sample size)
-#'                        or small-sized samples.
-#' @param ask_poly_param (Only with 'poly' testing method, otherwise useless. Boolean, default to FALSE) If TRUE, ask the user to choose
-#'                        both the order 'K' of expansion coefficients in the orthonormal polynomial basis, and the penalization rate 's'
-#'                        involved on the penalization rule for the test. Default values for these two parameters are 'K=3' and 's=0.25'.
-#' @param support (Used with 'poly' testing method, otherwise useless) The support of the observations; one of "Real",
-#'                 "Integer", "Positive", or "Bounded.continuous".
 #' @param conf_level The confidence level of the K-sample test.
-#' @param parallel (default to FALSE, only used with 'icv' testing) Boolean indicating whether parallel computations are performed
-#'                 (to speed-up the tabulation).
-#' @param n_cpu (default to 2, only used with 'icv' testing) Number of cores used when parallelizing.
+#' @param ... Optional arguments to 'gaussianity_test', 'IBM_k_samples_test' or 'orthobasis_test' depending on the choice made by the user
+#'            for the estimation method.
 #'
 #' @details For further details on implemented hypothesis tests, see the references hereafter.
 #'          .
@@ -62,19 +48,15 @@
 #' admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
 #'                          knownComp_param = mixt2$comp.param[[2]])
 #' admix_test(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
-#'            test_method = "poly", ask_poly_param = FALSE, support = "Real",
-#'            conf_level = 0.95, parallel = FALSE, n_cpu = 2)
+#'            conf_level = 0.95, test_method = "poly", ask_poly_param = FALSE,
+#'            support = "Real")
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-admix_test <- function(samples, admixMod, test_method = c("poly","icv"), sim_U = NULL, n_sim_tab = 50,
-                       ICV_tunePenalty = FALSE, ask_poly_param = FALSE,
-                       support = c("Real","Integer","Positive","Bounded.continuous"),
-                       conf_level = 0.95, parallel = FALSE, n_cpu = 2)
-{
+admix_test <- function(samples, admixMod, test_method = c("poly","icv"), conf_level = 0.95, ...) {
+
   meth <- match.arg(test_method)
-  supp <- match.arg(support)
 
   n_samples <- length(samples)
   ## Check right specification of arguments:
@@ -85,34 +67,16 @@ admix_test <- function(samples, admixMod, test_method = c("poly","icv"), sim_U =
 
   if (meth == "icv") {
     options(warn = -1)
-    if (n_samples == 2) {
-      test_res <- IBM_k_samples_test(samples = samples, admixMod = admixMod, sim_U = NULL, n_sim_tab = n_sim_tab,
-                                     conf_level = conf_level, tune_penalty = FALSE, parallel = parallel, n_cpu = n_cpu)
-    } else if (n_samples > 2) {
-      test_res <- IBM_k_samples_test(samples = samples, admixMod = admixMod, sim_U = sim_U, n_sim_tab = n_sim_tab,
-                                     conf_level = conf_level, tune_penalty = ICV_tunePenalty, parallel = parallel, n_cpu = n_cpu)
+    if (n_samples >= 2) {
+      test_res <- IBM_k_samples_test(samples = samples, admixMod = admixMod, conf_level = conf_level, ...)
     } else stop("Incorrect number of samples under study (should be > 1).")
 
   } else if (meth == "poly") {
-    if (ask_poly_param) {
-      K.user <- base::readline("Please enter 'K' (integer), the order for the polynomial expansion in the orthonormal basis: ")
-      s.user <- base::readline("Please enter 's' in ]0,0.5[, involved in the penalization rule for model selection where lower values of 's' lead to more powerful tests: ")
-      if (n_samples > 1) {
-        est_tech <- base::readline("Choose between 'BVdk' or 'PS' estimation method, given that theoretically speaking
-        'BVdk' should be prefered in a testing perspective but is valid only if unknown component densities are symetric: ")
-      }
-    } else {
-      K.user <- 3
-      s.user <- 0.25
-      est_tech <- "BVdk"
-    }
     if (n_samples == 1) {
       message("In the one-sample case, testing using polynomial basis expansions corresponds to a gaussianity test.\n")
-      test_res <- gaussianity_test(sample1 = samples[[1]], admixMod = admixMod[[1]],
-                                   K = as.numeric(K.user), s = as.numeric(s.user), support = supp)
+      test_res <- gaussianity_test(samples = samples[[1]], admixMod = admixMod[[1]], conf_level = conf_level, ...)
     } else if (n_samples == 2) {
-      test_res <- orthobasis_test(samples = samples, admixMod = admixMod, K = as.numeric(K.user), s = as.numeric(s.user),
-                                       est_method = est_tech, conf_level = conf_level, nb_echBoot = 100, support = supp)[1:7]
+      test_res <- orthobasis_test(samples = samples, admixMod = admixMod, conf_level = conf_level, ...)
     } else {
       stop("Testing using polynomial basis expansions is limited to ONE-sample or TWO-samples tests!")
     }
@@ -127,7 +91,7 @@ admix_test <- function(samples, admixMod, test_method = c("poly","icv"), sim_U =
     n_populations = n_samples,
     population_sizes = sapply(X = samples, FUN = length),
     admixture_models = admixMod,
-    testing_meth = switch(meth, "poly" = "Polynomial expansions of densities",
+    testing_meth = switch(meth, "poly" = "Polynomial expansion of the density",
                           "icv" = "Inner convergence property (following IBM)")
   )
 

@@ -5,13 +5,17 @@
 #' the known pdf and l is observed (others are unknown). This test requires optimization (to estimate the unknown parameters) as
 #' defined by Bordes & Vandekerkhove (2010), which means that the unknown mixture component must have a symmetric density.
 #'
-#' @param sample1 Sample under study.
+#' @param samples Sample under study.
 #' @param admixMod An object of class 'admix_model', containing useful information about distributions and parameters.
 #' @param conf_level (default to 0.95) The confidence level. Equals 1-alpha, where alpha is the level of the test (type-I error).
-#' @param K (K > 0) Number of coefficients considered for the polynomial basis expansion.
-#' @param s Normalization rate involved in the penalization rule for model selection (in ]0,1/2[). See the reference below.
-#' @param support Support of the probability density functions, useful to choose the polynomial orthonormal basis. One of 'Real',
+#' @param ask_poly_param (default to FALSE) If TRUE, ask the user to choose both the order 'K' of expansion coefficients in the
+#'                        orthonormal polynomial basis, and the penalization rate 's' involved on the penalization rule for the test.
+#' @param K (K > 0, default to 3) If not asked (see the previous argument), number of coefficients considered for the polynomial basis expansion.
+#' @param s (in ]0,1/2[, default to 0.25) If not asked (see the previous argument), normalization rate involved in the penalization rule
+#'          for model selection. See the reference below.
+#' @param support Support of the probability distributions, useful to choose the appropriate polynomial orthonormal basis. One of 'Real',
 #'                'Integer', 'Positive', or 'Bounded.continuous'.
+#' @param ... Optional arguments to 'estim_BVdk'.
 #'
 #' @details Extensions to the case of non-Gaussian known components can be overcome thanks to basic transformations using cdf.
 #'
@@ -37,16 +41,26 @@
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                          knownComp_param = mixt1$comp.param[[2]])
 #' ## Performs the test:
-#' gaussianity_test(sample1 = data1, admixMod = admixMod1,
-#'                  conf_level = 0.95, K = 3, s = 0.1, support = 'Real')
+#' gaussianity_test(samples = data1, admixMod = admixMod1,
+#'                  conf_level = 0.95, K = 3, s = 0.1, support = "Real")
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-gaussianity_test <- function(sample1, admixMod, conf_level = 0.95, K = 3, s = 0.25,
-                             support = c('Real','Integer','Positive','Bounded.continuous'))
+gaussianity_test <- function(samples, admixMod, conf_level = 0.95, ask_poly_param = FALSE, K = 3, s = 0.25,
+                             support = c('Real','Integer','Positive','Bounded.continuous'), ...)
 {
-  if (any(admixMod$comp.dist == "multinom")) stop("Gaussianity test for those mixture distribution is not supported")
+  support <- match.arg(support)
+
+  if (ask_poly_param) {
+    K.user <- base::readline("Please enter 'K' (integer), the order for the polynomial expansion in the orthonormal basis: ")
+    s.user <- base::readline("Please enter 's' in ]0,0.5[, involved in the penalization rule for model selection where lower values of 's' lead to more powerful tests: ")
+  } else {
+    K.user <- K
+    s.user <- s
+  }
+
+  if (any(admixMod$comp.dist == "multinom")) stop("Gaussianity test for those mixture distribution is not supported.\n")
 
   ## Extract the information on component distributions:
   comp.dist.dens <- paste0("d", admixMod$comp.dist$known)
@@ -67,29 +81,24 @@ gaussianity_test <- function(sample1, admixMod, conf_level = 0.95, K = 3, s = 0.
 
 	##-------- Split data sample -----------##
 	## Random sampling (p.6 Pommeret & Vandekerkhove) : create subsamples to get uncorrelated estimators of the different parameters
-	n <- length(sample1)
-	#blocksize <- n %/% 3							                   # block size
+	n <- length(samples)
 	blocksize <- n %/% 2							                   # block size
 	values <- stats::runif(n)									           # simulate random values
 	rang <- rank(values)									               # associate a rank to each insured / observation
 	block <- (rang-1) %/% blocksize + 1						       # associate to each individual a block number
 	block <- as.factor(block)
-	data.coef <- sample1[block == 1]
+	data.coef <- samples[block == 1]
 	n.coef <- length(data.coef)	                         # for the estimation of empirical moments
-	data.BVdk <- sample1[block == 2]
-	#data.p <- sample1[block == 2]
-	#n.p <- length(data.p)	                               # for the estimation of the mixing weight (proportion of the unknown component)
-	n.BVdk <- length(data.BVdk)	                               # for the estimation of the mixing weight (proportion of the unknown component)
-	#data.loc <- sample1[block == 3]
-	#n.loc <- length(data.loc)	                           # for the estimation of localisation parameter 'mu' (symmetric unknown density)
+	data.BVdk <- samples[block == 2]
+	n.BVdk <- length(data.BVdk)	                        # for the estimation of mixing weight / location shift
 
 	##-------- Estimation of parameters and corresponding variances -----------##
 	## Focus on parameters (weight, localization and variance), consider independent subsamples of the original data:
-	BVdk <- estim_BVdk(data = data.BVdk, admixMod = admixMod, method = "L-BFGS-B")
+	BVdk <- estim_BVdk(samples = data.BVdk, admixMod = admixMod, ...)
 	hat_p <- BVdk$estimated_mixing_weights
 	hat_loc <- BVdk$estimated_locations
 	## Plug-in method to estimate the variance:
-	kernelDensity_est_obs <- stats::density(sample1)
+	kernelDensity_est_obs <- stats::density(samples)
 	integrand_totweight <- function(x) {
 	  w <- (1/hat_p) * stats::approxfun(kernelDensity_est_obs)(x) - ((1-hat_p)/hat_p) * eval(parse(text = expr.dens))
 	  return( w * (w > 0) )
@@ -113,27 +122,27 @@ gaussianity_test <- function(sample1, admixMod, conf_level = 0.95, K = 3, s = 0.
 	                                   upper = max(kernelDensity_est_obs$x),
 	                                   method = "pcubature")$integral
 	}
-  #hat_s2 <- (1/hat_p) * ( mean(sample1^2) - ((1-hat_p) * m2_knownComp) ) - (1/hat_p^2) * (mean(sample1)-(1-hat_p)*m1_knownComp)^2
+  #hat_s2 <- (1/hat_p) * ( mean(samples^2) - ((1-hat_p) * m2_knownComp) ) - (1/hat_p^2) * (mean(samples)-(1-hat_p)*m1_knownComp)^2
 
 	## Then on the variances of the estimators: semiparametric estimation (time-consuming), based on results by Bordes & Vandekerkhove (2010)
-	varCov <- BVdk_varCov_estimators(estim = BVdk, data = sample1, admixMod = admixMod)
+	varCov <- BVdk_varCov_estimators(estim = BVdk, data = samples, admixMod = admixMod)
 	var.hat_p <- varCov$var.estim_prop
 	var.hat_loc <- varCov$var.estim_location
 	## Estimation of the variance of the variance estimator:
-	#var.hat_s2 <- BVdk_ML_varCov_estimators(data = sample1, hat_w = hat_p, hat_loc = hat_loc, hat_var = hat_s2,
+	#var.hat_s2 <- BVdk_ML_varCov_estimators(data = samples, hat_w = hat_p, hat_loc = hat_loc, hat_var = hat_s2,
 	#                                        comp.dist = comp.dist, comp.param = comp.param)
 
 	##-------- Compute test statistics with data 'data.coef' -----------##
-	stat.R <- matrix(rep(NA, n.coef*K), nrow = K, ncol = n.coef)
+	stat.R <- matrix(rep(NA, n.coef*K.user), nrow = K.user, ncol = n.coef)
 	## Plug-in (estimation of param. 'mu' et 's') to deduce coef. in Hermite polynomial orthonormal basis:
-	coef.known <- unlist(lapply(X = orthoBasis_coef(data = eval(parse(text = expr.sim)), supp = support, degree = K, m = 3, other = NULL), FUN = mean))
+	coef.known <- unlist(lapply(X = orthoBasis_coef(data = eval(parse(text = expr.sim)), supp = support, degree = K.user, m = 3, other = NULL), FUN = mean))
 	## Gaussianity test implies to assume a gaussian distribution of the unknown component:
-	coef.unknown <- unlist(lapply(X = orthoBasis_coef(data = stats::rnorm(100000, hat_loc, sqrt(hat_s2)), supp = support, degree = K, m = 3, other = NULL), FUN = mean))
+	coef.unknown <- unlist(lapply(X = orthoBasis_coef(data = stats::rnorm(100000, hat_loc, sqrt(hat_s2)), supp = support, degree = K.user, m = 3, other = NULL), FUN = mean))
 
 	## Cf definition of R_kn below formula (12) p.5 :
-	poly_basis <- poly_orthonormal_basis(support = support, deg = K, x = data.coef, m = 3)
-	var.coef <- numeric(length = K)
-	for (i in 1:K) {
+	poly_basis <- poly_orthonormal_basis(support = support, deg = K.user, x = data.coef, m = 3)
+	var.coef <- numeric(length = K.user)
+	for (i in 1:K.user) {
 	  mixt.coefs <- orthopolynom::polynomial.values(poly_basis, data.coef)[[i+1]] / sqrt(factorial(i))
 	  var.coef[i] <- stats::var(mixt.coefs)
 	  stat.R[i, ] <- mixt.coefs - hat_p * (coef.unknown[i]-coef.known[i]) - coef.known[i]
@@ -143,7 +152,7 @@ gaussianity_test <- function(sample1, admixMod, conf_level = 0.95, K = 3, s = 0.
 	statistics.R <- colMeans(t(stat.R))
 
 	##-------- Scaling (with variance) of the test statistic -----------##
-	var.R <- matrix(data = NA, nrow = K, ncol = K)
+	var.R <- matrix(data = NA, nrow = K.user, ncol = K.user)
 	## Introduce the correction factor for the adjustment of the variance, given the initial split of the sample:
 	#w.coef <- sqrt( (n.p * n.loc) / (n.coef + n.p + n.loc)^2 )
 	#w.p <- sqrt( (n.coef * n.loc) / (n.coef + n.p + n.loc)^2 )
@@ -158,11 +167,11 @@ gaussianity_test <- function(sample1, admixMod, conf_level = 0.95, K = 3, s = 0.
 	              w.loc * var.hat_loc * (1/36) * (hat_p*(3*hat_s2+hat_loc-6))^2
 
 	##-------- Compute the test statistics at different orders -----------##
-	test.statistic <- numeric(length = K)
+	test.statistic <- numeric(length = K.user)
 	val <- 0
-	for (k in 1:K) {
+	for (k in 1:K.user) {
 	  ## Equations (13) and (14) p.5 (except that we already scaled here, cf explanation top of p.6):
-	  test.statistic[k] <- val + n^s * statistics.R[k]^2 * var.R[k,k]^(-1) - log(n)
+	  test.statistic[k] <- val + n^s.user * statistics.R[k]^2 * var.R[k,k]^(-1) - log(n)
 		val <- test.statistic[k]
 	}
 	## Select the right order (optimal number of coefficients needed in the expansion) :
@@ -177,7 +186,7 @@ gaussianity_test <- function(sample1, admixMod, conf_level = 0.95, K = 3, s = 0.
 
 	obj <- list(
 	  n_populations = 1,
-	  population_sizes = length(sample1),
+	  population_sizes = length(samples),
 	  admixture_models = admixMod,
 	  reject_decision = rej,
 	  confidence_level = conf_level,
