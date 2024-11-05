@@ -68,7 +68,7 @@ The unknown quantities p_i and f_i then have to be estimated.</p>
 
 
 <dt id="arg-admixmod">admixMod<a class="anchor" aria-label="anchor" href="#arg-admixmod"></a></dt>
-<dd><p>A list of objects of class 'admix_model', containing useful information about distributions and parameters.</p></dd>
+<dd><p>A list of objects of class <a href="admix_model.html">admix_model</a>, containing useful information about distributions and parameters.</p></dd>
 
 
 <dt id="arg-est-method">est_method<a class="anchor" aria-label="anchor" href="#arg-est-method"></a></dt>
@@ -84,7 +84,7 @@ choice made by the user for the estimation method.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class 'admix_estim', containing at least 5 attributes: 1) the number of samples under study; 2) the information
+    <p>An object of class admix_estim, containing at least 5 attributes: 1) the number of samples under study; 2) the information
 about the mixture components (distributions and parameters); 3) the sizes of the samples; 4) the chosen estimation technique
 (one of 'BVdk', 'PS' or 'IBM'); 5) the estimated mixing proportions (weights of the unknown component distributions in the
 mixture model). In case of 'BVdk' estimation, one additional attribute corresponding to the estimated location shift parameter
@@ -136,20 +136,14 @@ MilhaudPommeretSalhiVandekerkhove2024aadmix</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     est_method = "BVdk")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing weight of the unknown component distribution in Sample 1: 0.63</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated location parameters of the unknown component distribution in Sample 1: -1.99</span>
 <span class="r-in"><span><span class="fu">admix_estim</span><span class="op">(</span>samples<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>,<span class="va">data2</span><span class="op">)</span>, admixMod<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>,<span class="va">admixMod2</span><span class="op">)</span>, est_method <span class="op">=</span> <span class="st">"PS"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> 'c.n' is not given. Fixing it to be '0.1*log(log(n))</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> 'c.n' is not given. Fixing it to be '0.1*log(log(n))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     admixMod2), est_method = "PS")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing weight of the unknown component distribution in Sample 1: 0.61</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing weight of the unknown component distribution in Sample 2: 0.81</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">admix_estim</span><span class="op">(</span>samples<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>,<span class="va">data2</span><span class="op">)</span>, admixMod<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>,<span class="va">admixMod2</span><span class="op">)</span>, est_method <span class="op">=</span> <span class="st">"IBM"</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span> IBM estimators of two unknown proportions are reliable only if the two</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>     corresponding unknown component distributions have been tested equal (see 'admix_test()').</span>
@@ -167,7 +161,6 @@ MilhaudPommeretSalhiVandekerkhove2024aadmix</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----- Pair 1 and 2 -----</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing weight of the unknown component distribution in Sample 1: 0.69</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing weight of the unknown component distribution in Sample 2: 0.88</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

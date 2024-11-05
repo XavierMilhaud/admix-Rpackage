@@ -60,7 +60,7 @@ More information in 'Details' below concerning the estimation method.</p>
 <span>  <span class="va">samples</span>,</span>
 <span>  <span class="va">admixMod</span>,</span>
 <span>  method <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"fixed"</span>, <span class="st">"lwr.bnd"</span>, <span class="st">"cv"</span><span class="op">)</span>,</span>
-<span>  c.n <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  c.n <span class="op">=</span> <span class="fl">0.1</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html" class="external-link">log</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">samples</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  folds <span class="op">=</span> <span class="fl">10</span>,</span>
 <span>  reps <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  cn.s <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -78,7 +78,7 @@ More information in 'Details' below concerning the estimation method.</p>
 
 
 <dt id="arg-admixmod">admixMod<a class="anchor" aria-label="anchor" href="#arg-admixmod"></a></dt>
-<dd><p>An object of class 'admix_model', containing information about the known component distribution and its parameter(s).</p></dd>
+<dd><p>An object of class <a href="admix_model.html">admix_model</a>, containing information about the known component distribution and its parameter(s).</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
@@ -115,7 +115,7 @@ Larger values are more computationally intensive but also lead to more accurate 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class 'estim_PS', containing 10 attributes: 1) the number of samples studied (1 in this case); 2) the sample
+    <p>An object of class estim_PS, containing 10 attributes: 1) the number of samples studied (1 in this case); 2) the sample
 size; 3) the information about component distributions of the admixture model; 4) the estimation method 5patra and Sen here);
 5) the estimated mixing weight (estimate of the unknown component proportion); 6) the estimated decontaminated CDF;
 7) an object of the class 'dist.fun' (that gives the distance); 8) the tuning parameter 'c.n'; 9) the lower bound of the
@@ -141,12 +141,9 @@ estimated mixing proportion (if such an option has been chosen); 10) the number 
 <span class="r-in"><span><span class="co">## Define the admixture model:</span></span></span>
 <span class="r-in"><span><span class="va">admixMod1</span> <span class="op">&lt;-</span> <span class="fu"><a href="admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt1</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>                         knownComp_param <span class="op">=</span> <span class="va">mixt1</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="co">## Transform the known component of the admixture model into a Uniform(O,1) distribution:</span></span></span>
-<span class="r-in"><span><span class="fu">estim_PS</span><span class="op">(</span>samples <span class="op">=</span> <span class="va">data1</span>, admixMod <span class="op">=</span> <span class="va">admixMod1</span>, method <span class="op">=</span> <span class="st">'fixed'</span>, c.n <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> 'c.n' is not given. Fixing it to be '0.1*log(log(n))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Call:estim_PS(samples = data1, admixMod = admixMod1, method = "fixed", </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     c.n = NULL)</span>
+<span class="r-in"><span><span class="co">## Estimation step:</span></span></span>
+<span class="r-in"><span><span class="fu">estim_PS</span><span class="op">(</span>samples <span class="op">=</span> <span class="va">data1</span>, admixMod <span class="op">=</span> <span class="va">admixMod1</span>, method <span class="op">=</span> <span class="st">'fixed'</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call:estim_PS(samples = data1, admixMod = admixMod1, method = "fixed")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Estimate of the mixing weight (proportion of the unknown component distribution) is 0.25</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  The chosen value c_n is 0.19 </span>

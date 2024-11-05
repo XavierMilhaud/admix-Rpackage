@@ -80,7 +80,8 @@ of the component densities, or by the inner-convergence property obtained using 
 
 
 <dt id="arg-admixmod">admixMod<a class="anchor" aria-label="anchor" href="#arg-admixmod"></a></dt>
-<dd><p>A list of objects of class 'admix_model', containing useful information about distributions and parameters.</p></dd>
+<dd><p>A list of objects of class <a href="admix_model.html">admix_model</a>, containing useful information about distributions and parameters
+of the contamination / admixture models under study.</p></dd>
 
 
 <dt id="arg-test-method">test_method<a class="anchor" aria-label="anchor" href="#arg-test-method"></a></dt>
@@ -94,13 +95,15 @@ only 'Poly' is available and the test is a gaussianity test. For further details
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Optional arguments to <a href="gaussianity_test.html">gaussianity_test</a>, <a href="IBM_k_samples_test.html">IBM_k_samples_test</a> or <a href="orthobasis_test.html">orthobasis_test</a>
-depending on the choice made by the user for the estimation method.</p></dd>
+<dd><p>Depending on the choice made by the user for the test method ('poly' or 'icv'), optional arguments to
+<a href="gaussianity_test.html">gaussianity_test</a> or <a href="orthobasis_test.html">orthobasis_test</a> (in case of 'poly'), and to <a href="IBM_k_samples_test.html">IBM_k_samples_test</a>
+in case of 'icv'.
+.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class 'admix_test', containing 8 attributes: 1) the test decision (reject the null hypothesis or not);
+    <p>An object of class admix_test, containing 8 attributes: 1) the test decision (reject the null hypothesis or not);
 2) the p-value of the test; 3) the confidence level of the test (1-alpha, where alpha denotes the level of the test
 or equivalently the type-I error); 4) the value of the test statistic; 5) the number of samples under study; 6) the
 respective size of each sample; 7) the information about mixture components (distributions and parameters); 8) the
