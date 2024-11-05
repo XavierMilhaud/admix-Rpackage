@@ -63,9 +63,12 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
                             support = c("Real","Integer","Positive","Bounded.continuous","Bounded.discrete"),
                             bounds_supp = NULL, ...)
 {
-  support <- match.arg(support)
+  old_options_warn <- base::options()$warn
+  base::options(warn = -1)
 
+  support <- match.arg(support)
   meth <- match.arg(est_method)
+
   if ((meth == "PS") & (nb_echBoot <= 1)) stop("Patra & Sen estimator is not square-root n consistent: bootstrap
                                                is necessary to assess the variance of the statistic for the test
                                                to be performed. Please specify a number of bootstrap samples > 1.")
@@ -237,6 +240,7 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
   obj$call <- match.call()
   class(obj) <- c("orthobasis_test", "admix_test")
 
+  on.exit(base::options(warn = old_options_warn))
   return(obj)
 }
 

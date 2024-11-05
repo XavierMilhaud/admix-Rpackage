@@ -65,8 +65,6 @@ admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
                          knownComp_param = mixt2$comp.param[[2]])
 admix_test(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
            conf_level = 0.95, test_method = "poly", ask_poly_param = FALSE, support = "Real")
-admix_test(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
-           conf_level = 0.95, test_method = "icv", n_sim_tab = 6)
 
 }
 \references{

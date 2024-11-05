@@ -49,8 +49,6 @@
 #'                          knownComp_param = mixt2$comp.param[[2]])
 #' admix_test(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
 #'            conf_level = 0.95, test_method = "poly", ask_poly_param = FALSE, support = "Real")
-#' admix_test(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
-#'            conf_level = 0.95, test_method = "icv", n_sim_tab = 6)
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
@@ -64,7 +62,7 @@ admix_test <- function(samples, admixMod, test_method = c("poly","icv"), conf_le
   if ((n_samples == 1) & (meth == "icv")) stop("Testing using the inner convergence property (obtained from IBM estimation) requires at least TWO samples.\n")
   if (meth == "poly") message("  Testing using polynomial basis expansions requires in theory a square-root n consistent estimation
   of the proportions of the unknown component distributions (thus using 'BVdk' estimation by default, associated to unknown
-  component distributions with symmetric densities. However, it is allowed to use 'PS' estimation in practice, but argument
+  component distributions with symmetric densities). However, it is allowed to use 'PS' estimation in practice, but argument
   'est_method' has therefore to be set to 'PS'. In this case, the variance of estimators is obtained by boostrapping.\n")
 
   if (meth == "icv") {
