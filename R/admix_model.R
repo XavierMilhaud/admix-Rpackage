@@ -9,7 +9,7 @@
 #' @param knownComp_param (Character) A vector of the names of the parameters (specified as in R glossary) involved in
 #'                        the chosen known distribution, with their values.
 #'
-#' @return An object of class 'admix_model', containing 2 attributes: 1) a list that gives the information about the distributions
+#' @return An object of class \link[admix]{admix_model}, containing 2 attributes: 1) a list that gives the information about the distributions
 #'         involved in the two-component mixture model (the unknown and the known ones); 2) a list that gives the information about
 #'         the corresponding parameters of those distributions.
 #'
@@ -27,14 +27,16 @@ admix_model <- function(knownComp_dist, knownComp_param)
   #dist_nm <- base::readline(prompt = paste("Please enter the name (in R glossary) of the known component distribution: "))
   dist_table <- EnvStats::Distribution.df[ ,c("Name", "Type", "Number.parameters", "Parameter.1",
                                               "Parameter.2", "Parameter.3", "Parameter.4", "Parameter.5")]
-  stopifnot("Unknown specified distribution" = knownComp_dist %in% rownames(dist_table) | knownComp_dist == "multinom")
+  stopifnot("Unknown specified distribution" = knownComp_dist %in% rownames(dist_table) | knownComp_dist == "multinom" | knownComp_dist == "gompertz")
 
-  if (knownComp_dist == "multinom") { nparam_theo <- 2
+  if (knownComp_dist == "multinom" | knownComp_dist == "gompertz") { nparam_theo <- 2
   } else { nparam_theo <- dist_table[rownames(dist_table) == knownComp_dist, "Number.parameters"] }
   stopifnot("Mispecification of parameters" = nparam_theo == length(knownComp_param))
 
   if (knownComp_dist == "multinom") {
     stopifnot("Name of parameters not appropriate" = all(names(knownComp_param) == c("size","prob")))
+  } else if (knownComp_dist == "gompertz") {
+    stopifnot("Name of parameters not appropriate" = all(names(knownComp_param) == c("shape","rate")))
   } else {
     if (!all(as.character(dist_table[rownames(dist_table) == knownComp_dist, 4:(4+nparam_theo-1)]) == names(knownComp_param))) {
       cat("Name of parameters not appropriate, please provide the following parameters /",

@@ -11,7 +11,7 @@
 #'                   itself. The names used in each list must correspond to the native R argument names for these distributions.
 #'                   These elements respectively refer to the parameters of f and g distributions of the mixture model.
 #'
-#' @return An object of class 'twoComp_mixt', containing eight attributes: 1) the number of simulated observations, 2) the simulated mixture
+#' @return An object of class \link[admix]{twoComp_mixt}, containing eight attributes: 1) the number of simulated observations, 2) the simulated mixture
 #'         data, 3) the support of the distributions, 4) the name of the component distributions, 5) the name of the parameters of the
 #'         component distributions and their values, 6) the mixing proportion, 7) the observations coming from the first component,
 #'         8) the observations coming from the second component.
@@ -50,16 +50,19 @@ twoComp_mixt <- function(n = 1000, weight = 0.5, comp.dist = list("norm", "norm"
                                                                  one for each of the mixture components.")
   dist_table <- EnvStats::Distribution.df[ ,c("Name", "Type", "Number.parameters", "Parameter.1",
                                               "Parameter.2", "Parameter.3", "Parameter.4", "Parameter.5")]
-  stopifnot("Unknown specified distribution" = any(comp.dist %in% rownames(dist_table)) | any(comp.dist == "multinom"))
+  stopifnot("Unknown specified distribution" = any(comp.dist %in% rownames(dist_table)) | any(comp.dist == "multinom") | any(comp.dist == "gompertz"))
   dist.type <- dist_table[match(unlist(comp.dist), rownames(dist_table)), "Type"]
   if (any(comp.dist == "multinom")) {
     dist.type <- c("Discrete", "Discrete")
     if (!(all(comp.dist == "multinom"))) stop("Multinomial distribution can only be mixed with another multinomial distribution")
-  }
+  } else if (any(comp.dist == "gompertz")) {
+    dist.type <- c("Continuous", "Continuous")
+    if (!(all(comp.dist == "gompertz"))) stop("Gompertz distribution can only be mixed with another Gompertz distribution")
+  } else { NULL }
 
   nparam_theo <- numeric(length = 2L)
   for (k in 1:length(nparam_theo)) {
-    if (any(comp.dist == "multinom")) { nparam_theo[k] <- 2
+    if (any(comp.dist == "multinom") | any(comp.dist == "gompertz")) { nparam_theo[k] <- 2
     } else { nparam_theo[k] <- dist_table[rownames(dist_table) == comp.dist[[k]], "Number.parameters"] }
   }
 
@@ -67,6 +70,8 @@ twoComp_mixt <- function(n = 1000, weight = 0.5, comp.dist = list("norm", "norm"
   for (k in 1:length(nparam_theo)) {
     if (any(comp.dist == "multinom")) {
       stopifnot("Name of parameters not appropriate" = all(names(comp.param[[k]]) == c("size","prob")))
+    } else if (any(comp.dist == "gompertz")) {
+      stopifnot("Name of parameters not appropriate" = all(names(comp.param[[k]]) == c("shape","rate")))
     } else {
       if (!all(as.character(dist_table[rownames(dist_table) == comp.dist[[k]], 4:(4+nparam_theo[k]-1)]) == names(comp.param[[k]]))) {
         cat("Name of parameters not appropriate, please provide the following parameters /",

@@ -12,13 +12,13 @@ IBM_k_samples_test(
   n_cpu = 2,
   sim_U = NULL,
   n_sim_tab = 100,
-  tune_penalty = FALSE
+  tune_penalty = TRUE
 )
 }
 \arguments{
 \item{samples}{A list of the K samples to be studied, all following admixture distributions.}
 
-\item{admixMod}{A list of objects of class 'admix_model', containing useful information about distributions and parameters.}
+\item{admixMod}{A list of objects of class class \link[admix]{admix_model}, containing useful information about distributions and parameters.}
 
 \item{conf_level}{The confidence level of the K-sample test.}
 
@@ -30,12 +30,12 @@ IBM_k_samples_test(
 
 \item{n_sim_tab}{(default to 100) Number of simulated Gaussian processes when tabulating the inner convergence distribution in the IBM approach.}
 
-\item{tune_penalty}{(default to FALSE) A boolean that allows to choose between a classical penalty term or an optimized penalty (embedding
-some tuning parameters, automatically optimized). Optimized penalty is particularly useful for low or unbalanced sample sizes
+\item{tune_penalty}{(default to TRUE) A boolean that allows to choose between a classical penalty term or an optimized penalty (embedding
+some tuning parameters, automatically optimized). Optimized penalty is very useful for low or unbalanced sample sizes
 to detect alternatives to the null hypothesis (H0).}
 }
 \value{
-An object of class 'IBM_test', containing 17 attributes: 1) the number of samples for the test; 2) the sizes of each sample;
+An object of class \link[admix]{admix_test}, containing 17 attributes: 1) the number of samples for the test; 2) the sizes of each sample;
 3) the information about component distributions for each sample; 4) the reject decision of the test; 5) the confidence level
 of the test (1-alpha, where alpha refers to the first-type error); 6) the test p-value; 7) the 95th-percentile of the contrast
 tabulated distribution; 8) the test statistic value; 9) the selected rank (number of terms involved in the test statistic);

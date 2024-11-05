@@ -6,7 +6,7 @@
 #' defined by Bordes & Vandekerkhove (2010), which means that the unknown mixture component must have a symmetric density.
 #'
 #' @param samples Sample under study.
-#' @param admixMod An object of class 'admix_model', containing useful information about distributions and parameters.
+#' @param admixMod An object of class \link[admix]{admix_model}, containing useful information about distributions and parameters.
 #' @param conf_level (default to 0.95) The confidence level. Equals 1-alpha, where alpha is the level of the test (type-I error).
 #' @param ask_poly_param (default to FALSE) If TRUE, ask the user to choose both the order 'K' of expansion coefficients in the
 #'                        orthonormal polynomial basis, and the penalization rate 's' involved on the penalization rule for the test.
@@ -22,7 +22,7 @@
 #' @references
 #' \insertRef{PommeretVandekerkhove2019}{admix}
 #'
-#' @return An object of class 'gaussianity_test', containing 10 elements: 1) the number of populations under study (1 in this case);
+#' @return An object of class \link[admix]{gaussianity_test}, containing 10 elements: 1) the number of populations under study (1 in this case);
 #'         2) the sample size; 3) the information about the known component distribution; 4) the reject decision of the test; 5) the
 #'         confidence level of the test, 6) the p-value of the test; 7) the value of the test statistic; 8) the variance of the test
 #'         statistic at each order in the polynomial orthobasis expansion; 9) the selected rank (order) for the test statistic;
@@ -93,7 +93,10 @@ gaussianity_test <- function(samples, admixMod, conf_level = 0.95, ask_poly_para
 
 	##-------- Estimation of parameters and corresponding variances -----------##
 	## Focus on parameters (weight, localization and variance), consider independent subsamples of the original data:
+	old_options_warn <- base::options()$warn
+	base::options(warn = -1)
 	BVdk <- estim_BVdk(samples = data.BVdk, admixMod = admixMod, ...)
+	on.exit(base::options(warn = old_options_warn))
 	hat_p <- BVdk$estimated_mixing_weights
 	hat_loc <- BVdk$estimated_locations
 	## Plug-in method to estimate the variance:

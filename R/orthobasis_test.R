@@ -7,7 +7,7 @@
 #'
 #' @param samples List of the two samples, each one following the mixture distribution given by l = p*f + (1-p)*g,
 #'                with f and p unknown and g known.
-#' @param admixMod An object of class 'admix_model', containing useful information about distributions and parameters.
+#' @param admixMod An object of class \link[admix]{admix_model}, containing useful information about distributions and parameters.
 #' @param conf_level The confidence level, default to 95 percent. Equals 1-alpha, where alpha is the level of the test (type-I error).
 #' @param est_method Estimation method to get the component weights, either 'PS' (Patra and Sen estimation) or 'BVdk'
 #'                   (Bordes and Vendekerkhove estimation). Choosing 'PS' requires to specify the number of bootstrap samples.
@@ -27,7 +27,7 @@
 #' @references
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2022}{admix}
 #'
-#' @return An object of class 'orthobasis_test', containing ten attributes: 1) the number of populations under study (2 in this case);
+#' @return An object of class \link[admix]{orthobasis_test}, containing ten attributes: 1) the number of populations under study (2 in this case);
 #'         2) the sizes of samples; 3) the information about the known component distribution; 4) the reject decision of the test; 5) the
 #'         confidence level of the test, 6) the p-value of the test; 7) the value of the test statistic; 8) the variance of the test
 #'         statistic at each order in the polynomial orthobasis expansion; 9) the selected rank (order) for the test statistic;

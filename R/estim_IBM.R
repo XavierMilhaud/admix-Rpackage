@@ -6,13 +6,13 @@
 #' For further details about IBM approach, see 'Details' below.
 #'
 #' @param samples A list of the two considered samples.
-#' @param admixMod A list of two objects of class 'admix_model', one for each sample.
+#' @param admixMod A list of two objects of class \link[admix]{admix_model}, one for each sample.
 #' @param n.integ Number of data points generated for the distribution on which to integrate.
 #'
 #' @references
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2024a}{admix}
 #'
-#' @return An object of class 'estim_IBM', containing 7 attributes: 1) the number of samples under study; 2) the sizes of samples;
+#' @return An object of class \link[admix]{estim_IBM}, containing 7 attributes: 1) the number of samples under study; 2) the sizes of samples;
 #'         3) the information about mixture components (distributions and parameters) for each sample; 4) the estimation
 #'         method (Inversion Best Matching here, see the given reference); 5) the estimated mixing proportions (weights of the
 #'         unknown component distributions in each sample); 6) the arbitrary value of the mixing weight in the first admixture sample

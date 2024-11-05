@@ -9,12 +9,12 @@ estim_BVdk(samples, admixMod, method = c("L-BFGS-B", "Nelder-Mead"))
 \arguments{
 \item{samples}{The observed sample under study.}
 
-\item{admixMod}{An object of class 'admix_model', containing useful information about distributions and parameters.}
+\item{admixMod}{An object of class \link[admix]{admix_model}, containing useful information about distributions and parameters.}
 
 \item{method}{The method used throughout the optimization process, either 'L-BFGS-B' or 'Nelder-Mead' (see ?optim).}
 }
 \value{
-An object of class 'estim_BVdk', containing 7 attributes: 1) the number of sample under study (set to 1 here);
+An object of class \link[admix]{estim_BVdk}, containing 7 attributes: 1) the number of sample under study (set to 1 here);
 2) the sample size; 3) the information about mixture components (distributions and parameters); 4) the estimation
 method (Bordes and Vandekerkhove here, see the given reference); 5) the estimated mixing proportion (weight of the
 unknown component distribution); 6) the estimated location parameter of the unknown component distribution (with symetric

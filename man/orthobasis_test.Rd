@@ -22,7 +22,7 @@ orthobasis_test(
 \item{samples}{List of the two samples, each one following the mixture distribution given by l = p*f + (1-p)*g,
 with f and p unknown and g known.}
 
-\item{admixMod}{An object of class 'admix_model', containing useful information about distributions and parameters.}
+\item{admixMod}{An object of class \link[admix]{admix_model}, containing useful information about distributions and parameters.}
 
 \item{conf_level}{The confidence level, default to 95 percent. Equals 1-alpha, where alpha is the level of the test (type-I error).}
 
@@ -52,7 +52,7 @@ following: list( list(min.f1,min.g1,min.f2,min.g2) , list(max.f1,max.g1,max.f2,m
 \item{...}{Optional arguments to \link[admix]{estim_BVdk} or \link[admix]{estim_PS}, depending on the chosen argument 'est_method' (see above).}
 }
 \value{
-An object of class 'orthobasis_test', containing ten attributes: 1) the number of populations under study (2 in this case);
+An object of class \link[admix]{orthobasis_test}, containing ten attributes: 1) the number of populations under study (2 in this case);
 2) the sizes of samples; 3) the information about the known component distribution; 4) the reject decision of the test; 5) the
 confidence level of the test, 6) the p-value of the test; 7) the value of the test statistic; 8) the variance of the test
 statistic at each order in the polynomial orthobasis expansion; 9) the selected rank (order) for the test statistic;

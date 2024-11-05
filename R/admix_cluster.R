@@ -4,11 +4,11 @@
 #' using Inversion - Best Matching (IBM) approach, see 'Details' below for further information.
 #'
 #' @param samples A list of the K (K>1) samples to be studied, all following admixture distributions.
-#' @param admixMod A list of objects of class 'admix_model', containing useful information about distributions and parameters.
+#' @param admixMod A list of objects of class \link[admix]{admix_model}, containing useful information about distributions and parameters.
 #' @param conf_level (default to 0.95) The confidence level of the k-sample tests used in the clustering procedure.
 #' @param n_sim_tab (default to 100) Number of simulated Gaussian processes when tabulating the inner convergence distribution
 #'                  in the IBM approach.
-#' @param tune_penalty (default to FALSE) A boolean that allows to choose between a classical penalty term or an optimized penalty (embedding
+#' @param tune_penalty (default to TRUE) A boolean that allows to choose between a classical penalty term or an optimized penalty (embedding
 #'                     some tuning parameters, automatically optimized). Optimized penalty is particularly useful for low or unbalanced sample sizes
 #'                     to detect alternatives to the null hypothesis (H0).
 #' @param parallel (default to FALSE) Boolean to indicate whether parallel computations are performed (speed-up the tabulation).
@@ -21,7 +21,7 @@
 #' @references
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2024b}{admix}
 #'
-#' @return An object of class 'admix_cluster', containing 12 attributes: 1) the number of samples under study; 2) the sizes of samples;
+#' @return An object of class \link[admix]{admix_cluster}, containing 12 attributes: 1) the number of samples under study; 2) the sizes of samples;
 #'         3) the information about mixture components in each sample (distributions and parameters); 4) the number of detected clusters;
 #'         5) the list of p-values for each k-sample test at the origin of detected clusters; 6) the cluster affiliation for each sample;
 #'         7) the confidence level of statistical tests; 8) which samples in which cluster; 9) the size of clusters; 10) the estimated
@@ -71,7 +71,7 @@
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-admix_cluster <- function(samples, admixMod, conf_level = 0.95, n_sim_tab = 30, tune_penalty = FALSE,
+admix_cluster <- function(samples, admixMod, conf_level = 0.95, n_sim_tab = 30, tune_penalty = TRUE,
                           parallel = FALSE, n_cpu = 2, tabul_dist = NULL, echo = FALSE)
 {
   old_options_warn <- base::options()$warn

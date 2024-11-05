@@ -14,7 +14,7 @@ of the admixture model}
 the chosen known distribution, with their values.}
 }
 \value{
-An object of class 'admix_model', containing 2 attributes: 1) a list that gives the information about the distributions
+An object of class \link[admix]{admix_model}, containing 2 attributes: 1) a list that gives the information about the distributions
 involved in the two-component mixture model (the unknown and the known ones); 2) a list that gives the information about
 the corresponding parameters of those distributions.
 }

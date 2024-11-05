@@ -18,7 +18,7 @@ gaussianity_test(
 \arguments{
 \item{samples}{Sample under study.}
 
-\item{admixMod}{An object of class 'admix_model', containing useful information about distributions and parameters.}
+\item{admixMod}{An object of class \link[admix]{admix_model}, containing useful information about distributions and parameters.}
 
 \item{conf_level}{(default to 0.95) The confidence level. Equals 1-alpha, where alpha is the level of the test (type-I error).}
 
@@ -36,7 +36,7 @@ for model selection. See the reference below.}
 \item{...}{Optional arguments to \link[admix]{estim_BVdk}.}
 }
 \value{
-An object of class 'gaussianity_test', containing 10 elements: 1) the number of populations under study (1 in this case);
+An object of class \link[admix]{gaussianity_test}, containing 10 elements: 1) the number of populations under study (1 in this case);
 2) the sample size; 3) the information about the known component distribution; 4) the reject decision of the test; 5) the
 confidence level of the test, 6) the p-value of the test; 7) the value of the test statistic; 8) the variance of the test
 statistic at each order in the polynomial orthobasis expansion; 9) the selected rank (order) for the test statistic;

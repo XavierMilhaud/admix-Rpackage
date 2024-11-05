@@ -7,7 +7,7 @@
 #' More information in 'Details' below concerning the estimation method.
 #'
 #' @param samples Sample to be studied.
-#' @param admixMod An object of class 'admix_model', containing information about the known component distribution and its parameter(s).
+#' @param admixMod An object of class \link[admix]{admix_model}, containing information about the known component distribution and its parameter(s).
 #' @param method One of 'lwr.bnd', fixed' or 'cv': depending on whether compute some lower bound of the mixing proportion, the estimate
 #'               based on the value of 'c.n' or use cross-validation for choosing 'c.n' (tuning parameter).
 #' @param c.n (default to NULL) A positive number for the penalization, see reference below. If NULL, equals to 0.1*log(log(n)).
@@ -23,7 +23,7 @@
 #' @references
 #' \insertRef{PatraSen2016}{admix}
 #'
-#' @return An object of class 'estim_PS', containing 10 attributes: 1) the number of samples studied (1 in this case); 2) the sample
+#' @return An object of class \link[admix]{estim_PS}, containing 10 attributes: 1) the number of samples studied (1 in this case); 2) the sample
 #'         size; 3) the information about component distributions of the admixture model; 4) the estimation method 5patra and Sen here);
 #'         5) the estimated mixing weight (estimate of the unknown component proportion); 6) the estimated decontaminated CDF;
 #'         7) an object of the class 'dist.fun' (that gives the distance); 8) the tuning parameter 'c.n'; 9) the lower bound of the
@@ -39,15 +39,16 @@
 #' ## Define the admixture model:
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                          knownComp_param = mixt1$comp.param[[2]])
-#' ## Transform the known component of the admixture model into a Uniform(O,1) distribution:
-#' estim_PS(samples = data1, admixMod = admixMod1, method = 'fixed', c.n = NULL)
+#' ## Estimation step:
+#' estim_PS(samples = data1, admixMod = admixMod1, method = 'fixed')
 #'
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-estim_PS <- function(samples, admixMod, method = c("fixed", "lwr.bnd", "cv"), c.n = NULL,
-                             folds = 10, reps = 1, cn.s = NULL, cn.length = 100, gridsize = 1200)
+estim_PS <- function(samples, admixMod, method = c("fixed", "lwr.bnd", "cv"),
+                     c.n =  0.1*log(log(length(samples))), folds = 10, reps = 1,
+                     cn.s = NULL, cn.length = 100, gridsize = 1200)
 {
 	if (!is.vector(samples)) stop("'samples' has to be a numerical vector.")
 	if (is.null(method)) stop("'method' cannot be NULL")

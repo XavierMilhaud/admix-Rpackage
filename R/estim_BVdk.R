@@ -8,13 +8,13 @@
 #' See the reference below for further details.
 #'
 #' @param samples The observed sample under study.
-#' @param admixMod An object of class 'admix_model', containing useful information about distributions and parameters.
+#' @param admixMod An object of class \link[admix]{admix_model}, containing useful information about distributions and parameters.
 #' @param method The method used throughout the optimization process, either 'L-BFGS-B' or 'Nelder-Mead' (see ?optim).
 #'
 #' @references
 #' \insertRef{BordesVandekerkhove2010}{admix}
 #'
-#' @return An object of class 'estim_BVdk', containing 7 attributes: 1) the number of sample under study (set to 1 here);
+#' @return An object of class \link[admix]{estim_BVdk}, containing 7 attributes: 1) the number of sample under study (set to 1 here);
 #'         2) the sample size; 3) the information about mixture components (distributions and parameters); 4) the estimation
 #'         method (Bordes and Vandekerkhove here, see the given reference); 5) the estimated mixing proportion (weight of the
 #'         unknown component distribution); 6) the estimated location parameter of the unknown component distribution (with symetric

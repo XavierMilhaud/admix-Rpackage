@@ -9,7 +9,7 @@ admix_estim(samples, admixMod, est_method = c("PS", "BVdk", "IBM"), ...)
 \arguments{
 \item{samples}{A list of the K (K>0) samples to be studied, all following admixture distributions.}
 
-\item{admixMod}{A list of objects of class 'admix_model', containing useful information about distributions and parameters.}
+\item{admixMod}{A list of objects of class \link[admix]{admix_model}, containing useful information about distributions and parameters.}
 
 \item{est_method}{The estimation method to be applied. Can be one of 'BVdk' (Bordes and Vandekerkhove estimator), 'PS' (Patra and Sen
 estimator), or 'IBM' (Inversion Best-Matching approach) in the continuous case (continuous random variable). Only 'IBM' for
@@ -19,7 +19,7 @@ discrete random variables. The same estimation method is performed on each sampl
 choice made by the user for the estimation method.}
 }
 \value{
-An object of class 'admix_estim', containing at least 5 attributes: 1) the number of samples under study; 2) the information
+An object of class \link[admix]{admix_estim}, containing at least 5 attributes: 1) the number of samples under study; 2) the information
 about the mixture components (distributions and parameters); 3) the sizes of the samples; 4) the chosen estimation technique
 (one of 'BVdk', 'PS' or 'IBM'); 5) the estimated mixing proportions (weights of the unknown component distributions in the
 mixture model). In case of 'BVdk' estimation, one additional attribute corresponding to the estimated location shift parameter

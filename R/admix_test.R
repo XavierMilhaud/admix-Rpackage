@@ -9,13 +9,16 @@
 #' of the component densities, or by the inner-convergence property obtained using the IBM approach. See 'Details' below for further information.
 #'
 #' @param samples A list of the K (K > 0) samples to be studied, each one assumed to follow a mixture distribution.
-#' @param admixMod A list of objects of class 'admix_model', containing useful information about distributions and parameters.
+#' @param admixMod A list of objects of class \link[admix]{admix_model}, containing useful information about distributions and parameters
+#'                 of the contamination / admixture models under study.
 #' @param test_method The testing method to be applied. Can be either 'poly' (polynomial basis expansion) or 'icv' (inner
 #'                    convergence from IBM). The same testing method is performed between all samples. In the one-sample case,
 #'                    only 'Poly' is available and the test is a gaussianity test. For further details, see section 'Details' below.
 #' @param conf_level The confidence level of the K-sample test.
-#' @param ... Optional arguments to \link[admix]{gaussianity_test}, \link[admix]{IBM_k_samples_test} or \link[admix]{orthobasis_test}
-#'            depending on the choice made by the user for the estimation method.
+#' @param ... Depending on the choice made by the user for the test method ('poly' or 'icv'), optional arguments to
+#'            \link[admix]{gaussianity_test} or \link[admix]{orthobasis_test} (in case of 'poly'), and to \link[admix]{IBM_k_samples_test}
+#'            in case of 'icv'.
+#'            .
 #'
 #' @details For further details on implemented hypothesis tests, see the references hereafter.
 #'          .
@@ -24,7 +27,7 @@
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2022}{admix}
 #' \insertRef{PommeretVandekerkhove2019}{admix}
 #'
-#' @return An object of class 'admix_test', containing 8 attributes: 1) the test decision (reject the null hypothesis or not);
+#' @return An object of class \link[admix]{admix_test}, containing 8 attributes: 1) the test decision (reject the null hypothesis or not);
 #'         2) the p-value of the test; 3) the confidence level of the test (1-alpha, where alpha denotes the level of the test
 #'         or equivalently the type-I error); 4) the value of the test statistic; 5) the number of samples under study; 6) the
 #'         respective size of each sample; 7) the information about mixture components (distributions and parameters); 8) the

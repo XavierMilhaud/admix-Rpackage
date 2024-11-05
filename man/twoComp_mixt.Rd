@@ -24,7 +24,7 @@ itself. The names used in each list must correspond to the native R argument nam
 These elements respectively refer to the parameters of f and g distributions of the mixture model.}
 }
 \value{
-An object of class 'twoComp_mixt', containing eight attributes: 1) the number of simulated observations, 2) the simulated mixture
+An object of class \link[admix]{twoComp_mixt}, containing eight attributes: 1) the number of simulated observations, 2) the simulated mixture
 data, 3) the support of the distributions, 4) the name of the component distributions, 5) the name of the parameters of the
 component distributions and their values, 6) the mixing proportion, 7) the observations coming from the first component,
 8) the observations coming from the second component.
