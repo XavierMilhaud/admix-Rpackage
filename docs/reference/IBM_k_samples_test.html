@@ -76,7 +76,7 @@ H0 : f_1 = ... = f_K  against  H1 : f_i differs from f_j (i different from j, an
 <span>  n_cpu <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  sim_U <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  n_sim_tab <span class="op">=</span> <span class="fl">100</span>,</span>
-<span>  tune_penalty <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span>  tune_penalty <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -87,7 +87,7 @@ H0 : f_1 = ... = f_K  against  H1 : f_i differs from f_j (i different from j, an
 
 
 <dt>admixMod</dt>
-<dd><p>A list of objects of class 'admix_model', containing useful information about distributions and parameters.</p></dd>
+<dd><p>A list of objects of class class <a href="admix_model.html">admix_model</a>, containing useful information about distributions and parameters.</p></dd>
 
 
 <dt>conf_level</dt>
@@ -111,8 +111,8 @@ H0 : f_1 = ... = f_K  against  H1 : f_i differs from f_j (i different from j, an
 
 
 <dt>tune_penalty</dt>
-<dd><p>(default to FALSE) A boolean that allows to choose between a classical penalty term or an optimized penalty (embedding
-some tuning parameters, automatically optimized). Optimized penalty is particularly useful for low or unbalanced sample sizes
+<dd><p>(default to TRUE) A boolean that allows to choose between a classical penalty term or an optimized penalty (embedding
+some tuning parameters, automatically optimized). Optimized penalty is very useful for low or unbalanced sample sizes
 to detect alternatives to the null hypothesis (H0).</p></dd>
 
 </dl></div>
@@ -120,7 +120,7 @@ to detect alternatives to the null hypothesis (H0).</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>An object of class 'IBM_test', containing 17 attributes: 1) the number of samples for the test; 2) the sizes of each sample;
+<p>An object of class <a href="admix_test.html">admix_test</a>, containing 17 attributes: 1) the number of samples for the test; 2) the sizes of each sample;
 3) the information about component distributions for each sample; 4) the reject decision of the test; 5) the confidence level
 of the test (1-alpha, where alpha refers to the first-type error); 6) the test p-value; 7) the 95th-percentile of the contrast
 tabulated distribution; 8) the test statistic value; 9) the selected rank (number of terms involved in the test statistic);

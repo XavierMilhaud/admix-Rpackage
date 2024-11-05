@@ -75,7 +75,7 @@ For further details about IBM approach, see 'Details' below.</p>
 
 
 <dt>admixMod</dt>
-<dd><p>A list of two objects of class 'admix_model', one for each sample.</p></dd>
+<dd><p>A list of two objects of class <a href="admix_model.html">admix_model</a>, one for each sample.</p></dd>
 
 
 <dt>n.integ</dt>
@@ -86,7 +86,7 @@ For further details about IBM approach, see 'Details' below.</p>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>An object of class 'estim_IBM', containing 7 attributes: 1) the number of samples under study; 2) the sizes of samples;
+<p>An object of class estim_IBM, containing 7 attributes: 1) the number of samples under study; 2) the sizes of samples;
 3) the information about mixture components (distributions and parameters) for each sample; 4) the estimation
 method (Inversion Best Matching here, see the given reference); 5) the estimated mixing proportions (weights of the
 unknown component distributions in each sample); 6) the arbitrary value of the mixing weight in the first admixture sample
@@ -134,8 +134,8 @@ unknown component distributions in each sample); 6) the arbitrary value of the m
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:estim_IBM(samples = list(data1, data2), admixMod = list(admixMod1, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     admixMod2), n.integ = 1000)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 1st sample:  0.534427 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 2nd sample:  0.7232172 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 1st sample:  0.5105568 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 2nd sample:  0.7183735 </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 2: multinomial distribution (discrete case).</span></span></span>
 <span class="r-in"><span><span class="va">mixt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1500</span>, weight <span class="op">=</span> <span class="fl">0.8</span>,</span></span>
@@ -163,8 +163,8 @@ unknown component distributions in each sample); 6) the arbitrary value of the m
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:estim_IBM(samples = list(data1, data2), admixMod = list(admixMod1, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     admixMod2))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 1st sample:  0.9603357 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 2nd sample:  0.2956614 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 1st sample:  0.7771235 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 2nd sample:  0.3411098 </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

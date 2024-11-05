@@ -111,8 +111,6 @@ unknown component f after having estimated p.</p>
 <span class="r-in"><span><span class="co">## Estimation:</span></span></span>
 <span class="r-in"><span><span class="va">est</span> <span class="op">&lt;-</span> <span class="fu"><a href="admix_estim.html">admix_estim</a></span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span><span class="op">)</span>, admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                   est_method <span class="op">=</span> <span class="st">'PS'</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> 'c.n' is not given. Fixing it to be '0.1*log(log(n))</span>
 <span class="r-in"><span><span class="co">## Determine the decontaminated version of the unknown density by inversion:</span></span></span>
 <span class="r-in"><span><span class="fu">decontaminated_density</span><span class="op">(</span>sample1 <span class="op">=</span> <span class="va">data1</span>, estim.p <span class="op">=</span> <span class="va">est</span><span class="op">$</span><span class="va">estimated_mixing_weights</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>                       admixMod <span class="op">=</span> <span class="va">admixMod1</span><span class="op">)</span></span></span>
@@ -121,8 +119,8 @@ unknown component f after having estimated p.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function (x) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (1/estim.p) * (l1_emp(x) - (1 - estim.p) * g1(x))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x7fa7a2e09988&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x7fa7a2dfcbe8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x7fac974b6bb0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x7fac974b5f70&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Type of support: Continuous</span>
 <span class="r-in"><span></span></span>
@@ -158,8 +156,8 @@ unknown component f after having estimated p.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function (x) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (1/estim.p) * (l1_emp(x) - (1 - estim.p) * g1(x))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x7fa7a2e09988&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x7fa793164628&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x7fac974b6bb0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x7fac974bc000&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Type of support: Discrete</span>
 <span class="r-in"><span></span></span>
@@ -195,8 +193,8 @@ unknown component f after having estimated p.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function (x) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (1/estim.p) * (l1_emp(x) - (1 - estim.p) * g1(x))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x7fa7a2e09988&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x7fa7a659c428&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x7fac974b6bb0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x7fac937c6e98&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Type of support: Discrete</span>
 <span class="r-in"><span></span></span>
