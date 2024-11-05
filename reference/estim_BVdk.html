@@ -4,12 +4,12 @@ More precisely, estimates the two parameters (mixture weight and location shift)
 l(x) = p*f(x-mu) + (1-p)*g(x), x in R,
 where g is the known component, p is the proportion and f is the unknown component with symmetric density.
 The localization shift parameter is denoted mu, and the component weight p.
-See 'Details' below for further information."><meta property="og:description" content="Estimates parameters in an admixture model where the unknown component is assumed to have a symmetric density.
+See the reference below for further details."><meta property="og:description" content="Estimates parameters in an admixture model where the unknown component is assumed to have a symmetric density.
 More precisely, estimates the two parameters (mixture weight and location shift) in the admixture model with pdf:
 l(x) = p*f(x-mu) + (1-p)*g(x), x in R,
 where g is the known component, p is the proportion and f is the unknown component with symmetric density.
 The localization shift parameter is denoted mu, and the component weight p.
-See 'Details' below for further information."></head><body>
+See the reference below for further details."></head><body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
 
 
@@ -54,7 +54,7 @@ More precisely, estimates the two parameters (mixture weight and location shift)
 l(x) = p*f(x-mu) + (1-p)*g(x), x in R,
 where g is the known component, p is the proportion and f is the unknown component with symmetric density.
 The localization shift parameter is denoted mu, and the component weight p.
-See 'Details' below for further information.</p>
+See the reference below for further details.</p>
     </div>
 
     <div class="section level2">
@@ -107,16 +107,15 @@ density); 7) the optimization method that was used.</p>
 <span class="r-in"><span><span class="co">## Define the admixture model:</span></span></span>
 <span class="r-in"><span><span class="va">admixMod</span> <span class="op">&lt;-</span> <span class="fu"><a href="admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt1</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>                        knownComp_param <span class="op">=</span> <span class="va">mixt1</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Perform the estimation of parameters in real-life:</span></span></span>
 <span class="r-in"><span><span class="fu">estim_BVdk</span><span class="op">(</span>samples <span class="op">=</span> <span class="va">data1</span>, admixMod <span class="op">=</span> <span class="va">admixMod</span>, method <span class="op">=</span> <span class="st">'L-BFGS-B'</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Estimation by 'BVdk' assumes the unknown component distribution</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   to be a standard Gaussian distribution.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   to have a symmetric probability density function.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:estim_BVdk(samples = data1, admixMod = admixMod, method = "L-BFGS-B")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion:  0.3856035 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated location parameter:  -1.927124 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion:  0.3959759 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated location parameter:  -2.117757 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Second example:</span></span></span>
@@ -127,16 +126,15 @@ density); 7) the optimization method that was used.</p>
 <span class="r-in"><span><span class="va">data2</span> <span class="op">&lt;-</span> <span class="fu"><a href="getmixtData.html">getmixtData</a></span><span class="op">(</span><span class="va">mixt2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">admixMod2</span> <span class="op">&lt;-</span> <span class="fu"><a href="admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt2</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>                        knownComp_param <span class="op">=</span> <span class="va">mixt2</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Perform the estimation of parameters in real-life:</span></span></span>
 <span class="r-in"><span><span class="fu">estim_BVdk</span><span class="op">(</span>samples <span class="op">=</span> <span class="va">data2</span>, admixMod <span class="op">=</span> <span class="va">admixMod2</span>, method <span class="op">=</span> <span class="st">'L-BFGS-B'</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Estimation by 'BVdk' assumes the unknown component distribution</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   to be a standard Gaussian distribution.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   to have a symmetric probability density function.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:estim_BVdk(samples = data2, admixMod = admixMod2, method = "L-BFGS-B")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion:  0.705621 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated location parameter:  -1.014888 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion:  0.7187116 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated location parameter:  -1.011398 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
