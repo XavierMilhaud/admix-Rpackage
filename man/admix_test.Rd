@@ -23,8 +23,8 @@ only 'Poly' is available and the test is a gaussianity test. For further details
 
 \item{conf_level}{The confidence level of the K-sample test.}
 
-\item{...}{Optional arguments to 'gaussianity_test', 'IBM_k_samples_test' or 'orthobasis_test' depending on the choice made by the user
-for the estimation method.}
+\item{...}{Optional arguments to \link[admix]{gaussianity_test}, \link[admix]{IBM_k_samples_test} or \link[admix]{orthobasis_test}
+depending on the choice made by the user for the estimation method.}
 }
 \value{
 An object of class 'admix_test', containing 8 attributes: 1) the test decision (reject the null hypothesis or not);
@@ -49,11 +49,11 @@ For further details on implemented hypothesis tests, see the references hereafte
 }
 \examples{
 ####### Example with 2 samples
-mixt1 <- twoComp_mixt(n = 280, weight = 0.7,
+mixt1 <- twoComp_mixt(n = 380, weight = 0.7,
                       comp.dist = list("norm", "norm"),
                       comp.param = list(list("mean" = -2, "sd" = 0.5),
                                         list("mean" = 0, "sd" = 1)))
-mixt2 <- twoComp_mixt(n = 250, weight = 0.85,
+mixt2 <- twoComp_mixt(n = 350, weight = 0.85,
                       comp.dist = list("norm", "norm"),
                       comp.param = list(list("mean" = -2, "sd" = 0.5),
                                         list("mean" = -1, "sd" = 1)))
@@ -64,8 +64,9 @@ admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
                          knownComp_param = mixt2$comp.param[[2]])
 admix_test(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
-           conf_level = 0.95, test_method = "poly", ask_poly_param = FALSE,
-           support = "Real")
+           conf_level = 0.95, test_method = "poly", ask_poly_param = FALSE, support = "Real")
+admix_test(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
+           conf_level = 0.95, test_method = "icv", n_sim_tab = 6)
 
 }
 \references{

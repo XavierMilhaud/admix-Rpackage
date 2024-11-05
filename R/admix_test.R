@@ -14,8 +14,8 @@
 #'                    convergence from IBM). The same testing method is performed between all samples. In the one-sample case,
 #'                    only 'Poly' is available and the test is a gaussianity test. For further details, see section 'Details' below.
 #' @param conf_level The confidence level of the K-sample test.
-#' @param ... Optional arguments to 'gaussianity_test', 'IBM_k_samples_test' or 'orthobasis_test' depending on the choice made by the user
-#'            for the estimation method.
+#' @param ... Optional arguments to \link[admix]{gaussianity_test}, \link[admix]{IBM_k_samples_test} or \link[admix]{orthobasis_test}
+#'            depending on the choice made by the user for the estimation method.
 #'
 #' @details For further details on implemented hypothesis tests, see the references hereafter.
 #'          .
@@ -33,11 +33,11 @@
 #'
 #' @examples
 #' ####### Example with 2 samples
-#' mixt1 <- twoComp_mixt(n = 280, weight = 0.7,
+#' mixt1 <- twoComp_mixt(n = 380, weight = 0.7,
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = -2, "sd" = 0.5),
 #'                                         list("mean" = 0, "sd" = 1)))
-#' mixt2 <- twoComp_mixt(n = 250, weight = 0.85,
+#' mixt2 <- twoComp_mixt(n = 350, weight = 0.85,
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = -2, "sd" = 0.5),
 #'                                         list("mean" = -1, "sd" = 1)))
@@ -48,8 +48,9 @@
 #' admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
 #'                          knownComp_param = mixt2$comp.param[[2]])
 #' admix_test(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
-#'            conf_level = 0.95, test_method = "poly", ask_poly_param = FALSE,
-#'            support = "Real")
+#'            conf_level = 0.95, test_method = "poly", ask_poly_param = FALSE, support = "Real")
+#' admix_test(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
+#'            conf_level = 0.95, test_method = "icv", n_sim_tab = 6)
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
@@ -61,9 +62,10 @@ admix_test <- function(samples, admixMod, test_method = c("poly","icv"), conf_le
   n_samples <- length(samples)
   ## Check right specification of arguments:
   if ((n_samples == 1) & (meth == "icv")) stop("Testing using the inner convergence property (obtained from IBM estimation) requires at least TWO samples.\n")
-  if (meth == "poly") message("  Testing using polynomial basis expansions requires a square-root n consistent estimation
-  of the proportions of the unknown component distributions (with 'BVdk' estimation),
-  and thus unknown component distributions with symmetric densities.\n")
+  if (meth == "poly") message("  Testing using polynomial basis expansions requires in theory a square-root n consistent estimation
+  of the proportions of the unknown component distributions (thus using 'BVdk' estimation by default, associated to unknown
+  component distributions with symmetric densities. However, it is allowed to use 'PS' estimation in practice, but argument
+  'est_method' has therefore to be set to 'PS'. In this case, the variance of estimators is obtained by boostrapping.\n")
 
   if (meth == "icv") {
     options(warn = -1)

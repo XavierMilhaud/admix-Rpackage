@@ -8,35 +8,37 @@ admix_cluster(
   samples,
   admixMod,
   conf_level = 0.95,
-  n_sim_tab = 100,
+  n_sim_tab = 30,
   tune_penalty = FALSE,
-  tabul_dist = NULL,
-  echo = TRUE,
   parallel = FALSE,
-  n_cpu = 2
+  n_cpu = 2,
+  tabul_dist = NULL,
+  echo = FALSE
 )
 }
 \arguments{
-\item{samples}{(list) A list of the K (K>0) samples to be studied, all following admixture distributions.}
+\item{samples}{A list of the K (K>1) samples to be studied, all following admixture distributions.}
 
-\item{admixMod}{(list) A list of objects of class 'admix_model', containing useful information about distributions and parameters.}
+\item{admixMod}{A list of objects of class 'admix_model', containing useful information about distributions and parameters.}
 
-\item{conf_level}{The confidence level of the K-sample test used in the clustering procedure.}
+\item{conf_level}{(default to 0.95) The confidence level of the k-sample tests used in the clustering procedure.}
 
-\item{n_sim_tab}{Number of simulated gaussian processes used in the tabulation of the inner convergence distribution in the IBM approach.}
+\item{n_sim_tab}{(default to 100) Number of simulated Gaussian processes when tabulating the inner convergence distribution
+in the IBM approach.}
 
-\item{tune_penalty}{A boolean that allows to choose between a classical penalty term or an optimized penalty embedding some tuning parameters
-(automatically optimized) for k-sample tests used within the clustering procedure.
-Optimized penalty is particularly useful for low sample size.}
-
-\item{tabul_dist}{(Only useful for comparisons of detected clusters at different confidence levels) A list of the tabulated distributions
-of the stochastic integral for each cluster previously detected.}
-
-\item{echo}{(default to TRUE) Display the remaining computation time.}
+\item{tune_penalty}{(default to FALSE) A boolean that allows to choose between a classical penalty term or an optimized penalty (embedding
+some tuning parameters, automatically optimized). Optimized penalty is particularly useful for low or unbalanced sample sizes
+to detect alternatives to the null hypothesis (H0).}
 
 \item{parallel}{(default to FALSE) Boolean to indicate whether parallel computations are performed (speed-up the tabulation).}
 
-\item{n_cpu}{(default to 2) Number of cores used when parallelizing.}
+\item{n_cpu}{(default to 2) Number of cores used when paralleling computations.}
+
+\item{tabul_dist}{(default to NULL) Only useful for comparisons of detected clusters at different confidence levels. A list of
+the tabulated distributions of the stochastic integral used in the k-sample test, each element for each
+cluster previously detected.}
+
+\item{echo}{(default to FALSE) Display the remaining computation time.}
 }
 \value{
 An object of class 'admix_cluster', containing 12 attributes: 1) the number of samples under study; 2) the sizes of samples;
@@ -74,7 +76,6 @@ data1 <- getmixtData(mixt1)
 data2 <- getmixtData(mixt2)
 data3 <- getmixtData(mixt3)
 data4 <- getmixtData(mixt4)
-
 ## Define the admixture models:
 admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
                          knownComp_param = mixt1$comp.param[[2]])
@@ -84,11 +85,11 @@ admixMod3 <- admix_model(knownComp_dist = mixt3$comp.dist[[2]],
                          knownComp_param = mixt3$comp.param[[2]])
 admixMod4 <- admix_model(knownComp_dist = mixt4$comp.dist[[2]],
                          knownComp_param = mixt4$comp.param[[2]])
-
+## Clustering procedure:
 admix_cluster(samples = list(data1, data2, data3, data4),
               admixMod = list(admixMod1, admixMod2, admixMod3, admixMod4),
               conf_level = 0.95, n_sim_tab = 30, tune_penalty = TRUE,
-              tabul_dist = NULL, echo = FALSE, parallel = FALSE, n_cpu = 2)
+              parallel = FALSE, n_cpu = 2, tabul_dist = NULL, echo = FALSE)
 }
 
 }

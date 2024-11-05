@@ -10,7 +10,7 @@
 #' @param admixMod An object of class 'admix_model', containing information about the known component distribution and its parameter(s).
 #' @param method One of 'lwr.bnd', fixed' or 'cv': depending on whether compute some lower bound of the mixing proportion, the estimate
 #'               based on the value of 'c.n' or use cross-validation for choosing 'c.n' (tuning parameter).
-#' @param c.n (default to NULL) A positive number for the penalization, see reference below.
+#' @param c.n (default to NULL) A positive number for the penalization, see reference below. If NULL, equals to 0.1*log(log(n)).
 #' @param folds (optional, default to 10) Number of folds used for cross-validation.
 #' @param reps (optional, default to 1) Number of replications for cross-validation.
 #' @param cn.s (optional) A sequence of 'c.n' to be used for cross-validation (vector of values). Default is equally
@@ -31,16 +31,14 @@
 #'
 #' @examples
 #' ## Simulate mixture data:
-#' mixt1 <- twoComp_mixt(n = 800, weight = 0.2,
-#'                       comp.dist = list("norm", "norm"),
-#'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
-#'                                         list("mean" = 0, "sd" = 1)))
+#' mixt1 <- twoComp_mixt(n = 800, weight = 0.33,
+#'                       comp.dist = list("gamma", "exp"),
+#'                       comp.param = list(list("shape" = 2, "scale" = 0.5),
+#'                                         list("rate" = 0.25)))
 #' data1 <- getmixtData(mixt1)
-#'
 #' ## Define the admixture model:
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                          knownComp_param = mixt1$comp.param[[2]])
-#'
 #' ## Transform the known component of the admixture model into a Uniform(O,1) distribution:
 #' estim_PS(samples = data1, admixMod = admixMod1, method = 'fixed', c.n = NULL)
 #'
@@ -133,8 +131,8 @@ print.estim_PS <- function(x, ...){
   cat("Call:")
   print(x$call)
   if(x$method != "lwr.bnd"){
-    cat("\n", paste("Estimate of the mixing weight (proportion of the unknown component distribution) is" , x$estimated_mixing_weights))
-    cat("\n", paste("The chosen value c_n is", x$c.n))
+    cat("\n", paste("Estimate of the mixing weight (proportion of the unknown component distribution) is" , round(x$estimated_mixing_weights,2)))
+    cat("\n", paste("The chosen value c_n is", round(x$c.n, 3)), "\n")
     if( !is.null(x$cv.out)){
       old_par <- graphics::par()$mfrow
       graphics::par(mfrow=c(1,2))

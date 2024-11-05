@@ -15,13 +15,14 @@
 #'                        orthonormal polynomial basis, and the penalization rate 's' involved on the penalization rule for the test.
 #' @param K (K > 0, default to 3) If not asked (see the previous argument), number of coefficients considered for the polynomial basis expansion.
 #' @param s (in ]0,1/2[, default to 0.49) If not asked (see the previous argument), rate at which the normalization factor is set in
-#'           the penalization rule for model selection (in ]0,1/2[). See reference below.
+#'           the penalization rule for model selection (in ]0,1/2[). Low values of 's' favors the detection of alternative hypothesis.
+#'           See reference below.
 #' @param nb_echBoot (default to 100) Number of bootstrap samples, useful when choosing 'PS' estimation method.
 #' @param support Support of the probability distributions, useful to choose the appropriate polynomial orthonormal basis. One of 'Real',
 #'                'Integer', 'Positive', or 'Bounded.continuous'.
 #' @param bounds_supp (default to NULL) Useful if support = 'Bounded.continuous', a list of minimum and maximum bounds, specified as
 #'                     following: list( list(min.f1,min.g1,min.f2,min.g2) , list(max.f1,max.g1,max.f2,max.g2) )
-#' @param ... Optional arguments to 'estim_BVdk' or 'estim_PS', depending on the chosen argument 'est_method' (see above).
+#' @param ... Optional arguments to \link[admix]{estim_BVdk} or \link[admix]{estim_PS}, depending on the chosen argument 'est_method' (see above).
 #'
 #' @references
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2022}{admix}
@@ -36,9 +37,9 @@
 #' \donttest{
 #' #### Under the null hypothesis H0.
 #' mixt1 <- twoComp_mixt(n = 300, weight = 0.77,
-#'                       comp.dist = list("norm", "norm"),
+#'                       comp.dist = list("norm", "exp"),
 #'                       comp.param = list(list("mean" = 1, "sd" = 1),
-#'                                         list("mean" = 4, "sd" = 1)))
+#'                                         list("rate" = 0.33)))
 #' data1 <- getmixtData(mixt1)
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                         knownComp_param = mixt1$comp.param[[2]])
@@ -49,7 +50,7 @@
 #' data2 <- getmixtData(mixt2)
 #' admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
 #'                         knownComp_param = mixt2$comp.param[[2]])
-#'
+#' ## Test procedure:
 #' orthobasis_test(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
 #'                 conf_level = 0.95, est_method = 'BVdk', support = 'Real')
 #' }
@@ -70,8 +71,8 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
                                                to be performed. Please specify a number of bootstrap samples > 1.")
 
   if (ask_poly_param) {
-    K.user <- base::readline("Please enter 'K' (integer), the order for the polynomial expansion in the orthonormal basis: ")
-    s.user <- base::readline("Please enter 's' in ]0,0.5[, involved in the penalization rule for model selection where lower values of 's' lead to more powerful tests: ")
+    K.user <- as.numeric(base::readline("Please enter 'K' (integer), the order for the polynomial expansion in the orthonormal basis: "))
+    s.user <- as.numeric(base::readline("Please enter 's' in ]0,0.5[, involved in the penalization rule for model selection where lower values of 's' lead to more powerful tests: "))
   } else {
     K.user <- K
     s.user <- s
@@ -127,9 +128,6 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
     hat.p1 <- getmixingWeight(PS_est1)
     hat.p2 <- getmixingWeight(PS_est2)
   } else {
-#    message("    Remind that choosing 'BVdk' for the estimation method
-#    is consistent only if the unknown component distributions
-#    have a symmetric density function.")
     BVdk_est1 <- estim_BVdk(samples = data.p1, admixMod = admixMod[[1]], ...)
     BVdk_est2 <- estim_BVdk(samples = data.p2, admixMod = admixMod[[2]], ...)
     hat.p1 <- getmixingWeight(BVdk_est1)
@@ -167,11 +165,11 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
 
     ##---------- Estimate the unknown component weight on each bootstrap sample -----------##
 	  ##--- by Patra-Sen estimator :
-    liste.p1 <- apply(bootstrap.samples.p1, 1, estim_PS, admixMod[[1]], method = "fixed", gridsize = 1000)
-    vect.p1 <- sapply(liste.p1, "[[", "alp.hat")
+    liste.p1 <- apply(bootstrap.samples.p1, 1, estim_PS, admixMod[[1]], ...)
+    vect.p1 <- sapply(liste.p1, "[[", "estimated_mixing_weights")
   	##--- Same task for the second sample Y, still by Patra-Sen estimator :
-    liste.p2 <- apply(bootstrap.samples.p2, 1, estim_PS, admixMod[[2]], method = "fixed", gridsize = 1000)
-    vect.p2 <- sapply(liste.p2, "[[", "alp.hat")
+    liste.p2 <- apply(bootstrap.samples.p2, 1, estim_PS, admixMod[[2]], ...)
+    vect.p2 <- sapply(liste.p2, "[[", "estimated_mixing_weights")
 
     ## Calcul de la statistique de test pour chacun des echantillons bootstrap et pour chaque ordre du developpement:
     coef.h1 <- coef.h2 <- moy.coef1 <- moy.coef2 <- NULL
@@ -258,7 +256,7 @@ print.orthobasis_test <- function(x, ...)
   cat("\n")
   cat("Is the null hypothesis (gaussian unknown component distribution) rejected? ",
       ifelse(x$reject_decision, "Yes", "No"), sep="")
-  cat("\nTest p-value: ", round(x$p_value,3), sep="")
+  cat("\nTest p-value: ", round(x$p_value,3), "\n", sep="")
 }
 
 

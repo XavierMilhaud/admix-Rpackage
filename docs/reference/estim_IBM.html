@@ -71,11 +71,11 @@ For further details about IBM approach, see 'Details' below.</p>
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>samples</dt>
-<dd><p>(List) List of the two considered samples.</p></dd>
+<dd><p>A list of the two considered samples.</p></dd>
 
 
 <dt>admixMod</dt>
-<dd><p>(List) List of objects of class 'admix_model', one for each sample.</p></dd>
+<dd><p>A list of two objects of class 'admix_model', one for each sample.</p></dd>
 
 
 <dt>n.integ</dt>
@@ -107,7 +107,7 @@ unknown component distributions in each sample); 6) the arbitrary value of the m
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Simulate mixture data:</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Continuous support: simulate mixture data.</span></span></span>
 <span class="r-in"><span><span class="va">mixt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1500</span>, weight <span class="op">=</span> <span class="fl">0.5</span>,</span></span>
 <span class="r-in"><span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"norm"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">3</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span></span>
@@ -118,13 +118,11 @@ unknown component distributions in each sample); 6) the arbitrary value of the m
 <span class="r-in"><span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">3</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                                        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">5</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">data2</span> <span class="op">&lt;-</span> <span class="fu"><a href="getmixtData.html">getmixtData</a></span><span class="op">(</span><span class="va">mixt2</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Define the admixture models:</span></span></span>
 <span class="r-in"><span><span class="va">admixMod1</span> <span class="op">&lt;-</span> <span class="fu"><a href="admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt1</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>                         knownComp_param <span class="op">=</span> <span class="va">mixt1</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">admixMod2</span> <span class="op">&lt;-</span> <span class="fu"><a href="admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt2</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>                         knownComp_param <span class="op">=</span> <span class="va">mixt2</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Estimate the mixture weights of the two admixture models (provide only hat(theta)_n):</span></span></span>
 <span class="r-in"><span><span class="fu">estim_IBM</span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>,<span class="va">data2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>          admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>,<span class="va">admixMod2</span><span class="op">)</span>, n.integ <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></span>
@@ -136,10 +134,10 @@ unknown component distributions in each sample); 6) the arbitrary value of the m
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:estim_IBM(samples = list(data1, data2), admixMod = list(admixMod1, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     admixMod2), n.integ = 1000)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 1st sample:  0.4833008 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 2nd sample:  0.7154068 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 1st sample:  0.534427 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 2nd sample:  0.7232172 </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## Example 2: multinomial distribution:</span></span></span>
+<span class="r-in"><span><span class="co">## Example 2: multinomial distribution (discrete case).</span></span></span>
 <span class="r-in"><span><span class="va">mixt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1500</span>, weight <span class="op">=</span> <span class="fl">0.8</span>,</span></span>
 <span class="r-in"><span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"multinom"</span>, <span class="st">"multinom"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"size"</span> <span class="op">=</span> <span class="fl">1</span>, <span class="st">"prob"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>,<span class="fl">0.3</span>,<span class="fl">0.5</span><span class="op">)</span><span class="op">)</span>,</span></span>
@@ -150,13 +148,11 @@ unknown component distributions in each sample); 6) the arbitrary value of the m
 <span class="r-in"><span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"size"</span> <span class="op">=</span> <span class="fl">1</span>, <span class="st">"prob"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>,<span class="fl">0.3</span>,<span class="fl">0.5</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                                        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"size"</span> <span class="op">=</span> <span class="fl">1</span>, <span class="st">"prob"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.7</span>,<span class="fl">0.1</span>,<span class="fl">0.2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">data2</span> <span class="op">&lt;-</span> <span class="fu"><a href="getmixtData.html">getmixtData</a></span><span class="op">(</span><span class="va">mixt2</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Define the admixture models:</span></span></span>
 <span class="r-in"><span><span class="va">admixMod1</span> <span class="op">&lt;-</span> <span class="fu"><a href="admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt1</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>                         knownComp_param <span class="op">=</span> <span class="va">mixt1</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">admixMod2</span> <span class="op">&lt;-</span> <span class="fu"><a href="admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt2</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>                         knownComp_param <span class="op">=</span> <span class="va">mixt2</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Estimate the mixture weights of the two admixture models (provide only hat(theta)_n):</span></span></span>
 <span class="r-in"><span><span class="fu">estim_IBM</span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>,<span class="va">data2</span><span class="op">)</span>, admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>,<span class="va">admixMod2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span> IBM estimators of two unknown proportions are reliable only if the two</span>
@@ -167,8 +163,8 @@ unknown component distributions in each sample); 6) the arbitrary value of the m
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:estim_IBM(samples = list(data1, data2), admixMod = list(admixMod1, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     admixMod2))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 1st sample:  0.9788402 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 2nd sample:  0.2754237 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 1st sample:  0.9603357 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 2nd sample:  0.2956614 </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

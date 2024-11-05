@@ -27,7 +27,6 @@
 #'                       comp.param = list(list("mean"=-3, "sd"=0.5),
 #'                                         list("rate"=1)))
 #' print(sim.X)
-#' print(sim.Y)
 #' plot(sim.X, xlim=c(-5,5), ylim=c(0,0.5))
 #' plot(sim.Y, add.plot = TRUE, xlim=c(-5,5), ylim=c(0,0.5), col = "red")
 #'

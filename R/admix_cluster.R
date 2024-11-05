@@ -3,18 +3,20 @@
 #' Create clusters on the unknown components related to the K populations following admixture models. Based on the K-sample test
 #' using Inversion - Best Matching (IBM) approach, see 'Details' below for further information.
 #'
-#' @param samples (list) A list of the K (K>0) samples to be studied, all following admixture distributions.
-#' @param admixMod (list) A list of objects of class 'admix_model', containing useful information about distributions and parameters.
-#' @param conf_level The confidence level of the K-sample test used in the clustering procedure.
-#' @param n_sim_tab Number of simulated gaussian processes used in the tabulation of the inner convergence distribution in the IBM approach.
-#' @param tune_penalty A boolean that allows to choose between a classical penalty term or an optimized penalty embedding some tuning parameters
-#'                     (automatically optimized) for k-sample tests used within the clustering procedure.
-#'                     Optimized penalty is particularly useful for low sample size.
-#' @param tabul_dist (Only useful for comparisons of detected clusters at different confidence levels) A list of the tabulated distributions
-#'                   of the stochastic integral for each cluster previously detected.
-#' @param echo (default to TRUE) Display the remaining computation time.
+#' @param samples A list of the K (K>1) samples to be studied, all following admixture distributions.
+#' @param admixMod A list of objects of class 'admix_model', containing useful information about distributions and parameters.
+#' @param conf_level (default to 0.95) The confidence level of the k-sample tests used in the clustering procedure.
+#' @param n_sim_tab (default to 100) Number of simulated Gaussian processes when tabulating the inner convergence distribution
+#'                  in the IBM approach.
+#' @param tune_penalty (default to FALSE) A boolean that allows to choose between a classical penalty term or an optimized penalty (embedding
+#'                     some tuning parameters, automatically optimized). Optimized penalty is particularly useful for low or unbalanced sample sizes
+#'                     to detect alternatives to the null hypothesis (H0).
 #' @param parallel (default to FALSE) Boolean to indicate whether parallel computations are performed (speed-up the tabulation).
-#' @param n_cpu (default to 2) Number of cores used when parallelizing.
+#' @param n_cpu (default to 2) Number of cores used when paralleling computations.
+#' @param tabul_dist (default to NULL) Only useful for comparisons of detected clusters at different confidence levels. A list of
+#'                    the tabulated distributions of the stochastic integral used in the k-sample test, each element for each
+#'                    cluster previously detected.
+#' @param echo (default to FALSE) Display the remaining computation time.
 #'
 #' @references
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2024b}{admix}
@@ -50,7 +52,6 @@
 #' data2 <- getmixtData(mixt2)
 #' data3 <- getmixtData(mixt3)
 #' data4 <- getmixtData(mixt4)
-#'
 #' ## Define the admixture models:
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                          knownComp_param = mixt1$comp.param[[2]])
@@ -60,20 +61,22 @@
 #'                          knownComp_param = mixt3$comp.param[[2]])
 #' admixMod4 <- admix_model(knownComp_dist = mixt4$comp.dist[[2]],
 #'                          knownComp_param = mixt4$comp.param[[2]])
-#'
+#' ## Clustering procedure:
 #' admix_cluster(samples = list(data1, data2, data3, data4),
 #'               admixMod = list(admixMod1, admixMod2, admixMod3, admixMod4),
 #'               conf_level = 0.95, n_sim_tab = 30, tune_penalty = TRUE,
-#'               tabul_dist = NULL, echo = FALSE, parallel = FALSE, n_cpu = 2)
+#'               parallel = FALSE, n_cpu = 2, tabul_dist = NULL, echo = FALSE)
 #' }
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-admix_cluster <- function(samples, admixMod, conf_level = 0.95, n_sim_tab = 100,
-                          tune_penalty = FALSE, tabul_dist = NULL, echo = TRUE,
-                          parallel = FALSE, n_cpu = 2)
+admix_cluster <- function(samples, admixMod, conf_level = 0.95, n_sim_tab = 30, tune_penalty = FALSE,
+                          parallel = FALSE, n_cpu = 2, tabul_dist = NULL, echo = FALSE)
 {
+  old_options_warn <- base::options()$warn
+  base::options(warn = -1)
+
   if (length(sapply(samples, length)) == 1) return("One single sample, no clusters to be found.")
 
   ## Control whether parallel computations were asked for or not:
@@ -87,11 +90,13 @@ admix_cluster <- function(samples, admixMod, conf_level = 0.95, n_sim_tab = 100,
   ## Get the minimal size among all sample sizes, useful for future tabulation (adjustment of variance-covariance):
   minimal_size <- min(sapply(X = samples, FUN = length))
   index_minimal_size <- which.min(sapply(X = samples, FUN = length))
-
   ## K*(K-1)/2 combinations of populations under study:
   couples.list <- NULL
-  for (i in 1:(length(samples)-1)) { for (j in (i+1):length(samples)) { couples.list <- rbind(couples.list,c(i,j)) } }
-
+  for (i in 1:(length(samples)-1)) {
+    for (j in (i+1):length(samples)) {
+      couples.list <- rbind(couples.list,c(i,j))
+    }
+  }
   couples.expr <- couples.param <- vector(mode = "list", length = nrow(couples.list))
   empirical.contr <-
   foreach::foreach (k = 1:nrow(couples.list), .inorder = TRUE, .errorhandling = 'pass', .export = ls(globalenv())) %fun% {
@@ -105,6 +110,7 @@ admix_cluster <- function(samples, admixMod, conf_level = 0.95, n_sim_tab = 100,
     minimal_size * IBM_empirical_contrast(XY$estimated_mixing_weights, samples = samples[as.numeric(couples.list[k, ])],
                                           admixMod = admixMod[as.numeric(couples.list[k, ])], G = XY$integ.supp, fixed.p.X = XY$p.X.fixed)
   }
+
   ## Manage cases when the optimization algorithm could not find a solution:
   if (length(which(lapply(X = empirical.contr, FUN = is.numeric) == FALSE)) != 0) {
     for (k in 1:length(which(lapply(X = empirical.contr, FUN = is.numeric) == FALSE))) {
@@ -124,9 +130,9 @@ admix_cluster <- function(samples, admixMod, conf_level = 0.95, n_sim_tab = 100,
     pairwise_H0test <- NULL
     pairwise_H0test <- IBM_2samples_test(samples = samples[as.numeric(couples.list[k, ])],
                                          admixMod = admixMod[as.numeric(couples.list[k, ])],
-                                         sim_U = NULL, n_sim_tab = 30, conf_level = conf_level,
-                                         parallel = parallel, n_cpu = n_cpu)
-    weights.list[k, ] <- pairwise_H0test$estimated_mix_proportions
+                                         conf_level = conf_level, parallel = parallel, n_cpu = n_cpu,
+                                         n_sim_tab = n_sim_tab)
+    weights.list[k, ] <- pairwise_H0test$estimated_mixing_weights
     H0.test[couples.list[k, ][1], couples.list[k, ][2]] <- pairwise_H0test$reject_decision
   }
 
@@ -137,11 +143,11 @@ admix_cluster <- function(samples, admixMod, conf_level = 0.95, n_sim_tab = 100,
   neighboors_index_init <- which.min(contrast.matrix)
   first.group <- discrepancy.id[which_row, which_col]
   if (is.null(tabul_dist)) {
-    U <- IBM_tabul_stochasticInteg(n.sim = n_sim_tab, n.varCovMat = 80, samples = list(samples[[which_row]], samples[[which_col]]),
+    U <- IBM_tabul_stochasticInteg(samples = list(samples[[which_row]], samples[[which_col]]),
                                    admixMod = list(admixMod[[which_row]], admixMod[[which_col]]),
-                                   min_size = minimal_size, parallel = parallel, n_cpu = n_cpu)
-    tab_distrib[[1]] <- U$U_sim
-    Usim <- U$U_sim
+                                   min_size = minimal_size, parallel = parallel, n_cpu = n_cpu,
+                                   n.varCovMat = 80, n_sim_tab = n_sim_tab)
+    Usim <- tab_distrib[[1]] <- U$U_sim
     CDF_U <- stats::ecdf(U$U_sim)
     q_H <- stats::quantile(U$U_sim, conf_level)
   } else {
@@ -152,7 +158,7 @@ admix_cluster <- function(samples, admixMod, conf_level = 0.95, n_sim_tab = 100,
   }
   test.H0 <- contrast.matrix[which_row, which_col] > q_H
   ## Numerical vector storing the p-values associated to each test: each cluster is closed once the p-value lies below the H0-rejection
-  ## threshold (1-conf_level). This enables to see whether we were close to terminate the cluster or not each time we add a new population.
+  ## threshold (1-conf_level). This enables to see whether we were close to close the cluster or not each time we add a new population.
   p_value <- numeric(length = 0L)
   if (!test.H0) {
     clusters[[1]] <- alreadyGrouped_samples <- as.character(c(which_row, which_col))
@@ -160,7 +166,6 @@ admix_cluster <- function(samples, admixMod, conf_level = 0.95, n_sim_tab = 100,
     new.n_clust <- n_clust <- 1
     ## Look for a another member to integrate the newly built cluster:
     indexesSamples_to_consider <- c(0,0,0)
-    #CDF_U <- stats::ecdf(U[["U_sim"]])
     p_value <- c(p_value, 1 - CDF_U(contrast.matrix[which_row, which_col]))
     CDF_U <- NULL
     if (echo) {
@@ -201,28 +206,25 @@ admix_cluster <- function(samples, admixMod, conf_level = 0.95, n_sim_tab = 100,
       if (new.n_clust == (n_clust+1)) {
         n_clust <- n_clust + 1
         if ( is.null(tabul_dist) | (new.n_clust > length(tabul_dist)) ) {
-          U <- IBM_tabul_stochasticInteg(n.sim = n_sim_tab, n.varCovMat = 80,
-                                         samples = list(samples[[as.numeric(first_sample)]], samples[[as.numeric(second_sample)]]),
+          U <- IBM_tabul_stochasticInteg(samples = list(samples[[as.numeric(first_sample)]], samples[[as.numeric(second_sample)]]),
                                          admixMod = list(admixMod[[as.numeric(first_sample)]], admixMod[[as.numeric(second_sample)]]),
-                                         min_size = minimal_size, parallel = parallel, n_cpu = n_cpu)
+                                         min_size = minimal_size, parallel = parallel, n_cpu = n_cpu, n.varCovMat = 80, n_sim_tab = n_sim_tab)
           ## Store the simulated tabulated distribution:
           Usim <- U$U_sim
           tab_distrib <- append(tab_distrib, list(Usim))
           q_H <- stats::quantile(U$U_sim, conf_level)
           CDF_U <- stats::ecdf(U$U_sim)
           p_val <- 1 - CDF_U(contrast.matrix[as.numeric(first_sample), as.numeric(second_sample)])
-          CDF_U <- NULL
         } else {
           Usim <- tabul_dist[[new.n_clust]]
           q_H <- stats::quantile(tabul_dist[[new.n_clust]], conf_level)
           CDF_U <- stats::ecdf(tabul_dist[[new.n_clust]])
           p_val <- 1 - CDF_U(contrast.matrix[as.numeric(first_sample), as.numeric(second_sample)])
-          CDF_U <- NULL
         }
+        CDF_U <- NULL
       }
       if (length(setdiff(indexesSamples_to_consider_new, indexesSamples_to_consider)) > 0) {
-        ## First check whether the new population could eventually be affected to the existing cluster
-        ## by looking at results from pairwise equality tests:
+        ## check whether new population could be affected to the existing cluster by looking at results from pairwise equality tests:
         which_to_test <- indexesSamples_to_consider_new[indexesSamples_to_consider_new %in% as.numeric(clusters[[length(clusters)]]) == FALSE]
         couples_to_test <- apply(X = t(expand.grid(list(as.numeric(clusters[[length(clusters)]]), which_to_test))), 1, sort)
         if (!is.matrix(couples_to_test)) {
@@ -244,8 +246,8 @@ admix_cluster <- function(samples, admixMod, conf_level = 0.95, n_sim_tab = 100,
             comp_indices <- sort( c(2*indexesSamples_to_consider_new-1, 2*indexesSamples_to_consider_new) )
             k_sample_test <- IBM_k_samples_test(samples = samples[indexesSamples_to_consider_new],
                                                 admixMod = admixMod[indexesSamples_to_consider_new],
-                                                sim_U = Usim, n_sim_tab = n_sim_tab, conf_level = conf_level,
-                                                tune_penalty = tune_penalty, parallel = parallel, n_cpu = n_cpu)
+                                                conf_level = conf_level, parallel = parallel, n_cpu = n_cpu,
+                                                sim_U = Usim, n_sim_tab = n_sim_tab, tune_penalty = tune_penalty)
             tab_distrib <- append(tab_distrib, list(k_sample_test$tabulated_dist))
             k_sample_decision <- k_sample_test$reject_decision
             k_sample_pval <- k_sample_test$p_value
@@ -320,6 +322,7 @@ admix_cluster <- function(samples, admixMod, conf_level = 0.95, n_sim_tab = 100,
   class(obj) <- "admix_cluster"
   obj$call <- match.call()
 
+  on.exit(base::options(warn = old_options_warn))
   return(obj)
 }
 

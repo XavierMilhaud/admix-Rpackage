@@ -24,7 +24,7 @@ estim_PS(
 \item{method}{One of 'lwr.bnd', fixed' or 'cv': depending on whether compute some lower bound of the mixing proportion, the estimate
 based on the value of 'c.n' or use cross-validation for choosing 'c.n' (tuning parameter).}
 
-\item{c.n}{(default to NULL) A positive number for the penalization, see reference below.}
+\item{c.n}{(default to NULL) A positive number for the penalization, see reference below. If NULL, equals to 0.1*log(log(n)).}
 
 \item{folds}{(optional, default to 10) Number of folds used for cross-validation.}
 
@@ -55,16 +55,14 @@ More information in 'Details' below concerning the estimation method.
 }
 \examples{
 ## Simulate mixture data:
-mixt1 <- twoComp_mixt(n = 800, weight = 0.2,
-                      comp.dist = list("norm", "norm"),
-                      comp.param = list(list("mean" = 3, "sd" = 0.5),
-                                        list("mean" = 0, "sd" = 1)))
+mixt1 <- twoComp_mixt(n = 800, weight = 0.33,
+                      comp.dist = list("gamma", "exp"),
+                      comp.param = list(list("shape" = 2, "scale" = 0.5),
+                                        list("rate" = 0.25)))
 data1 <- getmixtData(mixt1)
-
 ## Define the admixture model:
 admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
                          knownComp_param = mixt1$comp.param[[2]])
-
 ## Transform the known component of the admixture model into a Uniform(O,1) distribution:
 estim_PS(samples = data1, admixMod = admixMod1, method = 'fixed', c.n = NULL)
 

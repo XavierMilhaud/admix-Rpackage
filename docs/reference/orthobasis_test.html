@@ -111,7 +111,8 @@ orthonormal polynomial basis, and the penalization rate 's' involved on the pena
 
 <dt>s</dt>
 <dd><p>(in ]0,1/2[, default to 0.49) If not asked (see the previous argument), rate at which the normalization factor is set in
-the penalization rule for model selection (in ]0,1/2[). See reference below.</p>
+the penalization rule for model selection (in ]0,1/2[). Low values of 's' favors the detection of alternative hypothesis.
+See reference below.</p>
 <p>[, default to 0.49) If not asked (see the previous argument), rate at which the normalization factor is set in
 the penalization rule for model selection (in ]: R:,%20default%20to%200.49)%20If%20not%20asked%20(see%20the%20previous%20argument),%20rate%20at%20which%20the%20normalization%20factor%20is%20set%20in%0A%20%20%20%20%20%20%20%20%20%20the%20penalization%20rule%20for%20model%20selection%20(in%20</p></dd>
 
@@ -131,7 +132,7 @@ following: list( list(min.f1,min.g1,min.f2,min.g2) , list(max.f1,max.g1,max.f2,m
 
 
 <dt>...</dt>
-<dd><p>Optional arguments to 'estim_BVdk' or 'estim_PS', depending on the chosen argument 'est_method' (see above).</p></dd>
+<dd><p>Optional arguments to <a href="estim_BVdk.html">estim_BVdk</a> or <a href="estim_PS.html">estim_PS</a>, depending on the chosen argument 'est_method' (see above).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -162,9 +163,9 @@ ISSN 0378-3758, <a href="https://doi.org/10.1016/j.jspi.2021.05.010" class="exte
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="co">#### Under the null hypothesis H0.</span></span></span>
 <span class="r-in"><span><span class="va">mixt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">300</span>, weight <span class="op">=</span> <span class="fl">0.77</span>,</span></span>
-<span class="r-in"><span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"norm"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"exp"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">1</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                                        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">4</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                                        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"rate"</span> <span class="op">=</span> <span class="fl">0.33</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">data1</span> <span class="op">&lt;-</span> <span class="fu"><a href="getmixtData.html">getmixtData</a></span><span class="op">(</span><span class="va">mixt1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">admixMod1</span> <span class="op">&lt;-</span> <span class="fu"><a href="admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt1</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>                        knownComp_param <span class="op">=</span> <span class="va">mixt1</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
@@ -175,18 +176,18 @@ ISSN 0378-3758, <a href="https://doi.org/10.1016/j.jspi.2021.05.010" class="exte
 <span class="r-in"><span><span class="va">data2</span> <span class="op">&lt;-</span> <span class="fu"><a href="getmixtData.html">getmixtData</a></span><span class="op">(</span><span class="va">mixt2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">admixMod2</span> <span class="op">&lt;-</span> <span class="fu"><a href="admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt2</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>                        knownComp_param <span class="op">=</span> <span class="va">mixt2</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co">## Test procedure:</span></span></span>
 <span class="r-in"><span><span class="fu">orthobasis_test</span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>,<span class="va">data2</span><span class="op">)</span>, admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>,<span class="va">admixMod2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                conf_level <span class="op">=</span> <span class="fl">0.95</span>, est_method <span class="op">=</span> <span class="st">'BVdk'</span>, support <span class="op">=</span> <span class="st">'Real'</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Estimation by 'BVdk' assumes the unknown component distribution</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   to be a standard Gaussian distribution.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   to have a symmetric probability density function.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Estimation by 'BVdk' assumes the unknown component distribution</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   to be a standard Gaussian distribution.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   to have a symmetric probability density function.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:orthobasis_test(samples = list(data1, data2), admixMod = list(admixMod1, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     admixMod2), conf_level = 0.95, est_method = "BVdk", support = "Real")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Is the null hypothesis (gaussian unknown component distribution) rejected? No</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Test p-value: 0.605</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Is the null hypothesis (gaussian unknown component distribution) rejected? Yes</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Test p-value: 0</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

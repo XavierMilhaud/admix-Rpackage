@@ -27,7 +27,6 @@ The decontaminated CDF is obtained by inverting the admixture CDF, given by L = 
 unknown component F after having estimated p. This means that F = (1/hat(p)) * (hat(L)-(1-p)*G).
 }
 \examples{
-####### Continuous support:
 ## Simulate mixture data:
 mixt1 <- twoComp_mixt(n = 400, weight = 0.4,
                       comp.dist = list("norm", "norm"),
@@ -45,8 +44,8 @@ admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
                          knownComp_param = mixt2$comp.param[[2]])
 ## Estimation:
-est <- admix_estim(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
-                   est_method = 'PS')
+est <- admix_estim(samples = list(data1,data2),
+                   admixMod = list(admixMod1,admixMod2), est_method = 'PS')
 prop <- getmixingWeight(est)
 ## Determine the decontaminated version of the unknown CDF by inversion:
 F1 <- decontaminated_cdf(sample1 = data1, estim.p = prop[1], admixMod = admixMod1)

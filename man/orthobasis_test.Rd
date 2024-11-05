@@ -35,7 +35,8 @@ orthonormal polynomial basis, and the penalization rate 's' involved on the pena
 \item{K}{(K > 0, default to 3) If not asked (see the previous argument), number of coefficients considered for the polynomial basis expansion.}
 
 \item{s}{(in ]0,1/2[, default to 0.49) If not asked (see the previous argument), rate at which the normalization factor is set in
-the penalization rule for model selection (in ]0,1/2[). See reference below.
+the penalization rule for model selection (in ]0,1/2[). Low values of 's' favors the detection of alternative hypothesis.
+See reference below.
 
 [, default to 0.49) If not asked (see the previous argument), rate at which the normalization factor is set in
 the penalization rule for model selection (in ]: R:,\%20default\%20to\%200.49)\%20If\%20not\%20asked\%20(see\%20the\%20previous\%20argument),\%20rate\%20at\%20which\%20the\%20normalization\%20factor\%20is\%20set\%20in\%0A\%20\%20\%20\%20\%20\%20\%20\%20\%20\%20the\%20penalization\%20rule\%20for\%20model\%20selection\%20(in\%20}
@@ -48,7 +49,7 @@ the penalization rule for model selection (in ]: R:,\%20default\%20to\%200.49)\%
 \item{bounds_supp}{(default to NULL) Useful if support = 'Bounded.continuous', a list of minimum and maximum bounds, specified as
 following: list( list(min.f1,min.g1,min.f2,min.g2) , list(max.f1,max.g1,max.f2,max.g2) )}
 
-\item{...}{Optional arguments to 'estim_BVdk' or 'estim_PS', depending on the chosen argument 'est_method' (see above).}
+\item{...}{Optional arguments to \link[admix]{estim_BVdk} or \link[admix]{estim_PS}, depending on the chosen argument 'est_method' (see above).}
 }
 \value{
 An object of class 'orthobasis_test', containing ten attributes: 1) the number of populations under study (2 in this case);
@@ -67,9 +68,9 @@ are observed. The admixture weights p1 and p2 thus have to be estimated. For fur
 \donttest{
 #### Under the null hypothesis H0.
 mixt1 <- twoComp_mixt(n = 300, weight = 0.77,
-                      comp.dist = list("norm", "norm"),
+                      comp.dist = list("norm", "exp"),
                       comp.param = list(list("mean" = 1, "sd" = 1),
-                                        list("mean" = 4, "sd" = 1)))
+                                        list("rate" = 0.33)))
 data1 <- getmixtData(mixt1)
 admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
                         knownComp_param = mixt1$comp.param[[2]])
@@ -80,7 +81,7 @@ mixt2 <- twoComp_mixt(n = 500, weight = 0.62,
 data2 <- getmixtData(mixt2)
 admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
                         knownComp_param = mixt2$comp.param[[2]])
-
+## Test procedure:
 orthobasis_test(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
                 conf_level = 0.95, est_method = 'BVdk', support = 'Real')
 }

@@ -33,7 +33,7 @@ for model selection. See the reference below.}
 \item{support}{Support of the probability distributions, useful to choose the appropriate polynomial orthonormal basis. One of 'Real',
 'Integer', 'Positive', or 'Bounded.continuous'.}
 
-\item{...}{Optional arguments to 'estim_BVdk'.}
+\item{...}{Optional arguments to \link[admix]{estim_BVdk}.}
 }
 \value{
 An object of class 'gaussianity_test', containing 10 elements: 1) the number of populations under study (1 in this case);
@@ -55,11 +55,10 @@ Extensions to the case of non-Gaussian known components can be overcome thanks t
 ####### Under the null hypothesis H0.
 ## Simulate mixture data:
 mixt1 <- twoComp_mixt(n = 250, weight = 0.4,
-                      comp.dist = list("norm", "norm"),
+                      comp.dist = list("norm", "exp"),
                       comp.param = list(list("mean" = -2, "sd" = 0.5),
-                                        list("mean" = 0, "sd" = 1)))
+                                        list("rate" = 1)))
 data1 <- getmixtData(mixt1)
-
 ## Define the admixture models:
 admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
                          knownComp_param = mixt1$comp.param[[2]])

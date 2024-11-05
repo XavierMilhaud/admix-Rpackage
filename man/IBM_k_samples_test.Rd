@@ -8,11 +8,11 @@ IBM_k_samples_test(
   samples,
   admixMod,
   conf_level = 0.95,
+  parallel = FALSE,
+  n_cpu = 2,
   sim_U = NULL,
   n_sim_tab = 100,
-  tune_penalty = FALSE,
-  parallel = FALSE,
-  n_cpu = 2
+  tune_penalty = FALSE
 )
 }
 \arguments{
@@ -22,6 +22,10 @@ IBM_k_samples_test(
 
 \item{conf_level}{The confidence level of the K-sample test.}
 
+\item{parallel}{(default to FALSE) Boolean indicating whether parallel computations are performed.}
+
+\item{n_cpu}{(default to 2) Number of cores used when paralleling the computations.}
+
 \item{sim_U}{(default to NULL) Random draws of the inner convergence part of the contrast as defined in the IBM approach (see 'Details' below).}
 
 \item{n_sim_tab}{(default to 100) Number of simulated Gaussian processes when tabulating the inner convergence distribution in the IBM approach.}
@@ -29,10 +33,6 @@ IBM_k_samples_test(
 \item{tune_penalty}{(default to FALSE) A boolean that allows to choose between a classical penalty term or an optimized penalty (embedding
 some tuning parameters, automatically optimized). Optimized penalty is particularly useful for low or unbalanced sample sizes
 to detect alternatives to the null hypothesis (H0).}
-
-\item{parallel}{(default to FALSE) Boolean indicating whether parallel computations are performed.}
-
-\item{n_cpu}{(default to 2) Number of cores used when paralleling the computations.}
 }
 \value{
 An object of class 'IBM_test', containing 17 attributes: 1) the number of samples for the test; 2) the sizes of each sample;
@@ -71,7 +71,6 @@ mixt3 <- twoComp_mixt(n = 400, weight = 0.8,
 data1 <- getmixtData(mixt1)
 data2 <- getmixtData(mixt2)
 data3 <- getmixtData(mixt3)
-
 ## Define the admixture models:
 admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
                          knownComp_param = mixt1$comp.param[[2]])
@@ -82,8 +81,8 @@ admixMod3 <- admix_model(knownComp_dist = mixt3$comp.dist[[2]],
 ## Perform the 3-samples test:
 IBM_k_samples_test(samples = list(data1, data2, data3),
                    admixMod = list(admixMod1, admixMod2, admixMod3),
-                   sim_U = NULL, n_sim_tab = 8, conf_level = 0.95,
-                   tune_penalty = FALSE, parallel = FALSE, n_cpu = 2)
+                   conf_level = 0.95, parallel = FALSE, n_cpu = 2,
+                   sim_U = NULL, n_sim_tab = 8, tune_penalty = FALSE)
 }
 
 }

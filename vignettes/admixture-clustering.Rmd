@@ -100,6 +100,6 @@ admixMod5 <- admix_model(knownComp_dist = mixt5$comp.dist[[2]],
 ## Look for the clusters:
 admix_cluster(samples = list(data1,data2,data3,data4,data5), 
               admixMod = list(admixMod1,admixMod2,admixMod3,admixMod4,admixMod5),
-              conf_level = 0.95, n_sim_tab = 10, tune_penalty = FALSE, tabul_dist = NULL, 
-              echo = FALSE, parallel = FALSE, n_cpu = 2)
+              conf_level = 0.95, parallel = FALSE, n_cpu = 2, n_sim_tab = 10, 
+              tune_penalty = FALSE, tabul_dist = NULL, echo = FALSE)
 ```

@@ -26,7 +26,7 @@ More precisely, estimates the two parameters (mixture weight and location shift)
 l(x) = p*f(x-mu) + (1-p)*g(x), x in R,
 where g is the known component, p is the proportion and f is the unknown component with symmetric density.
 The localization shift parameter is denoted mu, and the component weight p.
-See 'Details' below for further information.
+See the reference below for further details.
 }
 \examples{
 ## Simulate mixture data:
@@ -39,7 +39,6 @@ data1 <- getmixtData(mixt1)
 ## Define the admixture model:
 admixMod <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
                         knownComp_param = mixt1$comp.param[[2]])
-
 ## Perform the estimation of parameters in real-life:
 estim_BVdk(samples = data1, admixMod = admixMod, method = 'L-BFGS-B')
 
@@ -51,7 +50,6 @@ mixt2 <- twoComp_mixt(n = 200, weight = 0.65,
 data2 <- getmixtData(mixt2)
 admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
                         knownComp_param = mixt2$comp.param[[2]])
-
 ## Perform the estimation of parameters in real-life:
 estim_BVdk(samples = data2, admixMod = admixMod2, method = 'L-BFGS-B')
 

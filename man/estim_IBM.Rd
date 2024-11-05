@@ -7,9 +7,9 @@
 estim_IBM(samples, admixMod, n.integ = 1000)
 }
 \arguments{
-\item{samples}{(List) List of the two considered samples.}
+\item{samples}{A list of the two considered samples.}
 
-\item{admixMod}{(List) List of objects of class 'admix_model', one for each sample.}
+\item{admixMod}{A list of two objects of class 'admix_model', one for each sample.}
 
 \item{n.integ}{Number of data points generated for the distribution on which to integrate.}
 }
@@ -27,7 +27,7 @@ l1 = p1*f1 + (1-p1)\emph{g1 and l2 = p2}f2 + (1-p2)*g2, where g1 and g2 are the 
 For further details about IBM approach, see 'Details' below.
 }
 \examples{
-## Simulate mixture data:
+## Continuous support: simulate mixture data.
 mixt1 <- twoComp_mixt(n = 1500, weight = 0.5,
                       comp.dist = list("norm", "norm"),
                       comp.param = list(list("mean" = 3, "sd" = 0.5),
@@ -38,18 +38,16 @@ mixt2 <- twoComp_mixt(n = 2000, weight = 0.7,
                       comp.param = list(list("mean" = 3, "sd" = 0.5),
                                         list("mean" = 5, "sd" = 2)))
 data2 <- getmixtData(mixt2)
-
 ## Define the admixture models:
 admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
                          knownComp_param = mixt1$comp.param[[2]])
 admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
                          knownComp_param = mixt2$comp.param[[2]])
-
 ## Estimate the mixture weights of the two admixture models (provide only hat(theta)_n):
 estim_IBM(samples = list(data1,data2),
           admixMod = list(admixMod1,admixMod2), n.integ = 1000)
 
-## Example 2: multinomial distribution:
+## Example 2: multinomial distribution (discrete case).
 mixt1 <- twoComp_mixt(n = 1500, weight = 0.8,
                       comp.dist = list("multinom", "multinom"),
                       comp.param = list(list("size" = 1, "prob" = c(0.2,0.3,0.5)),
@@ -60,13 +58,11 @@ mixt2 <- twoComp_mixt(n = 2000, weight = 0.3,
                       comp.param = list(list("size" = 1, "prob" = c(0.2,0.3,0.5)),
                                         list("size" = 1, "prob" = c(0.7,0.1,0.2))))
 data2 <- getmixtData(mixt2)
-
 ## Define the admixture models:
 admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
                          knownComp_param = mixt1$comp.param[[2]])
 admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
                          knownComp_param = mixt2$comp.param[[2]])
-
 ## Estimate the mixture weights of the two admixture models (provide only hat(theta)_n):
 estim_IBM(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2))
 

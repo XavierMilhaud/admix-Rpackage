@@ -15,7 +15,7 @@
 #'          for model selection. See the reference below.
 #' @param support Support of the probability distributions, useful to choose the appropriate polynomial orthonormal basis. One of 'Real',
 #'                'Integer', 'Positive', or 'Bounded.continuous'.
-#' @param ... Optional arguments to 'estim_BVdk'.
+#' @param ... Optional arguments to \link[admix]{estim_BVdk}.
 #'
 #' @details Extensions to the case of non-Gaussian known components can be overcome thanks to basic transformations using cdf.
 #'
@@ -32,11 +32,10 @@
 #' ####### Under the null hypothesis H0.
 #' ## Simulate mixture data:
 #' mixt1 <- twoComp_mixt(n = 250, weight = 0.4,
-#'                       comp.dist = list("norm", "norm"),
+#'                       comp.dist = list("norm", "exp"),
 #'                       comp.param = list(list("mean" = -2, "sd" = 0.5),
-#'                                         list("mean" = 0, "sd" = 1)))
+#'                                         list("rate" = 1)))
 #' data1 <- getmixtData(mixt1)
-#'
 #' ## Define the admixture models:
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                          knownComp_param = mixt1$comp.param[[2]])
@@ -218,7 +217,7 @@ print.gaussianity_test <- function(x, ...)
   cat("\n")
   cat("Is the null hypothesis (gaussian unknown component distribution) rejected? ",
       ifelse(x$reject_decision, "Yes", "No"), sep="")
-  cat("\nTest p-value: ", round(x$p_value,3), sep="")
+  cat("\nTest p-value: ", round(x$p_value,3), "\n", sep="")
 }
 
 
