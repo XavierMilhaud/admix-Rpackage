@@ -8,10 +8,10 @@ IBM_tabul_stochasticInteg(
   samples,
   admixMod,
   min_size = NULL,
-  parallel = FALSE,
-  n_cpu = 2,
   n.varCovMat = 80,
-  n_sim_tab = 100
+  n_sim_tab = 100,
+  parallel = FALSE,
+  n_cpu = 2
 )
 }
 \arguments{
@@ -22,13 +22,14 @@ IBM_tabul_stochasticInteg(
 \item{min_size}{(optional, NULL by default) In the k-sample case, useful to provide the minimal size among all samples
 (needed to take into account the correction factor for variance-covariance assessment). Otherwise, useless.}
 
-\item{parallel}{(default to FALSE) Boolean to indicate whether parallel computations are performed (speed-up the tabulation).}
-
-\item{n_cpu}{(default to 2) Number of cores used for computations when parallelizing.}
-
 \item{n.varCovMat}{(default to 80) Number of time points at which the Gaussian processes are simulated.}
 
-\item{n_sim_tab}{(default to 100) Number of trajectories for the simulated Gaussian processes (number of random draws for tabulation).}
+\item{n_sim_tab}{(default to 100) Number of simulated Gaussian processes when tabulating the inner convergence distribution
+in the 'icv' testing method using the IBM estimation approach.}
+
+\item{parallel}{(default to FALSE) Boolean to indicate whether parallel computations are performed (speed-up the tabulation).}
+
+\item{n_cpu}{(default to 2) Number of cores used when paralleling computations.}
 }
 \value{
 A list with four elements, containing: 1) random draws of the contrast as defined in the reference given here;
@@ -59,7 +60,7 @@ admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
                          knownComp_param = mixt2$comp.param[[2]])
 IBM_tabul_stochasticInteg(samples = list(data1, data2), admixMod = list(admixMod1, admixMod2),
-                          min_size=NULL, parallel=FALSE, n_cpu=2, n.varCovMat=20, n_sim_tab=2)
+                          min_size=NULL, n.varCovMat=20, n_sim_tab=2, parallel=FALSE, n_cpu=2)
 }
 
 }

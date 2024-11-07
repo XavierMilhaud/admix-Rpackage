@@ -9,13 +9,14 @@
 #' @param samples A list of the K samples to be studied, all following admixture distributions.
 #' @param admixMod A list of objects of class class \link[admix]{admix_model}, containing useful information about distributions and parameters.
 #' @param conf_level The confidence level of the K-sample test.
-#' @param parallel (default to FALSE) Boolean indicating whether parallel computations are performed.
-#' @param n_cpu (default to 2) Number of cores used when paralleling the computations.
 #' @param sim_U (default to NULL) Random draws of the inner convergence part of the contrast as defined in the IBM approach (see 'Details' below).
-#' @param n_sim_tab (default to 100) Number of simulated Gaussian processes when tabulating the inner convergence distribution in the IBM approach.
 #' @param tune_penalty (default to TRUE) A boolean that allows to choose between a classical penalty term or an optimized penalty (embedding
 #'                     some tuning parameters, automatically optimized). Optimized penalty is very useful for low or unbalanced sample sizes
 #'                     to detect alternatives to the null hypothesis (H0).
+#' @param n_sim_tab (default to 100) Number of simulated Gaussian processes when tabulating the inner convergence distribution
+#'                  in the 'icv' testing method using the IBM estimation approach.
+#' @param parallel (default to FALSE) Boolean to indicate whether parallel computations are performed (speed-up the tabulation).
+#' @param n_cpu (default to 2) Number of cores used when paralleling computations.
 #'
 #' @references
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2024b}{admix}
@@ -66,8 +67,8 @@
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-IBM_k_samples_test <- function(samples, admixMod, conf_level = 0.95, parallel = FALSE, n_cpu = 2,
-                               sim_U = NULL, n_sim_tab = 100, tune_penalty = TRUE)
+IBM_k_samples_test <- function(samples, admixMod, conf_level = 0.95, sim_U = NULL,
+                               tune_penalty = TRUE, n_sim_tab = 100, parallel = FALSE, n_cpu = 2)
 {
   old_options_warn <- base::options()$warn
   base::options(warn = -1)
@@ -82,7 +83,7 @@ IBM_k_samples_test <- function(samples, admixMod, conf_level = 0.95, parallel = 
 
   if (length(samples) == 2) {
     return(IBM_2samples_test(samples = samples, admixMod = admixMod, conf_level = conf_level,
-                             parallel = parallel, n_cpu = n_cpu, sim_U = sim_U, n_sim_tab = n_sim_tab))
+                             sim_U = sim_U, n_sim_tab = n_sim_tab, parallel = parallel, n_cpu = n_cpu))
   } else {
 
     ## Get the minimal size among all sample sizes, useful for contrast tabulation (adjustment of covariance terms):
@@ -261,8 +262,8 @@ IBM_k_samples_test <- function(samples, admixMod, conf_level = 0.95, parallel = 
       which_col <- unlist(apply(discrepancy.rank, 1, function(x) which(x == 1)))
       U <- IBM_tabul_stochasticInteg(samples = list(samples[[which_row]], samples[[which_col]]),
                                      admixMod = list(admixMod[[which_row]], admixMod[[which_col]]),
-                                     min_size = minimal_size, parallel = parallel, n_cpu = n_cpu,
-                                     n.varCovMat = 80, n_sim_tab = n_sim_tab)
+                                     min_size = minimal_size, n.varCovMat = 80, n_sim_tab = n_sim_tab,
+                                     parallel = parallel, n_cpu = n_cpu)
       sim_U <- U[["U_sim"]]
     } else {
       sim_U <- sim_U
@@ -402,10 +403,11 @@ summary.IBM_test <- function(object, ...)
 #' @param samples A list of the two samples under study.
 #' @param admixMod A list of two objects of class 'admix_model', containing useful information about distributions and parameters.
 #' @param conf_level (default to 0.95) The confidence level of the 2-samples test, i.e. the quantile level to which the test statistic is compared.
-#' @param parallel (default to FALSE) Boolean to indicate whether parallel computations are performed (speed-up the tabulation).
-#' @param n_cpu (default to 2) Number of cores used when parallelizing.
 #' @param sim_U Random draws of the inner convergence part of the contrast as defined in the IBM approach (see 'Details' below).
-#' @param n_sim_tab Number of simulated gaussian processes used in the tabulation of the inner convergence distribution in the IBM approach.
+#' @param n_sim_tab (default to 100) Number of simulated Gaussian processes when tabulating the inner convergence distribution
+#'                  in the 'icv' testing method using the IBM estimation approach.
+#' @param parallel (default to FALSE) Boolean to indicate whether parallel computations are performed (speed-up the tabulation).
+#' @param n_cpu (default to 2) Number of cores used when paralleling computations.
 #'
 #' @references
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2024a}{admix}
@@ -465,8 +467,8 @@ IBM_2samples_test <- function(samples, admixMod, conf_level = 0.95, parallel = F
     # green_light <- IBM_greenLight_criterion(estim_obj = estim, samples = samples, admixMod = admixMod, alpha = (1-conf_level))
     # if (green_light) {
     #   if (is.null(sim_U)) {
-    #     tab_dist <- IBM_tabul_stochasticInteg(samples = samples, admixMod = admixMod, min_size = min_size,
-    #                                          parallel = parallel, n_cpu = n_cpu, n.varCovMat = 80, n_sim_tab = n_sim_tab)
+    #     tab_dist <- IBM_tabul_stochasticInteg(samples = samples, admixMod = admixMod, min_size = min_size, n.varCovMat = 80,
+    #                                           n_sim_tab = n_sim_tab, parallel = parallel, n_cpu = n_cpu)
     #     sim_U <- tab_dist$U_sim
     #     contrast_val <- tab_dist$contrast_value
     #   }
@@ -486,8 +488,8 @@ IBM_2samples_test <- function(samples, admixMod, conf_level = 0.95, parallel = F
     sim_U <- extreme_quantile <- NA
   } else {
     if (is.null(sim_U)) {
-      tab_dist <- IBM_tabul_stochasticInteg(samples = samples, admixMod = admixMod, min_size = min_size,
-                                            parallel = parallel, n_cpu = n_cpu, n.varCovMat = 80, n_sim_tab = n_sim_tab)
+      tab_dist <- IBM_tabul_stochasticInteg(samples = samples, admixMod = admixMod, min_size = min_size, n.varCovMat = 80,
+                                            n_sim_tab = n_sim_tab, parallel = parallel, n_cpu = n_cpu)
       sim_U <- tab_dist$U_sim
       contrast_val <- tab_dist$contrast_value
     }
@@ -609,10 +611,11 @@ IBM_greenLight_criterion <- function(estim_obj, samples, admixMod, alpha = 0.05)
 #' @param admixMod A list of two objects of class 'admix_model', with information about distributions and parameters.
 #' @param min_size (optional, NULL by default) In the k-sample case, useful to provide the minimal size among all samples
 #'                 (needed to take into account the correction factor for variance-covariance assessment). Otherwise, useless.
-#' @param parallel (default to FALSE) Boolean to indicate whether parallel computations are performed (speed-up the tabulation).
-#' @param n_cpu (default to 2) Number of cores used for computations when parallelizing.
 #' @param n.varCovMat (default to 80) Number of time points at which the Gaussian processes are simulated.
-#' @param n_sim_tab (default to 100) Number of trajectories for the simulated Gaussian processes (number of random draws for tabulation).
+#' @param n_sim_tab (default to 100) Number of simulated Gaussian processes when tabulating the inner convergence distribution
+#'                  in the 'icv' testing method using the IBM estimation approach.
+#' @param parallel (default to FALSE) Boolean to indicate whether parallel computations are performed (speed-up the tabulation).
+#' @param n_cpu (default to 2) Number of cores used when paralleling computations.
 #'
 #' @references
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2024a}{admix}
@@ -640,14 +643,14 @@ IBM_greenLight_criterion <- function(estim_obj, samples, admixMod, alpha = 0.05)
 #' admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
 #'                          knownComp_param = mixt2$comp.param[[2]])
 #' IBM_tabul_stochasticInteg(samples = list(data1, data2), admixMod = list(admixMod1, admixMod2),
-#'                           min_size=NULL, parallel=FALSE, n_cpu=2, n.varCovMat=20, n_sim_tab=2)
+#'                           min_size=NULL, n.varCovMat=20, n_sim_tab=2, parallel=FALSE, n_cpu=2)
 #' }
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-IBM_tabul_stochasticInteg <- function(samples, admixMod, min_size = NULL, parallel = FALSE,
-                                      n_cpu = 2, n.varCovMat = 80, n_sim_tab = 100)
+IBM_tabul_stochasticInteg <- function(samples, admixMod, min_size = NULL, n.varCovMat = 80,
+                                      n_sim_tab = 100, parallel = FALSE, n_cpu = 2)
 {
   stopifnot("Wrong number of samples... Must be 2!" = length(samples) == 2)
 

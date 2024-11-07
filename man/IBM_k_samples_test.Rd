@@ -8,11 +8,11 @@ IBM_k_samples_test(
   samples,
   admixMod,
   conf_level = 0.95,
-  parallel = FALSE,
-  n_cpu = 2,
   sim_U = NULL,
+  tune_penalty = TRUE,
   n_sim_tab = 100,
-  tune_penalty = TRUE
+  parallel = FALSE,
+  n_cpu = 2
 )
 }
 \arguments{
@@ -22,17 +22,18 @@ IBM_k_samples_test(
 
 \item{conf_level}{The confidence level of the K-sample test.}
 
-\item{parallel}{(default to FALSE) Boolean indicating whether parallel computations are performed.}
-
-\item{n_cpu}{(default to 2) Number of cores used when paralleling the computations.}
-
 \item{sim_U}{(default to NULL) Random draws of the inner convergence part of the contrast as defined in the IBM approach (see 'Details' below).}
-
-\item{n_sim_tab}{(default to 100) Number of simulated Gaussian processes when tabulating the inner convergence distribution in the IBM approach.}
 
 \item{tune_penalty}{(default to TRUE) A boolean that allows to choose between a classical penalty term or an optimized penalty (embedding
 some tuning parameters, automatically optimized). Optimized penalty is very useful for low or unbalanced sample sizes
 to detect alternatives to the null hypothesis (H0).}
+
+\item{n_sim_tab}{(default to 100) Number of simulated Gaussian processes when tabulating the inner convergence distribution
+in the 'icv' testing method using the IBM estimation approach.}
+
+\item{parallel}{(default to FALSE) Boolean to indicate whether parallel computations are performed (speed-up the tabulation).}
+
+\item{n_cpu}{(default to 2) Number of cores used when paralleling computations.}
 }
 \value{
 An object of class \link[admix]{admix_test}, containing 17 attributes: 1) the number of samples for the test; 2) the sizes of each sample;
