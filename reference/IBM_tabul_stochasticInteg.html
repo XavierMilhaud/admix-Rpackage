@@ -54,10 +54,10 @@ of interest. See 'Details' below and the cited paper therein for further informa
 <span>  <span class="va">samples</span>,</span>
 <span>  <span class="va">admixMod</span>,</span>
 <span>  min_size <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  n_cpu <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  n.varCovMat <span class="op">=</span> <span class="fl">80</span>,</span>
-<span>  n_sim_tab <span class="op">=</span> <span class="fl">100</span></span>
+<span>  n_sim_tab <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  parallel <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  n_cpu <span class="op">=</span> <span class="fl">2</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -78,20 +78,21 @@ of interest. See 'Details' below and the cited paper therein for further informa
 (needed to take into account the correction factor for variance-covariance assessment). Otherwise, useless.</p></dd>
 
 
-<dt id="arg-parallel">parallel<a class="anchor" aria-label="anchor" href="#arg-parallel"></a></dt>
-<dd><p>(default to FALSE) Boolean to indicate whether parallel computations are performed (speed-up the tabulation).</p></dd>
-
-
-<dt id="arg-n-cpu">n_cpu<a class="anchor" aria-label="anchor" href="#arg-n-cpu"></a></dt>
-<dd><p>(default to 2) Number of cores used for computations when parallelizing.</p></dd>
-
-
 <dt id="arg-n-varcovmat">n.varCovMat<a class="anchor" aria-label="anchor" href="#arg-n-varcovmat"></a></dt>
 <dd><p>(default to 80) Number of time points at which the Gaussian processes are simulated.</p></dd>
 
 
 <dt id="arg-n-sim-tab">n_sim_tab<a class="anchor" aria-label="anchor" href="#arg-n-sim-tab"></a></dt>
-<dd><p>(default to 100) Number of trajectories for the simulated Gaussian processes (number of random draws for tabulation).</p></dd>
+<dd><p>(default to 100) Number of simulated Gaussian processes when tabulating the inner convergence distribution
+in the 'icv' testing method using the IBM estimation approach.</p></dd>
+
+
+<dt id="arg-parallel">parallel<a class="anchor" aria-label="anchor" href="#arg-parallel"></a></dt>
+<dd><p>(default to FALSE) Boolean to indicate whether parallel computations are performed (speed-up the tabulation).</p></dd>
+
+
+<dt id="arg-n-cpu">n_cpu<a class="anchor" aria-label="anchor" href="#arg-n-cpu"></a></dt>
+<dd><p>(default to 2) Number of cores used when paralleling computations.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -129,7 +130,7 @@ of interest. See 'Details' below and the cited paper therein for further informa
 <span class="r-in"><span><span class="va">admixMod2</span> <span class="op">&lt;-</span> <span class="fu"><a href="admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt2</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>                         knownComp_param <span class="op">=</span> <span class="va">mixt2</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">IBM_tabul_stochasticInteg</span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>, <span class="va">data2</span><span class="op">)</span>, admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>, <span class="va">admixMod2</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                          min_size<span class="op">=</span><span class="cn">NULL</span>, parallel<span class="op">=</span><span class="cn">FALSE</span>, n_cpu<span class="op">=</span><span class="fl">2</span>, n.varCovMat<span class="op">=</span><span class="fl">20</span>, n_sim_tab<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                          min_size<span class="op">=</span><span class="cn">NULL</span>, n.varCovMat<span class="op">=</span><span class="fl">20</span>, n_sim_tab<span class="op">=</span><span class="fl">2</span>, parallel<span class="op">=</span><span class="cn">FALSE</span>, n_cpu<span class="op">=</span><span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span> IBM estimators of two unknown proportions are reliable only if the two</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>     corresponding unknown component distributions have been tested equal (see 'admix_test()').</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>     Furthermore, when both the known and unknown component distributions of the mixture</span>
