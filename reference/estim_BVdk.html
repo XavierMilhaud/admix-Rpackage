@@ -80,11 +80,12 @@ See the reference below for further details.</p>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class estim_BVdk, containing 7 attributes: 1) the number of sample under study (set to 1 here);
+    <p>An object of class estim_BVdk, containing 8 attributes: 1) the number of sample under study (set to 1 here);
 2) the sample size; 3) the information about mixture components (distributions and parameters); 4) the estimation
 method (Bordes and Vandekerkhove here, see the given reference); 5) the estimated mixing proportion (weight of the
 unknown component distribution); 6) the estimated location parameter of the unknown component distribution (with symetric
-density); 7) the optimization method that was used.</p>
+density); 7) the variance of the two estimators (respectively the mixing proportion and location shift); 8) the optimization
+method that was used.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -116,6 +117,8 @@ density); 7) the optimization method that was used.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion:  0.3997622 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated location parameter:  -1.986474 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Variance of the mixing proportion estimator:  0.002384065 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Variance of the location shift estimator:  0.007135565 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Second example:</span></span></span>
@@ -135,6 +138,8 @@ density); 7) the optimization method that was used.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion:  0.6165552 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Estimated location parameter:  -1.06661 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Variance of the mixing proportion estimator:  0.001413177 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Variance of the location shift estimator:  0.002412356 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
