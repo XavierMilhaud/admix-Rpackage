@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admix</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -175,14 +175,14 @@ Exponential-Exponential and Gamma-Gamma mixtures.</p>
 <span><span class="co">## Look for the clusters:</span></span>
 <span><span class="fu"><a href="../reference/admix_cluster.html">admix_cluster</a></span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>,<span class="va">data2</span>,<span class="va">data3</span>,<span class="va">data4</span>,<span class="va">data5</span><span class="op">)</span>, </span>
 <span>              admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>,<span class="va">admixMod2</span>,<span class="va">admixMod3</span>,<span class="va">admixMod4</span>,<span class="va">admixMod5</span><span class="op">)</span>,</span>
-<span>              conf_level <span class="op">=</span> <span class="fl">0.95</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span>, n_cpu <span class="op">=</span> <span class="fl">2</span>, n_sim_tab <span class="op">=</span> <span class="fl">10</span>, </span>
-<span>              tune_penalty <span class="op">=</span> <span class="cn">FALSE</span>, tabul_dist <span class="op">=</span> <span class="cn">NULL</span>, echo <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>              conf_level <span class="op">=</span> <span class="fl">0.95</span>, tune_penalty <span class="op">=</span> <span class="cn">FALSE</span>, tabul_dist <span class="op">=</span> <span class="cn">NULL</span>, echo <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>              n_sim_tab <span class="op">=</span> <span class="fl">10</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span>, n_cpu <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; admix_cluster(samples = list(data1, data2, data3, data4, data5), </span></span>
 <span><span class="co">#&gt;     admixMod = list(admixMod1, admixMod2, admixMod3, admixMod4, </span></span>
 <span><span class="co">#&gt;         admixMod5), conf_level = 0.95, tune_penalty = FALSE, </span></span>
-<span><span class="co">#&gt;     tabul_dist = NULL, echo = FALSE, parallel = FALSE, n_cpu = 2, </span></span>
-<span><span class="co">#&gt;     n_sim_tab = 10)</span></span>
+<span><span class="co">#&gt;     tabul_dist = NULL, echo = FALSE, n_sim_tab = 10, parallel = FALSE, </span></span>
+<span><span class="co">#&gt;     n_cpu = 2)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Number of detected clusters across the samples provided: 1.</span></span>
 <span><span class="co">#&gt; </span></span>

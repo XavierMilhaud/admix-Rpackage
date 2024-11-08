@@ -1,6 +1,6 @@
 Package: admix
 Title: Package Admix for Admixture (aka Contamination) Models
-Version: 2.3.2
+Version: 2.3.3
 Authors@R: c(
     person("Xavier", "Milhaud", , "xavier.milhaud.research@gmail.com", role = c("aut", "cre")),
     person("Pierre", "Vandekerkhove", role = "ctb"),
