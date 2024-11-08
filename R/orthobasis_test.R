@@ -136,10 +136,8 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
     hat.p1 <- getmixingWeight(BVdk_est1)
     hat.p2 <- getmixingWeight(BVdk_est2)
     ## Estimation of the variances of the estimators :
-    varCov.p1 <- BVdk_varCov_estimators(estim = BVdk_est1, data = data.p1, admixMod = admixMod[[1]])
-    var_hat.p1 <- varCov.p1$var.estim_prop
-    varCov.p2 <- BVdk_varCov_estimators(estim = BVdk_est2, data = data.p2, admixMod = admixMod[[2]])
-    var_hat.p2 <- varCov.p2$var.estim_prop
+    var_hat.p1 <- BVdk_est1$mix_weight_variance
+    var_hat.p2 <- BVdk_est2$mix_weight_variance
   }
 
   ##-------- Computation of the test statistic U -----------##

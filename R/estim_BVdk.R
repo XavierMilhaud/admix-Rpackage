@@ -14,11 +14,12 @@
 #' @references
 #' \insertRef{BordesVandekerkhove2010}{admix}
 #'
-#' @return An object of class \link[admix]{estim_BVdk}, containing 7 attributes: 1) the number of sample under study (set to 1 here);
+#' @return An object of class \link[admix]{estim_BVdk}, containing 8 attributes: 1) the number of sample under study (set to 1 here);
 #'         2) the sample size; 3) the information about mixture components (distributions and parameters); 4) the estimation
 #'         method (Bordes and Vandekerkhove here, see the given reference); 5) the estimated mixing proportion (weight of the
 #'         unknown component distribution); 6) the estimated location parameter of the unknown component distribution (with symetric
-#'         density); 7) the optimization method that was used.
+#'         density); 7) the variance of the two estimators (respectively the mixing proportion and location shift); 8) the optimization
+#'         method that was used.
 #'
 #' @examples
 #' ## Simulate mixture data:
@@ -78,6 +79,13 @@ estim_BVdk <- function(samples, admixMod, method = c("L-BFGS-B","Nelder-Mead"))
                         h = bandw, method = "L-BFGS-B", lower = c(0.001,min(samples)), upper = c(0.999,max(samples)))
   }
 
+  if (all(is.numeric(sol$par))) {
+    var_estimators <- BVdk_varCov_estimators(mixing_weight = sol$par[1], location = sol$par[2],
+                                             data = samples, admixMod = admixMod)
+  } else {
+    var_estimators <- NA
+  }
+
   obj <- list(
     n_populations = 1,
     population_sizes = length(samples),
@@ -85,6 +93,8 @@ estim_BVdk <- function(samples, admixMod, method = c("L-BFGS-B","Nelder-Mead"))
     estimation_method = "Bordes and Vandekerkhove",
     estimated_mixing_weights = sol$par[1],
     estimated_locations = sol$par[2],
+    mix_weight_variance = ifelse(all(is.na(var_estimators)), NA, var_estimators$var.estim_prop),
+    location_variance = ifelse(all(is.na(var_estimators)), NA, var_estimators$var.estim_location),
     optim_method = method
   )
   class(obj) <- c("estim_BVdk", "admix_estim")
@@ -110,7 +120,9 @@ print.estim_BVdk <- function(x, ...)
   print(x$call)
   cat("\n")
   cat("Estimated mixing proportion: ", x$estimated_mixing_weights, "\n")
-  cat("Estimated location parameter: ", x$estimated_locations, "\n\n")
+  cat("Estimated location parameter: ", x$estimated_locations, "\n")
+  cat("Variance of the mixing proportion estimator: ", x$mix_weight_variance, "\n")
+  cat("Variance of the location shift estimator: ", x$location_variance, "\n\n")
 }
 
 
@@ -136,7 +148,9 @@ summary.estim_BVdk <- function(object, ...)
   print(unlist(object$admixture_models$comp.param$known, use.names = TRUE))
   cat("\n------- Estimation results -------\n")
   cat("Estimated mixing proportion: ", object$estimated_mixing_weights, "\n")
-  cat("Estimated location parameter: ", object$estimated_locations, "\n\n")
+  cat("Estimated location parameter: ", object$estimated_locations, "\n")
+  cat("Variance of the mixing proportion estimator: ", object$mix_weight_variance, "\n")
+  cat("Variance of the location shift estimator: ", object$location_variance, "\n\n")
   cat("------- Optimization -------\n")
   cat("Optimization method: ", object$optim_method, "\n\n")
 }
@@ -293,7 +307,8 @@ BVdk_contrast_gradient <- function(param, data, admixMod, h)
 #' where g is the known component of the two-component mixture, p is the unknown proportion, f is the unknown component density and
 #' mu is the location shift. See 'Details' below for more information.
 #'
-#' @param estim An object of class 'estim_BVdk', containing the estimators of unknown quantities in the admixture model.
+#' @param mixing_weight Estimators of the unknown mixing weights in the admixture models.
+#' @param location Estimators of the unknown shift location parameters in the admixture models.
 #' @param data The observed sample under study.
 #' @param admixMod An object of class 'admix_model', containing useful information about distributions and parameters.
 #'
@@ -320,21 +335,23 @@ BVdk_contrast_gradient <- function(param, data, admixMod, h)
 #'
 #' ## Perform the estimation of parameters in real-life:
 #' estim <- estim_BVdk(samples = data1, admixMod = admixMod, method = 'L-BFGS-B')
-#' BVdk_varCov_estimators(estim = estim, data = data1, admixMod = admixMod)
+#' BVdk_varCov_estimators(mixing_weight = estim$estimated_mixing_weights,
+#'                        location = estim$estimated_locations,
+#'                        data = data1, admixMod = admixMod)
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @noRd
 
-BVdk_varCov_estimators <- function(estim, data, admixMod)
+BVdk_varCov_estimators <- function(mixing_weight, location, data, admixMod)
 {
   n <- length(data)
   bandw <- stats::density(data)$bw
   u <- v <- round(mean(data))
 
-  inv_J <- solve(BVdk_mat_J(estim, data, admixMod, h = bandw))
-  mat_L.u <- BVdk_mat_L(u = u, estim, data, admixMod, h = bandw)
-  mat_L.v <- BVdk_mat_L(u = v, estim, data, admixMod, h = bandw)
-  sigma.mat.uv <- BVdk_mat_Sigma(u = u, v = v, estim, data, admixMod, h = bandw)
+  inv_J <- solve(BVdk_mat_J(mixing_weight, location, data, admixMod, h = bandw))
+  mat_L.u <- BVdk_mat_L(u = u, mixing_weight, location, data, admixMod, h = bandw)
+  mat_L.v <- BVdk_mat_L(u = v, mixing_weight, location, data, admixMod, h = bandw)
+  sigma.mat.uv <- BVdk_mat_Sigma(u = u, v = v, mixing_weight, location, data, admixMod, h = bandw)
   varCov.matrix <- (1/n) * (mat_L.u %*% inv_J %*% sigma.mat.uv %*% inv_J %*% t(mat_L.v))
 
   return( list(varCov.mat = varCov.matrix,
@@ -347,21 +364,21 @@ BVdk_varCov_estimators <- function(estim, data, admixMod)
 ## Estimation of matrix Sigma(u,v) from empirical versions (cf p.28 et p.29), with arguments:
 ## - u the time point at which the first (related to the first parameter) underlying empirical process is looked through.
 ## - v the time point at which the second (related to the second parameter) underlying empirical process is looked through.
-BVdk_mat_Sigma <- function(u, v, estim, data, admixMod, h)
+BVdk_mat_Sigma <- function(u, v, mixing_weight, location, data, admixMod, h)
 {
   n <- length(data)
   aux1 <- aux2 <- rep(0, n)
-  aux1 <- sapply(X = data, FUN = h1, estim, admixMod)
-  aux2 <- sapply(X = data, FUN = h2, data, estim, admixMod, h)
+  aux1 <- sapply(X = data, FUN = h1, mixing_weight, location, admixMod)
+  aux2 <- sapply(X = data, FUN = h2, data, mixing_weight, location, admixMod, h)
 
   sorted_data <- sort(data)
-  ul <- sapply(X = data, FUN = l_fun, u, sorted_data, estim)
-  vl <- sapply(X = data, FUN = l_fun, v, sorted_data, estim)
+  ul <- sapply(X = data, FUN = l_fun, u, sorted_data, location)
+  vl <- sapply(X = data, FUN = l_fun, v, sorted_data, location)
 
   aux12 <- terms_sigma11 <- terms_sigma22 <- terms_sigma12 <- matrix(NA, nrow = n, ncol = n)
   for (i in 1:(n-1)) {
     for (j in (i+1):n) {
-      aux12[i,j] <- ka(data[i], data[j], sorted_data, estim)
+      aux12[i,j] <- ka(data[i], data[j], sorted_data, location)
       terms_sigma11[i,j] <- aux1[i] * aux1[j] * aux12[i,j]
       terms_sigma22[i,j] <- aux2[i] * aux2[j] * aux12[i,j]
       terms_sigma12[i,j] <- (aux1[i] * aux2[j] + aux1[j] * aux2[i]) * aux12[i,j]
@@ -371,27 +388,27 @@ BVdk_mat_Sigma <- function(u, v, estim, data, admixMod, h)
   sigma_mat <- matrix(NA, nrow = 3, ncol = 3)
   sigma_mat[3,3] <- .Call('_admix_Donsker_correl_cpp',
                           PACKAGE = 'admix',
-                          u + estim$estimated_locations,
-                          v + estim$estimated_locations, sorted_data)
-  sigma_mat[1,3] <- (2 / (n * estim$estimated_mixing_weights)) * sum(aux1 * vl)
-  sigma_mat[3,1] <- (2 / (n * estim$estimated_mixing_weights)) * sum(aux1 * ul)
-  sigma_mat[2,3] <- (2 / (n * estim$estimated_mixing_weights)) * sum(aux2 * vl)
-  sigma_mat[3,2] <- (2 / (n * estim$estimated_mixing_weights)) * sum(aux2 * ul)
-  sigma_mat[1,1] <- (8 / (n * (n-1) * estim$estimated_mixing_weights^2)) * sum(terms_sigma11, na.rm = TRUE)
-  sigma_mat[2,2] <- (8 / (n * (n-1) * estim$estimated_mixing_weights^2)) * sum(terms_sigma22, na.rm = TRUE)
-  sigma_mat[1,2] <- sigma_mat[2,1] <- (4 / (n * (n-1) * estim$estimated_mixing_weights^2)) * sum(terms_sigma12, na.rm = TRUE)
+                          u + location,
+                          v + location, sorted_data)
+  sigma_mat[1,3] <- (2 / (n * mixing_weight)) * sum(aux1 * vl)
+  sigma_mat[3,1] <- (2 / (n * mixing_weight)) * sum(aux1 * ul)
+  sigma_mat[2,3] <- (2 / (n * mixing_weight)) * sum(aux2 * vl)
+  sigma_mat[3,2] <- (2 / (n * mixing_weight)) * sum(aux2 * ul)
+  sigma_mat[1,1] <- (8 / (n * (n-1) * mixing_weight^2)) * sum(terms_sigma11, na.rm = TRUE)
+  sigma_mat[2,2] <- (8 / (n * (n-1) * mixing_weight^2)) * sum(terms_sigma22, na.rm = TRUE)
+  sigma_mat[1,2] <- sigma_mat[2,1] <- (4 / (n * (n-1) * mixing_weight^2)) * sum(terms_sigma12, na.rm = TRUE)
 
   return(sigma_mat)
 }
 
 
 ## Define the matrix J that is useful for the consistency theorem of estimators (cf p.29-30) .
-BVdk_mat_J <- function(estim, data, admixMod, h)
+BVdk_mat_J <- function(mixing_weight, location, data, admixMod, h)
 {
   n <- length(data)
   aux1 <- aux2 <- rep(0, n)
-  aux1 <- sapply(X = data, FUN = h1, estim, admixMod)
-  aux2 <- sapply(X = data, FUN = h2, data, estim, admixMod, h)
+  aux1 <- sapply(X = data, FUN = h1, mixing_weight, location, admixMod)
+  aux2 <- sapply(X = data, FUN = h2, data, mixing_weight, location, admixMod, h)
   J <- matrix(0, nrow = 3, ncol = 3)
   J[1,1] <- -(2/n) * sum(aux1^2)
   J[2,2] <- -(2/n) * sum(aux2^2)
@@ -403,13 +420,13 @@ BVdk_mat_J <- function(estim, data, admixMod, h)
 
 ## Define the matrix L, useful for the consistency theorem of estimators (cf p.29-30).
 ## Returns the evaluation of the matrix terms at point 'u'.
-BVdk_mat_L <- function(u, estim, data, admixMod, h)
+BVdk_mat_L <- function(u, mixing_weight, location, data, admixMod, h)
 {
   L <- matrix(0, nrow = 3, ncol = 3)
   L[1,1] <- L[2,2] <- 1
-  L[3,1] <- h3(u, data, estim, admixMod)
-  L[3,2] <- h2(u, data, estim, admixMod, h) / 2
-  L[3,3] <- 1 / estim$estimated_mixing_weights
+  L[3,1] <- h3(u, data, mixing_weight, location, admixMod)
+  L[3,2] <- h2(u, data, mixing_weight, location, admixMod, h) / 2
+  L[3,3] <- 1 / mixing_weight
   return(L)
 }
 
@@ -417,79 +434,79 @@ BVdk_mat_L <- function(u, estim, data, admixMod, h)
 ##### All the following functions are defined p.28 of the paper (see p.29 for empirical versions).
 
 ## Function h1, see formula (3.9) p.13
-h1 <- function(u, estim, admixMod)
+h1 <- function(u, mixing_weight, location, admixMod)
 {
   ## Extracts the information on component distributions and stores in expressions:
   exp.comp.dist <- paste0("p", admixMod$comp.dist$known)
   comp_h1 <- sapply(X = exp.comp.dist, FUN = get, mode = "function")
   assign(x = names(comp_h1)[1], value = comp_h1[[1]])
-  expr1 <- paste(names(comp_h1)[1],"(q=(estim$estimated_locations+u),",
+  expr1 <- paste(names(comp_h1)[1],"(q=(location+u),",
                  paste(names(admixMod$comp.param$known), "=", admixMod$comp.param$known, sep = "", collapse = ","), ")", sep="")
-  expr2 <- paste(names(comp_h1)[1],"(q=(estim$estimated_locations-u),",
+  expr2 <- paste(names(comp_h1)[1],"(q=(location-u),",
                  paste(names(admixMod$comp.param$known), "=", admixMod$comp.param$known, sep = "", collapse = ","), ")", sep="")
-  res <- (eval(parse(text = expr1)) + eval(parse(text = expr2)) - 1) / estim$estimated_mixing_weights
+  res <- (eval(parse(text = expr1)) + eval(parse(text = expr2)) - 1) / mixing_weight
   return(res)
 }
 
 ## Fonction h2, see formula (3.8) p.13 (see also the connexion with formula end p.6)
-h2 <- function(u, data, estim, admixMod, h)
+h2 <- function(u, data, mixing_weight, location, admixMod, h)
 {
   ## Extracts the information on component distributions and stores in expressions:
   exp.comp.dist <- paste0("d", admixMod$comp.dist$known)
   comp_h2 <- sapply(X = exp.comp.dist, FUN = get, mode = "function")
   assign(x = names(comp_h2)[1], value = comp_h2[[1]])
-  expr <- paste(names(comp_h2)[1],"(x=(estim$estimated_locations+u),",
+  expr <- paste(names(comp_h2)[1],"(x=(location+u),",
                 paste(names(admixMod$comp.param$known), "=", admixMod$comp.param$known, sep = "", collapse = ","), ")", sep="")
 
-  g  <- mean( kernel_density(u + estim$estimated_locations - data, h) )
+  g  <- mean( kernel_density(u + location - data, h) )
   fo <- eval(parse(text = expr))
-  f  <- (g - (1-estim$estimated_mixing_weights) * fo) / estim$estimated_mixing_weights			# cf (2.2) p.5
+  f  <- (g - (1-mixing_weight) * fo) / mixing_weight			# cf (2.2) p.5
 
   res <- 2 * f * (f >= 0)         # end p.28
   return(res)
 }
 
 ## Fonction h3:
-h3 <- function(u, data, estim, admixMod)
+h3 <- function(u, data, mixing_weight, location, admixMod)
 {
   ## Extracts the information on component distributions and stores in expressions:
   exp.comp.dist <- paste0("p", admixMod$comp.dist$known)
   comp_h3 <- sapply(X = exp.comp.dist, FUN = get, mode = "function")
   assign(x = names(comp_h3)[1], value = comp_h3[[1]])
-  expr <- paste(names(comp_h3)[1],"(q=(estim$estimated_locations+u),",
+  expr <- paste(names(comp_h3)[1],"(q=(location+u),",
                 paste(names(admixMod$comp.param$known), "=", admixMod$comp.param$known, sep = "", collapse = ","), ")", sep="")
   G_ecdf <- stats::ecdf(data)
 
-  res <- (eval(parse(text = expr)) - G_ecdf(u + estim$estimated_locations)) / estim$estimated_mixing_weights^2
+  res <- (eval(parse(text = expr)) - G_ecdf(u + location)) / mixing_weight^2
   return(res)
 }
 
 ## Function ka of the paper:
-ka <- function(u, v, data, estim)
+ka <- function(u, v, data, location)
 {
-  return( l_fun(u, v, data, estim) + l_fun(-u, v, data, estim) )
+  return( l_fun(u, v, data, location) + l_fun(-u, v, data, location) )
 }
 
 ## Old implementation of fonction k in the article:
-ka_old <- function(u, v, data, estim)
-{
-  return( l_fun_old(u, v, data, estim) + l_fun_old(-u, v, data, estim) )
-}
+#ka_old <- function(u, v, data, estim)
+#{
+#  return( l_fun_old(u, v, data, estim) + l_fun_old(-u, v, data, estim) )
+#}
 
 ## Function l of the article:
-l_fun <- function(u, v, data, estim)
+l_fun <- function(u, v, data, location)
 {
-  term1 <- .Call('_admix_Donsker_correl_cpp', PACKAGE = 'admix', estim$estimated_locations + u, estim$estimated_locations + v, data)
-  term2 <- .Call('_admix_Donsker_correl_cpp', PACKAGE = 'admix', estim$estimated_locations + u, estim$estimated_locations - v, data)
+  term1 <- .Call('_admix_Donsker_correl_cpp', PACKAGE = 'admix', location + u, location + v, data)
+  term2 <- .Call('_admix_Donsker_correl_cpp', PACKAGE = 'admix', location + u, location - v, data)
   return(term1 + term2)
 }
 
 ## Old implementation of fonction l in the article:
-l_fun_old <- function(u, v, data, estim)
-{
-  return( Donsker_correl_old(estim$estimated_locations + u, estim$estimated_locations + v, data) +
-            Donsker_correl_old(estim$estimated_locations + u, estim$estimated_locations - v, data) )
-}
+#l_fun_old <- function(u, v, data, estim)
+#{
+#  return( Donsker_correl_old(estim$estimated_locations + u, estim$estimated_locations + v, data) +
+#            Donsker_correl_old(estim$estimated_locations + u, estim$estimated_locations - v, data) )
+#}
 
 ## Donsker correlation:
 Donsker_correl_old <- function(u, v, obs.data)

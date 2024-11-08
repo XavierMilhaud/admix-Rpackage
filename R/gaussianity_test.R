@@ -99,6 +99,13 @@ gaussianity_test <- function(samples, admixMod, conf_level = 0.95, ask_poly_para
 	on.exit(base::options(warn = old_options_warn))
 	hat_p <- BVdk$estimated_mixing_weights
 	hat_loc <- BVdk$estimated_locations
+	## Then variances of the estimators: semiparametric estimation (time-consuming), based on results by Bordes & Vandekerkhove (2010)
+	var.hat_p <- BVdk$mix_weight_variance
+	var.hat_loc <- BVdk$location_variance
+	## Estimation of the variance of the variance estimator:
+	#var.hat_s2 <- BVdk_ML_varCov_estimators(data = samples, hat_w = hat_p, hat_loc = hat_loc, hat_var = hat_s2,
+	#                                        comp.dist = comp.dist, comp.param = comp.param)
+
 	## Plug-in method to estimate the variance:
 	kernelDensity_est_obs <- stats::density(samples)
 	integrand_totweight <- function(x) {
@@ -125,14 +132,6 @@ gaussianity_test <- function(samples, admixMod, conf_level = 0.95, ask_poly_para
 	                                   method = "pcubature")$integral
 	}
   #hat_s2 <- (1/hat_p) * ( mean(samples^2) - ((1-hat_p) * m2_knownComp) ) - (1/hat_p^2) * (mean(samples)-(1-hat_p)*m1_knownComp)^2
-
-	## Then on the variances of the estimators: semiparametric estimation (time-consuming), based on results by Bordes & Vandekerkhove (2010)
-	varCov <- BVdk_varCov_estimators(estim = BVdk, data = samples, admixMod = admixMod)
-	var.hat_p <- varCov$var.estim_prop
-	var.hat_loc <- varCov$var.estim_location
-	## Estimation of the variance of the variance estimator:
-	#var.hat_s2 <- BVdk_ML_varCov_estimators(data = samples, hat_w = hat_p, hat_loc = hat_loc, hat_var = hat_s2,
-	#                                        comp.dist = comp.dist, comp.param = comp.param)
 
 	##-------- Compute test statistics with data 'data.coef' -----------##
 	stat.R <- matrix(rep(NA, n.coef*K.user), nrow = K.user, ncol = n.coef)
