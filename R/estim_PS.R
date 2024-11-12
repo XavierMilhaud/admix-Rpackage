@@ -132,8 +132,8 @@ print.estim_PS <- function(x, ...){
   cat("Call:")
   print(x$call)
   if(x$method != "lwr.bnd"){
-    cat("\n", paste("Estimate of the mixing weight (proportion of the unknown component distribution) is" , round(x$estimated_mixing_weights,2)))
-    cat("\n", paste("The chosen value c_n is", round(x$c.n, 3)), "\n")
+    cat("\n", paste("Estimate of the mixing weight (proportion of the unknown component distribution): " , round(x$estimated_mixing_weights,2)))
+    #cat("\n", paste("The chosen value c_n is", round(x$c.n, 3)), "\n")
     if( !is.null(x$cv.out)){
       old_par <- graphics::par()$mfrow
       graphics::par(mfrow=c(1,2))

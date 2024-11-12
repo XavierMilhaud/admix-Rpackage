@@ -4,7 +4,7 @@
 \alias{estim_IBM}
 \title{Estimates weights of unknown components from 2 admixtures using IBM}
 \usage{
-estim_IBM(samples, admixMod, n.integ = 1000)
+estim_IBM(samples, admixMod, n.integ = 1000, compute_var = FALSE)
 }
 \arguments{
 \item{samples}{A list of the two considered samples.}
@@ -12,6 +12,9 @@ estim_IBM(samples, admixMod, n.integ = 1000)
 \item{admixMod}{A list of two objects of class \link[admix]{admix_model}, one for each sample.}
 
 \item{n.integ}{Number of data points generated for the distribution on which to integrate.}
+
+\item{compute_var}{(default to FALSE) A boolean that indicates whether one computes the variance
+of the estimators of unknown mixing proportions.}
 }
 \value{
 An object of class \link[admix]{estim_IBM}, containing 7 attributes: 1) the number of samples under study; 2) the sizes of samples;
@@ -64,7 +67,8 @@ admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
                          knownComp_param = mixt2$comp.param[[2]])
 ## Estimate the mixture weights of the two admixture models (provide only hat(theta)_n):
-estim_IBM(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2))
+estim_IBM(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
+          compute_var = TRUE)
 
 }
 \references{

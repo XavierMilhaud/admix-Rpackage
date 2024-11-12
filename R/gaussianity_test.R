@@ -95,7 +95,7 @@ gaussianity_test <- function(samples, admixMod, conf_level = 0.95, ask_poly_para
 	## Focus on parameters (weight, localization and variance), consider independent subsamples of the original data:
 	old_options_warn <- base::options()$warn
 	base::options(warn = -1)
-	BVdk <- estim_BVdk(samples = data.BVdk, admixMod = admixMod, ...)
+	BVdk <- estim_BVdk(samples = data.BVdk, admixMod = admixMod, compute_var = TRUE, ...)
 	on.exit(base::options(warn = old_options_warn))
 	hat_p <- BVdk$estimated_mixing_weights
 	hat_loc <- BVdk$estimated_locations

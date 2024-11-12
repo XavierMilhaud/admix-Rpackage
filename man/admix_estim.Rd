@@ -56,7 +56,7 @@ admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
                          knownComp_param = mixt2$comp.param[[2]])
 # Estimation by different methods:
-admix_estim(samples = list(data1), admixMod = list(admixMod1), est_method = "BVdk")
+admix_estim(samples=list(data1), admixMod=list(admixMod1), est_method = "BVdk")
 admix_estim(samples=list(data1,data2), admixMod=list(admixMod1,admixMod2), est_method = "PS")
 admix_estim(samples=list(data1,data2), admixMod=list(admixMod1,admixMod2), est_method = "IBM")
 

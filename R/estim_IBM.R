@@ -8,6 +8,8 @@
 #' @param samples A list of the two considered samples.
 #' @param admixMod A list of two objects of class \link[admix]{admix_model}, one for each sample.
 #' @param n.integ Number of data points generated for the distribution on which to integrate.
+#' @param compute_var (default to FALSE) A boolean that indicates whether one computes the variance
+#'                    of the estimators of unknown mixing proportions.
 #'
 #' @references
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2024a}{admix}
@@ -56,12 +58,13 @@
 #' admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
 #'                          knownComp_param = mixt2$comp.param[[2]])
 #' ## Estimate the mixture weights of the two admixture models (provide only hat(theta)_n):
-#' estim_IBM(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2))
+#' estim_IBM(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
+#'           compute_var = TRUE)
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-estim_IBM <- function(samples, admixMod, n.integ = 1000)
+estim_IBM <- function(samples, admixMod, n.integ = 1000, compute_var = FALSE)
 {
   stopifnot("Wrong number of samples... Must be 2!" = length(samples) == 2)
 
@@ -86,7 +89,9 @@ estim_IBM <- function(samples, admixMod, n.integ = 1000)
   if (G1equalG2) {
     ## Leads to a one-dimensional optimization because known components of mixture distributions are the same.
     ## Set arbitrarily the proportion to 1/2, could be any other value belonging to ]0,1[:
-    fixed.p.X <- 0.5
+    warning("In 'estim_IBM': in case of identical known components, the mixing weight of the unknown
+  component in the first sample, named 'fixed.p.X', was arbitrarily set to 0.2")
+    fixed.p.X <- 0.2
     par.init <- 0.5
   } else {
     ## Otherwise classical optimization to get the two component weights:
@@ -130,6 +135,20 @@ estim_IBM <- function(samples, admixMod, n.integ = 1000)
     stop("In 'IBM_estim': whatever the optimization algorithm, the solution has not been found.")
   } else {
     estim.weights <- sol[['par']]
+    var_estimators <- NA
+    if (compute_var) {
+      minimal_size <- min(length(samples[[1]]), length(samples[[2]]))
+      var_estimators <- (1/minimal_size) * IBM_estimVarCov_gaussVect(x = mean(samples[[1]]), y = mean(samples[[2]]),
+                                                                     mixing_weights = estim.weights, fixed_prop = fixed.p.X,
+                                                                     integration_supp = sort(G), samples = samples, admixMod = admixMod)
+      if (all(dim(var_estimators) == c(3,3))) {
+        var_est_p1 <- var_estimators[1,1]
+        var_est_p2 <- var_estimators[2,2]
+      } else if (all(dim(var_estimators) == c(2,2))) {
+        var_est_p1 <- 0
+        var_est_p2 <- var_estimators[1,1]
+      } else NULL
+    }
   }
 
   res <- list(
@@ -138,6 +157,8 @@ estim_IBM <- function(samples, admixMod, n.integ = 1000)
     admixture_models = admixMod,
     estimation_method = "Inversion Best Matching (IBM)",
     estimated_mixing_weights = estim.weights,
+    variance_est_p1 = ifelse(all(is.na(var_estimators)), NA, var_est_p1),
+    variance_est_p2 = ifelse(all(is.na(var_estimators)), NA, var_est_p2),
     equal.knownComp = G1equalG2,
     p.X.fixed = fixed.p.X,
     integ.supp = sort(G)
@@ -165,10 +186,14 @@ print.estim_IBM <- function(x, ...)
   cat("\n")
   if (x$equal.knownComp) {
     cat("Fixed proportion (of the unknown component) in the 1st sample (since equal unknown components): ", x$p.X.fixed, "\n")
-    cat("Estimated mixing proportion (of the unknown component) in the 2nd sample: ", x$estimated_mixing_weights, "\n")
+    cat("Estimated mixing proportion (of the unknown component) in the 2nd sample: ", round(x$estimated_mixing_weights,3), "\n")
+    cat("Variance of the estimator of the mixing proportion in the 1st sample (no variance since fixed): ", round(x$variance_est_p1,6), "\n")
+    cat("Variance of the estimator of the mixing proportion in the 2nd sample: ", round(x$variance_est_p2,6), "\n\n")
   } else {
-    cat("Estimated mixing proportion (of the unknown component) in the 1st sample: ", x$estimated_mixing_weights[1], "\n")
-    cat("Estimated mixing proportion (of the unknown component) in the 2nd sample: ", x$estimated_mixing_weights[2], "\n")
+    cat("Estimated mixing proportion (of the unknown component) in the 1st sample: ", round(x$estimated_mixing_weights[1],3), "\n")
+    cat("Estimated mixing proportion (of the unknown component) in the 2nd sample: ", round(x$estimated_mixing_weights[2],3), "\n")
+    cat("Variance of the estimator of the mixing proportion in the 1st sample: ", round(x$variance_est_p1,6), "\n")
+    cat("Variance of the estimator of the mixing proportion in the 2nd sample: ", round(x$variance_est_p2,6), "\n\n")
   }
 }
 
@@ -200,10 +225,14 @@ summary.estim_IBM <- function(object, ...)
   cat("\n------- Estimation results -------\n")
   if (object$equal.knownComp) {
     cat("Fixed proportion (of the unknown component) in the 1st sample (since equal unknown components): ", object$p.X.fixed, "\n")
-    cat("Estimated mixing proportion (of the unknown component) in the 2nd sample: ", object$estimated_mixing_weights, "\n")
+    cat("Estimated mixing proportion (of the unknown component) in the 2nd sample: ", round(object$estimated_mixing_weights,3), "\n")
+    cat("Variance of the estimator of the mixing proportion in the 1st sample (no variance since fixed): ", round(object$variance_est_p1,6), "\n")
+    cat("Variance of the estimator of the mixing proportion in the 2nd sample: ", round(object$variance_est_p2,6), "\n")
   } else {
-    cat("Estimated mixing proportion (of the unknown component) in the 1st sample: ", object$estimated_mixing_weights[1], "\n")
-    cat("Estimated mixing proportion (of the unknown component) in the 2nd sample: ", object$estimated_mixing_weights[2], "\n")
+    cat("Estimated mixing proportion (of the unknown component) in the 1st sample: ", round(object$estimated_mixing_weights[1],3), "\n")
+    cat("Estimated mixing proportion (of the unknown component) in the 2nd sample: ", round(object$estimated_mixing_weights[2],3), "\n")
+    cat("Variance of the estimator of the mixing proportion in the 1st sample: ", round(object$variance_est_p1,6), "\n")
+    cat("Variance of the estimator of the mixing proportion in the 2nd sample: ", round(object$variance_est_p2,6), "\n")
   }
   cat("\n------- Support -------\n")
   cat("Integration support: ", paste(utils::head(object$integ.supp,3), collapse=" "), "...",
@@ -338,10 +367,10 @@ IBM_empirical_contrast <- function(par, samples, admixMod, G, fixed.p.X = NULL)
 
 
 
-#' Estimates the covariance matrix of the gaussian vector (IBM)
+#' Estimates the covariance matrix of the Gaussian vector resulting from IBM method
 #'
-#' Nonparametric estimation of the covariance matrix of the gaussian vector at point 'z', considering the use of Inversion - Best
-#' Matching (IBM) method to estimate the model parameters in two-sample admixture models.
+#' Nonparametric estimation of the covariance matrix of (sqrt(n)*) the Gaussian vector at point 'z', considering the
+#' use of Inversion - Best Matching (IBM) method to estimate the model parameters in two-sample admixture models.
 #' Recall that the two admixture models have respective probability density functions (pdf) l1 and l2, such that:
 #'   l1 = p1*f1 + (1-p1)*g1 and l2 = p2*f2 + (1-p2)*g2, where g1 and g2 are the known component densities.
 #' Further information for the IBM approach are given in 'Details' below.
@@ -349,8 +378,8 @@ IBM_empirical_contrast <- function(par, samples, admixMod, G, fixed.p.X = NULL)
 #' @param x Time point at which the 1st (related to the 1st parameter) underlying empirical process is looked through.
 #' @param y Time point at which the 2nd (related to the 2nd parameter) underlying empirical process is looked through.
 #' @param IBMestim.obj An object of class 'estim_IBM'.
-#' @param samples (List) List of the two considered samples.
-#' @param admixMod (List) List of objects of class 'admix_model', one for each sample.
+#' @param samples A list of the two considered samples.
+#' @param admixMod A list of objects of class 'admix_model', one for each sample.
 #'
 #' @references
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2024a}{admix}
@@ -383,20 +412,22 @@ IBM_empirical_contrast <- function(par, samples, admixMod, G, fixed.p.X = NULL)
 #' est <- estim_IBM(samples = list(data1,data2),
 #'                  admixMod = list(admixMod1,admixMod2), n.integ = 1000)
 #'
-#' IBM_estimVarCov_gaussVect(x = mean(data1), y = mean(data2), IBMestim.obj = est,
-#'                           samples=list(data1,data2), admixMod = list(admixMod1,admixMod2))
+#' IBM_estimVarCov_gaussVect(x = mean(data1), y = mean(data2), mixing_weights = est$estimated_mixing_weights,
+#'                           fixed_prop = est$p.X.fixed, integration_supp = est$integ.supp,
+#'                           samples = list(data1,data2), admixMod = list(admixMod1,admixMod2))
 #' }
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @noRd
 
-IBM_estimVarCov_gaussVect <- function(x, y, IBMestim.obj, samples, admixMod)
+IBM_estimVarCov_gaussVect <- function(x, y, mixing_weights, fixed_prop, integration_supp, samples, admixMod)
 {
-  estimators <- IBMestim.obj$estimated_mixing_weights
   ## Location at which the variance-covariance matrix is evaluated:
-  varCov.gaussianVect <- IBM_mat_Sigma(x = x, y = y, par = estimators, samples = samples, admixMod = admixMod, G = IBMestim.obj$integ.supp)
+  varCov.gaussianVect <- IBM_mat_Sigma(x = x, y = y, par = mixing_weights, fixed_prop = fixed_prop,
+                                       samples = samples, admixMod = admixMod, integration_supp = integration_supp)
   ## Adjusts by the normalization factor to get the distribution of the gaussian vector Z=(hat(p1), hat(p2), Dn(z)):
-  normalization.factor <- IBM_normalization_term(z = x, IBMestim.obj = IBMestim.obj, samples = samples, admixMod = admixMod)
+  normalization.factor <- IBM_normalization_term(z = x, mixing_weights = mixing_weights, fixed_prop = fixed_prop,
+                                                 integration_supp = integration_supp, samples = samples, admixMod = admixMod)
   varCov.transfo_gaussVect <- normalization.factor %*% varCov.gaussianVect %*% t(normalization.factor)
 
   return(varCov.transfo_gaussVect)
@@ -404,13 +435,12 @@ IBM_estimVarCov_gaussVect <- function(x, y, IBMestim.obj, samples, admixMod)
 
 
 ## Normalization of the variance-covariance by matrix 'M' in the paper
-IBM_normalization_term <- function(z, IBMestim.obj, samples, admixMod)
+IBM_normalization_term <- function(z, mixing_weights, fixed_prop, integration_supp, samples, admixMod)
 {
   ## Adjusts by the normalization factor to get the distribution of the gaussian vector Z=(hat(p1), hat(p2), Dn(z)):
-  L <- IBM_mat_L(z = z, par = IBMestim.obj$estimated_mixing_weights, IBMestim.obj = IBMestim.obj, samples = samples,
-                 admixMod = admixMod)
-  inv_J <- solve(IBM_mat_J(par = IBMestim.obj$estimated_mixing_weights, IBMestim.obj = IBMestim.obj, samples = samples,
-                           admixMod = admixMod, G = IBMestim.obj$integ.supp))
+  L <- IBM_mat_L(z = z, par = mixing_weights, fixed_prop = fixed_prop, samples = samples, admixMod = admixMod)
+  inv_J <- solve(IBM_mat_J(par = mixing_weights, fixed_prop = fixed_prop, samples = samples,
+                           admixMod = admixMod, integration_supp = integration_supp))
 
   ##------- Differentiates the cases where G1 = G2 or not --------##
   G1equalG2 <- is_equal_knownComp(admixMod[[1]], admixMod[[2]])
@@ -447,24 +477,26 @@ IBM_normalization_term <- function(z, IBMestim.obj, samples, admixMod)
 
 
 ## Matrice J de l'article (normalisation par la variance):
-IBM_mat_J <- function(par, IBMestim.obj, samples, admixMod, G)
+IBM_mat_J <- function(par, fixed_prop, samples, admixMod, integration_supp)
 {
   ##------- Differentiates the cases where G1 = G2 or not --------##
   G1equalG2 <- is_equal_knownComp(admixMod[[1]], admixMod[[2]])
 
   if (G1equalG2) {
-    stopifnot("Error in 'IBM_mat_J: 'p.X.fixed' must have a value" = !is.null(IBMestim.obj$p.X.fixed))
+    stopifnot("Error in 'IBM_mat_J: 'p.X.fixed' must have a value" = !is.null(fixed_prop))
     J <- diag(1, nrow = 3, ncol = 3)
-    J[1,1] <- IBM_hessian_contrast(par = par, IBMestim.obj = IBMestim.obj, samples = samples, admixMod = admixMod, G = G)
+    J[1,1] <- IBM_hessian_contrast(par = par, fixed_prop = fixed_prop, samples = samples,
+                                   admixMod = admixMod, integration_supp = integration_supp)
   } else {
     J <- diag(1, nrow = 4, ncol = 4)
-    J[1:2,1:2] <- IBM_hessian_contrast(par = par, IBMestim.obj = IBMestim.obj, samples = samples, admixMod = admixMod, G = G)
+    J[1:2,1:2] <- IBM_hessian_contrast(par = par, fixed_prop = fixed_prop, samples = samples,
+                                       admixMod = admixMod, integration_supp = integration_supp)
   }
   return(J)
 }
 
 ## Matrice L de l'article (matrice muette pour les estimateurs de p1 et p2):
-IBM_mat_L <- function(z, par, IBMestim.obj, samples, admixMod)
+IBM_mat_L <- function(z, par, fixed_prop, samples, admixMod)
 {
   ## Extract the information on component distributions:
   knownCDF_comp.dist <- paste0("p", unlist(sapply(admixMod, '[[', 'comp.dist')["known", ]))
@@ -503,17 +535,17 @@ IBM_mat_L <- function(z, par, IBMestim.obj, samples, admixMod)
   xi <- 1 / sqrt(max(n1,n2)/min(n1,n2))
 
   if (G1equalG2) {
-    stopifnot("Error in 'IBM_mat_L: 'p.X.fixed' must have a value" = !is.null(IBMestim.obj$p.X.fixed))
+    stopifnot("Error in 'IBM_mat_L: 'p.X.fixed' must have a value" = !is.null(fixed_prop))
     L <- matrix(0, nrow = 2, ncol = 3)
     if (n1 <= n2) {
       L[1,1] <- 1
       L[2,1] <- (1/par^2) * (L2(z) - G2(z))
-      L[2,2] <- 1 / IBMestim.obj$p.X.fixed
+      L[2,2] <- 1 / fixed_prop
       L[2,3] <- -xi / par
     } else {
       L[1,1] <- 1
       L[2,1] <- (1/par^2) * (L2(z) - G2(z))
-      L[2,2] <- xi / IBMestim.obj$p.X.fixed
+      L[2,2] <- xi / fixed_prop
       L[2,3] <- -1 / par
     }
   } else {
@@ -539,7 +571,7 @@ IBM_mat_L <- function(z, par, IBMestim.obj, samples, admixMod)
 
 ## Variance-covariance matrix of the Gaussian random vector. Arguments are defined as follows:
 ## This function returns the non-normalized variance-covariance matrix of the gaussian random vector.
-IBM_mat_Sigma <- function(x, y, par, IBMestim.obj, samples, admixMod, G)
+IBM_mat_Sigma <- function(x, y, par, fixed_prop, samples, admixMod, integration_supp)
 {
   ##------- Differentiates the cases where G1 = G2 or not --------##
   G1equalG2 <- is_equal_knownComp(admixMod[[1]], admixMod[[2]])
@@ -547,22 +579,26 @@ IBM_mat_Sigma <- function(x, y, par, IBMestim.obj, samples, admixMod, G)
   if (G1equalG2) {
     Sigma <- matrix(0, nrow = 4, ncol = 4)
     ## Upper block of the matrix :
-    Sigma[1:2,1:2] <- IBM_Sigma1(x = x, y = y, par = par, IBMestim.obj = IBMestim.obj, samples = samples, admixMod = admixMod, G = G)
+    Sigma[1:2,1:2] <- IBM_Sigma1(x = x, y = y, par = par, fixed_prop = fixed_prop, samples = samples,
+                                 admixMod = admixMod, integration_supp = integration_supp)
     ## Lower block of the matrix :
-    Sigma[3:4,3:4] <- IBM_Sigma2(x = x, y = y, par = par, IBMestim.obj = IBMestim.obj, samples = samples, admixMod = admixMod, G = G)
+    Sigma[3:4,3:4] <- IBM_Sigma2(x = x, y = y, par = par, fixed_prop = fixed_prop, samples = samples,
+                                 admixMod = admixMod, integration_supp = integration_supp)
   } else {
     Sigma <- matrix(0, nrow = 6, ncol = 6)
     ## Upper block of the matrix :
-    Sigma[1:3,1:3] <- IBM_Sigma1(x = x, y = y, par = par, IBMestim.obj = IBMestim.obj, samples = samples, admixMod = admixMod, G = G)
+    Sigma[1:3,1:3] <- IBM_Sigma1(x = x, y = y, par = par, fixed_prop = fixed_prop, samples = samples,
+                                 admixMod = admixMod, integration_supp = integration_supp)
     ## Lower block of the matrix :
-    Sigma[4:6,4:6] <- IBM_Sigma2(x = x, y = y, par = par, IBMestim.obj = IBMestim.obj, samples = samples, admixMod = admixMod, G = G)
+    Sigma[4:6,4:6] <- IBM_Sigma2(x = x, y = y, par = par, fixed_prop = fixed_prop, samples = samples,
+                                 admixMod = admixMod, integration_supp = integration_supp)
   }
   return(Sigma)
 }
 
 
 ## Upper block of the variance-covariance matrix:
-IBM_Sigma1 <- function(x, y, par, IBMestim.obj, samples, admixMod, G)
+IBM_Sigma1 <- function(x, y, par, fixed_prop, samples, admixMod, integration_supp)
 {
   ## Extract the information on component distributions:
   knownCDF_comp.dist <- paste0("p", unlist(sapply(admixMod, '[[', 'comp.dist')["known", ]))
@@ -600,18 +636,18 @@ IBM_Sigma1 <- function(x, y, par, IBMestim.obj, samples, admixMod, G)
   ## Loi de G et support d'integration :
   support <- detect_support_type(samples[[1]], samples[[2]])
   if (support == "Continuous") {
-    densite.G <- stats::density(G, bw = "SJ", adjust = 0.5, kernel = "gaussian")
-    supp.integration <- c(min(G), max(G))
+    densite.G <- stats::density(integration_supp, bw = "SJ", adjust = 0.5, kernel = "gaussian")
+    supp.integration <- c(min(integration_supp), max(integration_supp))
   } else {
-    supp.integration <- G
+    supp.integration <- integration_supp
   }
 
   ## Numerical computation of each term included in the variance-covariance matrix of the gaussian vector:
   if (G1equalG2) {
     stopifnot(length(par) == 1)
-    psi1 <- function(z) 2*( ((2-par)/par^3) * G1(z) - (2/par^3)*L2(z) + (1/(par^2*IBMestim.obj$p.X.fixed))*L1(z) -
-                              ((1-IBMestim.obj$p.X.fixed)/(par^2*IBMestim.obj$p.X.fixed)) * G1(z) )
-    psi2 <- function(z) 2*( (1/(par^2*IBMestim.obj$p.X.fixed)) * (L2(z) - G1(z)) )
+    psi1 <- function(z) 2*( ((2-par)/par^3) * G1(z) - (2/par^3)*L2(z) + (1/(par^2*fixed_prop))*L1(z) -
+                              ((1-fixed_prop)/(par^2*fixed_prop)) * G1(z) )
+    psi2 <- function(z) 2*( (1/(par^2*fixed_prop)) * (L2(z) - G1(z)) )
     integrand.sigma1.11_g1eqg2 <- function(x,y) {
       if (support == "Continuous") {
         densite.G.dataPoint.x <- stats::approx(densite.G$x, densite.G$y, xout = x)$y
@@ -742,7 +778,7 @@ IBM_Sigma1 <- function(x, y, par, IBMestim.obj, samples, admixMod, G)
 
 
 ## Lower block:
-IBM_Sigma2 <- function(x, y, par, IBMestim.obj, samples, admixMod, G)
+IBM_Sigma2 <- function(x, y, par, fixed_prop, samples, admixMod, integration_supp)
 {
   ## Extract the information on component distributions:
   knownCDF_comp.dist <- paste0("p", unlist(sapply(admixMod, '[[', 'comp.dist')["known", ]))
@@ -780,19 +816,19 @@ IBM_Sigma2 <- function(x, y, par, IBMestim.obj, samples, admixMod, G)
   ## Loi de G et support d'integration:
   support <- detect_support_type(samples[[1]], samples[[2]])
   if (support == "Continuous") {
-    densite.G <- stats::density(G, bw = "SJ", adjust = 0.5, kernel = "gaussian")
-    supp.integration <- c(min(G), max(G))
+    densite.G <- stats::density(integration_supp, bw = "SJ", adjust = 0.5, kernel = "gaussian")
+    supp.integration <- c(min(integration_supp), max(integration_supp))
   } else {
-    supp.integration <- G
+    supp.integration <- integration_supp
   }
 
   ## Numerical computation of each term included in the variance-covariance matrix of the gaussian vector:
   if (G1equalG2) {
 
     stopifnot(length(par) == 1)
-    psi1 <- function(z) 2*( ((2-par)/par^3) * G1(z) - (2/par^3)*L2(z) + (1/(par^2*IBMestim.obj$p.X.fixed))*L1(z) -
-                              ((1-IBMestim.obj$p.X.fixed)/(par^2*IBMestim.obj$p.X.fixed)) * G1(z) )
-    psi2 <- function(z) 2*( (1/(par^2*IBMestim.obj$p.X.fixed)) * (L2(z) - G1(z)) )
+    psi1 <- function(z) 2*( ((2-par)/par^3) * G1(z) - (2/par^3)*L2(z) + (1/(par^2*fixed_prop))*L1(z) -
+                              ((1-fixed_prop)/(par^2*fixed_prop)) * G1(z) )
+    psi2 <- function(z) 2*( (1/(par^2*fixed_prop)) * (L2(z) - G1(z)) )
 
     integrand.sigma2.11_g1eqg2 <- function(x,y) {
       if (support == "Continuous") {
@@ -932,10 +968,10 @@ IBM_Sigma2 <- function(x, y, par, IBMestim.obj, samples, admixMod, G)
 #' See 'Details' below for further information about the definition of the contrast.
 #'
 #' @param par Numeric vector with two elements (corresponding to the two unknown component weights) at which the hessian is computed.
-#' @param IBMestim.obj An object of class 'estim_IBM'.
-#' @param samples (List) List of the two considered samples.
-#' @param admixMod (List) List of objects of class 'admix_model', one for each sample.
-#' @param G Distribution on which to integrate when calculating the contrast.
+#' @param fixed_prop the fixed proportion of the first sample when studying admixture sharing the same known component.
+#' @param samples A list of the two considered samples.
+#' @param admixMod A list of objects of class 'admix_model', one for each sample.
+#' @param integration_supp Distribution on which to integrate when calculating the contrast.
 #'
 #' @references
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2024a}{admix}
@@ -960,23 +996,17 @@ IBM_Sigma2 <- function(x, y, par, IBMestim.obj, samples, admixMod, G)
 #'                          knownComp_param = mixt1$comp.param[[2]])
 #' admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
 #'                          knownComp_param = mixt2$comp.param[[2]])
-#'
 #' ## Estimate the mixture weights of the two admixture models (provide only hat(theta)_n):
 #' est <- estim_IBM(samples = list(data1,data2),
 #'                  admixMod = list(admixMod1,admixMod2), n.integ = 1000)
-#'
-#' ## Define the distribution over which to integrate:
-#' fit.all <- stats::density(x = c(data1, data2))
-#' G <- stats::rnorm(n = 1000, mean = sample(c(data1, data2),
-#'                                           size = 1000, replace = TRUE), sd = fit.all$bw)
 #' ## Evaluate the hessian matrix at point (p1,p2) = (0.3,0.6):
-#' IBM_hessian_contrast(par = c(0.3,0.6), IBMestim.obj = est, samples = list(data1,data2),
-#'                      admixMod = list(admixMod1, admixMod2), G = G)
+#' IBM_hessian_contrast(par = c(0.3,0.6), fixed_prop = est$p.X.fixed, samples = list(data1,data2),
+#'                      admixMod = list(admixMod1, admixMod2), integration_supp = est$integ.supp)
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @noRd
 
-IBM_hessian_contrast <- function(par, IBMestim.obj, samples, admixMod, G)
+IBM_hessian_contrast <- function(par, fixed_prop, samples, admixMod, integration_supp)
 {
   ## Extract the information on component distributions:
   knownCDF_comp.dist <- paste0("p", unlist(sapply(admixMod, '[[', 'comp.dist')["known", ]))
@@ -1014,10 +1044,10 @@ IBM_hessian_contrast <- function(par, IBMestim.obj, samples, admixMod, G)
   ## Loi de G et support d'integration:
   support <- detect_support_type(samples[[1]], samples[[2]])
   if (support == "Continuous") {
-    densite.G <- stats::density(G, bw = "SJ", adjust = 0.5, kernel = "gaussian")
-    supp.integration <- c(min(G), max(G))
+    densite.G <- stats::density(integration_supp, bw = "SJ", adjust = 0.5, kernel = "gaussian")
+    supp.integration <- c(min(integration_supp), max(integration_supp))
   } else {
-    supp.integration <- G
+    supp.integration <- integration_supp
   }
 
   ## Differentiates cases where G1 = G2 and G1 != G2 :
@@ -1029,7 +1059,7 @@ IBM_hessian_contrast <- function(par, IBMestim.obj, samples, admixMod, G)
       } else {
         densite.G.dataPoint <- 1 / length(table(c(samples[[1]],samples[[2]])))
       }
-      F.X.dataPoint <- (1/IBMestim.obj$p.X.fixed) * (L1(z) - (1-IBMestim.obj$p.X.fixed) * G1(z))
+      F.X.dataPoint <- (1/fixed_prop) * (L1(z) - (1-fixed_prop) * G1(z))
       F.Y.dataPoint <- (1/par) * (L2(z) - (1-par) * G2(z))
       D <- (F.X.dataPoint - F.Y.dataPoint)
       gradD.dataPoint <- (1/par^2) * (L2(z) - G2(z))
@@ -1146,8 +1176,8 @@ IBM_hessian_contrast <- function(par, IBMestim.obj, samples, admixMod, G)
 #'
 #' @param z the point at which the difference between both unknown (estimated) component distributions is computed.
 #' @param par Numeric vector with two elements, corresponding to the weights of the unknown component for the two admixture models.
-#' @param samples (List) List of the two considered samples.
-#' @param admixMod (List) List of objects of class 'admix_model', one for each sample.
+#' @param samples A list of the two considered samples.
+#' @param admixMod A list of objects of class 'admix_model', one for each sample.
 #'
 #' @references
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2024a}{admix}
@@ -1163,17 +1193,15 @@ IBM_hessian_contrast <- function(par, IBMestim.obj, samples, admixMod, G)
 #' data1 <- getmixtData(mixt1)
 #' mixt2 <- twoComp_mixt(n = 2000, weight = 0.7,
 #'                       comp.dist = list("norm", "norm"),
-#'                       comp.param = list(list("mean" = 1, "sd" = 0.1),
+#'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
 #'                                         list("mean" = 5, "sd" = 2)))
 #' data2 <- getmixtData(mixt2)
-#'
 #' ## Define the admixture models:
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                          knownComp_param = mixt1$comp.param[[2]])
 #' admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
 #'                          knownComp_param = mixt2$comp.param[[2]])
-#'
-#' IBM_gap(z = 2.8, par = c(0.3,0.6), samples = list(data1,data2),
+#' IBM_gap(z = 2.8, par = c(0.5,0.7), samples = list(data1,data2),
 #'         admixMod = list(admixMod1,admixMod2))
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
@@ -1213,16 +1241,17 @@ IBM_gap <- function(z, par, samples, admixMod)
 
   ##------- Differentiates the cases where G1 = G2 or not --------##
   G1equalG2 <- is_equal_knownComp(admixMod[[1]], admixMod[[2]])
-  warning("In function 'IBM_gap': in case of identical known components, 'fixed.p1' was arbitrarily set to 0.5.")
-  if (G1equalG2) { fixed.p1 <- 0.5
-  } else { fixed.p1 <- NULL }
+  warning("In function 'IBM_gap': in case of identical known components, the mixing weight of the unknown
+  component in the first sample, named 'fixed.p.X', was arbitrarily set to 0.2")
+  if (G1equalG2) { fixed.p.X <- 0.2
+  } else { fixed.p.X <- NULL }
 
   ## Calcul explicite de la difference:
-  if (is.null(fixed.p1)) {
+  if (is.null(fixed.p.X)) {
     F.X.dataPoint <- (1/par[1]) * (L1(z) - (1-par[1]) * G1(z))
     F.Y.dataPoint <- (1/par[2]) * (L2(z) - (1-par[2]) * G2(z))
   } else {
-    F.X.dataPoint <- (1/fixed.p1) * (L1(z) - (1-fixed.p1) * G1(z))
+    F.X.dataPoint <- (1/fixed.p.X) * (L1(z) - (1-fixed.p.X) * G1(z))
     F.Y.dataPoint <- (1/par) * (L2(z) - (1-par) * G2(z))
   }
   difference <- F.X.dataPoint - F.Y.dataPoint
@@ -1231,6 +1260,24 @@ IBM_gap <- function(z, par, samples, admixMod)
 }
 
 
+#' @examples
+#' ## Simulate mixture data:
+#' mixt1 <- twoComp_mixt(n = 1500, weight = 0.5,
+#'                       comp.dist = list("norm", "norm"),
+#'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
+#'                                         list("mean" = 0, "sd" = 1)))
+#' data1 <- getmixtData(mixt1)
+#' mixt2 <- twoComp_mixt(n = 2000, weight = 0.7,
+#'                       comp.dist = list("norm", "norm"),
+#'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
+#'                                         list("mean" = 5, "sd" = 2)))
+#' data2 <- getmixtData(mixt2)
+#' IBM_theoretical_gap(z = 2.8, par = c(0.5,0.7), known.p = c(0.5,0.7),
+#'                     mixtMod = list(mixt1, mixt2))
+#'
+#' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
+#' @noRd
+#'
 IBM_theoretical_gap <- function(z, par, known.p, mixtMod)
 {
   if (is.null(known.p)) stop("In 'IBM_theoretical_gap': argument 'known.p' must be specified.")

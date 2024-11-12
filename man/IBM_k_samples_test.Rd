@@ -25,8 +25,8 @@ IBM_k_samples_test(
 \item{sim_U}{(default to NULL) Random draws of the inner convergence part of the contrast as defined in the IBM approach (see 'Details' below).}
 
 \item{tune_penalty}{(default to TRUE) A boolean that allows to choose between a classical penalty term or an optimized penalty (embedding
-some tuning parameters, automatically optimized). Optimized penalty is very useful for low or unbalanced sample sizes
-to detect alternatives to the null hypothesis (H0).}
+some tuning parameters, automatically optimized). Optimized penalty is particularly useful for low or unbalanced sample sizes
+to detect alternatives to the null hypothesis (H0). It is recommended to set it to TRUE.}
 
 \item{n_sim_tab}{(default to 100) Number of simulated Gaussian processes when tabulating the inner convergence distribution
 in the 'icv' testing method using the IBM estimation approach.}
@@ -82,8 +82,8 @@ admixMod3 <- admix_model(knownComp_dist = mixt3$comp.dist[[2]],
 ## Perform the 3-samples test:
 IBM_k_samples_test(samples = list(data1, data2, data3),
                    admixMod = list(admixMod1, admixMod2, admixMod3),
-                   conf_level = 0.95, parallel = FALSE, n_cpu = 2,
-                   sim_U = NULL, n_sim_tab = 8, tune_penalty = FALSE)
+                   conf_level = 0.95, sim_U = NULL, n_sim_tab = 8,
+                   tune_penalty = FALSE, parallel = FALSE, n_cpu = 2)
 }
 
 }

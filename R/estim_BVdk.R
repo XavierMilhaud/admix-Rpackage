@@ -10,6 +10,8 @@
 #' @param samples The observed sample under study.
 #' @param admixMod An object of class \link[admix]{admix_model}, containing useful information about distributions and parameters.
 #' @param method The method used throughout the optimization process, either 'L-BFGS-B' or 'Nelder-Mead' (see ?optim).
+#' @param compute_var (default to FALSE) A boolean that indicates whether one computes the variance
+#'                    of the estimators of unknown mixing proportions and location shift parameter.
 #'
 #' @references
 #' \insertRef{BordesVandekerkhove2010}{admix}
@@ -44,12 +46,13 @@
 #' admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
 #'                         knownComp_param = mixt2$comp.param[[2]])
 #' ## Perform the estimation of parameters in real-life:
-#' estim_BVdk(samples = data2, admixMod = admixMod2, method = 'L-BFGS-B')
+#' estim_BVdk(samples = data2, admixMod = admixMod2, method = 'L-BFGS-B',
+#'            compute_var = TRUE)
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-estim_BVdk <- function(samples, admixMod, method = c("L-BFGS-B","Nelder-Mead"))
+estim_BVdk <- function(samples, admixMod, method = c("L-BFGS-B","Nelder-Mead"), compute_var = FALSE)
 {
   warning("Estimation by 'BVdk' assumes the unknown component distribution
   to have a symmetric probability density function.\n")
@@ -79,11 +82,12 @@ estim_BVdk <- function(samples, admixMod, method = c("L-BFGS-B","Nelder-Mead"))
                         h = bandw, method = "L-BFGS-B", lower = c(0.001,min(samples)), upper = c(0.999,max(samples)))
   }
 
-  if (all(is.numeric(sol$par))) {
-    var_estimators <- BVdk_varCov_estimators(mixing_weight = sol$par[1], location = sol$par[2],
-                                             data = samples, admixMod = admixMod)
-  } else {
-    var_estimators <- NA
+  var_estimators <- NA
+  if (compute_var) {
+    if (all(is.numeric(sol$par))) {
+      var_estimators <- BVdk_varCov_estimators(mixing_weight = sol$par[1], location = sol$par[2],
+                                               data = samples, admixMod = admixMod)
+    }
   }
 
   obj <- list(
