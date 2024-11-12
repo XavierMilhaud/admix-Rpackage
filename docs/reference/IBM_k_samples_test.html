@@ -100,8 +100,8 @@ H0 : f_1 = ... = f_K  against  H1 : f_i differs from f_j (i different from j, an
 
 <dt>tune_penalty</dt>
 <dd><p>(default to TRUE) A boolean that allows to choose between a classical penalty term or an optimized penalty (embedding
-some tuning parameters, automatically optimized). Optimized penalty is very useful for low or unbalanced sample sizes
-to detect alternatives to the null hypothesis (H0).</p></dd>
+some tuning parameters, automatically optimized). Optimized penalty is particularly useful for low or unbalanced sample sizes
+to detect alternatives to the null hypothesis (H0). It is recommended to set it to TRUE.</p></dd>
 
 
 <dt>n_sim_tab</dt>
@@ -173,8 +173,8 @@ in case of equal unknown component distributions); 17) the matrix of pairwise co
 <span class="r-in"><span><span class="co">## Perform the 3-samples test:</span></span></span>
 <span class="r-in"><span><span class="fu">IBM_k_samples_test</span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>, <span class="va">data2</span>, <span class="va">data3</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                   admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>, <span class="va">admixMod2</span>, <span class="va">admixMod3</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>                   conf_level <span class="op">=</span> <span class="fl">0.95</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span>, n_cpu <span class="op">=</span> <span class="fl">2</span>,</span></span>
-<span class="r-in"><span>                   sim_U <span class="op">=</span> <span class="cn">NULL</span>, n_sim_tab <span class="op">=</span> <span class="fl">8</span>, tune_penalty <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>                   conf_level <span class="op">=</span> <span class="fl">0.95</span>, sim_U <span class="op">=</span> <span class="cn">NULL</span>, n_sim_tab <span class="op">=</span> <span class="fl">8</span>,</span></span>
+<span class="r-in"><span>                   tune_penalty <span class="op">=</span> <span class="cn">FALSE</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span>, n_cpu <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:IBM_k_samples_test(samples = list(data1, data2, data3), admixMod = list(admixMod1, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     admixMod2, admixMod3), conf_level = 0.95, sim_U = NULL, tune_penalty = FALSE, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     n_sim_tab = 8, parallel = FALSE, n_cpu = 2)</span>
