@@ -53,7 +53,7 @@ For further details about IBM approach, see 'Details' below.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">estim_IBM</span><span class="op">(</span><span class="va">samples</span>, <span class="va">admixMod</span>, n.integ <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">estim_IBM</span><span class="op">(</span><span class="va">samples</span>, <span class="va">admixMod</span>, n.integ <span class="op">=</span> <span class="fl">1000</span>, compute_var <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -70,6 +70,11 @@ For further details about IBM approach, see 'Details' below.</p>
 
 <dt id="arg-n-integ">n.integ<a class="anchor" aria-label="anchor" href="#arg-n-integ"></a></dt>
 <dd><p>Number of data points generated for the distribution on which to integrate.</p></dd>
+
+
+<dt id="arg-compute-var">compute_var<a class="anchor" aria-label="anchor" href="#arg-compute-var"></a></dt>
+<dd><p>(default to FALSE) A boolean that indicates whether one computes the variance
+of the estimators of unknown mixing proportions.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -118,8 +123,11 @@ unknown component distributions in each sample); 6) the arbitrary value of the m
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:estim_IBM(samples = list(data1, data2), admixMod = list(admixMod1, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     admixMod2), n.integ = 1000)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 1st sample:  0.5111508 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 2nd sample:  0.710976 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 1st sample:  0.511 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 2nd sample:  0.711 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Variance of the estimator of the mixing proportion in the 1st sample:  NA </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Variance of the estimator of the mixing proportion in the 2nd sample:  NA </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 2: multinomial distribution (discrete case).</span></span></span>
 <span class="r-in"><span><span class="va">mixt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1500</span>, weight <span class="op">=</span> <span class="fl">0.8</span>,</span></span>
@@ -138,17 +146,21 @@ unknown component distributions in each sample); 6) the arbitrary value of the m
 <span class="r-in"><span><span class="va">admixMod2</span> <span class="op">&lt;-</span> <span class="fu"><a href="admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt2</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>                         knownComp_param <span class="op">=</span> <span class="va">mixt2</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co">## Estimate the mixture weights of the two admixture models (provide only hat(theta)_n):</span></span></span>
-<span class="r-in"><span><span class="fu">estim_IBM</span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>,<span class="va">data2</span><span class="op">)</span>, admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>,<span class="va">admixMod2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">estim_IBM</span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>,<span class="va">data2</span><span class="op">)</span>, admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>,<span class="va">admixMod2</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>          compute_var <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span> IBM estimators of two unknown proportions are reliable only if the two</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>     corresponding unknown component distributions have been tested equal (see 'admix_test()').</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>     Furthermore, when both the known and unknown component distributions of the mixture</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>     models are identical, the IBM approach provides an estimation of the ratio of the</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>     actual mixing weights rather than an estimation of the unknown weights themselves.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Call:estim_IBM(samples = list(data1, data2), admixMod = list(admixMod1, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     admixMod2))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     admixMod2), compute_var = TRUE)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 1st sample:  0.7187107 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 2nd sample:  0.3061926 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 1st sample:  0.719 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated mixing proportion (of the unknown component) in the 2nd sample:  0.306 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Variance of the estimator of the mixing proportion in the 1st sample:  0.005797 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Variance of the estimator of the mixing proportion in the 2nd sample:  0.000551 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
