@@ -60,6 +60,7 @@ gaussianity_test <- function(samples, admixMod, conf_level = 0.95, ask_poly_para
   }
 
   if (any(admixMod$comp.dist == "multinom")) stop("Gaussianity test for those mixture distribution is not supported.\n")
+  if ((s.user <= 0) | (s.user >= 0.5)) stop("The penalty exponent 's' was not correctly defined.")
 
   ## Extract the information on component distributions:
   comp.dist.dens <- paste0("d", admixMod$comp.dist$known)
@@ -217,9 +218,13 @@ print.gaussianity_test <- function(x, ...)
   cat("Call:")
   print(x$call)
   cat("\n")
-  cat("Is the null hypothesis (gaussian unknown component distribution) rejected? ",
+  cat("Is the null hypothesis (Gaussian unknown distribution) rejected? ",
       ifelse(x$reject_decision, "Yes", "No"), sep="")
-  cat("\nTest p-value: ", round(x$p_value,3), "\n", sep="")
+  if (round(x$p_value, 3) == 0) {
+    cat("\np-value of the test: 1e-12", sep="")
+  } else {
+    cat("\np-value of the test: ", round(x$p_value, 3), sep="")
+  }
 }
 
 
@@ -235,24 +240,28 @@ summary.gaussianity_test <- function(object, ...)
 {
   cat("Call:")
   print(object$call)
-  cat("\n--------- About samples ---------\n")
+  cat("\n------- About samples -------\n")
   cat(paste("Size of sample ", 1:object$n_populations, ": ", object$population_sizes, sep = ""), sep = "\n")
-  cat("\n-------- About contamination (admixture) models -------")
+  cat("\n------ About contamination (admixture) models -----\n")
   cat("-> Distribution and parameters of the known component \n for the admixture model: ", sep="")
   cat(object$admixture_models$comp.dist$known, "\n")
   print(unlist(object$admixture_models$comp.param$known, use.names = TRUE))
-  cat("\n------- Test decision -------\n")
-  cat("Is the null hypothesis (gaussian unknown component distribution) rejected? ",
+  cat("\n----- Test decision -----\n")
+  cat("Is the null hypothesis (Gaussian unknown distribution) rejected? ",
       ifelse(object$reject_decision, "Yes", "No"), sep="")
   cat("\nConfidence level of the test: ", object$confidence_level, sep="")
-  cat("\nTest p-value: ", round(object$p_value,3), sep="")
-  cat("\n\n------- Test statistic -------\n")
-  cat("Selected rank of the test statistic (following the penalization rule): ", object$selected_rank, sep="")
-  cat("\nValue of the test statistic ", round(object$test_statistic_value,2), sep="")
-  cat("\nVariance of the test statistic (for each order of the expansion):", paste(round(diag(object$var_statistic),2), sep=" "), sep=" ")
-  cat("\n\n------- Estimates -------\n")
-  cat(paste(c(" Estimation of the mixing weight (proportion of the unknown component distribution): ",
-          "Estimation of the mean of the unknown gaussian distribution: ",
-          "Estimation of the standard deviation of the unknown gaussian distribution: "),
-          sapply(object$estimates, round, 2), "\n"))
+  if (round(object$p_value, 3) == 0) {
+    cat("\np-value of the test: 1e-12", sep="")
+  } else {
+    cat("\np-value of the test: ", round(object$p_value, 3), sep="")
+  }
+  cat("\n\n----- Test statistic -----\n")
+  cat("Selected rank of the statistic (following penalization rule): ", object$selected_rank, sep="")
+  cat("\nValue of the test statistic: ", round(object$test_statistic_value,2), sep="")
+  cat("\nVariance of the test statistic (for each expansion order):", paste(round(diag(object$var_statistic),2), sep=" "), sep=" ")
+  cat("\n\n----- Estimates -----\n")
+  cat(paste(c(" Estimated weight of the unknown distribution): ",
+        "Estimated mean of the unknown Gaussian distribution: ",
+        "Estimated standard dev. of the unknown Gaussian distribution: "),
+        sapply(object$estimates, round, 2), "\n"))
 }

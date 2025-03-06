@@ -185,15 +185,15 @@ print.estim_IBM <- function(x, ...)
   print(x$call)
   cat("\n")
   if (x$equal.knownComp) {
-    cat("Fixed proportion (of the unknown component) in the 1st sample (since equal unknown components): ", x$p.X.fixed, "\n")
-    cat("Estimated mixing proportion (of the unknown component) in the 2nd sample: ", round(x$estimated_mixing_weights,3), "\n")
-    cat("Variance of the estimator of the mixing proportion in the 1st sample (no variance since fixed): ", round(x$variance_est_p1,6), "\n")
-    cat("Variance of the estimator of the mixing proportion in the 2nd sample: ", round(x$variance_est_p2,6), "\n\n")
+    cat("Fixed weight of the unknown distribution in the 1st sample (equal known components): ", x$p.X.fixed, "\n")
+    cat("Estimated weight of the unknown distribution in the 2nd sample: ", round(x$estimated_mixing_weights,3), "\n")
+    cat("Estimated variance of the latter weight in the 1st sample (no variance since fixed): ", round(x$variance_est_p1,6), "\n")
+    cat("Estimated variance of the latter weight in the 2nd sample: ", round(x$variance_est_p2,6), "\n\n")
   } else {
-    cat("Estimated mixing proportion (of the unknown component) in the 1st sample: ", round(x$estimated_mixing_weights[1],3), "\n")
-    cat("Estimated mixing proportion (of the unknown component) in the 2nd sample: ", round(x$estimated_mixing_weights[2],3), "\n")
-    cat("Variance of the estimator of the mixing proportion in the 1st sample: ", round(x$variance_est_p1,6), "\n")
-    cat("Variance of the estimator of the mixing proportion in the 2nd sample: ", round(x$variance_est_p2,6), "\n\n")
+    cat("Estimated weight of the unknown distribution in the 1st sample: ", round(x$estimated_mixing_weights[1],3), "\n")
+    cat("Estimated weight of the unknown distribution in the 2nd sample: ", round(x$estimated_mixing_weights[2],3), "\n")
+    cat("Estimated variance of the latter weight in the 1st sample: ", round(x$variance_est_p1,6), "\n")
+    cat("Estimated variance of the latter weight in the 2nd sample: ", round(x$variance_est_p2,6), "\n\n")
   }
 }
 
@@ -213,7 +213,7 @@ summary.estim_IBM <- function(object, ...)
   cat("Call:")
   print(object$call)
   cat("\n")
-  cat("------- Samples -------\n")
+  cat("----- Samples -----\n")
   cat("Number of samples: ", object$n_populations, "\n")
   cat("Sample sizes: ", object$population_sizes, "\n")
   for (k in 1:object$n_populations) {
@@ -222,19 +222,19 @@ summary.estim_IBM <- function(object, ...)
     cat("\n")
   }
   cat("Are the known component distributions equal? ", object$equal.knownComp,"\n")
-  cat("\n------- Estimation results -------\n")
+  cat("\n----- Estimation results -----\n")
   if (object$equal.knownComp) {
-    cat("Fixed proportion (of the unknown component) in the 1st sample (since equal unknown components): ", object$p.X.fixed, "\n")
-    cat("Estimated mixing proportion (of the unknown component) in the 2nd sample: ", round(object$estimated_mixing_weights,3), "\n")
-    cat("Variance of the estimator of the mixing proportion in the 1st sample (no variance since fixed): ", round(object$variance_est_p1,6), "\n")
-    cat("Variance of the estimator of the mixing proportion in the 2nd sample: ", round(object$variance_est_p2,6), "\n")
+    cat("Fixed weight of the unknown distribution in the 1st sample (equal known components): ", object$p.X.fixed, "\n")
+    cat("Estimated weight of the unknown distribution in the 2nd sample: ", round(object$estimated_mixing_weights,3), "\n")
+    cat("Estimated variance of the latter weight in the 1st sample (no variance since fixed): ", round(object$variance_est_p1,6), "\n")
+    cat("Estimated variance of the latter weight in the 2nd sample: ", round(object$variance_est_p2,6), "\n")
   } else {
-    cat("Estimated mixing proportion (of the unknown component) in the 1st sample: ", round(object$estimated_mixing_weights[1],3), "\n")
-    cat("Estimated mixing proportion (of the unknown component) in the 2nd sample: ", round(object$estimated_mixing_weights[2],3), "\n")
-    cat("Variance of the estimator of the mixing proportion in the 1st sample: ", round(object$variance_est_p1,6), "\n")
-    cat("Variance of the estimator of the mixing proportion in the 2nd sample: ", round(object$variance_est_p2,6), "\n")
+    cat("Estimated weight of the unknown distribution in the 1st sample: ", round(object$estimated_mixing_weights[1],3), "\n")
+    cat("Estimated weight of the unknown distribution in the 2nd sample: ", round(object$estimated_mixing_weights[2],3), "\n")
+    cat("Estimated variance of the latter weight in the 1st sample: ", round(object$variance_est_p1,6), "\n")
+    cat("Estimated variance of the latter weight in the 2nd sample: ", round(object$variance_est_p2,6), "\n")
   }
-  cat("\n------- Support -------\n")
+  cat("\n----- Support -----\n")
   cat("Integration support: ", paste(utils::head(object$integ.supp,3), collapse=" "), "...",
       paste(utils::tail(object$integ.supp,3), collapse = " "), "\n\n", sep="")
 }

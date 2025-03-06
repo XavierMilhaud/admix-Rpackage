@@ -126,32 +126,33 @@ print.admix_estim <- function(x, ...)
   print(x$call)
   if (x$estimation_method != "Inversion Best-Matching (IBM)") {
     cat("\n")
-    cat(paste("Estimated mixing weight of the unknown component distribution in Sample ", 1:x$n_populations,
+    cat(paste("Estimated weight of the unknown distribution in Sample ", 1:x$n_populations,
               ": ", round(x$estimated_mixing_weights,2), sep = ""), sep = "\n")
   } else {
     cat("\nPairwise estimation performed (IBM estimation method). \n")
-    cat("Remember that estimated weights are reliable only if the unknown component distributions
-have previously been tested equal. See ?admix_test. \n\n")
+    cat("N.B.: estimated weights are reliable only if the unknown
+component distributions have previously been tested equal.
+See ?admix_test. \n\n")
     for (k in 1:(x$n_populations-1)) {
       cat("----- Pair 1 and ", k+1, " -----\n", sep = "")
       if (!x$equal_knownComp[k]) {
         if (inherits(x$estimated_mixing_weights, "matrix")) {
-          cat("Estimated mixing weight of the unknown component distribution in Sample 1: ",
+          cat("Estimated weight of the unknown distribution in Sample 1: ",
               round(x$estimated_mixing_weights[ ,k][1],2), "\n", sep = "")
-          cat("Estimated mixing weight of the unknown component distribution in Sample ", k+1, ": ",
+          cat("Estimated weight of the unknown distribution in Sample ", k+1, ": ",
               round(x$estimated_mixing_weights[ ,k][2],2), sep = "")
           cat("\n")
         } else {
-          cat("Estimated mixing weight of the unknown component distribution in Sample 1: ",
+          cat("Estimated weight of the unknown distribution in Sample 1: ",
               round(x$estimated_mixing_weights[[k]][1],2), "\n", sep = "")
-          cat("Estimated mixing weight of the unknown component distribution in Sample ", k+1, ": ",
+          cat("Estimated weight of the unknown distribution in Sample ", k+1, ": ",
               round(x$estimated_mixing_weights[[k]][2],2), sep = "")
           cat("\n")
         }
       } else {
-        cat("Estimated mixing weights of the unknown component distributions in Sample 1 and ", k+1, ": ",
+        cat("Estimated weights of the unknown distributions in Sample 1 and ", k+1, ": ",
             paste(c(x$fixed_prop[k],round(x$estimated_mixing_weights[[k]],2)), collapse=", ", sep = ""), sep="")
-        cat("\nFirst proportion was fixed (not estimated) because of equal known components.
+        cat("\nFirst proportion was fixed because of equal known components.
 The estimated proportion for the 2nd sample makes sense through the ratio of
 the two proportions, which should roughly be similar than the true actual ratio.\n")
         cat("\n")
@@ -160,7 +161,7 @@ the two proportions, which should roughly be similar than the true actual ratio.
   }
   #cat("\n")
   if (x$estimation_method == "Bordes and Vandekerkhove (BVdk)") {
-    cat(paste("Estimated location parameters of the unknown component distribution in Sample ", 1:x$n_populations,
+    cat(paste("Estimated location of the unknown distribution in Sample ", 1:x$n_populations,
               ": ", round(x$estimated_locations,2), sep = ""), sep = "\n")
   }
 }
@@ -182,14 +183,14 @@ summary.admix_estim <- function(object, ...)
 {
   cat("Call:\n")
   print(object$call)
-  cat("\n--------- About samples ---------\n")
+  cat("\n------- About samples ------\n")
   cat(paste("Size of sample ", 1:object$n_populations, ": ", object$population_sizes, sep = ""), sep = "\n")
-  cat("\n-------- About contamination (admixture) models -------")
+  cat("\n------ About contamination (admixture) models -----")
   cat("\n")
   if (object$n_populations == 1) {
     cat("-> Distribution and parameters of the known component \n for the admixture model: ", sep="")
-    cat(object$admixture_models$comp.dist$known, "\n")
-    print(unlist(object$admixture_models$comp.param$known, use.names = TRUE))
+    cat(object$admixture_models[[1]]$comp.dist$known, "\n")
+    print(unlist(object$admixture_models[[1]]$comp.param$known, use.names = TRUE))
   } else {
     for (k in 1:object$n_populations) {
       cat("-> Distribution and parameters of the known component \n for admixture model #", k, ": ", sep="")
@@ -197,36 +198,37 @@ summary.admix_estim <- function(object, ...)
       cat("\n")
     }
   }
-  cat("\n-------- About estimation -------")
+  cat("\n------ About estimation -----")
   cat("\nEstimation approach: ", object$estimation_method,  "\n", sep = "")
   if (object$estimation_method != "Inversion Best-Matching (IBM)") {
-    cat("\n")
-    cat(paste("Estimated mixing weight of the unknown component distribution in Sample ", 1:object$n_populations,
+    #cat("\n")
+    cat(paste("Estimated weight of the unknown distribution in Sample ", 1:object$n_populations,
               ": ", round(object$estimated_mixing_weights,2), sep = ""), sep = "\n")
   } else {
     cat("\nPairwise estimation performed (IBM estimation method). \n")
-    cat("Remember that estimated weights are reliable only if the unknown component distributions
-have previously been tested equal. See ?admix_test. \n\n")
+    cat("N.B.: estimated weights are reliable only if the unknown
+component distributions have previously been tested equal.
+See ?admix_test. \n\n")
     for (k in 1:(object$n_populations-1)) {
-      cat("----- Pair 1 and ", k+1, " -----\n", sep = "")
+      cat("--- Pair 1 and ", k+1, " ---\n", sep = "")
       if (!object$equal_knownComp[k]) {
         if (inherits(object$estimated_mixing_weights, "matrix")) {
-          cat("Estimated mixing weight of the unknown component distribution in Sample 1: ",
+          cat("Estimated weight of the unknown distribution in Sample 1: ",
               round(object$estimated_mixing_weights[ ,k][1],2), "\n", sep = "")
-          cat("Estimated mixing weight of the unknown component distribution in Sample ", k+1, ": ",
+          cat("Estimated weight of the unknown distribution in Sample ", k+1, ": ",
               round(object$estimated_mixing_weights[ ,k][2],2), sep = "")
           cat("\n")
         } else {
-          cat("Estimated mixing weight of the unknown component distribution in Sample 1: ",
+          cat("Estimated weight of the unknown distribution in Sample 1: ",
               round(object$estimated_mixing_weights[[k]][1],2), "\n", sep = "")
-          cat("Estimated mixing weight of the unknown component distribution in Sample ", k+1, ": ",
+          cat("Estimated weight of the unknown distribution in Sample ", k+1, ": ",
               round(object$estimated_mixing_weights[[k]][2],2), sep = "")
           cat("\n")
         }
       } else {
-        cat("Estimated mixing weights of the unknown component distributions in Sample 1 and ", k+1, ": ",
+        cat("Estimated weights of the unknown distributions in Sample 1 and ", k+1, ": ",
             paste(c(object$fixed_prop[k],round(object$estimated_mixing_weights[[k]],2)), collapse=", ", sep = ""), sep="")
-        cat("\nFirst proportion was fixed (not estimated) because of equal known components.
+        cat("\nFirst proportion was fixed because of equal known components.
 The estimated proportion for the 2nd sample makes sense through the ratio of
 the two proportions, which should roughly be similar than the true actual ratio.\n")
         cat("\n")
@@ -236,7 +238,7 @@ the two proportions, which should roughly be similar than the true actual ratio.
   cat("\n")
   if (object$estimation_method == "Bordes and Vandekerkhove") {
     cat("-> Location parameters (symmetric density assumption):\n")
-    cat(paste("Estimated location parameters of the unknown distribution in Sample ", 1:object$n_populations,
+    cat(paste("Estimated location of the unknown distribution in Sample ", 1:object$n_populations,
               ": ", round(object$estimated_locations,2), sep = ""), sep = "\n")
   }
 }

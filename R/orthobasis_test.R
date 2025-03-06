@@ -14,7 +14,7 @@
 #' @param ask_poly_param (default to FALSE) If TRUE, ask the user to choose both the order 'K' of expansion coefficients in the
 #'                        orthonormal polynomial basis, and the penalization rate 's' involved on the penalization rule for the test.
 #' @param K (K > 0, default to 3) If not asked (see the previous argument), number of coefficients considered for the polynomial basis expansion.
-#' @param s (in ]0,1/2[, default to 0.49) If not asked (see the previous argument), rate at which the normalization factor is set in
+#' @param s (in ]0,1/2[, default to 0.25) If not asked (see the previous argument), rate at which the normalization factor is set in
 #'           the penalization rule for model selection (in ]0,1/2[). Low values of 's' favors the detection of alternative hypothesis.
 #'           See reference below.
 #' @param nb_echBoot (default to 100) Number of bootstrap samples, useful when choosing 'PS' estimation method.
@@ -59,7 +59,7 @@
 #' @export
 
 orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c("BVdk","PS"),
-                            ask_poly_param = FALSE, K = 3, s = 0.49, nb_echBoot = 100,
+                            ask_poly_param = FALSE, K = 3, s = 0.25, nb_echBoot = 100,
                             support = c("Real","Integer","Positive","Bounded.continuous","Bounded.discrete"),
                             bounds_supp = NULL, ...)
 {
@@ -80,6 +80,7 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
     K.user <- K
     s.user <- s
   }
+  if ((s.user <= 0) | (s.user >= 0.5)) stop("The penalty exponent 's' was not correctly defined.")
 
   ## Extract useful information about known component distribution:
   knownComp.sim <- paste0("r", sapply(admixMod, "[[", "comp.dist")["known", ])

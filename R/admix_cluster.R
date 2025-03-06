@@ -265,8 +265,8 @@ print.admix_cluster <- function(x, ...)
   cat("Call:\n")
   print(x$call)
   cat("\nNumber of detected clusters across the samples provided: ", x$n_clust, ".\n", sep = "")
-  cat("\nList of samples involved in each built cluster (in numeric format, i.e. inside c()) :\n",
-      paste("  - Cluster #", 1:length(x$clust_pop), ": vector of populations ", x$clust_pop, collapse="\n", sep = ""), sep="")
+  cat("\nList of samples involved in each built cluster (inside c()) :\n",
+      paste("  - Cluster #", 1:length(x$clust_pop), ": samples ", x$clust_pop, collapse="\n", sep = ""), sep="")
   cat("\n")
 }
 
@@ -286,23 +286,23 @@ summary.admix_cluster <- function(object, ...)
 {
   cat("Call:\n")
   print(object$call)
-  cat("\n--------- About samples ---------\n")
+  cat("\n------ About samples ------\n")
   cat("The number of populations/samples under study is ", object$n_populations, ".\n", sep = "")
   cat(paste("Size of sample ", 1:object$n_populations, ": ", object$population_sizes, sep = ""), sep = "\n")
-  cat("\n-------- About contamination (admixture) models -------")
+  cat("\n----- About contamination (admixture) models -----")
   cat("\n")
   for (k in 1:object$n_populations) {
     cat("-> Distribution and parameters of the known component \n for admixture model #", k, ": ", sep="")
     cat(paste(sapply(object$admixture_models[[k]], "[[", "known")[1:2], collapse = " - "))
     cat("\n")
   }
-  cat("\n--------- About clustering ---------\n")
-  cat("The level of the underlying k-sample testing procedure is set to ", (1-object$confidence_level)*100, "%.", sep = "")
+  cat("\n------ About clustering ------\n")
+  cat("Test level of the underlying k-sample testing procedure: ", (1-object$confidence_level)*100, "%.", sep = "")
   cat("\nNumber of detected clusters across the samples provided: ", object$n_clust, ".", sep = "")
-  cat("\nThe p-values of the k-sample tests (showing when to close the clusters (i.e. p-value < ", (1-object$confidence_level), ") equal: ",
+  cat("\np-values of the k-sample tests (showing when to close the clusters (i.e. p-value < ", (1-object$confidence_level), ") equal: ",
       paste(object$pval_clust, collapse=", "), ".", sep="")
-  cat("\n\nList of samples involved in each built cluster (in numeric format, i.e. inside c()) :\n",
-      paste("  - Cluster #", 1:length(object$clust_pop), ": vector of populations ", object$clust_pop, collapse="\n", sep = ""), sep="")
+  cat("\n\nList of samples involved in each built cluster (inside c()) :\n",
+      paste("  - Cluster #", 1:length(object$clust_pop), ": samples ", object$clust_pop, collapse="\n", sep = ""), sep="")
   weights.list <- vector(mode = "list", length = length(object$clust_weights))
   for (i in 1:length(object$clust_weights)) {
     if (object$clust_sizes[i] > 2) {
@@ -312,10 +312,10 @@ summary.admix_cluster <- function(object, ...)
       weights.list[[i]] <- c(round(object$clust_weights[[i]], 2))
     }
   }
-  cat("\n\nList of estimated weights for the unknown component distributions in each detected cluster
+  cat("\n\nList of estimated weights for the unknown distributions in each detected cluster
       (in the same order as listed samples in each detected clusters) :\n",
-      paste("  - estimated weights of the unknown component distributions for cluster ", 1:length(object$clust_pop), ": ", weights.list, collapse="\n"), sep="")
-  cat("\n\nMatrix providing the discrepancies between populations, used in the clustering procedure:\n")
+      paste("  - Estimated weights of the unknown distributions for cluster ", 1:length(object$clust_pop), ": ", weights.list, collapse="\n"), sep="")
+  cat("\n\nMatrix of discrepancies between samples (used for clustering):\n")
   print(object$discrepancy_matrix)
 }
 

@@ -65,8 +65,8 @@ admix_test <- function(samples, admixMod, test_method = c("poly","icv"), conf_le
   if ((n_samples == 1) & (meth == "icv")) stop("Testing using the inner convergence property (obtained from IBM estimation) requires at least TWO samples.\n")
   if (meth == "poly") message("  Testing using polynomial basis expansions requires in theory a square-root n consistent estimation
   of the proportions of the unknown component distributions (thus using 'BVdk' estimation by default, associated to unknown
-  component distributions with symmetric densities). However, it is allowed to use 'PS' estimation in practice, but argument
-  'est_method' has therefore to be set to 'PS'. In this case, the variance of estimators is obtained by boostrapping.\n")
+  component distributions with symmetric densities). However, it is allowed to use 'PS' estimation in practice (argument 'est_method'
+  has therefore to be set to 'PS'. In this case, the variance of estimators is obtained by boostrapping.\n")
 
   if (meth == "icv") {
     options(warn = -1)
@@ -119,8 +119,12 @@ print.admix_test <- function(x, ...)
   cat("Call:")
   print(x$call)
   cat("\n")
-  cat("Do we reject the null hypothesis? ", ifelse(x$reject_decision, "Yes", "No"), "\n", sep="")
-  cat("Here is the associated p-value of the test: ", round(x$p_value, 3), "\n", sep="")
+  cat("Is the null hypothesis H0 rejected? ", ifelse(x$reject_decision, "Yes", "No"), "\n", sep="")
+  if (round(x$p_value, 3) == 0) {
+    cat("p-value of the test: 1e-12 \n", sep="")
+  } else {
+    cat("p-value of the test: ", round(x$p_value, 3), "\n", sep="")
+  }
 }
 
 
@@ -141,9 +145,9 @@ summary.admix_test <- function(object, ...)
 {
   cat("Call:\n")
   print(object$call)
-  cat("\n--------- About samples ---------\n")
+  cat("\n------- About samples -------\n")
   cat(paste("Size of sample ", 1:object$n_populations, ": ", object$population_sizes, sep = ""), sep = "\n")
-  cat("\n-------- About contamination (admixture) models -------")
+  cat("\n------ About contamination (admixture) models -----")
   cat("\n")
   if (object$n_populations == 1) {
     cat("-> Distribution and parameters of the known component \n for the admixture model: ", sep="")
@@ -157,9 +161,13 @@ summary.admix_test <- function(object, ...)
     }
   }
   cat("\n--------- About testing results ---------\n")
-  cat("Testing method: ", object$testing_meth, "\n", sep = "")
+  cat("Method: ", object$testing_meth, "\n", sep = "")
   cat("Is the null hypothesis rejected? ", ifelse(object$reject_decision, "Yes", "No"), "\n", sep = "")
-  cat("The type-I error is fixed to ", (1-object$confidence_level)*100, "%\n", sep = "")
-  cat("The p-value of the test equals ", round(object$p_value, 3), "\n", sep = "")
-  cat("The value of the test statistics is ", object$test_statistic_value, "\n\n", sep = "")
+  cat("Type-I error is fixed to ", (1-object$confidence_level)*100, "%\n", sep = "")
+  if (round(object$p_value, 3) == 0) {
+    cat("p-value of the test: 1e-12 \n", sep="")
+  } else {
+    cat("p-value of the test: ", round(object$p_value, 3), "\n", sep="")
+  }
+  cat("Value of the test statistic: ", round(object$test_statistic_value,3), "\n\n", sep = "")
 }
