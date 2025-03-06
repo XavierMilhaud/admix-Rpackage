@@ -11,7 +11,7 @@ orthobasis_test(
   est_method = c("BVdk", "PS"),
   ask_poly_param = FALSE,
   K = 3,
-  s = 0.49,
+  s = 0.25,
   nb_echBoot = 100,
   support = c("Real", "Integer", "Positive", "Bounded.continuous", "Bounded.discrete"),
   bounds_supp = NULL,
@@ -34,12 +34,12 @@ orthonormal polynomial basis, and the penalization rate 's' involved on the pena
 
 \item{K}{(K > 0, default to 3) If not asked (see the previous argument), number of coefficients considered for the polynomial basis expansion.}
 
-\item{s}{(in ]0,1/2[, default to 0.49) If not asked (see the previous argument), rate at which the normalization factor is set in
+\item{s}{(in ]0,1/2[, default to 0.25) If not asked (see the previous argument), rate at which the normalization factor is set in
 the penalization rule for model selection (in ]0,1/2[). Low values of 's' favors the detection of alternative hypothesis.
 See reference below.
 
-[, default to 0.49) If not asked (see the previous argument), rate at which the normalization factor is set in
-the penalization rule for model selection (in ]: R:,\%20default\%20to\%200.49)\%20If\%20not\%20asked\%20(see\%20the\%20previous\%20argument),\%20rate\%20at\%20which\%20the\%20normalization\%20factor\%20is\%20set\%20in\%0A\%20\%20\%20\%20\%20\%20\%20\%20\%20\%20the\%20penalization\%20rule\%20for\%20model\%20selection\%20(in\%20}
+[, default to 0.25) If not asked (see the previous argument), rate at which the normalization factor is set in
+the penalization rule for model selection (in ]: R:,\%20default\%20to\%200.25)\%20If\%20not\%20asked\%20(see\%20the\%20previous\%20argument),\%20rate\%20at\%20which\%20the\%20normalization\%20factor\%20is\%20set\%20in\%0A\%20\%20\%20\%20\%20\%20\%20\%20\%20\%20the\%20penalization\%20rule\%20for\%20model\%20selection\%20(in\%20}
 
 \item{nb_echBoot}{(default to 100) Number of bootstrap samples, useful when choosing 'PS' estimation method.}
 
