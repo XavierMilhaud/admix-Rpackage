@@ -9,10 +9,16 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE,
+  message = FALSE
+)
+```
 
-
-
-``` r
+```{r setup}
 library(admix)
 ```
 
@@ -39,8 +45,7 @@ The support of the known component density has to be in line with the one of the
 Because of the use of asymptotically normal estimators, it is not possible to use the estimator provided in [@PatraSen2016] to perform hypothesis testing. On the contrary, @BordesVandekerkhove2010 propose an estimator that can be used if the unknown component density is assumed to be symmetric. More generally, @PommeretVandekerkhove2019 give more details about the distribution of the test statistic under the null (hypothesis $H_0$), and under the alternative $H_1$.
 
 Here, the implemented function allows to perform the so-called Gaussianity test, meaning that the parametric family against which the unknown component is tested belongs to Gaussian distributions. Below is an example of hypothesis testing in this 1-sample case:
-
-``` r
+```{r}
 ####### Under the null hypothesis H0.
 ## Simulate mixture data:
 mixt1 <- twoComp_mixt(n = 300, weight = 0.6,
@@ -53,12 +58,6 @@ admixMod <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
                         knownComp_param = mixt1$comp.param[[2]])
 admix_test(samples = list(data1), admixMod = list(admixMod), conf_level = 0.95,
            test_method = "poly", ask_poly_param = FALSE, support = "Real")
-#> Call:admix_test(samples = list(data1), admixMod = list(admixMod), 
-#>     test_method = "poly", conf_level = 0.95, ask_poly_param = FALSE, 
-#>     support = "Real")
-#> 
-#> Is the null hypothesis H0 rejected? No
-#> p-value of the test: 0.682
 ```
 The result of the test is that we cannot reject the null hypothesis $H_0$, which is in line with the specified distribution for the unknown component. Indeed, simulated data is a Gaussian mixture with two components, i.e. $F \sim \mathcal{N}(\mu,\sigma)$ where $\mu=2$ and $\sigma=0.5$.
 
@@ -84,8 +83,7 @@ In this framework, we assume that $F_1$ and $F_2$ both have a symmetric density.
 
 In what follows, we simulate two samples under the null and check whether the test provides satisfactory results.
 
-
-``` r
+```{r}
 mixt1 <- twoComp_mixt(n = 600, weight = 0.8,
                       comp.dist = list("norm", "norm"),
                       comp.param = list(list("mean" = 3, "sd" = 0.5),
@@ -104,12 +102,6 @@ admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
 ## Using expansion coefficients in orthonormal polynomial basis:
 admix_test(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2), conf_level = 0.95,
            test_method = "poly", ask_poly_param = FALSE, support = "Real")
-#> Call:admix_test(samples = list(data1, data2), admixMod = list(admixMod1, 
-#>     admixMod2), test_method = "poly", conf_level = 0.95, ask_poly_param = FALSE, 
-#>     support = "Real")
-#> 
-#> Is the null hypothesis H0 rejected? No
-#> p-value of the test: 0.096
 ```
 
 The hypothesis test concludes that the null hypothesis cannot be rejected, once again in line with what was expected given the specified parameters when simulating the data.
@@ -167,8 +159,7 @@ $$\tilde{U}_n \quad \geq \quad \hat q_{1-\alpha} \qquad \Rightarrow \qquad H_0 \
 
 We now provide the way to perform this test with the package $admix$ with Gaussian mixtures. First, let us study the case where we are under the null hypothesis $H_0$, considering $K=3$ different populations.
 
-
-``` r
+```{r}
 mixt1 <- twoComp_mixt(n = 450, weight = 0.4,
                       comp.dist = list("norm", "norm"),
                       comp.param = list(c("mean" = -2, "sd" = 0.5),
@@ -194,12 +185,6 @@ admix_test(samples = list(data1, data2, data3),
            admixMod = list(admixMod1, admixMod2, admixMod3), 
            conf_level = 0.95, test_method = "icv", n_sim_tab = 4, 
            tune_penalty = FALSE, parallel = FALSE, n_cpu = 2)
-#> Call:admix_test(samples = list(data1, data2, data3), admixMod = list(admixMod1, 
-#>     admixMod2, admixMod3), test_method = "icv", conf_level = 0.95, 
-#>     n_sim_tab = 4, tune_penalty = FALSE, parallel = FALSE, n_cpu = 2)
-#> 
-#> Is the null hypothesis H0 rejected? No
-#> p-value of the test: 0.667
 ```
 
 # References

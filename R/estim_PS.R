@@ -327,6 +327,19 @@ plot.PS_estimCV <- function(x,...)
 }
 
 
+#' Function that computes the cross-validation score
+#'
+#' @param tr.data An object of class 'PS_dist_fun'.
+#' @param test.data The data used in the test sample.
+#' @param c.n The coefficient in the penalization.
+#'
+#' @references
+#' \insertRef{PatraSen2016}{admix}
+#'
+#' @return The loss corresponding to the cross-validation error.
+#'
+#' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
+#' @noRd
 
 cv.score <- function(tr.data, test.data, c.n)
 {

@@ -44,7 +44,7 @@ Many works studied the estimation of the unknown proportion in two-component adm
 ### Case of symmetric unknown density
 In this case, we use the Bordes and Vandekerkhove estimator, see [@BordesVandekerkhove2010].
 
-```{r}
+```{r sym}
 ## Simulate mixture data:
 mixt1 <- twoComp_mixt(n = 400, weight = 0.7,
                       comp.dist = list("norm", "norm"),
@@ -62,7 +62,7 @@ Because this estimation method relies on the symmetry of the unknown component d
 ### Other cases
 In full generality (no assumptions made on the unknown component distribution), we use the Patra and Sen estimator, see [@PatraSen2016].
 
-```{r}
+```{r generalCase}
 admix_estim(samples = list(data1), admixMod = list(admixMod), est_method = 'PS')
 ```
 In this case, the only estimated parameter is the mixing proportion related to the unknown component distribution.
@@ -75,7 +75,7 @@ In the two-sample setting, one idea could be to use the Inversion - Best Matchin
 ### Under the null hypothesis $H_0: F_1 = F_2$
 
 When we are under the null, @MilhaudPommeretSalhiVandekerkhove2024a show that the estimators is consistent towards the true parameter values.
-```{r}
+```{r twoSampleNullHyp}
 ## Simulate mixture data:
 mixt1 <- twoComp_mixt(n = 450, weight = 0.4,
                       comp.dist = list("norm", "norm"),
@@ -103,7 +103,7 @@ Indeed, one can see that the two unknown proportions were consistently estimated
 
 Estimators are also consistent under $H_1$, although they can be (strongly) biased as compared to their true values as illustrated in the following example.
 
-```{r}
+```{r twoSampleAltHyp}
 ## Simulate mixture data:
 mixt1 <- twoComp_mixt(n = 800, weight = 0.5,
                       comp.dist = list("norm", "norm"),
@@ -140,7 +140,7 @@ $$F(x) = \dfrac{L(x) - (1-p)G(x)}{p},$$
 once $p$ has been consistenly estimated.
 
 This is what is commonly called the decontaminated density of the unknown component. In the following, we propose to compare the two decontaminated densities obtained once the unknown quantities have been consistently estimated by the IBM approach. Note that we are under the null ($F_1=F_2$), and thus that the decontaminated densities should look similar.
-```{r}
+```{r decontDens}
 ## Simulate mixture data:
 mixt1 <- twoComp_mixt(n = 800, weight = 0.4,
                       comp.dist = list("norm", "norm"),
