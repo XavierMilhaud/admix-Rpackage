@@ -13,7 +13,7 @@ For further details about IBM approach, see 'Details' below."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">admix</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,6 +90,11 @@ unknown component distributions in each sample); 6) the arbitrary value of the m
     <p>MilhaudPommeretSalhiVandekerkhove2024aadmix</p>
     </div>
     <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><code><a href="print.estim_IBM.html">print.estim_IBM()</a></code> for printing a short version of the results from this estimation method,
+and <code><a href="summary.estim_IBM.html">summary.estim_IBM()</a></code> for more comprehensive results.</p></div>
+    </div>
+    <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
     <p>Xavier Milhaud <a href="mailto:xavier.milhaud.research@gmail.com">xavier.milhaud.research@gmail.com</a></p>
     </div>
@@ -120,13 +125,24 @@ unknown component distributions in each sample); 6) the arbitrary value of the m
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>     Furthermore, when both the known and unknown component distributions of the mixture</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>     models are identical, the IBM approach provides an estimation of the ratio of the</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>     actual mixing weights rather than an estimation of the unknown weights themselves.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Call:estim_IBM(samples = list(data1, data2), admixMod = list(admixMod1, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> estim_IBM(samples = list(data1, data2), admixMod = list(admixMod1, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     admixMod2), n.integ = 1000)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated weight of the unknown distribution in the 1st sample:  0.511 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated weight of the unknown distribution in the 2nd sample:  0.711 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated variance of the latter weight in the 1st sample:  NA </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated variance of the latter weight in the 2nd sample:  NA </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Pairwise estimation performed (IBM estimation method). </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N.B.: estimated weights are reliable only if the unknown</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> component distributions have previously been tested equal.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> See ?admix_test. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Weight of the first component is fixed in case of equal known components.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The estimated proportion for the 2nd sample makes sense through the ratio of</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> the two proportions, which should roughly be similar than the true actual ratio.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ######### Samples 1 and 2 #########</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ######### Samples 1 and 1 #########</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ######### Samples 1 and 0 #########</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Example 2: multinomial distribution (discrete case).</span></span></span>
@@ -153,13 +169,24 @@ unknown component distributions in each sample); 6) the arbitrary value of the m
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>     Furthermore, when both the known and unknown component distributions of the mixture</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>     models are identical, the IBM approach provides an estimation of the ratio of the</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>     actual mixing weights rather than an estimation of the unknown weights themselves.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Call:estim_IBM(samples = list(data1, data2), admixMod = list(admixMod1, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> estim_IBM(samples = list(data1, data2), admixMod = list(admixMod1, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     admixMod2), compute_var = TRUE)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated weight of the unknown distribution in the 1st sample:  0.719 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated weight of the unknown distribution in the 2nd sample:  0.306 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated variance of the latter weight in the 1st sample:  0.005797 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated variance of the latter weight in the 2nd sample:  0.000551 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Pairwise estimation performed (IBM estimation method). </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N.B.: estimated weights are reliable only if the unknown</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> component distributions have previously been tested equal.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> See ?admix_test. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Weight of the first component is fixed in case of equal known components.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The estimated proportion for the 2nd sample makes sense through the ratio of</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> the two proportions, which should roughly be similar than the true actual ratio.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ######### Samples 1 and 2 #########</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ######### Samples 1 and 1 #########</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ######### Samples 1 and 0 #########</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

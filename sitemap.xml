@@ -27,6 +27,7 @@
 <url><loc>/reference/milkyWay.html</loc></url>
 <url><loc>/reference/mortality_sample.html</loc></url>
 <url><loc>/reference/orthobasis_test.html</loc></url>
+<url><loc>/reference/plot.admix_model.html</loc></url>
 <url><loc>/reference/plot.decontaminated_density.html</loc></url>
 <url><loc>/reference/plot.twoComp_mixt.html</loc></url>
 <url><loc>/reference/print.IBM_test.html</loc></url>
@@ -45,12 +46,15 @@
 <url><loc>/reference/summary.IBM_test.html</loc></url>
 <url><loc>/reference/summary.admix_cluster.html</loc></url>
 <url><loc>/reference/summary.admix_estim.html</loc></url>
+<url><loc>/reference/summary.admix_model.html</loc></url>
 <url><loc>/reference/summary.admix_test.html</loc></url>
+<url><loc>/reference/summary.decontaminated_density.html</loc></url>
 <url><loc>/reference/summary.estim_BVdk.html</loc></url>
 <url><loc>/reference/summary.estim_IBM.html</loc></url>
 <url><loc>/reference/summary.estim_PS.html</loc></url>
 <url><loc>/reference/summary.gaussianity_test.html</loc></url>
 <url><loc>/reference/summary.orthobasis_test.html</loc></url>
+<url><loc>/reference/summary.twoComp_mixt.html</loc></url>
 <url><loc>/reference/twoComp_mixt.html</loc></url>
 </urlset>
 
