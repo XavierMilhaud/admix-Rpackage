@@ -14,7 +14,7 @@ L = p*F + (1-p)*G, with g a known CDF and p and f unknown quantities."><!-- math
     
     <a class="navbar-brand me-2" href="../index.html">admix</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,12 +72,11 @@ L = p*F + (1-p)*G, with g a known CDF and p and f unknown quantities.</p>
 
 
 <dt>estim.p</dt>
-<dd><p>The estimated weight of the unknown component distribution, related to the proportion of the unknown component
-in the admixture model studied.</p></dd>
+<dd><p>The estimated weight, related to the proportion of the unknown component distribution in the admixture model studied.</p></dd>
 
 
 <dt>admixMod</dt>
-<dd><p>An object of class 'admix_model', containing useful information about distributions and parameters.</p></dd>
+<dd><p>An object of class 'admix_model', containing useful information about known distribution(s) and parameter(s).</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -119,10 +118,9 @@ unknown component f after having estimated p.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function (x) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (1/estim.p) * (l1_emp(x) - (1 - estim.p) * g1(x))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x7feedb8f4240&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x7feedb8f0fa8&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x7f79dd32b610&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x7f79dd32c368&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Type of support: Continuous</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">####### Discrete support:</span></span></span>
 <span class="r-in"><span><span class="va">mixt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">5000</span>, weight <span class="op">=</span> <span class="fl">0.6</span>,</span></span>
@@ -156,10 +154,9 @@ unknown component f after having estimated p.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function (x) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (1/estim.p) * (l1_emp(x) - (1 - estim.p) * g1(x))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x7feedb8f4240&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x7feedc6826a0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x7f79dd32b610&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x7f79db59e478&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Type of support: Discrete</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">####### Finite discrete support:</span></span></span>
 <span class="r-in"><span><span class="va">mixt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">12000</span>, weight <span class="op">=</span> <span class="fl">0.6</span>,</span></span>
@@ -193,10 +190,9 @@ unknown component f after having estimated p.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> function (x) </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> (1/estim.p) * (l1_emp(x) - (1 - estim.p) * g1(x))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x7feedb8f4240&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x7feec7535e88&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x7f79dd32b610&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x7f79df0839c8&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Type of support: Discrete</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

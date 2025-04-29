@@ -14,7 +14,7 @@ of interest. See 'Details' below and the cited paper therein for further informa
     
     <a class="navbar-brand me-2" href="../index.html">admix</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -156,12 +156,23 @@ in the 'icv' testing method using the IBM estimation approach.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 0.07155802 0.30318710</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $estimator</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Call:estim_IBM(samples = samples, admixMod = admixMod, n.integ = 1000)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> estim_IBM(samples = samples, admixMod = admixMod, n.integ = 1000)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated weight of the unknown distribution in the 1st sample:  0.452 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated weight of the unknown distribution in the 2nd sample:  0.79 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated variance of the latter weight in the 1st sample:  NA </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Estimated variance of the latter weight in the 2nd sample:  NA </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Pairwise estimation performed (IBM estimation method). </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> N.B.: estimated weights are reliable only if the unknown</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> component distributions have previously been tested equal.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> See ?admix_test. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Weight of the first component is fixed in case of equal known components.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> The estimated proportion for the 2nd sample makes sense through the ratio of</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> the two proportions, which should roughly be similar than the true actual ratio.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ######### Samples 1 and 2 #########</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ######### Samples 1 and 1 #########</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ######### Samples 1 and 0 #########</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> NULL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $contrast_value</span>

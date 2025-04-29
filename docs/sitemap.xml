@@ -85,6 +85,9 @@
     <loc>/reference/orthobasis_test.html</loc>
   </url>
   <url>
+    <loc>/reference/plot.admix_model.html</loc>
+  </url>
+  <url>
     <loc>/reference/plot.decontaminated_density.html</loc>
   </url>
   <url>
@@ -139,7 +142,13 @@
     <loc>/reference/summary.admix_estim.html</loc>
   </url>
   <url>
+    <loc>/reference/summary.admix_model.html</loc>
+  </url>
+  <url>
     <loc>/reference/summary.admix_test.html</loc>
+  </url>
+  <url>
+    <loc>/reference/summary.decontaminated_density.html</loc>
   </url>
   <url>
     <loc>/reference/summary.estim_BVdk.html</loc>
@@ -155,6 +164,9 @@
   </url>
   <url>
     <loc>/reference/summary.orthobasis_test.html</loc>
+  </url>
+  <url>
+    <loc>/reference/summary.twoComp_mixt.html</loc>
   </url>
   <url>
     <loc>/reference/twoComp_mixt.html</loc>

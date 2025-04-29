@@ -16,7 +16,7 @@ are observed. The admixture weights p1 and p2 thus have to be estimated. For fur
     
     <a class="navbar-brand me-2" href="../index.html">admix</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,7 +88,7 @@ with f and p unknown and g known.</p></dd>
 
 
 <dt>admixMod</dt>
-<dd><p>An object of class <a href="admix_model.html">admix_model</a>, containing useful information about distributions and parameters.</p></dd>
+<dd><p>A list of objects of class <a href="admix_model.html">admix_model</a>, containing useful information about distributions and parameters.</p></dd>
 
 
 <dt>conf_level</dt>
@@ -154,14 +154,18 @@ ISSN 0378-3758, <a href="https://doi.org/10.1016/j.jspi.2021.05.010" class="exte
 .</p>
     </div>
     <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><code><a href="print.orthobasis_test.html">print.orthobasis_test()</a></code> for printing a short version of the results from this estimation method,
+and <code><a href="summary.orthobasis_test.html">summary.orthobasis_test()</a></code> for more comprehensive results.</p></div>
+    </div>
+    <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
     <p>Xavier Milhaud <a href="mailto:xavier.milhaud.research@gmail.com">xavier.milhaud.research@gmail.com</a></p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
-<span class="r-in"><span><span class="co">#### Under the null hypothesis H0.</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">#### Under the null hypothesis H0.</span></span></span>
 <span class="r-in"><span><span class="va">mixt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">300</span>, weight <span class="op">=</span> <span class="fl">0.77</span>,</span></span>
 <span class="r-in"><span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"exp"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">1</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span></span>
@@ -184,7 +188,7 @@ ISSN 0378-3758, <a href="https://doi.org/10.1016/j.jspi.2021.05.010" class="exte
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Is the null hypothesis (gaussian unknown component distribution) rejected? Yes</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Test p-value: 0.015</span>
-<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

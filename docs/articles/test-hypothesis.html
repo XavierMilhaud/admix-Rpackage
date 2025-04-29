@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admix</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -154,7 +154,7 @@ an example of hypothesis testing in this 1-sample case:</p>
 <span><span class="co">#&gt;     support = "Real")</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Is the null hypothesis H0 rejected? No</span></span>
-<span><span class="co">#&gt; p-value of the test: 0.916</span></span></code></pre></div>
+<span><span class="co">#&gt; p-value of the test: 0.682</span></span></code></pre></div>
 <p>The result of the test is that we cannot reject the null hypothesis
 <span class="math inline">\(H_0\)</span>, which is in line with the
 specified distribution for the unknown component. Indeed, simulated data
@@ -210,7 +210,7 @@ whether the test provides satisfactory results.</p>
 <span><span class="co">#&gt;     support = "Real")</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Is the null hypothesis H0 rejected? No</span></span>
-<span><span class="co">#&gt; p-value of the test: 0.423</span></span></code></pre></div>
+<span><span class="co">#&gt; p-value of the test: 0.096</span></span></code></pre></div>
 <p>The hypothesis test concludes that the null hypothesis cannot be
 rejected, once again in line with what was expected given the specified
 parameters when simulating the data.</p>
@@ -241,7 +241,7 @@ IBM method (see below).</p>
 Matching approach, see <span class="citation">(Milhaud et al.
 2024b)</span>. In this case, one can still use the function with same
 first arguments except ‘method’, and ‘method’ should be set to ‘icv’.
-The user also has to define the number of simulated gaussian processes
+The user also has to define the number of simulated Gaussian processes
 used to tabulate the test statistic distribution (‘n_sim_tab’), and can
 accelerate computations using parallel computations and choosing an
 adequate number of cpus. Other arguments such as <span class="math inline">\(support\)</span> are useless.</p>
@@ -330,14 +330,14 @@ us study the case where we are under the null hypothesis <span class="math inlin
 <span>                         knownComp_param <span class="op">=</span> <span class="va">mixt3</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/admix_test.html">admix_test</a></span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>, <span class="va">data2</span>, <span class="va">data3</span><span class="op">)</span>, </span>
 <span>           admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>, <span class="va">admixMod2</span>, <span class="va">admixMod3</span><span class="op">)</span>, </span>
-<span>           conf_level <span class="op">=</span> <span class="fl">0.95</span>, test_method <span class="op">=</span> <span class="st">"icv"</span>, n_sim_tab <span class="op">=</span> <span class="fl">8</span>, </span>
+<span>           conf_level <span class="op">=</span> <span class="fl">0.95</span>, test_method <span class="op">=</span> <span class="st">"icv"</span>, n_sim_tab <span class="op">=</span> <span class="fl">4</span>, </span>
 <span>           tune_penalty <span class="op">=</span> <span class="cn">FALSE</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span>, n_cpu <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Call:admix_test(samples = list(data1, data2, data3), admixMod = list(admixMod1, </span></span>
 <span><span class="co">#&gt;     admixMod2, admixMod3), test_method = "icv", conf_level = 0.95, </span></span>
-<span><span class="co">#&gt;     n_sim_tab = 8, tune_penalty = FALSE, parallel = FALSE, n_cpu = 2)</span></span>
+<span><span class="co">#&gt;     n_sim_tab = 4, tune_penalty = FALSE, parallel = FALSE, n_cpu = 2)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Is the null hypothesis H0 rejected? No</span></span>
-<span><span class="co">#&gt; p-value of the test: 1</span></span></code></pre></div>
+<span><span class="co">#&gt; p-value of the test: 0.667</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
