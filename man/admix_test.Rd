@@ -26,8 +26,7 @@ only 'Poly' is available and the test is a gaussianity test. For further details
 
 \item{...}{Depending on the choice made by the user for the test method ('poly' or 'icv'), optional arguments to
 \link[admix]{gaussianity_test} or \link[admix]{orthobasis_test} (in case of 'poly'), and to \link[admix]{IBM_k_samples_test}
-in case of 'icv'.
-.}
+in case of 'icv'.}
 }
 \value{
 An object of class \link[admix]{admix_test}, containing 8 attributes: 1) the test decision (reject the null hypothesis or not);

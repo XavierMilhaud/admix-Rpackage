@@ -7,7 +7,7 @@
 #'
 #' @param samples List of the two samples, each one following the mixture distribution given by l = p*f + (1-p)*g,
 #'                with f and p unknown and g known.
-#' @param admixMod An object of class \link[admix]{admix_model}, containing useful information about distributions and parameters.
+#' @param admixMod A list of objects of class \link[admix]{admix_model}, containing useful information about distributions and parameters.
 #' @param conf_level The confidence level, default to 95 percent. Equals 1-alpha, where alpha is the level of the test (type-I error).
 #' @param est_method Estimation method to get the component weights, either 'PS' (Patra and Sen estimation) or 'BVdk'
 #'                   (Bordes and Vendekerkhove estimation). Choosing 'PS' requires to specify the number of bootstrap samples.
@@ -33,8 +33,10 @@
 #'         statistic at each order in the polynomial orthobasis expansion; 9) the selected rank (order) for the test statistic;
 #'         10) a vector of estimates, related to the estimated mixing proportions in the two samples.
 #'
+#' @seealso [print.orthobasis_test()] for printing a short version of the results from this estimation method,
+#'          and [summary.orthobasis_test()] for more comprehensive results.
+#'
 #' @examples
-#' \donttest{
 #' #### Under the null hypothesis H0.
 #' mixt1 <- twoComp_mixt(n = 300, weight = 0.77,
 #'                       comp.dist = list("norm", "exp"),
@@ -53,16 +55,19 @@
 #' ## Test procedure:
 #' orthobasis_test(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
 #'                 conf_level = 0.95, est_method = 'BVdk', support = 'Real')
-#' }
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
+#' @keywords internal
 
 orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c("BVdk","PS"),
                             ask_poly_param = FALSE, K = 3, s = 0.25, nb_echBoot = 100,
                             support = c("Real","Integer","Positive","Bounded.continuous","Bounded.discrete"),
                             bounds_supp = NULL, ...)
 {
+  if (!all(sapply(X = admixMod, FUN = inherits, what = "admix_model")))
+    stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
+
   old_options_warn <- base::options()$warn
   base::options(warn = -1)
 
@@ -134,8 +139,8 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
   } else {
     BVdk_est1 <- estim_BVdk(samples = data.p1, admixMod = admixMod[[1]], compute_var = TRUE, ...)
     BVdk_est2 <- estim_BVdk(samples = data.p2, admixMod = admixMod[[2]], compute_var = TRUE, ...)
-    hat.p1 <- getmixingWeight(BVdk_est1)
-    hat.p2 <- getmixingWeight(BVdk_est2)
+    hat.p1 <- BVdk_est1$estimated_mixing_weights
+    hat.p2 <- BVdk_est2$estimated_mixing_weights
     ## Estimation of the variances of the estimators :
     var_hat.p1 <- BVdk_est1$mix_weight_variance
     var_hat.p2 <- BVdk_est2$mix_weight_variance
@@ -251,6 +256,7 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
+#' @keywords internal
 
 print.orthobasis_test <- function(x, ...)
 {
@@ -260,6 +266,7 @@ print.orthobasis_test <- function(x, ...)
   cat("Is the null hypothesis (gaussian unknown component distribution) rejected? ",
       ifelse(x$reject_decision, "Yes", "No"), sep="")
   cat("\nTest p-value: ", round(x$p_value,3), "\n", sep="")
+  cat("\n")
 }
 
 
@@ -270,6 +277,7 @@ print.orthobasis_test <- function(x, ...)
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
+#' @keywords internal
 
 summary.orthobasis_test <- function(object, ...)
 {

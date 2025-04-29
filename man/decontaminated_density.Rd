@@ -9,10 +9,9 @@ decontaminated_density(sample1, estim.p, admixMod)
 \arguments{
 \item{sample1}{Sample under study.}
 
-\item{estim.p}{The estimated weight of the unknown component distribution, related to the proportion of the unknown component
-in the admixture model studied.}
+\item{estim.p}{The estimated weight, related to the proportion of the unknown component distribution in the admixture model studied.}
 
-\item{admixMod}{An object of class 'admix_model', containing useful information about distributions and parameters.}
+\item{admixMod}{An object of class 'admix_model', containing useful information about known distribution(s) and parameter(s).}
 }
 \value{
 An object of class 'decontaminated_density', containing 2 attributes: 1) the decontaminated density function;

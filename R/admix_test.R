@@ -18,7 +18,6 @@
 #' @param ... Depending on the choice made by the user for the test method ('poly' or 'icv'), optional arguments to
 #'            \link[admix]{gaussianity_test} or \link[admix]{orthobasis_test} (in case of 'poly'), and to \link[admix]{IBM_k_samples_test}
 #'            in case of 'icv'.
-#'            .
 #'
 #' @details For further details on implemented hypothesis tests, see the references hereafter.
 #'          .
@@ -56,11 +55,14 @@
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-admix_test <- function(samples, admixMod, test_method = c("poly","icv"), conf_level = 0.95, ...) {
+admix_test <- function(samples, admixMod, test_method = c("poly","icv"), conf_level = 0.95, ...)
+{
+  if (!all(sapply(X = admixMod, FUN = inherits, what = "admix_model")))
+    stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
 
   meth <- match.arg(test_method)
-
   n_samples <- length(samples)
+
   ## Check right specification of arguments:
   if ((n_samples == 1) & (meth == "icv")) stop("Testing using the inner convergence property (obtained from IBM estimation) requires at least TWO samples.\n")
   if (meth == "poly") message("  Testing using polynomial basis expansions requires in theory a square-root n consistent estimation
@@ -68,8 +70,10 @@ admix_test <- function(samples, admixMod, test_method = c("poly","icv"), conf_le
   component distributions with symmetric densities). However, it is allowed to use 'PS' estimation in practice (argument 'est_method'
   has therefore to be set to 'PS'. In this case, the variance of estimators is obtained by boostrapping.\n")
 
+  old_options_warn <- base::options()$warn
+  base::options(warn = -1)
+
   if (meth == "icv") {
-    options(warn = -1)
     if (n_samples >= 2) {
       test_res <- IBM_k_samples_test(samples = samples, admixMod = admixMod, conf_level = conf_level, ...)
     } else stop("Incorrect number of samples under study (should be > 1).")
@@ -101,7 +105,7 @@ admix_test <- function(samples, admixMod, test_method = c("poly","icv"), conf_le
   class(obj_res) <- "admix_test"
   obj_res$call <- match.call()
 
-  options(warn = 0)
+  on.exit(base::options(warn = old_options_warn))
   return(obj_res)
 }
 
@@ -125,6 +129,7 @@ print.admix_test <- function(x, ...)
   } else {
     cat("p-value of the test: ", round(x$p_value, 3), "\n", sep="")
   }
+  cat("\n")
 }
 
 

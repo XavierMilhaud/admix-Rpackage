@@ -12,7 +12,7 @@
 \item{...}{Arguments to be passed to generic method 'plot', such as graphical parameters (see par).}
 }
 \value{
-More important information about the decontaminated density.
+The function related to the estimated decontaminated density.
 }
 \description{
 Print some overview of the decontaminated density function.

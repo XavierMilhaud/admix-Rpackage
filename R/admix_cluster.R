@@ -71,6 +71,9 @@
 admix_cluster <- function(samples, admixMod, conf_level = 0.95, tune_penalty = TRUE,
                           tabul_dist = NULL, echo = TRUE, ...)
 {
+  if (!all(sapply(X = admixMod, FUN = inherits, what = "admix_model")))
+    stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
+
   old_options_warn <- base::options()$warn
   base::options(warn = -1)
 
@@ -96,7 +99,7 @@ admix_cluster <- function(samples, admixMod, conf_level = 0.95, tune_penalty = T
       XY <- estim_IBM(samples = samples[as.numeric(couples.list[k, ])],
                       admixMod = admixMod[as.numeric(couples.list[k, ])], n.integ = 1000)
     }
-    weights.list[k, ] <- getmixingWeight(XY)
+    weights.list[k, ] <- XY$estimated_mixing_weights
     empirical.contr[[k]] <- minimal_size * IBM_empirical_contrast(XY$estimated_mixing_weights, samples = samples[as.numeric(couples.list[k, ])],
                                                                   admixMod = admixMod[as.numeric(couples.list[k, ])], G = XY$integ.supp, fixed.p.X = XY$p.X.fixed)
   }

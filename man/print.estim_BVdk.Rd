@@ -17,3 +17,4 @@ Print the results stored in an object of class 'estim_BVdk'.
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}
 }
+\keyword{internal}

@@ -17,3 +17,4 @@ Summary method for objects 'gaussianity_test'
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}
 }
+\keyword{internal}

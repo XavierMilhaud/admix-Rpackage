@@ -14,7 +14,7 @@
 \item{add_plot}{(default to FALSE) A boolean specifying if one plots the decontaminated density over an existing plot. Used for visual
 comparison purpose.}
 
-\item{...}{Arguments to be passed to generic method 'plot', such as graphical parameters (see par).}
+\item{...}{Arguments to be passed to generic method 'plot', such as graphical parameters (see ?par).}
 }
 \value{
 The plot of the decontaminated density.

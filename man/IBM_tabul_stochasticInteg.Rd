@@ -70,3 +70,4 @@ IBM_tabul_stochasticInteg(samples = list(data1, data2), admixMod = list(admixMod
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}
 }
+\keyword{internal}

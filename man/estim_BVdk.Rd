@@ -67,6 +67,11 @@ estim_BVdk(samples = data2, admixMod = admixMod2, method = 'L-BFGS-B',
 \references{
 \insertRef{BordesVandekerkhove2010}{admix}
 }
+\seealso{
+\code{\link[=print.estim_BVdk]{print.estim_BVdk()}} for printing a short version of the results from this estimation method,
+and \code{\link[=summary.estim_BVdk]{summary.estim_BVdk()}} for more comprehensive results.
+}
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}
 }
+\keyword{internal}

@@ -74,6 +74,11 @@ estim_IBM(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
 \references{
 \insertRef{MilhaudPommeretSalhiVandekerkhove2024a}{admix}
 }
+\seealso{
+\code{\link[=print.estim_IBM]{print.estim_IBM()}} for printing a short version of the results from this estimation method,
+and \code{\link[=summary.estim_IBM]{summary.estim_IBM()}} for more comprehensive results.
+}
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}
 }
+\keyword{internal}

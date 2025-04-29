@@ -147,6 +147,11 @@ sim_gaussianProcess <- function(mean_vec, varCov_mat, from = 0, to = 1, start = 
 
 is_equal_knownComp <- function(admixMod1, admixMod2)
 {
+  if (!inherits(x = admixMod1, what = "admix_model"))
+    stop("Argument 'admixMod1' is not correctly specified. See ?admix_model.")
+  if (!inherits(x = admixMod2, what = "admix_model"))
+    stop("Argument 'admixMod2' is not correctly specified. See ?admix_model.")
+
   if ( (admixMod1$comp.dist$known == admixMod2$comp.dist$known) &
        all(names(admixMod1$comp.param$known) == names(admixMod2$comp.param$known)) &
        all(unlist(admixMod1$comp.param$known) == unlist(admixMod2$comp.param$known)) ) {
@@ -233,6 +238,9 @@ kernel_density <- function(u, h)
 
 knownComp_to_uniform <- function(data, admixMod)
 {
+  if (!inherits(x = admixMod, what = "admix_model"))
+    stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
+
   ## Extracts the information about component distributions for inversion
   ## (transformation to uniform distribution of the known component):
   comp.dist.inv <- paste0("p", admixMod$comp.dist$known)

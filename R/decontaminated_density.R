@@ -5,9 +5,8 @@
 #' L = p*F + (1-p)*G, with g a known CDF and p and f unknown quantities.
 #'
 #' @param sample1 Sample under study.
-#' @param estim.p The estimated weight of the unknown component distribution, related to the proportion of the unknown component
-#'                in the admixture model studied.
-#' @param admixMod An object of class 'admix_model', containing useful information about distributions and parameters.
+#' @param estim.p The estimated weight, related to the proportion of the unknown component distribution in the admixture model studied.
+#' @param admixMod An object of class 'admix_model', containing useful information about known distribution(s) and parameter(s).
 #'
 #' @details The decontaminated density is obtained by inverting the admixture density, given by l = p*f + (1-p)*g, to isolate the
 #'          unknown component f after having estimated p.
@@ -83,6 +82,9 @@
 
 decontaminated_density <- function(sample1, estim.p, admixMod)
 {
+  if (!inherits(x = admixMod, what = "admix_model"))
+    stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
+
   ## Extract the information on component distributions:
   knownComp.dens <- paste0("d", admixMod$comp.dist$known)
   if (any(knownComp.dens == "dmultinom")) { knownComp.dens[which(knownComp.dens == "dmultinom")] <- "approxfun" }
@@ -119,8 +121,9 @@ decontaminated_density <- function(sample1, estim.p, admixMod)
   }
   f1_decontamin <- function(x) (1/estim.p) * (l1_emp(x) - (1-estim.p) * g1(x))
 
-  obj <- list(decontaminated_density_fun = f1_decontamin,
-              support = support)
+  obj <- list(data = sample1,
+              support = support,
+              decontaminated_density_fun = f1_decontamin)
   class(obj) <- "decontaminated_density"
   obj$call <- match.call()
 
@@ -135,7 +138,7 @@ decontaminated_density <- function(sample1, estim.p, admixMod)
 #' @param x An object of class 'decontaminated_density' (see ?decontaminated_density).
 #' @param ... Arguments to be passed to generic method 'plot', such as graphical parameters (see par).
 #'
-#' @return More important information about the decontaminated density.
+#' @return The function related to the estimated decontaminated density.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
@@ -147,9 +150,32 @@ print.decontaminated_density <- function(x, ...)
   cat("\n")
   print(x$decontaminated_density_fun)
   cat("\n")
-  cat("Type of support: ", x$support, sep = "")
 }
 
+
+#' Summary method for object of class 'decontaminated_density'
+#'
+#' Summarizes information about the estimated decontaminated density function.
+#'
+#' @param object An object of class 'decontaminated_density' (see ?decontaminated_density).
+#' @param ... Arguments to be passed to generic method 'summary'.
+#'
+#' @return Classical statistical indicators about the decontaminated density.
+#'
+#' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
+#' @export
+
+summary.decontaminated_density <- function(object, ...)
+{
+  cat("Call:")
+  print(object$call)
+  cat("\n")
+  cat("Type of support: ", object$support, sep = "")
+  cat("\n\n")
+  cat("Statistics about the estimated decontaminated density function:\n")
+  print(summary(object$decontaminated_density_fun(object$data)))
+  cat("\n")
+}
 
 
 #' Plot method for class 'decontaminated_density'
@@ -161,7 +187,7 @@ print.decontaminated_density <- function(x, ...)
 #' @param x_val (numeric) A vector of points at which to evaluate the probability mass/density function.
 #' @param add_plot (default to FALSE) A boolean specifying if one plots the decontaminated density over an existing plot. Used for visual
 #'                 comparison purpose.
-#' @param ... Arguments to be passed to generic method 'plot', such as graphical parameters (see par).
+#' @param ... Arguments to be passed to generic method 'plot', such as graphical parameters (see ?par).
 #'
 #' @details The decontaminated density is obtained by inverting the admixture density, given by l = p*f + (1-p)*g, to isolate the
 #'          unknown component f after having estimated p and l.
@@ -335,9 +361,13 @@ plot.decontaminated_density <- function(x, x_val, add_plot = FALSE, ...)
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
+#' @keywords internal
 
 decontaminated_cdf <- function(sample1, estim.p, admixMod)
 {
+  if (!inherits(x = admixMod, what = "admix_model"))
+    stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
+
   ## Extract the information on component distributions:
   knownComp.CDF <- paste0("p", admixMod$comp.dist$known)
   if (any(knownComp.CDF == "pmultinom")) { knownComp.CDF[which(knownComp.CDF == "pmultinom")] <- "stepfun" }

@@ -18,11 +18,12 @@ IBM_k_samples_test(
 \arguments{
 \item{samples}{A list of the K samples to be studied, all following admixture distributions.}
 
-\item{admixMod}{A list of objects of class class \link[admix]{admix_model}, containing useful information about distributions and parameters.}
+\item{admixMod}{A list of objects of class \link[admix]{admix_model}, containing useful information about distributions and parameters.}
 
 \item{conf_level}{The confidence level of the K-sample test.}
 
-\item{sim_U}{(default to NULL) Random draws of the inner convergence part of the contrast as defined in the IBM approach (see 'Details' below).}
+\item{sim_U}{(default to NULL) Random draws of the inner convergence part of the contrast as defined in the IBM approach (see 'Details' below,
+and \link[admix]{IBM_tabul_stochasticInteg}).}
 
 \item{tune_penalty}{(default to TRUE) A boolean that allows to choose between a classical penalty term or an optimized penalty (embedding
 some tuning parameters, automatically optimized). Optimized penalty is particularly useful for low or unbalanced sample sizes
@@ -54,7 +55,6 @@ observed sample. Perform the following hypothesis test:
 H0 : f_1 = ... = f_K  against  H1 : f_i differs from f_j (i different from j, and i,j in 1,...,K).
 }
 \examples{
-\donttest{
 ####### Under the null hypothesis H0 (with K=3 populations):
 ## Simulate mixture data:
 mixt1 <- twoComp_mixt(n = 450, weight = 0.4,
@@ -84,12 +84,17 @@ IBM_k_samples_test(samples = list(data1, data2, data3),
                    admixMod = list(admixMod1, admixMod2, admixMod3),
                    conf_level = 0.95, sim_U = NULL, n_sim_tab = 8,
                    tune_penalty = FALSE, parallel = FALSE, n_cpu = 2)
-}
 
 }
 \references{
 \insertRef{MilhaudPommeretSalhiVandekerkhove2024b}{admix}
 }
+\seealso{
+\code{\link[=print.IBM_test]{print.IBM_test()}} for printing a short version of the results from this estimation method,
+\code{\link[=summary.IBM_test]{summary.IBM_test()}} for more comprehensive results, and \code{\link[=IBM_tabul_stochasticInteg]{IBM_tabul_stochasticInteg()}} for the
+tabulation of the stochastic integral providing the quantile of interest for testing.
+}
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}
 }
+\keyword{internal}

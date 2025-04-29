@@ -70,6 +70,11 @@ gaussianity_test(samples = data1, admixMod = admixMod1,
 \references{
 \insertRef{PommeretVandekerkhove2019}{admix}
 }
+\seealso{
+\code{\link[=print.gaussianity_test]{print.gaussianity_test()}} for printing a short version of the results from this estimation method,
+and \code{\link[=summary.gaussianity_test]{summary.gaussianity_test()}} for more comprehensive results.
+}
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}
 }
+\keyword{internal}

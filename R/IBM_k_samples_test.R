@@ -7,9 +7,10 @@
 #'    H0 : f_1 = ... = f_K  against  H1 : f_i differs from f_j (i different from j, and i,j in 1,...,K).
 #'
 #' @param samples A list of the K samples to be studied, all following admixture distributions.
-#' @param admixMod A list of objects of class class \link[admix]{admix_model}, containing useful information about distributions and parameters.
+#' @param admixMod A list of objects of class \link[admix]{admix_model}, containing useful information about distributions and parameters.
 #' @param conf_level The confidence level of the K-sample test.
-#' @param sim_U (default to NULL) Random draws of the inner convergence part of the contrast as defined in the IBM approach (see 'Details' below).
+#' @param sim_U (default to NULL) Random draws of the inner convergence part of the contrast as defined in the IBM approach (see 'Details' below,
+#'               and \link[admix]{IBM_tabul_stochasticInteg}).
 #' @param tune_penalty (default to TRUE) A boolean that allows to choose between a classical penalty term or an optimized penalty (embedding
 #'                     some tuning parameters, automatically optimized). Optimized penalty is particularly useful for low or unbalanced sample sizes
 #'                     to detect alternatives to the null hypothesis (H0). It is recommended to set it to TRUE.
@@ -31,8 +32,11 @@
 #'         tabulated distribution of the contrast; 16) the estimated mixing proportions (not implemented yet, since that makes sense only
 #'         in case of equal unknown component distributions); 17) the matrix of pairwise contrasts (distance between two samples).
 #'
+#' @seealso [print.IBM_test()] for printing a short version of the results from this estimation method,
+#'          [summary.IBM_test()] for more comprehensive results, and [IBM_tabul_stochasticInteg()] for the
+#'          tabulation of the stochastic integral providing the quantile of interest for testing.
+#'
 #' @examples
-#' \donttest{
 #' ####### Under the null hypothesis H0 (with K=3 populations):
 #' ## Simulate mixture data:
 #' mixt1 <- twoComp_mixt(n = 450, weight = 0.4,
@@ -62,14 +66,17 @@
 #'                    admixMod = list(admixMod1, admixMod2, admixMod3),
 #'                    conf_level = 0.95, sim_U = NULL, n_sim_tab = 8,
 #'                    tune_penalty = FALSE, parallel = FALSE, n_cpu = 2)
-#' }
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
+#' @keywords internal
 
 IBM_k_samples_test <- function(samples, admixMod, conf_level = 0.95, sim_U = NULL,
                                tune_penalty = TRUE, n_sim_tab = 100, parallel = FALSE, n_cpu = 2)
 {
+  if (!all(sapply(X = admixMod, FUN = inherits, what = "admix_model")))
+    stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
+
   old_options_warn <- base::options()$warn
   base::options(warn = -1)
 
@@ -333,6 +340,7 @@ IBM_k_samples_test <- function(samples, admixMod, conf_level = 0.95, sim_U = NUL
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
+#' @keywords internal
 
 print.IBM_test <- function(x, ...)
 {
@@ -342,6 +350,7 @@ print.IBM_test <- function(x, ...)
   cat("Is the null hypothesis (equal unknown distributions) rejected? ",
       ifelse(x$reject_decision, "Yes", "No"), sep="")
   cat("\np-value of the test: ", round(x$p_value,3), "\n", sep="")
+  cat("\n")
 }
 
 
@@ -352,6 +361,7 @@ print.IBM_test <- function(x, ...)
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
+#' @keywords internal
 
 summary.IBM_test <- function(object, ...)
 {
@@ -650,6 +660,7 @@ IBM_greenLight_criterion <- function(estim_obj, samples, admixMod, alpha = 0.05)
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
+#' @keywords internal
 
 IBM_tabul_stochasticInteg <- function(samples, admixMod, min_size = NULL, n.varCovMat = 80,
                                       n_sim_tab = 100, parallel = FALSE, n_cpu = 2)

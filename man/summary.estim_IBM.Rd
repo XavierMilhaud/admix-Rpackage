@@ -17,3 +17,4 @@ Summarizes the results stored in an object of class 'estim_IBM'.
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}
 }
+\keyword{internal}

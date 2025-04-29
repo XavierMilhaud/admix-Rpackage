@@ -27,6 +27,7 @@
 #'                       comp.param = list(list("mean"=-3, "sd"=0.5),
 #'                                         list("rate"=1)))
 #' print(sim.X)
+#' summary(sim.X)
 #' plot(sim.X, xlim=c(-5,5), ylim=c(0,0.5))
 #' plot(sim.Y, add.plot = TRUE, xlim=c(-5,5), ylim=c(0,0.5), col = "red")
 #'
@@ -145,7 +146,7 @@ plot.twoComp_mixt <- function(x, add.plot = FALSE, ...)
   if (all(x$dist.type != "Discrete")) {
     base::plot(densities, ...)
   } else {
-    ## FIXME: pour breaks' defini comme ci-dessous, cela ne marche que si la loi discrete est a support positif!
+    ## FIXME: pour 'breaks' defini comme ci-dessous, cela ne marche que si la loi discrete est a support positif!
     #graphics::hist(x$mixt.data, freq = TRUE, breaks = 0:ceiling(x.axis.lim[2]), ...)
     base::plot(as.numeric(names(table(x$mixt.data))),
                as.numeric(table(x$mixt.data)) / sum(as.numeric(table(x$mixt.data))),
@@ -172,12 +173,6 @@ print.twoComp_mixt <- function(x, ...)
   cat("\nCall:")
   print(x$call)
   cat("\n")
-  cat("Component distributions: ", unlist(x$comp.dist), "\n")
-  cat("Support of the component distributions: ", unlist(x$dist.type), "\n\n")
-  cat("Value of the component parameters: \n")
-  print(unlist(x$comp.param))
-  cat("\nMixing proportion:", x$mix.prop, "\n")
-  cat("\n")
   cat("Number of observations: ", x$n, "\n")
   cat("\n")
   if (any(x$comp.dist == "multinom")) {
@@ -188,6 +183,48 @@ print.twoComp_mixt <- function(x, ...)
     cat("Simulated observations coming from the 1st component (first 10 obs.): \n", utils::head(x$comp1.data, 10), "\n")
     cat("\n")
     cat("Simulated observations coming from the 2nd component (first 10 obs.): \n", utils::head(x$comp2.data, 10), "\n")
+  }
+  cat("\n")
+}
+
+
+#' Summary method for objects 'twoComp_mixt'
+#'
+#' Provides statistical indicators of an object of class 'twoComp_mixt'.
+#' A two-component mixture model has probability density function (pdf) l such that:
+#'    l = p * f + (1-p) * g,
+#' where p is the mixing proportion, and f and g are the component distributions.
+#'
+#' @param object An object of class 'twoComp_mixt'.
+#' @param ... A list of additional parameters belonging to the default method.
+#'
+#' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
+#' @export
+
+summary.twoComp_mixt <- function(object, ...)
+{
+  cat("\nCall:")
+  print(object$call)
+  cat("\n")
+  cat("Component distributions: ", unlist(object$comp.dist), "\n")
+  cat("Support of the component distributions: ", unlist(object$dist.type), "\n\n")
+  cat("Value of the component parameters: \n")
+  print(unlist(object$comp.param))
+  cat("\nMixing proportion:", object$mix.prop, "\n")
+  cat("\n")
+  cat("Number of observations: ", object$n, "\n")
+  cat("\n")
+  if (any(object$comp.dist == "multinom")) {
+    cat("Obtained multinomial mixture distribution: \n", table(object$mixt.data), "\n")
+  } else {
+    cat("Statistics related to the simulated sample: \n")
+    print(summary(object$mixt.data))
+    cat("\n")
+    cat("Statistics related to the first component of the two-component mixture: \n")
+    print(summary(object$comp1.data))
+    cat("\n")
+    cat("Statistics related to the second component of the two-component mixture: \n")
+    print(summary(object$comp2.data))
   }
   cat("\n")
 }

@@ -28,6 +28,9 @@
 #'         statistic at each order in the polynomial orthobasis expansion; 9) the selected rank (order) for the test statistic;
 #'         10) a list of estimates (mixing weight, mean and standard deviation of the Gaussian unknown distribution).
 #'
+#' @seealso [print.gaussianity_test()] for printing a short version of the results from this estimation method,
+#'          and [summary.gaussianity_test()] for more comprehensive results.
+#'
 #' @examples
 #' ####### Under the null hypothesis H0.
 #' ## Simulate mixture data:
@@ -45,10 +48,14 @@
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
+#' @keywords internal
 
 gaussianity_test <- function(samples, admixMod, conf_level = 0.95, ask_poly_param = FALSE, K = 3, s = 0.25,
                              support = c('Real','Integer','Positive','Bounded.continuous'), ...)
 {
+  if (!inherits(x = admixMod, what = "admix_model"))
+    stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
+
   support <- match.arg(support)
 
   if (ask_poly_param) {
@@ -93,11 +100,12 @@ gaussianity_test <- function(samples, admixMod, conf_level = 0.95, ask_poly_para
 	n.BVdk <- length(data.BVdk)	                        # for the estimation of mixing weight / location shift
 
 	##-------- Estimation of parameters and corresponding variances -----------##
-	## Focus on parameters (weight, localization and variance), consider independent subsamples of the original data:
 	old_options_warn <- base::options()$warn
 	base::options(warn = -1)
+	## Focus on parameters (weight, localization and variance), consider independent subsamples of the original data:
 	BVdk <- estim_BVdk(samples = data.BVdk, admixMod = admixMod, compute_var = TRUE, ...)
 	on.exit(base::options(warn = old_options_warn))
+
 	hat_p <- BVdk$estimated_mixing_weights
 	hat_loc <- BVdk$estimated_locations
 	## Then variances of the estimators: semiparametric estimation (time-consuming), based on results by Bordes & Vandekerkhove (2010)
@@ -212,6 +220,7 @@ gaussianity_test <- function(samples, admixMod, conf_level = 0.95, ask_poly_para
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
+#' @keywords internal
 
 print.gaussianity_test <- function(x, ...)
 {
@@ -225,6 +234,7 @@ print.gaussianity_test <- function(x, ...)
   } else {
     cat("\np-value of the test: ", round(x$p_value, 3), sep="")
   }
+  cat("\n")
 }
 
 
@@ -235,6 +245,7 @@ print.gaussianity_test <- function(x, ...)
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
+#' @keywords internal
 
 summary.gaussianity_test <- function(object, ...)
 {

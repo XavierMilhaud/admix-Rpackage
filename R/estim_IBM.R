@@ -20,6 +20,9 @@
 #'         unknown component distributions in each sample); 6) the arbitrary value of the mixing weight in the first admixture sample
 #'         (in case of equal known components, see the given reference); 7) the support of integration that was used in the computations.
 #'
+#' @seealso [print.estim_IBM()] for printing a short version of the results from this estimation method,
+#'          and [summary.estim_IBM()] for more comprehensive results.
+#'
 #' @examples
 #' ## Continuous support: simulate mixture data.
 #' mixt1 <- twoComp_mixt(n = 1500, weight = 0.5,
@@ -63,10 +66,13 @@
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
+#' @keywords internal
 
 estim_IBM <- function(samples, admixMod, n.integ = 1000, compute_var = FALSE)
 {
   stopifnot("Wrong number of samples... Must be 2!" = length(samples) == 2)
+  if (!all(sapply(X = admixMod, FUN = inherits, what = "admix_model")))
+    stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
 
   warning(" IBM estimators of two unknown proportions are reliable only if the two
     corresponding unknown component distributions have been tested equal (see 'admix_test()').
@@ -177,7 +183,7 @@ estim_IBM <- function(samples, admixMod, n.integ = 1000, compute_var = FALSE)
 #' @param ... A list of additional parameters belonging to the default method.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @export
+#' @keywords internal
 
 print.estim_IBM <- function(x, ...)
 {
@@ -195,6 +201,7 @@ print.estim_IBM <- function(x, ...)
     cat("Estimated variance of the latter weight in the 1st sample: ", round(x$variance_est_p1,6), "\n")
     cat("Estimated variance of the latter weight in the 2nd sample: ", round(x$variance_est_p2,6), "\n\n")
   }
+  cat("\n")
 }
 
 
@@ -206,7 +213,7 @@ print.estim_IBM <- function(x, ...)
 #' @param ... A list of additional parameters belonging to the default method.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @export
+#' @keywords internal
 
 summary.estim_IBM <- function(object, ...)
 {
@@ -235,8 +242,9 @@ summary.estim_IBM <- function(object, ...)
     cat("Estimated variance of the latter weight in the 2nd sample: ", round(object$variance_est_p2,6), "\n")
   }
   cat("\n----- Support -----\n")
-  cat("Integration support: ", paste(utils::head(object$integ.supp,3), collapse=" "), "...",
-      paste(utils::tail(object$integ.supp,3), collapse = " "), "\n\n", sep="")
+  cat("Integration support: ", paste(round(utils::head(object$integ.supp,3),3), collapse=" "), "...",
+      paste(round(utils::tail(object$integ.supp,3),3), collapse = " "), "\n", sep="")
+  cat("\n")
 }
 
 

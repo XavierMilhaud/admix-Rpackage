@@ -23,6 +23,9 @@
 #'         density); 7) the variance of the two estimators (respectively the mixing proportion and location shift); 8) the optimization
 #'         method that was used.
 #'
+#' @seealso [print.estim_BVdk()] for printing a short version of the results from this estimation method,
+#'          and [summary.estim_BVdk()] for more comprehensive results.
+#'
 #' @examples
 #' ## Simulate mixture data:
 #' mixt1 <- twoComp_mixt(n = 200, weight = 0.4,
@@ -51,9 +54,13 @@
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
+#' @keywords internal
 
 estim_BVdk <- function(samples, admixMod, method = c("L-BFGS-B","Nelder-Mead"), compute_var = FALSE)
 {
+  if (!inherits(x = admixMod, what = "admix_model"))
+    stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
+
   warning("Estimation by 'BVdk' assumes the unknown component distribution
   to have a symmetric probability density function.\n")
   ## Extract useful information about known component distribution:
@@ -116,7 +123,7 @@ estim_BVdk <- function(samples, admixMod, method = c("L-BFGS-B","Nelder-Mead"), 
 #' @param ... A list of additional parameters belonging to the default method.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @export
+#' @keywords internal
 
 print.estim_BVdk <- function(x, ...)
 {
@@ -126,7 +133,8 @@ print.estim_BVdk <- function(x, ...)
   cat("Estimated mixing proportion: ", x$estimated_mixing_weights, "\n")
   cat("Estimated location parameter: ", x$estimated_locations, "\n")
   cat("Variance of the mixing proportion estimator: ", x$mix_weight_variance, "\n")
-  cat("Variance of the location shift estimator: ", x$location_variance, "\n\n")
+  cat("Variance of the location shift estimator: ", x$location_variance, "\n")
+  cat("\n")
 }
 
 
@@ -138,7 +146,7 @@ print.estim_BVdk <- function(x, ...)
 #' @param ... A list of additional parameters belonging to the default method.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @export
+#' @keywords internal
 
 summary.estim_BVdk <- function(object, ...)
 {
