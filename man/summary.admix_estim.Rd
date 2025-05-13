@@ -19,3 +19,4 @@ L = p*F + (1-p)*G, with G a known CDF, and p and F unknown quantities.
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}
 }
+\keyword{internal}

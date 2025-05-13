@@ -302,6 +302,7 @@ plot.decontaminated_density <- function(x, x_val, add_plot = FALSE, ...)
     }
   } else {
     old_par_new <- graphics::par()$new
+    on.exit(graphics::par(new = old_par_new))
     graphics::par(new = TRUE)
     if (support == "Discrete") {
       graphics::barplot(height = decontamin_dens_values, names = as.character(x_val), add = add_plot,
@@ -309,7 +310,6 @@ plot.decontaminated_density <- function(x, x_val, add_plot = FALSE, ...)
     } else {
       graphics::lines(x = x_val, y = decontamin_dens_values, ...)
     }
-    on.exit(graphics::par(new = old_par_new))
   }
 }
 

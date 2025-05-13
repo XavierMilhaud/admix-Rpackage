@@ -5,7 +5,7 @@
 \title{Gaussianity test in an admixture model}
 \usage{
 gaussianity_test(
-  samples,
+  sample,
   admixMod,
   conf_level = 0.95,
   ask_poly_param = FALSE,
@@ -16,7 +16,7 @@ gaussianity_test(
 )
 }
 \arguments{
-\item{samples}{Sample under study.}
+\item{sample}{(numeric) The sample under study.}
 
 \item{admixMod}{An object of class \link[admix]{admix_model}, containing useful information about distributions and parameters.}
 
@@ -25,7 +25,7 @@ gaussianity_test(
 \item{ask_poly_param}{(default to FALSE) If TRUE, ask the user to choose both the order 'K' of expansion coefficients in the
 orthonormal polynomial basis, and the penalization rate 's' involved on the penalization rule for the test.}
 
-\item{K}{(K > 0, default to 3) If not asked (see the previous argument), number of coefficients considered for the polynomial basis expansion.}
+\item{K}{(default to 3) If not asked (see the previous argument), number of coefficients considered for the polynomial basis expansion.}
 
 \item{s}{(in ]0,1/2[, default to 0.25) If not asked (see the previous argument), normalization rate involved in the penalization rule
 for model selection. See the reference below.}
@@ -43,13 +43,10 @@ statistic at each order in the polynomial orthobasis expansion; 9) the selected 
 10) a list of estimates (mixing weight, mean and standard deviation of the Gaussian unknown distribution).
 }
 \description{
-Performs an hypothesis test to check for the gaussianity of the unknown mixture component, given that the known component
-has support on the real line. Recall that an admixture model has probability density function (pdf) l = p*f + (1-p)*g, where g is
+Performs an hypothesis test to check for the gaussianity of the unknown mixture component.
+Recall that an admixture model has probability density function (pdf) l = p*f + (1-p)*g, where g is
 the known pdf and l is observed (others are unknown). This test requires optimization (to estimate the unknown parameters) as
 defined by Bordes & Vandekerkhove (2010), which means that the unknown mixture component must have a symmetric density.
-}
-\details{
-Extensions to the case of non-Gaussian known components can be overcome thanks to basic transformations using cdf.
 }
 \examples{
 ####### Under the null hypothesis H0.
@@ -63,7 +60,7 @@ data1 <- getmixtData(mixt1)
 admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
                          knownComp_param = mixt1$comp.param[[2]])
 ## Performs the test:
-gaussianity_test(samples = data1, admixMod = admixMod1,
+gaussianity_test(sample = data1, admixMod = admixMod1,
                  conf_level = 0.95, K = 3, s = 0.1, support = "Real")
 
 }

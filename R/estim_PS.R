@@ -142,9 +142,9 @@ print.estim_PS <- function(x, ...){
     #cat("\n", paste("The chosen value c_n is", round(x$c.n, 3)), "\n")
 #    if( !is.null(x$cv.out)){
 #      old_par <- graphics::par()$mfrow
+#      on.exit(graphics::par(old_par))
 #      graphics::par(mfrow=c(1,2))
 #      plot(x$cv.out)
-#      on.exit(graphics::par(old_par))
 #    }
 #    plot(x$dist.out)
   } else if(x$method == 'lwr.bnd'){

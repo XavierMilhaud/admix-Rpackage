@@ -75,6 +75,7 @@ admix_cluster <- function(samples, admixMod, conf_level = 0.95, tune_penalty = T
     stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
 
   old_options_warn <- base::options()$warn
+  on.exit(base::options(warn = old_options_warn))
   base::options(warn = -1)
 
   if (length(sapply(samples, length)) == 1) return("One single sample, no clusters to be found.")
@@ -246,8 +247,6 @@ admix_cluster <- function(samples, admixMod, conf_level = 0.95, tune_penalty = T
   )
   class(obj) <- "admix_cluster"
   obj$call <- match.call()
-
-  on.exit(base::options(warn = old_options_warn))
   return(obj)
 }
 

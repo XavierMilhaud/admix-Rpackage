@@ -78,6 +78,7 @@ IBM_k_samples_test <- function(samples, admixMod, conf_level = 0.95, sim_U = NUL
     stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
 
   old_options_warn <- base::options()$warn
+  on.exit(base::options(warn = old_options_warn))
   base::options(warn = -1)
 
   ## Control whether parallel computations were asked for or not:
@@ -102,8 +103,6 @@ IBM_k_samples_test <- function(samples, admixMod, conf_level = 0.95, sim_U = NUL
       S_ii <- matrix(NA, nrow = length(samples), ncol = 6)
       for (k in 1:length(samples)) {
 
-        #sapply(X = admixMod[as.numeric(model.list[[k]])], "[[", "comp.dist")["known", ]
-        #sapply(X = admixMod[as.numeric(model.list[[k]])], "[[", "comp.param")["known", ]
         ## Artificially create 6 times two subsamples from one given original sample (thus under the null H0):
         subsample1_index <- matrix(NA, nrow = floor(length(samples[[k]])/2), ncol = 6)
         subsample1_index <- replicate(n = 6, expr = sample(x = 1:length(samples[[k]]),
@@ -305,29 +304,36 @@ IBM_k_samples_test <- function(samples, admixMod, conf_level = 0.95, sim_U = NUL
     CDF_U <- stats::ecdf(sim_U)
     p_value <- 1 - CDF_U(finalStat_value)
 
+    names(finalStat_value) <- "Tabulated testing distribution"
+    stat_param <- NA ; names(stat_param) <- ""
+    estimated_values <- vector(mode = "numeric", length = 2L)
+    estimated_values <- c(gamma_opt, cst_selected)
+    names(estimated_values) <- c("Tuned Gamma","Tuned constant C")
+
     obj <- list(
+      null.value = unique(q_H),
+      alternative = "greater",
+      method = "Equality test of the unknown component distributions (with IBM)",
+      estimate = estimated_values,
+      data.name = deparse(substitute(samples)),
+      statistic = finalStat_value,
+      parameters = stat_param,
+      p.value = p_value,
       n_populations = length(samples),
       population_sizes = sapply(X = samples, FUN = length),
       admixture_models = admixMod,
       reject_decision = final_test,
       confidence_level = conf_level,
-      p_value = p_value,
-      extreme_quantile_tabul = unique(q_H),
-      test_statistic_value = finalStat_value,
       selected_rank = selected.index,
       statistic_name = finalStat_name,
       penalty_nullHyp = penalty_rule,
       penalized_stat = penalized.stats,
-      tuned_gamma = gamma_opt,
-      tuned_constant = cst_selected,
       tabulated_dist = sim_U,
-      estimated_mixing_weights = NA,
       contrast_matrix = contrast.matrix
     )
-    class(obj) <- c("IBM_test", "admix_test")
-    obj$call <- match.call()
 
-    on.exit(base::options(warn = old_options_warn))
+    class(obj) <- c("IBM_test", "htest")
+    obj$call <- match.call()
     return(obj)
   }
 
@@ -347,9 +353,13 @@ print.IBM_test <- function(x, ...)
   cat("Call:")
   print(x$call)
   cat("\n")
-  cat("Is the null hypothesis (equal unknown distributions) rejected? ",
+  cat("Is the null hypothesis rejected (same distribution for unknown components)? ",
       ifelse(x$reject_decision, "Yes", "No"), sep="")
-  cat("\np-value of the test: ", round(x$p_value,3), "\n", sep="")
+  if (round(x$p.value, 3) == 0) {
+    cat("\np-value of the test: 1e-12", sep="")
+  } else {
+    cat("\np-value of the test: ", round(x$p.value, 3), sep="")
+  }
   cat("\n")
 }
 
@@ -383,20 +393,21 @@ summary.IBM_test <- function(object, ...)
     }
   }
   cat("\n----- Test decision -----\n")
-  cat("Is the null hypothesis (equality of unknown distributions) rejected? ",
+  cat("Method: ", object$method, "\n", sep = "")
+  cat("Is the null hypothesis rejected (equality of unknown distributions)? ",
       ifelse(object$reject_decision, "Yes", "No"), sep="")
   cat("\nConfidence level of the test: ", object$confidence_level, sep="")
-  cat("\np-value of the test: ", round(object$p_value,3), sep="")
+  cat("\np-value of the test: ", round(object$p.value,3), sep="")
   cat("\n\n----- Test statistic -----\n")
   cat("Selected rank of the test statistic (following penalization rule): ", object$selected_rank, sep="")
-  cat("\nValue of the test statistic: ", round(object$test_statistic_value,2), "\n", sep="")
+  cat("\nValue of the test statistic: ", round(object$statistic,2), "\n", sep="")
   cat("Discrepancy terms involved in the statistic: ", paste(object$statistic_name, sep = ""), "\n", sep = "")
   cat("Optimal tuning parameters (if argument 'tune.penalty' is true):\n")
-  cat("Gamma: ", object$tuned_gamma, "\n", sep = "")
-  cat("Constant: ", object$tuned_constant, "\n", sep = "")
+  cat("Gamma: ", object$estimate["Tuned Gamma"], "\n", sep = "")
+  cat("Constant: ", object$estimate["Tuned constant C"], "\n", sep = "")
   cat("Chosen penalty rule: ", ifelse(object$penalty_nullHyp, "H0", "H1"), sep = "")
   cat("\n\n----- Tabulated test statistic distribution -----\n")
-  cat("Quantile at level ", object$confidence_level*100, "%: ", round(object$extreme_quantile_tabul, 3), "\n", sep = "")
+  cat("Quantile at level ", object$confidence_level*100, "%: ", round(object$null.value, 3), "\n", sep = "")
   cat("Tabulated distribution: ", paste(utils::head(round(sort(object$tabulated_dist),2),3), collapse = " "), "....",
       paste(utils::tail(round(sort(object$tabulated_dist),2),3), collapse = " "), "\n", sep = "")
   cat("\n")
@@ -509,22 +520,35 @@ IBM_2samples_test <- function(samples, admixMod, conf_level = 0.95, parallel = F
     p_value <- 1 - CDF_U(contrast_val)
   }
 
+  names(contrast_val) <- "Tabulated testing distribution"
+  stat_param <- NA ; names(stat_param) <- ""
+  estimated_values <- estim.weights
+  names(estimated_values) <- c("Weight in 1st sample","Weight in 2nd sample")
+
   obj <- list(
+    null.value = unique(extreme_quantile),
+    alternative = "greater",
+    method = "Equality test of the unknown component distributions (with IBM)",
+    estimate = estimated_values,
+    data.name = deparse(substitute(samples)),
+    statistic = contrast_val,
+    parameters = stat_param,
+    p.value = p_value,
+    n_populations = 2,
+    population_sizes = sapply(X = samples, FUN = length),
+    admixture_models = admixMod,
     reject_decision = reject,
     confidence_level = conf_level,
-    p_value = p_value,
-    extreme_quantile_tabul = extreme_quantile,
-    test_statistic_value = contrast_val,
     selected_rank = NA,
     statistic_name = NA,
     penalty_nullHyp = NA,
     penalized_stat = NA,
-    tuned_gamma = NA,
-    tuned_constant = NA,
     tabulated_dist = sim_U,
-    estimated_mixing_weights = estim.weights,
     contrast_matrix = NA
   )
+
+  class(obj) <- c("IBM_test", "htest")
+  obj$call <- match.call()
   return(obj)
 }
 

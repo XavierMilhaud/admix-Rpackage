@@ -1,23 +1,21 @@
 #' Gaussianity test in an admixture model
 #'
-#' Performs an hypothesis test to check for the gaussianity of the unknown mixture component, given that the known component
-#' has support on the real line. Recall that an admixture model has probability density function (pdf) l = p*f + (1-p)*g, where g is
+#' Performs an hypothesis test to check for the gaussianity of the unknown mixture component.
+#' Recall that an admixture model has probability density function (pdf) l = p*f + (1-p)*g, where g is
 #' the known pdf and l is observed (others are unknown). This test requires optimization (to estimate the unknown parameters) as
 #' defined by Bordes & Vandekerkhove (2010), which means that the unknown mixture component must have a symmetric density.
 #'
-#' @param samples Sample under study.
+#' @param sample (numeric) The sample under study.
 #' @param admixMod An object of class \link[admix]{admix_model}, containing useful information about distributions and parameters.
 #' @param conf_level (default to 0.95) The confidence level. Equals 1-alpha, where alpha is the level of the test (type-I error).
 #' @param ask_poly_param (default to FALSE) If TRUE, ask the user to choose both the order 'K' of expansion coefficients in the
 #'                        orthonormal polynomial basis, and the penalization rate 's' involved on the penalization rule for the test.
-#' @param K (K > 0, default to 3) If not asked (see the previous argument), number of coefficients considered for the polynomial basis expansion.
+#' @param K (default to 3) If not asked (see the previous argument), number of coefficients considered for the polynomial basis expansion.
 #' @param s (in ]0,1/2[, default to 0.25) If not asked (see the previous argument), normalization rate involved in the penalization rule
 #'          for model selection. See the reference below.
 #' @param support Support of the probability distributions, useful to choose the appropriate polynomial orthonormal basis. One of 'Real',
 #'                'Integer', 'Positive', or 'Bounded.continuous'.
 #' @param ... Optional arguments to \link[admix]{estim_BVdk}.
-#'
-#' @details Extensions to the case of non-Gaussian known components can be overcome thanks to basic transformations using cdf.
 #'
 #' @references
 #' \insertRef{PommeretVandekerkhove2019}{admix}
@@ -43,14 +41,14 @@
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                          knownComp_param = mixt1$comp.param[[2]])
 #' ## Performs the test:
-#' gaussianity_test(samples = data1, admixMod = admixMod1,
+#' gaussianity_test(sample = data1, admixMod = admixMod1,
 #'                  conf_level = 0.95, K = 3, s = 0.1, support = "Real")
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 #' @keywords internal
 
-gaussianity_test <- function(samples, admixMod, conf_level = 0.95, ask_poly_param = FALSE, K = 3, s = 0.25,
+gaussianity_test <- function(sample, admixMod, conf_level = 0.95, ask_poly_param = FALSE, K = 3, s = 0.25,
                              support = c('Real','Integer','Positive','Bounded.continuous'), ...)
 {
   if (!inherits(x = admixMod, what = "admix_model"))
@@ -88,35 +86,34 @@ gaussianity_test <- function(samples, admixMod, conf_level = 0.95, ask_poly_para
 
 	##-------- Split data sample -----------##
 	## Random sampling (p.6 Pommeret & Vandekerkhove) : create subsamples to get uncorrelated estimators of the different parameters
-	n <- length(samples)
+	n <- length(sample)
 	blocksize <- n %/% 2							                   # block size
 	values <- stats::runif(n)									           # simulate random values
 	rang <- rank(values)									               # associate a rank to each insured / observation
 	block <- (rang-1) %/% blocksize + 1						       # associate to each individual a block number
 	block <- as.factor(block)
-	data.coef <- samples[block == 1]
+	data.coef <- sample[block == 1]
 	n.coef <- length(data.coef)	                         # for the estimation of empirical moments
-	data.BVdk <- samples[block == 2]
+	data.BVdk <- sample[block == 2]
 	n.BVdk <- length(data.BVdk)	                        # for the estimation of mixing weight / location shift
 
 	##-------- Estimation of parameters and corresponding variances -----------##
 	old_options_warn <- base::options()$warn
+	on.exit(base::options(warn = old_options_warn))
 	base::options(warn = -1)
 	## Focus on parameters (weight, localization and variance), consider independent subsamples of the original data:
 	BVdk <- estim_BVdk(samples = data.BVdk, admixMod = admixMod, compute_var = TRUE, ...)
-	on.exit(base::options(warn = old_options_warn))
-
 	hat_p <- BVdk$estimated_mixing_weights
 	hat_loc <- BVdk$estimated_locations
 	## Then variances of the estimators: semiparametric estimation (time-consuming), based on results by Bordes & Vandekerkhove (2010)
 	var.hat_p <- BVdk$mix_weight_variance
 	var.hat_loc <- BVdk$location_variance
 	## Estimation of the variance of the variance estimator:
-	#var.hat_s2 <- BVdk_ML_varCov_estimators(data = samples, hat_w = hat_p, hat_loc = hat_loc, hat_var = hat_s2,
+	#var.hat_s2 <- BVdk_ML_varCov_estimators(data = sample, hat_w = hat_p, hat_loc = hat_loc, hat_var = hat_s2,
 	#                                        comp.dist = comp.dist, comp.param = comp.param)
 
 	## Plug-in method to estimate the variance:
-	kernelDensity_est_obs <- stats::density(samples)
+	kernelDensity_est_obs <- stats::density(sample)
 	integrand_totweight <- function(x) {
 	  w <- (1/hat_p) * stats::approxfun(kernelDensity_est_obs)(x) - ((1-hat_p)/hat_p) * eval(parse(text = expr.dens))
 	  return( w * (w > 0) )
@@ -140,7 +137,7 @@ gaussianity_test <- function(samples, admixMod, conf_level = 0.95, ask_poly_para
 	                                   upper = max(kernelDensity_est_obs$x),
 	                                   method = "pcubature")$integral
 	}
-  #hat_s2 <- (1/hat_p) * ( mean(samples^2) - ((1-hat_p) * m2_knownComp) ) - (1/hat_p^2) * (mean(samples)-(1-hat_p)*m1_knownComp)^2
+  #hat_s2 <- (1/hat_p) * ( mean(sample^2) - ((1-hat_p) * m2_knownComp) ) - (1/hat_p^2) * (mean(sample)-(1-hat_p)*m1_knownComp)^2
 
 	##-------- Compute test statistics with data 'data.coef' -----------##
 	stat.R <- matrix(rep(NA, n.coef*K.user), nrow = K.user, ncol = n.coef)
@@ -164,9 +161,7 @@ gaussianity_test <- function(samples, admixMod, conf_level = 0.95, ask_poly_para
 	##-------- Scaling (with variance) of the test statistic -----------##
 	var.R <- matrix(data = NA, nrow = K.user, ncol = K.user)
 	## Introduce the correction factor for the adjustment of the variance, given the initial split of the sample:
-	#w.coef <- sqrt( (n.p * n.loc) / (n.coef + n.p + n.loc)^2 )
-	#w.p <- sqrt( (n.coef * n.loc) / (n.coef + n.p + n.loc)^2 )
-	#w.loc <- sqrt( (n.p * n.coef) / (n.coef + n.p + n.loc)^2 )
+	#w.coef <- sqrt( (n.p * n.loc) / (n.coef + n.p + n.loc)^2 ) ; w.p <- sqrt( (n.coef * n.loc) / (n.coef + n.p + n.loc)^2 ) ; w.loc <- sqrt( (n.p * n.coef) / (n.coef + n.p + n.loc)^2 )
 	w.coef <- sqrt( (n.BVdk^2) / (n.coef + n.BVdk)^2 )
 	w.p <- sqrt( ((n.coef/2)^2) / (n.coef + n.BVdk)^2 )
 	w.loc <- sqrt( ((n.coef/2)^2) / (n.coef + n.BVdk)^2 )
@@ -187,26 +182,37 @@ gaussianity_test <- function(samples, admixMod, conf_level = 0.95, ask_poly_para
 	## Select the right order (optimal number of coefficients needed in the expansion) :
 	selected.index <- which.max(test.statistic)
 	## Then remove previously introduced penalty in the selection rule to get back to the test statistic (Equation (14) p.5):
-	final.stat <- test.statistic[selected.index] + selected.index * log(n)
-	p.value <- 1 - stats::pchisq(final.stat, 1)
+	stat_value <- test.statistic[selected.index] + selected.index * log(n)
+	p.value <- 1 - stats::pchisq(stat_value, 1)
 
 	## If the test statistic is greater that the quantile of interest, reject the null hypothesis (otherwise do not reject):
 	rej <- FALSE
-  if (final.stat > stats::qchisq(conf_level,1)) { rej <- TRUE }
+  if (stat_value > stats::qchisq(conf_level,1)) { rej <- TRUE }
+
+	names(stat_value) <- "Chi-square"
+	stat_param <- 1 ; names(stat_param) <- "df"
+	estimated_values <- vector(mode = "numeric", length = 3L)
+	estimated_values <- c(hat_p, hat_loc, sqrt(hat_s2))
+	names(estimated_values) <- c("Weight","Location","Variance")
 
 	obj <- list(
-	  n_populations = 1,
-	  population_sizes = length(samples),
-	  admixture_models = admixMod,
+	  null.value = stats::qchisq(conf_level,1),
+	  alternative = "greater",
+	  method = "Gaussianity test of the unknown component distribution",
+	  estimate = estimated_values,
+	  data.name = deparse(substitute(sample)),
+	  statistic = stat_value,
+	  parameters = stat_param,
+	  p.value = p.value,
+	  population_size = length(sample),
+	  admixture_model = admixMod,
 	  reject_decision = rej,
 	  confidence_level = conf_level,
-	  p_value = p.value,
-	  test_statistic_value = final.stat,
 	  var_statistic = var.R,
-	  selected_rank = selected.index,
-	  estimates = list(p = hat_p, mu = hat_loc, s = sqrt(hat_s2))
+	  selected_rank = selected.index
 	  )
-	class(obj) <- c("gaussianity_test", "admix_test")
+
+	class(obj) <- c("gaussianity_test", "htest")
 	obj$call <- match.call()
 	return(obj)
 }
@@ -227,12 +233,12 @@ print.gaussianity_test <- function(x, ...)
   cat("Call:")
   print(x$call)
   cat("\n")
-  cat("Is the null hypothesis (Gaussian unknown distribution) rejected? ",
+  cat("Is the null hypothesis rejected (Gaussian unknown component distribution) ? ",
       ifelse(x$reject_decision, "Yes", "No"), sep="")
-  if (round(x$p_value, 3) == 0) {
+  if (round(x$p.value, 3) == 0) {
     cat("\np-value of the test: 1e-12", sep="")
   } else {
-    cat("\np-value of the test: ", round(x$p_value, 3), sep="")
+    cat("\np-value of the test: ", round(x$p.value, 3), sep="")
   }
   cat("\n")
 }
@@ -251,28 +257,29 @@ summary.gaussianity_test <- function(object, ...)
 {
   cat("Call:")
   print(object$call)
-  cat("\n------- About samples -------\n")
-  cat(paste("Size of sample ", 1:object$n_populations, ": ", object$population_sizes, sep = ""), sep = "\n")
-  cat("\n------ About contamination (admixture) models -----\n")
+  cat("\n------- About the sample -------\n")
+  cat(paste("Size of the sample : ", object$population_size, sep = ""), sep = "\n")
+  cat("\n------ About the contamination (admixture) model -----\n")
   cat("-> Distribution and parameters of the known component \n for the admixture model: ", sep="")
-  cat(object$admixture_models$comp.dist$known, "\n")
-  print(unlist(object$admixture_models$comp.param$known, use.names = TRUE))
+  cat(object$admixture_model$comp.dist$known, "\n")
+  print(unlist(object$admixture_model$comp.param$known, use.names = TRUE))
   cat("\n----- Test decision -----\n")
-  cat("Is the null hypothesis (Gaussian unknown distribution) rejected? ",
+  cat("Method: ", object$method, "\n", sep = "")
+  cat("Is the null hypothesis rejected (Gaussian unknown component distribution)? ",
       ifelse(object$reject_decision, "Yes", "No"), sep="")
   cat("\nConfidence level of the test: ", object$confidence_level, sep="")
-  if (round(object$p_value, 3) == 0) {
+  if (round(object$p.value, 3) == 0) {
     cat("\np-value of the test: 1e-12", sep="")
   } else {
-    cat("\np-value of the test: ", round(object$p_value, 3), sep="")
+    cat("\np-value of the test: ", round(object$p.value, 3), sep="")
   }
   cat("\n\n----- Test statistic -----\n")
   cat("Selected rank of the statistic (following penalization rule): ", object$selected_rank, sep="")
-  cat("\nValue of the test statistic: ", round(object$test_statistic_value,2), sep="")
+  cat("\nValue of the test statistic: ", round(object$statistic,2), sep="")
   cat("\nVariance of the test statistic (for each expansion order):", paste(round(diag(object$var_statistic),2), sep=" "), sep=" ")
   cat("\n\n----- Estimates -----\n")
-  cat(paste(c(" Estimated weight of the unknown distribution): ",
-        "Estimated mean of the unknown Gaussian distribution: ",
-        "Estimated standard dev. of the unknown Gaussian distribution: "),
-        sapply(object$estimates, round, 2), "\n"))
+  cat(paste(c(" Estimated weight of the unknown distribution: ",
+      "Estimated mean of the unknown Gaussian distribution: ",
+      "Estimated standard dev. of the unknown Gaussian distribution: "),
+        sapply(object$estimate, round, 2), "\n"))
 }

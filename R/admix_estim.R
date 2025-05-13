@@ -105,13 +105,10 @@ admix_estim <- function(samples, admixMod, est_method = c("PS","BVdk","IBM"), ..
 #' @param ... further arguments passed to or from other methods.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @export
+#' @keywords internal
 
 print.admix_estim <- function(x, ...)
 {
-  cat("Call:\n")
-  print(x$call)
-  cat("\n")
   n_samples <- length(x$estim_objects)
   if (inherits(x, what = "estim_IBM")) {
     cat("Pairwise estimation performed (IBM estimation method). \n")
@@ -144,12 +141,10 @@ the two proportions, which should roughly be similar than the true actual ratio.
 #' @param ... further arguments passed to or from other methods.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @export
+#' @keywords internal
 
 summary.admix_estim <- function(object, ...)
 {
-  cat("Call:\n")
-  print(object$call)
   n_samples <- length(object$estim_objects)
   if (inherits(object, what = "estim_IBM")) {
     cat("Pairwise estimation performed (IBM estimation method). \n")

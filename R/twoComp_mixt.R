@@ -26,18 +26,15 @@
 #'                       comp.dist = list("norm", "exp"),
 #'                       comp.param = list(list("mean"=-3, "sd"=0.5),
 #'                                         list("rate"=1)))
-#' print(sim.X)
-#' summary(sim.X)
-#' plot(sim.X, xlim=c(-5,5), ylim=c(0,0.5))
-#' plot(sim.Y, add.plot = TRUE, xlim=c(-5,5), ylim=c(0,0.5), col = "red")
+#' #plot(sim.X, xlim=c(-5,5), ylim=c(0,0.5))
+#' #plot(sim.Y, add.plot = TRUE, xlim=c(-5,5), ylim=c(0,0.5), col = "red")
 #'
 #' ## Mixture of discrete random variables:
 #' sim.X <- twoComp_mixt(n = 2000, weight = 0.5,
 #'                       comp.dist = list("multinom", "multinom"),
 #'                       comp.param = list(list("size"=1, "prob"=c(0.3,0.4,0.3)),
 #'                                         list("size"=1, "prob"=c(0.1,0.2,0.7))))
-#' print(sim.X)
-#' plot(sim.X)
+#' #plot(sim.X)
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
@@ -133,10 +130,12 @@ twoComp_mixt <- function(n = 1000, weight = 0.5, comp.dist = list("norm", "norm"
 #' @return a plot with the densities of the samples provided as inputs.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @export
+#' @keywords internal
 
 plot.twoComp_mixt <- function(x, add.plot = FALSE, ...)
 {
+  old_par_new <- graphics::par()$new
+  on.exit(graphics::par(new = old_par_new))
   if (add.plot) {
     graphics::par(new = TRUE)
   }
@@ -152,7 +151,6 @@ plot.twoComp_mixt <- function(x, add.plot = FALSE, ...)
                as.numeric(table(x$mixt.data)) / sum(as.numeric(table(x$mixt.data))),
                type = "h", ...)
   }
-  on.exit(graphics::par(new = FALSE))
 }
 
 
@@ -166,7 +164,7 @@ plot.twoComp_mixt <- function(x, add.plot = FALSE, ...)
 #' @param ... A list of additional parameters belonging to the default method.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @export
+#' @keywords internal
 
 print.twoComp_mixt <- function(x, ...)
 {
@@ -199,7 +197,7 @@ print.twoComp_mixt <- function(x, ...)
 #' @param ... A list of additional parameters belonging to the default method.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @export
+#' @keywords internal
 
 summary.twoComp_mixt <- function(object, ...)
 {

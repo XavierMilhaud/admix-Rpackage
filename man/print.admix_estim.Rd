@@ -17,3 +17,4 @@ Print the estimated parameters from K admixture models
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}
 }
+\keyword{internal}

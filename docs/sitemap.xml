@@ -106,9 +106,6 @@
     <loc>/reference/print.admix_model.html</loc>
   </url>
   <url>
-    <loc>/reference/print.admix_test.html</loc>
-  </url>
-  <url>
     <loc>/reference/print.decontaminated_density.html</loc>
   </url>
   <url>
@@ -143,9 +140,6 @@
   </url>
   <url>
     <loc>/reference/summary.admix_model.html</loc>
-  </url>
-  <url>
-    <loc>/reference/summary.admix_test.html</loc>
   </url>
   <url>
     <loc>/reference/summary.decontaminated_density.html</loc>
