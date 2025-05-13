@@ -101,74 +101,15 @@ component distributions and their values, 6) the mixing proportion, 7) the obser
 <span class="r-in"><span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"exp"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"mean"</span><span class="op">=</span><span class="op">-</span><span class="fl">3</span>, <span class="st">"sd"</span><span class="op">=</span><span class="fl">0.5</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                                        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"rate"</span><span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">sim.X</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Call:twoComp_mixt(n = 2000, weight = 0.5, comp.dist = list("norm", </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     "norm"), comp.param = list(list(mean = 3, sd = 0.5), list(mean = 0, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     sd = 1)))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of observations:  2000 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Simulated data (first 10 obs.): </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2.93475 2.692277 0.6343698 3.718913 0.9463694 3.622782 2.175062 2.664207 -0.4500302 1.158445 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Simulated observations coming from the 1st component (first 10 obs.): </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2.93475 2.692277 3.718913 3.622782 2.175062 2.664207 3.03669 2.584259 3.011138 3.701056 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Simulated observations coming from the 2nd component (first 10 obs.): </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.6343698 0.9463694 -0.4500302 1.158445 -0.09883099 0.4869106 -0.320834 0.2575842 0.1839459 -0.24402 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">sim.X</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Call:twoComp_mixt(n = 2000, weight = 0.5, comp.dist = list("norm", </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     "norm"), comp.param = list(list(mean = 3, sd = 0.5), list(mean = 0, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     sd = 1)))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Component distributions:  norm norm </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Support of the component distributions:  Continuous Continuous </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Value of the component parameters: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> mean   sd mean   sd </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  3.0  0.5  0.0  1.0 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mixing proportion: 0.5 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of observations:  2000 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Statistics related to the simulated sample: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -3.08602  0.01654  2.04039  1.51243  2.99470  4.47155 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Statistics related to the first component of the two-component mixture: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   1.443   2.614   2.984   2.976   3.319   4.472 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Statistics related to the second component of the two-component mixture: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -3.08602 -0.69735  0.00708  0.00998  0.68613  3.43418 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sim.X</span>, xlim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>,<span class="fl">5</span><span class="op">)</span>, ylim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sim.Y</span>, add.plot <span class="op">=</span> <span class="cn">TRUE</span>, xlim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">5</span>,<span class="fl">5</span><span class="op">)</span>, ylim<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0.5</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="twoComp_mixt-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="co">#plot(sim.X, xlim=c(-5,5), ylim=c(0,0.5))</span></span></span>
+<span class="r-in"><span><span class="co">#plot(sim.Y, add.plot = TRUE, xlim=c(-5,5), ylim=c(0,0.5), col = "red")</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Mixture of discrete random variables:</span></span></span>
 <span class="r-in"><span><span class="va">sim.X</span> <span class="op">&lt;-</span> <span class="fu">twoComp_mixt</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">2000</span>, weight <span class="op">=</span> <span class="fl">0.5</span>,</span></span>
 <span class="r-in"><span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"multinom"</span>, <span class="st">"multinom"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"size"</span><span class="op">=</span><span class="fl">1</span>, <span class="st">"prob"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.3</span>,<span class="fl">0.4</span>,<span class="fl">0.3</span><span class="op">)</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                                        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"size"</span><span class="op">=</span><span class="fl">1</span>, <span class="st">"prob"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>,<span class="fl">0.2</span>,<span class="fl">0.7</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">sim.X</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Call:twoComp_mixt(n = 2000, weight = 0.5, comp.dist = list("multinom", </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     "multinom"), comp.param = list(list(size = 1, prob = c(0.3, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     0.4, 0.3)), list(size = 1, prob = c(0.1, 0.2, 0.7))))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of observations:  2000 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Obtained multinomial mixture distribution: </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  401 599 1000 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">sim.X</span><span class="op">)</span></span></span>
-<span class="r-plt img"><img src="twoComp_mixt-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="co">#plot(sim.X)</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -181,7 +122,7 @@ component distributions and their values, 6) the mixing proportion, 7) the obser
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
 </div>
 
     </footer></div>
