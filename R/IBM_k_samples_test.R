@@ -473,7 +473,7 @@ IBM_2samples_test <- function(samples, admixMod, conf_level = 0.95, parallel = F
   }
 
   if (inherits(x = estim, what = "try-error", which = FALSE)) {
-    estim.weights <- 100
+    estim.weights <- c(NA,NA)
     contrast_val <- NA
   } else {
     estim.weights <- estim$estimated_mixing_weights
@@ -499,7 +499,7 @@ IBM_2samples_test <- function(samples, admixMod, conf_level = 0.95, parallel = F
   }
 
   ## Earn computation time using this soft version of the green light criterion:
-  if (any(abs(estim.weights) > 1)) {
+  if ( any(abs(estim.weights) > 1) | any(is.na(estim.weights)) ) {
     reject <- TRUE
     p_value <- 1e-12
     sim_U <- extreme_quantile <- NA
@@ -518,7 +518,11 @@ IBM_2samples_test <- function(samples, admixMod, conf_level = 0.95, parallel = F
 
   names(contrast_val) <- "Tabulated testing distribution"
   stat_param <- NA ; names(stat_param) <- ""
-  estimated_values <- estim.weights
+  if (length(estim.weights) > 1) {
+    estimated_values <- estim.weights
+  } else {
+    estimated_values <- c(0.2,estim.weights)
+  }
   names(estimated_values) <- c("Weight in 1st sample","Weight in 2nd sample")
 
   obj <- list(
