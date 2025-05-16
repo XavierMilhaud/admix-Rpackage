@@ -22,8 +22,7 @@ IBM_k_samples_test(
 
 \item{conf_level}{The confidence level of the K-sample test.}
 
-\item{sim_U}{(default to NULL) Random draws of the inner convergence part of the contrast as defined in the IBM approach (see 'Details' below,
-and \link[admix]{IBM_tabul_stochasticInteg}).}
+\item{sim_U}{(default to NULL) Random draws of the inner convergence part of the contrast as defined in the IBM approach (see references below).}
 
 \item{tune_penalty}{(default to TRUE) A boolean that allows to choose between a classical penalty term or an optimized penalty (embedding
 some tuning parameters, automatically optimized). Optimized penalty is particularly useful for low or unbalanced sample sizes
@@ -37,7 +36,7 @@ in the 'icv' testing method using the IBM estimation approach.}
 \item{n_cpu}{(default to 2) Number of cores used when paralleling computations.}
 }
 \value{
-An object of class \link[admix]{admix_test}, containing 17 attributes: 1) the number of samples for the test; 2) the sizes of each sample;
+An object of class 'IBM_test', containing 17 attributes: 1) the number of samples for the test; 2) the sizes of each sample;
 3) the information about component distributions for each sample; 4) the reject decision of the test; 5) the confidence level
 of the test (1-alpha, where alpha refers to the first-type error); 6) the test p-value; 7) the 95th-percentile of the contrast
 tabulated distribution; 8) the test statistic value; 9) the selected rank (number of terms involved in the test statistic);
@@ -55,6 +54,7 @@ observed sample. Perform the following hypothesis test:
 H0 : f_1 = ... = f_K  against  H1 : f_i differs from f_j (i different from j, and i,j in 1,...,K).
 }
 \examples{
+\dontrun{
 ####### Under the null hypothesis H0 (with K=3 populations):
 ## Simulate mixture data:
 mixt1 <- twoComp_mixt(n = 450, weight = 0.4,
@@ -84,15 +84,11 @@ IBM_k_samples_test(samples = list(data1, data2, data3),
                    admixMod = list(admixMod1, admixMod2, admixMod3),
                    conf_level = 0.95, sim_U = NULL, n_sim_tab = 8,
                    tune_penalty = FALSE, parallel = FALSE, n_cpu = 2)
+}
 
 }
 \references{
 \insertRef{MilhaudPommeretSalhiVandekerkhove2024b}{admix}
-}
-\seealso{
-\code{\link[=print.IBM_test]{print.IBM_test()}} for printing a short version of the results from this estimation method,
-\code{\link[=summary.IBM_test]{summary.IBM_test()}} for more comprehensive results, and \code{\link[=IBM_tabul_stochasticInteg]{IBM_tabul_stochasticInteg()}} for the
-tabulation of the stochastic integral providing the quantile of interest for testing.
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

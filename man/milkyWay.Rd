@@ -3,7 +3,7 @@
 \docType{data}
 \name{milkyWay}
 \alias{milkyWay}
-\title{Heliocentric velocity for the Milky Way}
+\title{Dataset of heliocentric velocity for the Milky Way}
 \format{
 A data frame with 170,601 rows and 1 column:
 \describe{
@@ -17,7 +17,7 @@ A data frame with 170,601 rows and 1 column:
 milkyWay
 }
 \description{
-Heliocentric velocity for the Milky Way
+Dataset of heliocentric velocity for the Milky Way
 }
 \references{
 \insertRef{Walker2007}{admix}

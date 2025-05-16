@@ -20,7 +20,7 @@ of the contamination / admixture models under study.}
 
 \item{test_method}{The testing method to be applied. Can be either 'poly' (polynomial basis expansion) or 'icv' (inner
 convergence from IBM). The same testing method is performed between all samples. In the one-sample case,
-only 'Poly' is available and the test is a gaussianity test. For further details, see section 'Details' below.}
+only 'poly' is available and the test is a gaussianity test. For further details, see section 'Details' below.}
 
 \item{conf_level}{The confidence level of the K-sample test.}
 
@@ -29,12 +29,10 @@ only 'Poly' is available and the test is a gaussianity test. For further details
 in case of 'icv'.}
 }
 \value{
-An object of class \link[admix]{admix_test}, containing 8 attributes: 1) the test decision (reject the null hypothesis or not);
-2) the p-value of the test; 3) the confidence level of the test (1-alpha, where alpha denotes the level of the test
-or equivalently the type-I error); 4) the value of the test statistic; 5) the number of samples under study; 6) the
-respective size of each sample; 7) the information about mixture components (distributions and parameters); 8) the
-chosen testing method (either based on polynomial basis expansions, or on the inner convergence property; see given
-references).
+An object of class 'htest' containing the classical attributes of the latter class, as well as
+other attributes specific to the inherited object class. Usually, the test decision (reject the null hypothesis or not);
+the confidence level of the test (1-alpha, where alpha denotes the level of the test or equivalently the type-I error);
+the number of samples under study; the respective size of each sample; the information about known mixture components.
 }
 \description{
 Perform hypothesis test between unknown components of a list of admixture models, where we remind that the i-th admixture

@@ -1,4 +1,4 @@
-#' Estimates the decontaminated density of the unknown component in an admixture
+#' Probability density function of the unknown component
 #'
 #' Estimate the decontaminated density of the unknown component in the admixture model under study, after inversion of the admixture
 #' cumulative distribution function. Recall that an admixture model follows the cumulative distribution function (CDF) L, where
@@ -11,8 +11,9 @@
 #' @details The decontaminated density is obtained by inverting the admixture density, given by l = p*f + (1-p)*g, to isolate the
 #'          unknown component f after having estimated p.
 #'
-#' @return An object of class 'decontaminated_density', containing 2 attributes: 1) the decontaminated density function;
-#'         2) the type of support for the underlying distribution (either discrete or continuous, useful for plots).
+#' @return An object of class 'decontaminated_density', containing 3 attributes: 1) the data under study;
+#'         2) the type of support for the underlying distribution (either discrete or continuous, useful for plots);
+#'         3) the decontaminated density function.
 #'
 #' @examples
 #' ## Simulate mixture data:
@@ -178,7 +179,7 @@ summary.decontaminated_density <- function(object, ...)
 }
 
 
-#' Plot method for class 'decontaminated_density'
+#' Plot method for object of class 'decontaminated_density'
 #'
 #' Plot the decontaminated density of the unknown component from some admixture model, after inversion of the admixture
 #' cumulative distribution functions.

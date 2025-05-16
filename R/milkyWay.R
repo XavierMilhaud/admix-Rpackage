@@ -1,4 +1,4 @@
-#' Heliocentric velocity for the Milky Way
+#' Dataset of heliocentric velocity for the Milky Way
 #'
 #' @references
 #' \insertRef{Walker2007}{admix}

@@ -33,10 +33,8 @@
 #'         statistic at each order in the polynomial orthobasis expansion; 9) the selected rank (order) for the test statistic;
 #'         10) a vector of estimates, related to the estimated mixing proportions in the two samples.
 #'
-#' @seealso [print.orthobasis_test()] for printing a short version of the results from this estimation method,
-#'          and [summary.orthobasis_test()] for more comprehensive results.
-#'
 #' @examples
+#' \dontrun{
 #' #### Under the null hypothesis H0.
 #' mixt1 <- twoComp_mixt(n = 300, weight = 0.77,
 #'                       comp.dist = list("norm", "exp"),
@@ -55,9 +53,9 @@
 #' ## Test procedure:
 #' orthobasis_test(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
 #'                 conf_level = 0.95, est_method = 'BVdk', support = 'Real')
+#' }
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @export
 #' @keywords internal
 
 orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c("BVdk","PS"),
@@ -266,8 +264,8 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
 #' @param ... A list of additional parameters belonging to the default method.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @export
 #' @keywords internal
+#' @noRd
 
 print.orthobasis_test <- function(x, ...)
 {
@@ -291,8 +289,8 @@ print.orthobasis_test <- function(x, ...)
 #' @param ... A list of additional parameters belonging to the default method.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @export
 #' @keywords internal
+#' @noRd
 
 summary.orthobasis_test <- function(object, ...)
 {

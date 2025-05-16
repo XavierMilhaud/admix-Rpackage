@@ -1,4 +1,4 @@
-#' Short-term Mortality Fluctuations (STMF) data
+#' Dataset of Short-term Mortality Fluctuations (STMF) from HMD
 #'
 #' Restricted to 6 countries: Belgium, France, Italy, Netherlands, Spain, Germany. Weekly death counts provide the
 #' most objective and comparable way of assessing the scale of short-term mortality elevations across countries and time.

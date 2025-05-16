@@ -2,7 +2,7 @@
 % Please edit documentation in R/admix_cluster.R
 \name{admix_cluster}
 \alias{admix_cluster}
-\title{Clustering of K populations following admixture models}
+\title{Cluster K populations following admixture models}
 \usage{
 admix_cluster(
   samples,

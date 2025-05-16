@@ -3,7 +3,7 @@
 \docType{data}
 \name{mortality_sample}
 \alias{mortality_sample}
-\title{Deaths statistics in 11 european countries}
+\title{Dataset of deaths statistics in 11 european countries}
 \format{
 Dataset providing the exposure-to-death (population size) and number of deaths for males in 11 european countries,
 between 1908 and 2020, with ages ranging from 30 years old to 85 years old. Exported from the Human Mortality Database (HMD).
@@ -27,6 +27,6 @@ each element having 56 rows (ages 30-85) and 113 columns (period 1908-2020)}
 mortality_sample
 }
 \description{
-Deaths statistics in 11 european countries
+Dataset of deaths statistics in 11 european countries
 }
 \keyword{datasets}

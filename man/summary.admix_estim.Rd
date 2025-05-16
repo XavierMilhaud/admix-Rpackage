@@ -2,7 +2,7 @@
 % Please edit documentation in R/admix_estim.R
 \name{summary.admix_estim}
 \alias{summary.admix_estim}
-\title{Results of estimated parameters from K admixture models}
+\title{Summary method for object of class 'admix_estim'}
 \usage{
 \method{summary}{admix_estim}(object, ...)
 }
@@ -12,11 +12,10 @@
 \item{...}{further arguments passed to or from other methods.}
 }
 \description{
-Summarize the estimated weight(s) of the unknown component(s) in the admixture model(s) under study.
+Summarize the estimated weight(s) of the unknown component(s), and admixture model(s) under study.
 Recall that an admixture model follows the cumulative distribution function (CDF) L, where
 L = p*F + (1-p)*G, with G a known CDF, and p and F unknown quantities.
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}
 }
-\keyword{internal}

@@ -9,8 +9,7 @@
 #' @param samples A list of the K samples to be studied, all following admixture distributions.
 #' @param admixMod A list of objects of class \link[admix]{admix_model}, containing useful information about distributions and parameters.
 #' @param conf_level The confidence level of the K-sample test.
-#' @param sim_U (default to NULL) Random draws of the inner convergence part of the contrast as defined in the IBM approach (see 'Details' below,
-#'               and \link[admix]{IBM_tabul_stochasticInteg}).
+#' @param sim_U (default to NULL) Random draws of the inner convergence part of the contrast as defined in the IBM approach (see references below).
 #' @param tune_penalty (default to TRUE) A boolean that allows to choose between a classical penalty term or an optimized penalty (embedding
 #'                     some tuning parameters, automatically optimized). Optimized penalty is particularly useful for low or unbalanced sample sizes
 #'                     to detect alternatives to the null hypothesis (H0). It is recommended to set it to TRUE.
@@ -22,7 +21,7 @@
 #' @references
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2024b}{admix}
 #'
-#' @return An object of class \link[admix]{admix_test}, containing 17 attributes: 1) the number of samples for the test; 2) the sizes of each sample;
+#' @return An object of class 'IBM_test', containing 17 attributes: 1) the number of samples for the test; 2) the sizes of each sample;
 #'         3) the information about component distributions for each sample; 4) the reject decision of the test; 5) the confidence level
 #'         of the test (1-alpha, where alpha refers to the first-type error); 6) the test p-value; 7) the 95th-percentile of the contrast
 #'         tabulated distribution; 8) the test statistic value; 9) the selected rank (number of terms involved in the test statistic);
@@ -32,11 +31,8 @@
 #'         tabulated distribution of the contrast; 16) the estimated mixing proportions (not implemented yet, since that makes sense only
 #'         in case of equal unknown component distributions); 17) the matrix of pairwise contrasts (distance between two samples).
 #'
-#' @seealso [print.IBM_test()] for printing a short version of the results from this estimation method,
-#'          [summary.IBM_test()] for more comprehensive results, and [IBM_tabul_stochasticInteg()] for the
-#'          tabulation of the stochastic integral providing the quantile of interest for testing.
-#'
 #' @examples
+#' \dontrun{
 #' ####### Under the null hypothesis H0 (with K=3 populations):
 #' ## Simulate mixture data:
 #' mixt1 <- twoComp_mixt(n = 450, weight = 0.4,
@@ -66,9 +62,9 @@
 #'                    admixMod = list(admixMod1, admixMod2, admixMod3),
 #'                    conf_level = 0.95, sim_U = NULL, n_sim_tab = 8,
 #'                    tune_penalty = FALSE, parallel = FALSE, n_cpu = 2)
+#' }
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @export
 #' @keywords internal
 
 IBM_k_samples_test <- function(samples, admixMod, conf_level = 0.95, sim_U = NULL,
@@ -336,7 +332,6 @@ IBM_k_samples_test <- function(samples, admixMod, conf_level = 0.95, sim_U = NUL
     obj$call <- match.call()
     return(obj)
   }
-
 }
 
 #' Print method for objects 'IBM_test'
@@ -345,8 +340,8 @@ IBM_k_samples_test <- function(samples, admixMod, conf_level = 0.95, sim_U = NUL
 #' @param ... A list of additional parameters belonging to the default method.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @export
 #' @keywords internal
+#' @noRd
 
 print.IBM_test <- function(x, ...)
 {
@@ -370,8 +365,8 @@ print.IBM_test <- function(x, ...)
 #' @param ... A list of additional parameters belonging to the default method.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @export
 #' @keywords internal
+#' @noRd
 
 summary.IBM_test <- function(object, ...)
 {
@@ -461,6 +456,7 @@ summary.IBM_test <- function(object, ...)
 #'                   parallel = FALSE, n_cpu = 2, sim_U = NULL, n_sim_tab = 10)
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
+#' @keywords internal
 #' @noRd
 
 IBM_2samples_test <- function(samples, admixMod, conf_level = 0.95, parallel = FALSE,
@@ -599,6 +595,7 @@ IBM_2samples_test <- function(samples, admixMod, conf_level = 0.95, parallel = F
 #' }
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
+#' @keywords internal
 #' @noRd
 
 IBM_greenLight_criterion <- function(estim_obj, samples, admixMod, alpha = 0.05)
@@ -661,7 +658,7 @@ IBM_greenLight_criterion <- function(estim_obj, samples, admixMod, alpha = 0.05)
 #'         4) support that was used to evaluate the variance-covariance matrix of the empirical processes.
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' ## Simulate mixture data:
 #' mixt1 <- twoComp_mixt(n = 1200, weight = 0.4,
 #'                       comp.dist = list("norm", "norm"),
@@ -683,8 +680,8 @@ IBM_greenLight_criterion <- function(estim_obj, samples, admixMod, alpha = 0.05)
 #' }
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @export
 #' @keywords internal
+#' @noRd
 
 IBM_tabul_stochasticInteg <- function(samples, admixMod, min_size = NULL, n.varCovMat = 80,
                                       n_sim_tab = 100, parallel = FALSE, n_cpu = 2)

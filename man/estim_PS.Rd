@@ -54,6 +54,7 @@ where g is the known component of the two-component mixture, p is the unknown pr
 More information in 'Details' below concerning the estimation method.
 }
 \examples{
+\dontrun{
 ## Simulate mixture data:
 mixt1 <- twoComp_mixt(n = 800, weight = 0.33,
                       comp.dist = list("gamma", "exp"),
@@ -65,6 +66,7 @@ admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
                          knownComp_param = mixt1$comp.param[[2]])
 ## Estimation step:
 estim_PS(samples = data1, admixMod = admixMod1, method = 'fixed')
+}
 
 }
 \references{

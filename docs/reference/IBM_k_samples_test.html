@@ -95,8 +95,7 @@ H0 : f_1 = ... = f_K  against  H1 : f_i differs from f_j (i different from j, an
 
 
 <dt>sim_U</dt>
-<dd><p>(default to NULL) Random draws of the inner convergence part of the contrast as defined in the IBM approach (see 'Details' below,
-and <a href="IBM_tabul_stochasticInteg.html">IBM_tabul_stochasticInteg</a>).</p></dd>
+<dd><p>(default to NULL) Random draws of the inner convergence part of the contrast as defined in the IBM approach (see references below).</p></dd>
 
 
 <dt>tune_penalty</dt>
@@ -122,7 +121,7 @@ in the 'icv' testing method using the IBM estimation approach.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>An object of class <a href="admix_test.html">admix_test</a>, containing 17 attributes: 1) the number of samples for the test; 2) the sizes of each sample;
+<p>An object of class 'IBM_test', containing 17 attributes: 1) the number of samples for the test; 2) the sizes of each sample;
 3) the information about component distributions for each sample; 4) the reject decision of the test; 5) the confidence level
 of the test (1-alpha, where alpha refers to the first-type error); 6) the test p-value; 7) the 95th-percentile of the contrast
 tabulated distribution; 8) the test statistic value; 9) the selected rank (number of terms involved in the test statistic);
@@ -140,19 +139,14 @@ in case of equal unknown component distributions); 17) the matrix of pairwise co
 <a href="https://jmlr.org/papers/v25/23-0914.html" class="external-link">https://jmlr.org/papers/v25/23-0914.html</a>.</p>
     </div>
     <div class="section level2">
-    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="print.IBM_test.html">print.IBM_test()</a></code> for printing a short version of the results from this estimation method,
-<code><a href="summary.IBM_test.html">summary.IBM_test()</a></code> for more comprehensive results, and <code><a href="IBM_tabul_stochasticInteg.html">IBM_tabul_stochasticInteg()</a></code> for the
-tabulation of the stochastic integral providing the quantile of interest for testing.</p></div>
-    </div>
-    <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
     <p>Xavier Milhaud <a href="mailto:xavier.milhaud.research@gmail.com">xavier.milhaud.research@gmail.com</a></p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">####### Under the null hypothesis H0 (with K=3 populations):</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co">####### Under the null hypothesis H0 (with K=3 populations):</span></span></span>
 <span class="r-in"><span><span class="co">## Simulate mixture data:</span></span></span>
 <span class="r-in"><span><span class="va">mixt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">450</span>, weight <span class="op">=</span> <span class="fl">0.4</span>,</span></span>
 <span class="r-in"><span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"norm"</span><span class="op">)</span>,</span></span>
@@ -181,12 +175,7 @@ tabulation of the stochastic integral providing the quantile of interest for tes
 <span class="r-in"><span>                   admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>, <span class="va">admixMod2</span>, <span class="va">admixMod3</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                   conf_level <span class="op">=</span> <span class="fl">0.95</span>, sim_U <span class="op">=</span> <span class="cn">NULL</span>, n_sim_tab <span class="op">=</span> <span class="fl">8</span>,</span></span>
 <span class="r-in"><span>                   tune_penalty <span class="op">=</span> <span class="cn">FALSE</span>, parallel <span class="op">=</span> <span class="cn">FALSE</span>, n_cpu <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Call:IBM_k_samples_test(samples = list(data1, data2, data3), admixMod = list(admixMod1, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     admixMod2, admixMod3), conf_level = 0.95, sim_U = NULL, tune_penalty = FALSE, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     n_sim_tab = 8, parallel = FALSE, n_cpu = 2)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Is the null hypothesis rejected (same distribution for unknown components)? No</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> p-value of the test: 0.625</span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

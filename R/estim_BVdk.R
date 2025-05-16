@@ -27,6 +27,7 @@
 #'          and [summary.estim_BVdk()] for more comprehensive results.
 #'
 #' @examples
+#' \dontrun{
 #' ## Simulate mixture data:
 #' mixt1 <- twoComp_mixt(n = 200, weight = 0.4,
 #'                       comp.dist = list("norm", "norm"),
@@ -51,9 +52,9 @@
 #' ## Perform the estimation of parameters in real-life:
 #' estim_BVdk(samples = data2, admixMod = admixMod2, method = 'L-BFGS-B',
 #'            compute_var = TRUE)
+#' }
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @export
 #' @keywords internal
 
 estim_BVdk <- function(samples, admixMod, method = c("L-BFGS-B","Nelder-Mead"), compute_var = FALSE)
@@ -155,16 +156,17 @@ summary.estim_BVdk <- function(object, ...)
   cat("\n")
   cat("------- Sample -------\n")
   cat("Sample size: ", object$population_sizes, "\n")
-  cat("-> Distribution and parameters of the known component \n in the admixture model: ", sep="")
-  cat(object$admixture_models$comp.dist$known, "\n")
-  print(unlist(object$admixture_models$comp.param$known, use.names = TRUE))
+  cat("-> Distribution of the known component: ", object$admixture_models$comp.dist$known, "\n", sep="")
+  cat("-> Parameter(s) of the known component: ", paste(names(object$admixture_models$comp.param$known), object$admixture_models$comp.param$known, collapse="\t", sep="="), sep="")
+  cat("\n")
   cat("\n------- Estimation results -------\n")
   cat("Estimated mixing proportion: ", object$estimated_mixing_weights, "\n")
   cat("Estimated location parameter: ", object$estimated_locations, "\n")
   cat("Variance of the mixing proportion estimator: ", object$mix_weight_variance, "\n")
   cat("Variance of the location shift estimator: ", object$location_variance, "\n\n")
   cat("------- Optimization -------\n")
-  cat("Optimization method: ", object$optim_method, "\n\n")
+  cat("Optimization method: ", object$optim_method)
+  cat("\n")
 }
 
 

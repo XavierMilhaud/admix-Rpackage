@@ -97,7 +97,7 @@ of the contamination / admixture models under study.</p></dd>
 <dt>test_method</dt>
 <dd><p>The testing method to be applied. Can be either 'poly' (polynomial basis expansion) or 'icv' (inner
 convergence from IBM). The same testing method is performed between all samples. In the one-sample case,
-only 'Poly' is available and the test is a gaussianity test. For further details, see section 'Details' below.</p></dd>
+only 'poly' is available and the test is a gaussianity test. For further details, see section 'Details' below.</p></dd>
 
 
 <dt>conf_level</dt>
@@ -114,12 +114,10 @@ in case of 'icv'.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>An object of class admix_test, containing 8 attributes: 1) the test decision (reject the null hypothesis or not);
-2) the p-value of the test; 3) the confidence level of the test (1-alpha, where alpha denotes the level of the test
-or equivalently the type-I error); 4) the value of the test statistic; 5) the number of samples under study; 6) the
-respective size of each sample; 7) the information about mixture components (distributions and parameters); 8) the
-chosen testing method (either based on polynomial basis expansions, or on the inner convergence property; see given
-references).</p>
+<p>An object of class 'htest' containing the classical attributes of the latter class, as well as
+other attributes specific to the inherited object class. Usually, the test decision (reject the null hypothesis or not);
+the confidence level of the test (1-alpha, where alpha denotes the level of the test or equivalently the type-I error);
+the number of samples under study; the respective size of each sample; the information about known mixture components.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -167,22 +165,6 @@ Pommeret D, Vandekerkhove P (2019).
 <span class="r-in"><span>                         knownComp_param <span class="op">=</span> <span class="va">mixt1</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">admixMod2</span> <span class="op">&lt;-</span> <span class="fu"><a href="admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt2</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>                         knownComp_param <span class="op">=</span> <span class="va">mixt2</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">admix_test</span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span><span class="op">)</span>, admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>           conf_level <span class="op">=</span> <span class="fl">0.95</span>, test_method <span class="op">=</span> <span class="st">"poly"</span>, ask_poly_param <span class="op">=</span> <span class="cn">FALSE</span>, support <span class="op">=</span> <span class="st">"Real"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   Testing using polynomial basis expansions requires in theory a square-root n consistent estimation</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   of the proportions of the unknown component distributions (thus using 'BVdk' estimation by default, associated to unknown</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   component distributions with symmetric densities). However, it is allowed to use 'PS' estimation in practice (argument 'est_method'</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   has therefore to be set to 'PS'. In this case, the variance of estimators is obtained by boostrapping.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	Gaussianity test of the unknown component distribution</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> data:  samples[[1]]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Chi-square = 0.13779, df = 1, p-value = 0.7105</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true  is greater than 3.841459</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     Weight   Location   Variance </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.7167316 -1.9266719  0.6492622 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">admix_test</span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>,<span class="va">data2</span><span class="op">)</span>, admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>,<span class="va">admixMod2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>           conf_level <span class="op">=</span> <span class="fl">0.95</span>, test_method <span class="op">=</span> <span class="st">"poly"</span>, ask_poly_param <span class="op">=</span> <span class="cn">FALSE</span>, support <span class="op">=</span> <span class="st">"Real"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   Testing using polynomial basis expansions requires in theory a square-root n consistent estimation</span>
@@ -194,23 +176,11 @@ Pommeret D, Vandekerkhove P (2019).
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	expansions of pdfs)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> data:  samples</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Chi-square = 1.103, df = 1, p-value = 0.2936</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Chi-square = 0.0087227, df = 1, p-value = 0.9256</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true  is greater than 3.841459</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Weight in 1st sample Weight in 2nd sample </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            0.7005917            0.7845982 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="fu">admix_test</span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>,<span class="va">data2</span><span class="op">)</span>, admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>,<span class="va">admixMod2</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>           conf_level <span class="op">=</span> <span class="fl">0.95</span>, test_method <span class="op">=</span> <span class="st">"icv"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 	Equality test of the unknown component distributions (with IBM)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> data:  samples</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Tabulated testing distribution = 0.23231, = NA, p-value = 0.07229</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true  is greater than 0.2626518</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Weight in 1st sample Weight in 2nd sample </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            0.7420713            0.8873107 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            0.6871456            0.9177410 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

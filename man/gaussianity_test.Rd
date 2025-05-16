@@ -36,7 +36,8 @@ for model selection. See the reference below.}
 \item{...}{Optional arguments to \link[admix]{estim_BVdk}.}
 }
 \value{
-An object of class \link[admix]{gaussianity_test}, containing 10 elements: 1) the number of populations under study (1 in this case);
+An object of class \link[admix]{gaussianity_test}, inherited class from "htest".
+Contains attributes like 1) the number of populations under study (1 in this case);
 2) the sample size; 3) the information about the known component distribution; 4) the reject decision of the test; 5) the
 confidence level of the test, 6) the p-value of the test; 7) the value of the test statistic; 8) the variance of the test
 statistic at each order in the polynomial orthobasis expansion; 9) the selected rank (order) for the test statistic;
@@ -49,6 +50,7 @@ the known pdf and l is observed (others are unknown). This test requires optimiz
 defined by Bordes & Vandekerkhove (2010), which means that the unknown mixture component must have a symmetric density.
 }
 \examples{
+\dontrun{
 ####### Under the null hypothesis H0.
 ## Simulate mixture data:
 mixt1 <- twoComp_mixt(n = 250, weight = 0.4,
@@ -62,14 +64,11 @@ admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 ## Performs the test:
 gaussianity_test(sample = data1, admixMod = admixMod1,
                  conf_level = 0.95, K = 3, s = 0.1, support = "Real")
+}
 
 }
 \references{
 \insertRef{PommeretVandekerkhove2019}{admix}
-}
-\seealso{
-\code{\link[=print.gaussianity_test]{print.gaussianity_test()}} for printing a short version of the results from this estimation method,
-and \code{\link[=summary.gaussianity_test]{summary.gaussianity_test()}} for more comprehensive results.
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

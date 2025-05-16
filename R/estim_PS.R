@@ -33,6 +33,7 @@
 #'          and [summary.estim_PS()] for more comprehensive results.
 #'
 #' @examples
+#' \dontrun{
 #' ## Simulate mixture data:
 #' mixt1 <- twoComp_mixt(n = 800, weight = 0.33,
 #'                       comp.dist = list("gamma", "exp"),
@@ -44,9 +45,9 @@
 #'                          knownComp_param = mixt1$comp.param[[2]])
 #' ## Estimation step:
 #' estim_PS(samples = data1, admixMod = admixMod1, method = 'fixed')
+#' }
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @export
 #' @keywords internal
 
 estim_PS <- function(samples, admixMod, method = c("fixed", "lwr.bnd", "cv"),
@@ -135,10 +136,12 @@ estim_PS <- function(samples, admixMod, method = c("fixed", "lwr.bnd", "cv"),
 #' @keywords internal
 
 print.estim_PS <- function(x, ...){
+  cat("\n")
   cat("Call:")
   print(x$call)
+  cat("\n")
   if(x$method != "lwr.bnd"){
-    cat(paste("Estimate of the mixing weight (proportion of the unknown component distribution): " , round(x$estimated_mixing_weights,2)))
+    cat(paste("Estimate of mixing weight (proportion of the unknown component): " , round(x$estimated_mixing_weights,2)))
     #cat("\n", paste("The chosen value c_n is", round(x$c.n, 3)), "\n")
 #    if( !is.null(x$cv.out)){
 #      old_par <- graphics::par()$mfrow
@@ -172,12 +175,13 @@ summary.estim_PS <- function(object, ...)
   cat("\n")
   cat("------- Sample -------\n")
   cat("Sample size: ", object$population_sizes, "\n")
-  cat("-> Distribution and parameters of the known component \n in the admixture model: ", sep="")
-  cat(object$admixture_models$comp.dist$known, "\n")
-  print(unlist(object$admixture_models$comp.param$known, use.names = TRUE))
+  cat("-> Distribution of the known component: ", object$admixture_models$comp.dist$known, "\n", sep="")
+  cat("-> Parameter(s) of the known component: ", paste(names(object$admixture_models$comp.param$known), object$admixture_models$comp.param$known, collapse="\t", sep="="), sep="")
+  cat("\n")
   cat("\n------- Estimation results -------\n")
-  cat(paste("Estimate of the mixing weight (proportion of the unknown component distribution) is" , object$estimated_mixing_weights))
-  cat("\n", paste(" The chosen value c_n is", object$c.n))
+  cat(paste("Estimate of the mixing weight (proportion of the unknown component distribution) is" , round(object$estimated_mixing_weights,3)))
+  cat("\n", paste(" The chosen value c_n is", round(object$c.n,3)))
+  cat("\n")
 }
 
 #plot.estim_PS <- function(x, ...){

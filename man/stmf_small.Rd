@@ -3,7 +3,7 @@
 \docType{data}
 \name{stmf_small}
 \alias{stmf_small}
-\title{Short-term Mortality Fluctuations (STMF) data}
+\title{Dataset of Short-term Mortality Fluctuations (STMF) from HMD}
 \format{
 A data frame with 88146 rows and 19 variables:
 \describe{

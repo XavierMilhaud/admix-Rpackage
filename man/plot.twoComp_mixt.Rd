@@ -22,4 +22,3 @@ Plots the empirical densities of the samples with optional arguments to improve 
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}
 }
-\keyword{internal}

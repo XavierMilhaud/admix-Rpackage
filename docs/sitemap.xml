@@ -28,9 +28,6 @@
     <loc>/reference/IBM_k_samples_test.html</loc>
   </url>
   <url>
-    <loc>/reference/IBM_tabul_stochasticInteg.html</loc>
-  </url>
-  <url>
     <loc>/reference/admix-package.html</loc>
   </url>
   <url>
@@ -94,9 +91,6 @@
     <loc>/reference/plot.twoComp_mixt.html</loc>
   </url>
   <url>
-    <loc>/reference/print.IBM_test.html</loc>
-  </url>
-  <url>
     <loc>/reference/print.admix_cluster.html</loc>
   </url>
   <url>
@@ -118,19 +112,10 @@
     <loc>/reference/print.estim_PS.html</loc>
   </url>
   <url>
-    <loc>/reference/print.gaussianity_test.html</loc>
-  </url>
-  <url>
-    <loc>/reference/print.orthobasis_test.html</loc>
-  </url>
-  <url>
     <loc>/reference/print.twoComp_mixt.html</loc>
   </url>
   <url>
     <loc>/reference/stmf_small.html</loc>
-  </url>
-  <url>
-    <loc>/reference/summary.IBM_test.html</loc>
   </url>
   <url>
     <loc>/reference/summary.admix_cluster.html</loc>
@@ -152,12 +137,6 @@
   </url>
   <url>
     <loc>/reference/summary.estim_PS.html</loc>
-  </url>
-  <url>
-    <loc>/reference/summary.gaussianity_test.html</loc>
-  </url>
-  <url>
-    <loc>/reference/summary.orthobasis_test.html</loc>
   </url>
   <url>
     <loc>/reference/summary.twoComp_mixt.html</loc>

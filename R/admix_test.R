@@ -13,7 +13,7 @@
 #'                 of the contamination / admixture models under study.
 #' @param test_method The testing method to be applied. Can be either 'poly' (polynomial basis expansion) or 'icv' (inner
 #'                    convergence from IBM). The same testing method is performed between all samples. In the one-sample case,
-#'                    only 'Poly' is available and the test is a gaussianity test. For further details, see section 'Details' below.
+#'                    only 'poly' is available and the test is a gaussianity test. For further details, see section 'Details' below.
 #' @param conf_level The confidence level of the K-sample test.
 #' @param ... Depending on the choice made by the user for the test method ('poly' or 'icv'), optional arguments to
 #'            \link[admix]{gaussianity_test} or \link[admix]{orthobasis_test} (in case of 'poly'), and to \link[admix]{IBM_k_samples_test}
@@ -26,12 +26,10 @@
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2022}{admix}
 #' \insertRef{PommeretVandekerkhove2019}{admix}
 #'
-#' @return An object of class \link[admix]{admix_test}, containing 8 attributes: 1) the test decision (reject the null hypothesis or not);
-#'         2) the p-value of the test; 3) the confidence level of the test (1-alpha, where alpha denotes the level of the test
-#'         or equivalently the type-I error); 4) the value of the test statistic; 5) the number of samples under study; 6) the
-#'         respective size of each sample; 7) the information about mixture components (distributions and parameters); 8) the
-#'         chosen testing method (either based on polynomial basis expansions, or on the inner convergence property; see given
-#'         references).
+#' @return An object of class 'htest' containing the classical attributes of the latter class, as well as
+#'         other attributes specific to the inherited object class. Usually, the test decision (reject the null hypothesis or not);
+#'         the confidence level of the test (1-alpha, where alpha denotes the level of the test or equivalently the type-I error);
+#'         the number of samples under study; the respective size of each sample; the information about known mixture components.
 #'
 #' @examples
 #' ####### Example with 2 samples
@@ -78,18 +76,23 @@ admix_test <- function(samples, admixMod, test_method = c("poly","icv"), conf_le
   if (meth == "icv") {
     if (n_samples >= 2) {
       test_res <- IBM_k_samples_test(samples = samples, admixMod = admixMod, conf_level = conf_level, ...)
+      #specific_class <- "IBM_test"
     } else stop("Incorrect number of samples under study (should be > 1).")
 
   } else if (meth == "poly") {
     if (n_samples == 1) {
       test_res <- gaussianity_test(sample = samples[[1]], admixMod = admixMod[[1]], conf_level = conf_level, ...)
+      #specific_class <- "gaussianity_test"
     } else {  # case when n_samples == 2
       test_res <- orthobasis_test(samples = samples, admixMod = admixMod, conf_level = conf_level, ...)
+      #specific_class <- "orthobasis_test"
     }
 
   } else stop("Please choose appropriately the arguments of the function.")
 
+  #class(test_res) <- c("htest", specific_class)
   class(test_res) <- "htest"
   test_res$call <- match.call()
   return(test_res)
 }
+

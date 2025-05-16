@@ -2,7 +2,7 @@
 % Please edit documentation in R/decontaminated_density.R
 \name{plot.decontaminated_density}
 \alias{plot.decontaminated_density}
-\title{Plot method for class 'decontaminated_density'}
+\title{Plot method for object of class 'decontaminated_density'}
 \usage{
 \method{plot}{decontaminated_density}(x, x_val, add_plot = FALSE, ...)
 }

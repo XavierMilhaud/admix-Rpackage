@@ -130,7 +130,7 @@ twoComp_mixt <- function(n = 1000, weight = 0.5, comp.dist = list("norm", "norm"
 #' @return a plot with the densities of the samples provided as inputs.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @keywords internal
+#' @export
 
 plot.twoComp_mixt <- function(x, add.plot = FALSE, ...)
 {
@@ -164,7 +164,7 @@ plot.twoComp_mixt <- function(x, add.plot = FALSE, ...)
 #' @param ... A list of additional parameters belonging to the default method.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @keywords internal
+#' @export
 
 print.twoComp_mixt <- function(x, ...)
 {
@@ -197,7 +197,7 @@ print.twoComp_mixt <- function(x, ...)
 #' @param ... A list of additional parameters belonging to the default method.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @keywords internal
+#' @export
 
 summary.twoComp_mixt <- function(object, ...)
 {

@@ -154,18 +154,14 @@ ISSN 0378-3758, <a href="https://doi.org/10.1016/j.jspi.2021.05.010" class="exte
 .</p>
     </div>
     <div class="section level2">
-    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="print.orthobasis_test.html">print.orthobasis_test()</a></code> for printing a short version of the results from this estimation method,
-and <code><a href="summary.orthobasis_test.html">summary.orthobasis_test()</a></code> for more comprehensive results.</p></div>
-    </div>
-    <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
     <p>Xavier Milhaud <a href="mailto:xavier.milhaud.research@gmail.com">xavier.milhaud.research@gmail.com</a></p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">#### Under the null hypothesis H0.</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co">#### Under the null hypothesis H0.</span></span></span>
 <span class="r-in"><span><span class="va">mixt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">300</span>, weight <span class="op">=</span> <span class="fl">0.77</span>,</span></span>
 <span class="r-in"><span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"exp"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">1</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>,</span></span>
@@ -183,11 +179,7 @@ and <code><a href="summary.orthobasis_test.html">summary.orthobasis_test()</a></
 <span class="r-in"><span><span class="co">## Test procedure:</span></span></span>
 <span class="r-in"><span><span class="fu">orthobasis_test</span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>,<span class="va">data2</span><span class="op">)</span>, admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>,<span class="va">admixMod2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                conf_level <span class="op">=</span> <span class="fl">0.95</span>, est_method <span class="op">=</span> <span class="st">'BVdk'</span>, support <span class="op">=</span> <span class="st">'Real'</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Call:orthobasis_test(samples = list(data1, data2), admixMod = list(admixMod1, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     admixMod2), conf_level = 0.95, est_method = "BVdk", support = "Real")</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Is the null hypothesis rejected (same distribution for unknown components) ? Yes</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> p-value of the test: 1e-12</span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

@@ -20,4 +20,3 @@ where p is the mixing proportion, and f and g are the component distributions.
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}
 }
-\keyword{internal}

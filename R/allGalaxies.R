@@ -1,4 +1,4 @@
-#' Measurements of heliocentric velocities in four galaxies
+#' Measurements of heliocentric velocities
 #'
 #' An evolving data frame of velocities for 4 dSph galaxies (namely Carina, Sextans, Sculptor and Fornax),
 #' from SIMBAD astronomical database.

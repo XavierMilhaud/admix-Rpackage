@@ -2,7 +2,7 @@
 % Please edit documentation in R/admix_estim.R
 \name{print.admix_estim}
 \alias{print.admix_estim}
-\title{Print the estimated parameters from K admixture models}
+\title{Print method for object of class 'admix_estim'}
 \usage{
 \method{print}{admix_estim}(x, ...)
 }
@@ -12,9 +12,8 @@
 \item{...}{further arguments passed to or from other methods.}
 }
 \description{
-Print the estimated parameters from K admixture models
+Print method for object of class 'admix_estim'
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}
 }
-\keyword{internal}

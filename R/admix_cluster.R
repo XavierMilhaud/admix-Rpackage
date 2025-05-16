@@ -1,4 +1,4 @@
-#' Clustering of K populations following admixture models
+#' Cluster K populations following admixture models
 #'
 #' Create clusters on the unknown components related to the K populations following admixture models. Based on the K-sample test
 #' using Inversion - Best Matching (IBM) approach, see 'Details' below for further information.

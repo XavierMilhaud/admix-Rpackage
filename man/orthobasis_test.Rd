@@ -65,6 +65,7 @@ functions (pdf) l1 = p1*f1 + (1-p1)\emph{g1 and l2 = p2}f2 + (1-p2)*g2, where g1
 are observed. The admixture weights p1 and p2 thus have to be estimated. For further information on this method, see 'Details' below.
 }
 \examples{
+\dontrun{
 #### Under the null hypothesis H0.
 mixt1 <- twoComp_mixt(n = 300, weight = 0.77,
                       comp.dist = list("norm", "exp"),
@@ -83,14 +84,11 @@ admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
 ## Test procedure:
 orthobasis_test(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
                 conf_level = 0.95, est_method = 'BVdk', support = 'Real')
+}
 
 }
 \references{
 \insertRef{MilhaudPommeretSalhiVandekerkhove2022}{admix}
-}
-\seealso{
-\code{\link[=print.orthobasis_test]{print.orthobasis_test()}} for printing a short version of the results from this estimation method,
-and \code{\link[=summary.orthobasis_test]{summary.orthobasis_test()}} for more comprehensive results.
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

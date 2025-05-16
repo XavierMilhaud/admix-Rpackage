@@ -1,8 +1,7 @@
-#' Estimate the unknown parameters of the admixture model(s)
+#' Estimate the unknown weight in the admixture model
 #'
-#' Estimate the component weights, the location shift parameter (in case of a symmetric unknown component density),
-#' and the unknown component distribution using different estimation techniques. We remind that the i-th admixture
-#' model has probability density function (pdf) l_i such that:
+#' Estimate the unknown component weight (and location shift parameter in case of a symmetric unknown component density),
+#' using different estimation techniques. We remind that the i-th admixture model has probability density function (pdf) l_i such that:
 #'    l_i = p_i * f_i + (1-p_i) * g_i, where g_i is the known component density.
 #' The unknown quantities p_i and f_i then have to be estimated.
 #'
@@ -94,46 +93,39 @@ admix_estim <- function(samples, admixMod, est_method = c("PS","BVdk","IBM"), ..
 
   class(estimators) <- c("admix_estim", specific_class)
   estimators$call <- match.call()
-
   return(estimators)
 }
 
 
-#' Print the estimated parameters from K admixture models
+#' Print method for object of class 'admix_estim'
 #'
 #' @param x An object of class 'admix_estim' (see ?admix_estim).
 #' @param ... further arguments passed to or from other methods.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @keywords internal
+#' @export
 
 print.admix_estim <- function(x, ...)
 {
   n_samples <- length(x$estim_objects)
   if (inherits(x, what = "estim_IBM")) {
-    cat("Pairwise estimation performed (IBM estimation method). \n")
-    cat("N.B.: estimated weights are reliable only if the unknown
-component distributions have previously been tested equal.
-See ?admix_test. \n")
-    cat("Weight of the first component is fixed in case of equal known components.
-The estimated proportion for the 2nd sample makes sense through the ratio of
-the two proportions, which should roughly be similar than the true actual ratio.\n\n")
+    cat("\nPairwise estimation performed (IBM estimation method).\n\n")
     for (i in 2:n_samples) {
-      cat("######### Samples 1 and ", i, " #########\n", sep = "")
+      cat("######### Samples 1 with ", i, " #########\n", sep = "")
       print(x$estim_objects[[i]], ...)
     }
   } else {
+    cat("\n")
     for (i in 1:n_samples) {
       cat("######### Sample ", i, " #########\n", sep = "")
       print(x$estim_objects[[i]], ...)
     }
   }
-  cat("\n")
 }
 
-#' Results of estimated parameters from K admixture models
+#' Summary method for object of class 'admix_estim'
 #'
-#' Summarize the estimated weight(s) of the unknown component(s) in the admixture model(s) under study.
+#' Summarize the estimated weight(s) of the unknown component(s), and admixture model(s) under study.
 #' Recall that an admixture model follows the cumulative distribution function (CDF) L, where
 #' L = p*F + (1-p)*G, with G a known CDF, and p and F unknown quantities.
 #'
@@ -141,30 +133,26 @@ the two proportions, which should roughly be similar than the true actual ratio.
 #' @param ... further arguments passed to or from other methods.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @keywords internal
+#' @export
 
 summary.admix_estim <- function(object, ...)
 {
   n_samples <- length(object$estim_objects)
   if (inherits(object, what = "estim_IBM")) {
-    cat("Pairwise estimation performed (IBM estimation method). \n")
-    cat("N.B.: estimated weights are reliable only if the unknown
-component distributions have previously been tested equal.
-See ?admix_test. \n")
-    cat("Weight of the first component is fixed in case of equal known components.
-The estimated proportion for the 2nd sample makes sense through the ratio of
-the two proportions, which should roughly be similar than the true actual ratio.\n\n")
+    cat("\nPairwise estimation performed (IBM estimation method).\n\n")
     for (i in 2:n_samples) {
-      cat("######### Samples 1 and ", i, " #########\n", sep = "")
+      cat("######### Samples 1 with ", i, " #########\n", sep = "")
       summary(object$estim_objects[[i]], ...)
     }
   } else {
+    cat("\n")
     for (i in 1:n_samples) {
-      cat("\n\n######### Sample ", i, " #########\n\n", sep = "")
+      cat("######### Sample ", i, " #########\n\n", sep = "")
       summary(object$estim_objects[[i]], ...)
+      cat("\n")
     }
   }
-  cat("\n\n")
+  cat("\n")
 }
 
 

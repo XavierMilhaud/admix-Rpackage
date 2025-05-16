@@ -2,7 +2,7 @@
 % Please edit documentation in R/decontaminated_density.R
 \name{decontaminated_density}
 \alias{decontaminated_density}
-\title{Estimates the decontaminated density of the unknown component in an admixture}
+\title{Probability density function of the unknown component}
 \usage{
 decontaminated_density(sample1, estim.p, admixMod)
 }
@@ -14,8 +14,9 @@ decontaminated_density(sample1, estim.p, admixMod)
 \item{admixMod}{An object of class 'admix_model', containing useful information about known distribution(s) and parameter(s).}
 }
 \value{
-An object of class 'decontaminated_density', containing 2 attributes: 1) the decontaminated density function;
-2) the type of support for the underlying distribution (either discrete or continuous, useful for plots).
+An object of class 'decontaminated_density', containing 3 attributes: 1) the data under study;
+2) the type of support for the underlying distribution (either discrete or continuous, useful for plots);
+3) the decontaminated density function.
 }
 \description{
 Estimate the decontaminated density of the unknown component in the admixture model under study, after inversion of the admixture

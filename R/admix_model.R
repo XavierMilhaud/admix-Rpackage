@@ -1,8 +1,8 @@
-#' Create an object of class 'admix_model'
+#' Define the distribution/parameter(s) of the known component
 #'
-#' Create an admixture model, also known as (aka) a contamination model. Such a model is a two-component
-#' mixture model with one known component. Both the second component distribution and the mixing weight
-#' are unknown.
+#' Create an object of class 'admix_model', containing the information about the known component distribution in the admixture model.
+#' An admixture (aka contamination) model is a two-component mixture model with one known component.
+#' Both the second component distribution and the mixing weight are unknown.
 #'
 #' @param knownComp_dist (Character) The name of the distribution (specified as in R glossary) of the known component
 #'                        of the admixture model

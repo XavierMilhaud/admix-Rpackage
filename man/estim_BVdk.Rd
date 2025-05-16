@@ -38,6 +38,7 @@ The localization shift parameter is denoted mu, and the component weight p.
 See the reference below for further details.
 }
 \examples{
+\dontrun{
 ## Simulate mixture data:
 mixt1 <- twoComp_mixt(n = 200, weight = 0.4,
                       comp.dist = list("norm", "norm"),
@@ -62,6 +63,7 @@ admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
 ## Perform the estimation of parameters in real-life:
 estim_BVdk(samples = data2, admixMod = admixMod2, method = 'L-BFGS-B',
            compute_var = TRUE)
+}
 
 }
 \references{

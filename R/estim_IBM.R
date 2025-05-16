@@ -24,6 +24,7 @@
 #'          and [summary.estim_IBM()] for more comprehensive results.
 #'
 #' @examples
+#' \dontrun{
 #' ## Continuous support: simulate mixture data.
 #' mixt1 <- twoComp_mixt(n = 1500, weight = 0.5,
 #'                       comp.dist = list("norm", "norm"),
@@ -63,9 +64,9 @@
 #' ## Estimate the mixture weights of the two admixture models (provide only hat(theta)_n):
 #' estim_IBM(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
 #'           compute_var = TRUE)
+#' }
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @export
 #' @keywords internal
 
 estim_IBM <- function(samples, admixMod, n.integ = 1000, compute_var = FALSE)
@@ -75,10 +76,7 @@ estim_IBM <- function(samples, admixMod, n.integ = 1000, compute_var = FALSE)
     stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
 
   warning(" IBM estimators of two unknown proportions are reliable only if the two
-    corresponding unknown component distributions have been tested equal (see 'admix_test()').
-    Furthermore, when both the known and unknown component distributions of the mixture
-    models are identical, the IBM approach provides an estimation of the ratio of the
-    actual mixing weights rather than an estimation of the unknown weights themselves.\n")
+    corresponding unknown component distributions have been tested equal (see ?admix_test).\n")
 
   ##------- Defines the support for integration by simulation --------##
   ## Allows to integrate the gap between F1 and F2 in the contrast computation. span(G) must contain span(X) and span(Y).
@@ -96,7 +94,10 @@ estim_IBM <- function(samples, admixMod, n.integ = 1000, compute_var = FALSE)
     ## Leads to a one-dimensional optimization because known components of mixture distributions are the same.
     ## Set arbitrarily the proportion to 1/2, could be any other value belonging to ]0,1[:
     warning("In 'estim_IBM': in case of identical known components, the mixing weight of the unknown
-  component in the first sample, named 'fixed.p.X', was arbitrarily set to 0.2")
+  component in the first sample was arbitrarily set to 0.2.
+  Furthermore, when both the known and unknown component distributions of the mixture
+  models are identical, the IBM approach provides an estimation of the ratio of the
+  actual mixing weights rather than an estimation of the unknown weights themselves.\n")
     fixed.p.X <- 0.2
     par.init <- 0.5
   } else {
@@ -187,6 +188,7 @@ estim_IBM <- function(samples, admixMod, n.integ = 1000, compute_var = FALSE)
 
 print.estim_IBM <- function(x, ...)
 {
+  cat("\n")
   cat("Call:")
   print(x$call)
   cat("\n")
@@ -224,8 +226,9 @@ summary.estim_IBM <- function(object, ...)
   cat("Number of samples: ", object$n_populations, "\n")
   cat("Sample sizes: ", object$population_sizes, "\n")
   for (k in 1:object$n_populations) {
-    cat("-> Distribution and parameters of the known component \n for admixture model #", k, ": ", sep="")
-    cat(paste(sapply(object$admixture_models[[k]], "[[", "known")[1:2], collapse = " - "))
+    cat("-> Distribution of the known component for admixture model #", k, ": ", object$admixture_models[[k]]$comp.dist$known, "\n", sep="")
+    cat("-> Parameter(s) of the known component for admixture model #", k, ": ",
+        paste(names(object$admixture_models[[k]]$comp.param$known), object$admixture_models[[k]]$comp.param$known, collapse="\t", sep="="), sep="")
     cat("\n")
   }
   cat("Are the known component distributions equal? ", object$equal.knownComp,"\n")

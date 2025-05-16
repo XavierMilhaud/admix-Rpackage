@@ -3,7 +3,7 @@
 \docType{data}
 \name{allGalaxies}
 \alias{allGalaxies}
-\title{Measurements of heliocentric velocities in four galaxies}
+\title{Measurements of heliocentric velocities}
 \format{
 Currently contains 8,862 rows and 3 columns, with information on:
 \describe{
