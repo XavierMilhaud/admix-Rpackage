@@ -128,8 +128,8 @@ estim_BVdk <- function(samples, admixMod, method = c("L-BFGS-B","Nelder-Mead"), 
 
 print.estim_BVdk <- function(x, ...)
 {
-  cat("\nCall:")
-  print(x$call)
+#  cat("\nCall:")
+#  print(x$call)
   cat("\n")
   cat("Estimated mixing proportion: ", x$estimated_mixing_weights, "\n")
   cat("Estimated location parameter: ", x$estimated_locations, "\n")

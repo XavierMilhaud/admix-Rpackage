@@ -65,9 +65,10 @@ admix_test <- function(samples, admixMod, test_method = c("poly","icv"), conf_le
   if ((n_samples > 2) & (meth == "poly")) stop("Testing using polynomial basis expansions involves at most TWO samples.\n")
   if ((n_samples == 1) & (meth == "icv")) stop("Testing using the inner convergence property (obtained from IBM estimation) requires at least TWO samples.\n")
   if (meth == "poly") message("  Testing using polynomial basis expansions requires in theory a square-root n consistent estimation
-  of the proportions of the unknown component distributions (thus using 'BVdk' estimation by default, associated to unknown
-  component distributions with symmetric densities). However, it is allowed to use 'PS' estimation in practice (argument 'est_method'
-  has therefore to be set to 'PS'. In this case, the variance of estimators is obtained by boostrapping.\n")
+  of the proportions of the unknown component distributions (thus using 'BVdk' estimation by default,
+  associated to unknown component distributions with symmetric densities). However, it is allowed to
+  use 'PS' estimation in practice (argument 'est_method' has therefore to be set to 'PS'. In this case,
+  the variance of estimators is obtained by boostrapping.\n")
 
   old_options_warn <- base::options()$warn
   on.exit(base::options(warn = old_options_warn))

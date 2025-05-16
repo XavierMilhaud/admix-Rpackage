@@ -136,10 +136,10 @@ estim_PS <- function(samples, admixMod, method = c("fixed", "lwr.bnd", "cv"),
 #' @keywords internal
 
 print.estim_PS <- function(x, ...){
-  cat("\n")
-  cat("Call:")
-  print(x$call)
-  cat("\n")
+  #cat("\n")
+  #cat("Call:")
+  #print(x$call)
+  #cat("\n")
   if(x$method != "lwr.bnd"){
     cat(paste("Estimate of mixing weight (proportion of the unknown component): " , round(x$estimated_mixing_weights,2)))
     #cat("\n", paste("The chosen value c_n is", round(x$c.n, 3)), "\n")

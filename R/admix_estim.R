@@ -107,6 +107,11 @@ admix_estim <- function(samples, admixMod, est_method = c("PS","BVdk","IBM"), ..
 
 print.admix_estim <- function(x, ...)
 {
+  cat("\n")
+  cat("Call:")
+  print(x$call)
+#  cat("\n")
+
   n_samples <- length(x$estim_objects)
   if (inherits(x, what = "estim_IBM")) {
     cat("\nPairwise estimation performed (IBM estimation method).\n\n")
