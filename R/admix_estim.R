@@ -110,19 +110,17 @@ print.admix_estim <- function(x, ...)
   cat("\n")
   cat("Call:")
   print(x$call)
-#  cat("\n")
-
   n_samples <- length(x$estim_objects)
   if (inherits(x, what = "estim_IBM")) {
     cat("\nPairwise estimation performed (IBM estimation method).\n\n")
     for (i in 2:n_samples) {
-      cat("######### Samples 1 with ", i, " #########\n", sep = "")
+      cat("######### Samples 1 with ", i, " #########", sep = "")
       print(x$estim_objects[[i]], ...)
     }
   } else {
     cat("\n")
     for (i in 1:n_samples) {
-      cat("######### Sample ", i, " #########\n", sep = "")
+      cat("######### Sample ", i, " #########", sep = "")
       print(x$estim_objects[[i]], ...)
     }
   }

@@ -266,9 +266,10 @@ print.admix_cluster <- function(x, ...)
 {
   cat("Call:\n")
   print(x$call)
-  cat("\nNumber of detected clusters across the samples provided: ", x$n_clust, ".\n", sep = "")
-  cat("\nList of samples involved in each built cluster (inside c()) :\n",
-      paste("  - Cluster #", 1:length(x$clust_pop), ": samples ", x$clust_pop, collapse="\n", sep = ""), sep="")
+  cat("\nNumber of detected clusters: ", x$n_clust, ".\n", sep = "")
+  cat("List of samples involved in each built cluster (inside c()) :\n",
+      gsub("\\)", "", gsub("c\\(", "", paste("  - Cluster #", 1:length(x$clust_pop), ": samples ",
+                                             x$clust_pop, collapse="\n", sep = ""))))
   cat("\n")
 }
 

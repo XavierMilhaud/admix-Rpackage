@@ -516,7 +516,7 @@ IBM_2samples_test <- function(samples, admixMod, conf_level = 0.95, parallel = F
     p_value <- 1 - CDF_U(contrast_val)
   }
 
-  names(contrast_val) <- "Tabulated testing distribution"
+  names(contrast_val) <- "Test statistic value"
   stat_param <- NA ; names(stat_param) <- ""
   if (length(estim.weights) > 1) {
     estimated_values <- estim.weights
@@ -528,7 +528,7 @@ IBM_2samples_test <- function(samples, admixMod, conf_level = 0.95, parallel = F
   obj <- list(
     null.value = unique(extreme_quantile),
     alternative = "greater",
-    method = "Equality test of the unknown component distributions (with IBM)",
+    method = "Equality test of the unknown distributions (with ICV/IBM)",
     estimate = estimated_values,
     data.name = deparse(substitute(samples)),
     statistic = contrast_val,

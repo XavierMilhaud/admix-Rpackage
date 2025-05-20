@@ -193,15 +193,15 @@ print.estim_IBM <- function(x, ...)
 #  print(x$call)
   cat("\n")
   if (x$equal.knownComp) {
-    cat("Fixed weight of the unknown distribution in the 1st sample (equal known components): ", x$p.X.fixed, "\n")
-    cat("Estimated weight of the unknown distribution in the 2nd sample: ", round(x$estimated_mixing_weights,3), "\n")
-    cat("Estimated variance of the latter weight in the 1st sample (no variance since fixed): ", round(x$variance_est_p1,6), "\n")
-    cat("Estimated variance of the latter weight in the 2nd sample: ", round(x$variance_est_p2,6), "\n")
+    cat("Fixed mixing weight of the unknown distribution in the 1st sample (equal known components): ", x$p.X.fixed, "\n")
+    cat("Estimated mixing weight of the unknown distribution in the 2nd sample: ", round(x$estimated_mixing_weights,3), "\n")
+    cat("Variance of the estimated weight in the 1st sample (no variance since fixed): ", round(x$variance_est_p1,5), "\n")
+    cat("Variance of the estimated weight in the 2nd sample: ", round(x$variance_est_p2,5), "\n")
   } else {
-    cat("Estimated weight of the unknown distribution in the 1st sample: ", round(x$estimated_mixing_weights[1],3), "\n")
-    cat("Estimated weight of the unknown distribution in the 2nd sample: ", round(x$estimated_mixing_weights[2],3), "\n")
-    cat("Estimated variance of the latter weight in the 1st sample: ", round(x$variance_est_p1,6), "\n")
-    cat("Estimated variance of the latter weight in the 2nd sample: ", round(x$variance_est_p2,6), "\n")
+    cat("Estimated mixing weight of the unknown distribution in the 1st sample: ", round(x$estimated_mixing_weights[1],3), "\n")
+    cat("Estimated mixing weight of the unknown distribution in the 2nd sample: ", round(x$estimated_mixing_weights[2],3), "\n")
+    cat("Variance of the estimated weight in the 1st sample: ", round(x$variance_est_p1,5), "\n")
+    cat("Variance of the estimated weight in the 2nd sample: ", round(x$variance_est_p2,5), "\n")
   }
   cat("\n")
 }
