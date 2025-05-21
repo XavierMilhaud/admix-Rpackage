@@ -141,7 +141,7 @@ print.estim_PS <- function(x, ...){
   #print(x$call)
   cat("\n")
   if(x$method != "lwr.bnd"){
-    cat(paste("Estimated mixing weight (of the unknown component): " , round(x$estimated_mixing_weights,3)))
+    cat(paste("Estimated mixing weight (of the unknown component):" , round(x$estimated_mixing_weights,3)))
     #cat("\n", paste("The chosen value c_n is", round(x$c.n, 3)), "\n")
 #    if( !is.null(x$cv.out)){
 #      old_par <- graphics::par()$mfrow
@@ -175,8 +175,8 @@ summary.estim_PS <- function(object, ...)
   cat("\n")
   cat("------- Sample -------\n")
   cat("Sample size: ", object$population_sizes, "\n")
-  cat("-> Distribution of the known component: ", object$admixture_models$comp.dist$known, "\n", sep="")
-  cat("-> Parameter(s) of the known component: ", paste(names(object$admixture_models$comp.param$known), object$admixture_models$comp.param$known, collapse="\t", sep="="), sep="")
+  cat("-> Distribution of the known component:", object$admixture_models$comp.dist$known, "\n", sep="")
+  cat("-> Parameter(s) of the known component:", paste(names(object$admixture_models$comp.param$known), object$admixture_models$comp.param$known, collapse="\t", sep="="), sep="")
   cat("\n")
   cat("\n------- Estimation results -------\n")
   cat(paste("Estimate of the mixing weight (proportion of the unknown component distribution) is" , round(object$estimated_mixing_weights,3)))

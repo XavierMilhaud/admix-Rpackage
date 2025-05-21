@@ -114,13 +114,13 @@ print.admix_estim <- function(x, ...)
   if (inherits(x, what = "estim_IBM")) {
     cat("\nPairwise estimation performed (IBM estimation method).\n\n")
     for (i in 2:n_samples) {
-      cat("######### Samples 1 with ", i, " #########", sep = "")
+      cat("------ Samples #1 with #", i, " ------", sep = "")
       print(x$estim_objects[[i]], ...)
     }
   } else {
     cat("\n")
     for (i in 1:n_samples) {
-      cat("######### Sample ", i, " #########", sep = "")
+      cat("------ Sample #", i, " ------", sep = "")
       print(x$estim_objects[[i]], ...)
     }
   }
@@ -144,13 +144,13 @@ summary.admix_estim <- function(object, ...)
   if (inherits(object, what = "estim_IBM")) {
     cat("\nPairwise estimation performed (IBM estimation method).\n\n")
     for (i in 2:n_samples) {
-      cat("######### Samples 1 with ", i, " #########\n", sep = "")
+      cat("------ Samples #1 with #", i, " ------\n", sep = "")
       summary(object$estim_objects[[i]], ...)
     }
   } else {
     cat("\n")
     for (i in 1:n_samples) {
-      cat("######### Sample ", i, " #########\n\n", sep = "")
+      cat("------ Sample #", i, " ------\n\n", sep = "")
       summary(object$estim_objects[[i]], ...)
       cat("\n")
     }

@@ -22,19 +22,20 @@
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean"=3, "sd"=0.5),
 #'                                         list("mean"=0, "sd"=1)))
+#' print(sim.X)
 #' sim.Y <- twoComp_mixt(n = 1200, weight = 0.7,
 #'                       comp.dist = list("norm", "exp"),
 #'                       comp.param = list(list("mean"=-3, "sd"=0.5),
 #'                                         list("rate"=1)))
-#' #plot(sim.X, xlim=c(-5,5), ylim=c(0,0.5))
-#' #plot(sim.Y, add.plot = TRUE, xlim=c(-5,5), ylim=c(0,0.5), col = "red")
+#' plot(sim.X, xlim=c(-5,5), ylim=c(0,0.5))
+#' plot(sim.Y, add.plot = TRUE, xlim=c(-5,5), ylim=c(0,0.5), col = "red")
 #'
 #' ## Mixture of discrete random variables:
 #' sim.X <- twoComp_mixt(n = 2000, weight = 0.5,
 #'                       comp.dist = list("multinom", "multinom"),
 #'                       comp.param = list(list("size"=1, "prob"=c(0.3,0.4,0.3)),
 #'                                         list("size"=1, "prob"=c(0.1,0.2,0.7))))
-#' #plot(sim.X)
+#' plot(sim.X)
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
@@ -171,16 +172,16 @@ print.twoComp_mixt <- function(x, ...)
   cat("\nCall:")
   print(x$call)
   cat("\n")
-  cat("Number of observations: ", x$n, "\n")
+  cat("Number of observations:", x$n, "\n")
   cat("\n")
   if (any(x$comp.dist == "multinom")) {
     cat("Obtained multinomial mixture distribution: \n", table(x$mixt.data), "\n")
   } else {
-    cat("Simulated data (first 10 obs.): \n", utils::head(x$mixt.data, 10), "\n")
+    cat("Simulated data (first 5 obs.): \n", utils::head(x$mixt.data, 5))
     cat("\n")
-    cat("Simulated observations coming from the 1st component (first 10 obs.): \n", utils::head(x$comp1.data, 10), "\n")
+    cat("Simulated observations coming from the 1st component (first 5 obs.): \n", utils::head(x$comp1.data, 5))
     cat("\n")
-    cat("Simulated observations coming from the 2nd component (first 10 obs.): \n", utils::head(x$comp2.data, 10), "\n")
+    cat("Simulated observations coming from the 2nd component (first 5 obs.): \n", utils::head(x$comp2.data, 5))
   }
   cat("\n")
 }
