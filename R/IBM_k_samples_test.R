@@ -300,7 +300,7 @@ IBM_k_samples_test <- function(samples, admixMod, conf_level = 0.95, sim_U = NUL
     CDF_U <- stats::ecdf(sim_U)
     p_value <- 1 - CDF_U(finalStat_value)
 
-    names(finalStat_value) <- "Tabulated testing distribution"
+    names(finalStat_value) <- "Test statistic value"
     stat_param <- NA ; names(stat_param) <- ""
     estimated_values <- vector(mode = "numeric", length = 2L)
     estimated_values <- c(gamma_opt, cst_selected)
@@ -309,7 +309,7 @@ IBM_k_samples_test <- function(samples, admixMod, conf_level = 0.95, sim_U = NUL
     obj <- list(
       null.value = unique(q_H),
       alternative = "greater",
-      method = "Equality test of the unknown component distributions (with IBM)",
+      method = "Equality test of the unknown distributions (with ICV/IBM)",
       estimate = estimated_values,
       data.name = deparse(substitute(samples)),
       statistic = finalStat_value,

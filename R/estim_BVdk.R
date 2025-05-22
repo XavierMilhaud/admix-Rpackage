@@ -132,9 +132,9 @@ print.estim_BVdk <- function(x, ...)
 #  print(x$call)
   cat("\n")
   cat("Estimated mixing weight:", round(x$estimated_mixing_weights,3),
-      " / Estimated location shift param.:", round(x$estimated_locations,3),"\n")
+      "/ Estimated location shift:", round(x$estimated_locations,3),"\n")
   cat("Variance of weight estimator:", round(x$mix_weight_variance,5),
-      " / Variance of location estimator:", round(x$location_variance,5), "\n")
+      "/ Variance of loc. estimator:", round(x$location_variance,5), "\n")
   cat("\n")
 }
 

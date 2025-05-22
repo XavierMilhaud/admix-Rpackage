@@ -77,7 +77,7 @@ print.admix_model <- function(x, ...)
   cat("Known component distribution: ", x$comp.dist$known, "\n")
   cat("Known component parameters:",
       paste(names(x$comp.param$known), "=", unlist(x$comp.param$known, use.names=FALSE), sep=""))
-  cat("\n")
+  cat("\n\n")
 }
 
 

@@ -183,7 +183,7 @@ print.twoComp_mixt <- function(x, ...)
     cat("\n")
     cat("Simulated observations coming from the 2nd component (first 5 obs.): \n", utils::head(x$comp2.data, 5))
   }
-  cat("\n")
+  cat("\n\n")
 }
 
 
