@@ -224,7 +224,7 @@ summary.decontaminated_density <- function(object, ...)
 #'                                admixMod = admixMod2)
 #' ## Use appropriate sequence of x values:
 #' plot(x = res1, x_val = seq(from = 0, to = 6, length.out = 100), add_plot = FALSE)
-#' plot(x = res2, col = "red", x_val = seq(from = 0, to = 6, length.out = 100), add_plot = TRUE)
+#' plot(x = res2, x_val = seq(from=0, to=6, length.out=100), col="red", add_plot=TRUE)
 #'
 #' ####### Countable discrete support:
 #' mixt1 <- twoComp_mixt(n = 4000, weight = 0.7,
@@ -297,17 +297,15 @@ plot.decontaminated_density <- function(x, x_val, add_plot = FALSE, ...)
 
   if (!add_plot) {
     if (support == "Discrete") {
-      graphics::barplot(height = decontamin_dens_values, names = as.character(x_val), space = 0.1, ...)
+      graphics::barplot(height = decontamin_dens_values, names = as.character(x_val), space = 2,
+                        width = 0.5, ...)
     } else {
       plot(x = x_val, y = decontamin_dens_values, ...)
     }
   } else {
-    old_par_new <- graphics::par()$new
-    on.exit(graphics::par(new = old_par_new))
-    graphics::par(new = TRUE)
     if (support == "Discrete") {
-      graphics::barplot(height = decontamin_dens_values, names = as.character(x_val), add = add_plot,
-                        space = 0.1, ...)
+      graphics::barplot(height = decontamin_dens_values, names = NULL, add = add_plot,
+                        width = 0.5, space = c(3,rep(2,length(x_val)-1)), ...)
     } else {
       graphics::lines(x = x_val, y = decontamin_dens_values, ...)
     }

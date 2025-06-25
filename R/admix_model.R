@@ -76,9 +76,10 @@ print.admix_model <- function(x, ...)
   cat("\n")
   cat("Known component distribution: ", x$comp.dist$known, "\n")
   cat("Known component parameters:",
-      paste(names(x$comp.param$known), "=", unlist(x$comp.param$known, use.names=FALSE), sep=""))
+      paste(names(x$comp.param$known), "=", x$comp.param$known, sep=""))
   cat("\n\n")
 }
+
 
 
 #' Plot method for objects of class 'admix_model'

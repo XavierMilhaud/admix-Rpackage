@@ -56,7 +56,7 @@ res2 <- decontaminated_density(sample1 = data2, estim.p = prop[2],
                                admixMod = admixMod2)
 ## Use appropriate sequence of x values:
 plot(x = res1, x_val = seq(from = 0, to = 6, length.out = 100), add_plot = FALSE)
-plot(x = res2, col = "red", x_val = seq(from = 0, to = 6, length.out = 100), add_plot = TRUE)
+plot(x = res2, x_val = seq(from=0, to=6, length.out=100), col="red", add_plot=TRUE)
 
 ####### Countable discrete support:
 mixt1 <- twoComp_mixt(n = 4000, weight = 0.7,

@@ -107,7 +107,9 @@ estim_BVdk <- function(samples, admixMod, method = c("L-BFGS-B","Nelder-Mead"), 
     estimated_locations = sol$par[2],
     mix_weight_variance = ifelse(all(is.na(var_estimators)), NA, var_estimators$var.estim_prop),
     location_variance = ifelse(all(is.na(var_estimators)), NA, var_estimators$var.estim_location),
-    optim_method = method
+    optim_method = method,
+    data = samples,
+    data.name = deparse1(substitute(samples))
   )
   class(obj) <- c("estim_BVdk", "admix_estim")
   obj$call <- match.call()

@@ -237,7 +237,7 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
   obj <- list(
     null.value = stats::qchisq(conf_level,1),
     alternative = "greater",
-    method = "Equality test of unknown distributions (polynomial expansions of pdfs)",
+    method = "Equality test of unknown dist. (polynom. expansions of pdfs)",
     estimate = estimated_values,
     data.name = deparse(substitute(samples)),
     statistic = stat_value,
