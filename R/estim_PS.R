@@ -157,7 +157,7 @@ print.estim_PS <- function(x, ...){
     plot(x$dist.out)
     print (paste("The  '95%' lower confidence for alp_0 is ", x$alp.Lwr))
   }
-  cat("\n\n")
+  cat("\n")
 }
 
 
