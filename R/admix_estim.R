@@ -62,8 +62,8 @@ admix_estim <- function(samples, admixMod, est_method = c("PS","BVdk","IBM"), ..
 
   meth <- match.arg(est_method)
   supp <- detect_support_type(unlist(samples))
-  if ((supp != "Continuous") & (meth != "IBM"))
-    stop("'BVdk' or 'PS' estimation methods are not suitable to discrete random variables.")
+  if ((supp != "Continuous") & (meth == "BVdk"))
+    stop("'BVdk' estimation method is not suitable to discrete random variables.")
 
   n_samples <- length(samples)
   ## Check right specification of arguments:

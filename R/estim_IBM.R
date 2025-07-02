@@ -62,8 +62,9 @@
 #' admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
 #'                          knownComp_param = mixt2$comp.param[[2]])
 #' ## Estimate the mixture weights of the two admixture models (provide only hat(theta)_n):
-#' estim_IBM(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
-#'           compute_var = TRUE)
+#' ex <- estim_IBM(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
+#'                 compute_var = TRUE)
+#' print.estim_IBM(ex)
 #' }
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
