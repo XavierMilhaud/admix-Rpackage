@@ -137,21 +137,28 @@ plot.twoComp_mixt <- function(x, add.plot = FALSE, ...)
 {
   old_par_new <- graphics::par()$new
   on.exit(graphics::par(new = old_par_new))
-  if (add.plot) {
-    graphics::par(new = TRUE)
-  }
-  n <- x$n
-  densities <- stats::density(x$mixt.data)
-  x.axis.lim <- c(min(densities$x), max(densities$x))
-  if (all(x$dist.type != "Discrete")) {
-    base::plot(densities, ...)
+
+  if (!add.plot) {
+    if (all(x$dist.type == "Discrete")) {
+      graphics::barplot(height = as.numeric(table(x$mixt.data)) / sum(as.numeric(table(x$mixt.data))),
+                        names = names(table(x$mixt.data)), space = 2, width = 0.5, ...)
+    } else {
+      densities <- stats::density(x$mixt.data)
+      base::plot(densities, xlab = "observations", ylab = "density", main = "", ...)
+    }
   } else {
-    ## FIXME: pour 'breaks' defini comme ci-dessous, cela ne marche que si la loi discrete est a support positif!
-    #graphics::hist(x$mixt.data, freq = TRUE, breaks = 0:ceiling(x.axis.lim[2]), ...)
-    base::plot(as.numeric(names(table(x$mixt.data))),
-               as.numeric(table(x$mixt.data)) / sum(as.numeric(table(x$mixt.data))),
-               type = "h", ...)
+    if (all(x$dist.type == "Discrete")) {
+      x_val <- as.numeric(names(table(x$mixt.data)))
+      graphics::barplot(height = as.numeric(table(x$mixt.data)) / sum(as.numeric(table(x$mixt.data))),
+                        names = NULL, add = add.plot,
+                        width = 0.5, space = c(3,rep(2,length(x_val)-1)), ...)
+    } else {
+      densities <- stats::density(x$mixt.data)
+      par(new = TRUE)
+      base::plot(densities, xlab = "", ylab = "", main = "", ...)
+    }
   }
+  #graphics::lines(x = x_val, y = decontamin_dens_values, ...)
 }
 
 

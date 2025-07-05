@@ -244,14 +244,27 @@ knownComp_to_uniform <- function(data, admixMod)
   ## Extracts the information about component distributions for inversion
   ## (transformation to uniform distribution of the known component):
   comp.dist.inv <- paste0("p", admixMod$comp.dist$known)
-  #comp.inv <- sapply(X = comp.dist.inv, FUN = get, pos = "package:stats", mode = "function")
+  if (comp.dist.inv == "pmultinom") eff <- as.numeric(table(data))
   comp.inv <- sapply(X = comp.dist.inv, FUN = get, mode = "function")
   assign(x = names(comp.inv)[1], value = comp.inv[[1]])
 
-  ## Creates the expression allowing further to generate the right data:
+  ## Creates the adequate expression:
+  make.expr.multinom <- function(z) {
+    paste(names(comp.inv)[1],"(q = eff, n = sum(eff), prob = ",
+          paste("c(", paste(admixMod$comp.param$known$prob, collapse = ","), "), lower.tail=TRUE)", sep = ""), sep = "")
+  }
+  #make.expr.multinom <- function(z) {
+  #  paste(names(comp.inv)[1],"(q=c(rep(0,", z-1, "), 1, rep(0,", length(admixMod$comp.param$known$prob)-z, ")), n = 1, ",
+  #        paste("c(", paste(admixMod$comp.param$known$prob, collapse = ","), "), lower.tail=TRUE)", sep = ""), sep = "")
+  #}
   make.expr.inv <- function(z) paste(names(comp.inv)[1],"(q=", z, ",", paste(names(admixMod$comp.param$known),
                                      "=", admixMod$comp.param$known, sep="", collapse=","), ")", sep="")
-  expr.inv <- parse(text  = make.expr.inv(data))
+  if (comp.dist.inv == "pmultinom") {
+    expr.inv <- parse(text = make.expr.multinom(data))
+  } else {
+    expr.inv <- parse(text = make.expr.inv(data))
+  }
+
   ## Inversion of the second component to get a Uniform distribution for the second component:
   data.transformed <- sapply(expr.inv, eval)
 
