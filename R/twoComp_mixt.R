@@ -28,7 +28,7 @@
 #'                       comp.param = list(list("mean"=-3, "sd"=0.5),
 #'                                         list("rate"=1)))
 #' plot(sim.X, xlim=c(-5,5), ylim=c(0,0.5))
-#' plot(sim.Y, add.plot = TRUE, xlim=c(-5,5), ylim=c(0,0.5), col = "red")
+#' plot(sim.Y, add_plot = TRUE, xlim=c(-5,5), ylim=c(0,0.5), col = "red")
 #'
 #' ## Mixture of discrete random variables:
 #' sim.X <- twoComp_mixt(n = 2000, weight = 0.5,
@@ -125,7 +125,7 @@ twoComp_mixt <- function(n = 1000, weight = 0.5, comp.dist = list("norm", "norm"
 #' Plots the empirical densities of the samples with optional arguments to improve the visualization.
 #'
 #' @param x Object of class 'twoComp_mixt' from which the density will be plotted.
-#' @param add.plot (default to FALSE) Option to plot another mixture distribution on the same graph.
+#' @param add_plot (default to FALSE) Option to plot another mixture distribution on the same graph.
 #' @param ... further classical arguments and graphical parameters for methods plot and hist.
 #'
 #' @return a plot with the densities of the samples provided as inputs.
@@ -133,12 +133,12 @@ twoComp_mixt <- function(n = 1000, weight = 0.5, comp.dist = list("norm", "norm"
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-plot.twoComp_mixt <- function(x, add.plot = FALSE, ...)
+plot.twoComp_mixt <- function(x, add_plot = FALSE, ...)
 {
   old_par_new <- graphics::par()$new
   on.exit(graphics::par(new = old_par_new))
 
-  if (!add.plot) {
+  if (!add_plot) {
     if (all(x$dist.type == "Discrete")) {
       graphics::barplot(height = as.numeric(table(x$mixt.data)) / sum(as.numeric(table(x$mixt.data))),
                         names = names(table(x$mixt.data)), space = 2, width = 0.5, ...)
@@ -150,15 +150,13 @@ plot.twoComp_mixt <- function(x, add.plot = FALSE, ...)
     if (all(x$dist.type == "Discrete")) {
       x_val <- as.numeric(names(table(x$mixt.data)))
       graphics::barplot(height = as.numeric(table(x$mixt.data)) / sum(as.numeric(table(x$mixt.data))),
-                        names = NULL, add = add.plot,
+                        names = NULL, add = add_plot,
                         width = 0.5, space = c(3,rep(2,length(x_val)-1)), ...)
     } else {
       densities <- stats::density(x$mixt.data)
-      par(new = TRUE)
-      base::plot(densities, xlab = "", ylab = "", main = "", ...)
+      graphics::lines(densities, ...)
     }
   }
-  #graphics::lines(x = x_val, y = decontamin_dens_values, ...)
 }
 
 

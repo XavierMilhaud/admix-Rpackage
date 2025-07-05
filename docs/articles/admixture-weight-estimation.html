@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">admix</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -139,12 +139,9 @@ weight.</p>
 <span><span class="co">#&gt; Call:admix_estim(samples = list(data1), admixMod = list(admixMod), </span></span>
 <span><span class="co">#&gt;     est_method = "BVdk")</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ######### Sample 1 #########</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Estimated mixing proportion:  0.665276 </span></span>
-<span><span class="co">#&gt; Estimated location parameter:  2.975813 </span></span>
-<span><span class="co">#&gt; Variance of the mixing proportion estimator:  NA </span></span>
-<span><span class="co">#&gt; Variance of the location shift estimator:  NA</span></span></code></pre></div>
+<span><span class="co">#&gt; ------ Sample #1 ------</span></span>
+<span><span class="co">#&gt; Estimated mixing weight: 0.665 / Estimated location shift: 2.976 </span></span>
+<span><span class="co">#&gt; Variance of weight estimator: NA / Variance of loc. estimator: NA</span></span></code></pre></div>
 <p>Because this estimation method relies on the symmetry of the unknown
 component density, the estimator provides both the estimated mixing
 weight of the unknown component distribution and the estimated location
@@ -161,8 +158,9 @@ distribution), we use the Patra and Sen estimator, see <span class="citation">(P
 <span><span class="co">#&gt; Call:admix_estim(samples = list(data1), admixMod = list(admixMod), </span></span>
 <span><span class="co">#&gt;     est_method = "PS")</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ######### Sample 1 #########</span></span>
-<span><span class="co">#&gt; Estimate of mixing weight (proportion of the unknown component):  0.64</span></span></code></pre></div>
+<span><span class="co">#&gt; ------ Sample #1 ------</span></span>
+<span><span class="co">#&gt;  Estimated mixing weight (of the unknown component): 0.641</span></span>
+<span><span class="co">#&gt;  The chosen value c_n is 0.179</span></span></code></pre></div>
 <p>In this case, the only estimated parameter is the mixing proportion
 related to the unknown component distribution.</p>
 </div>
@@ -212,12 +210,11 @@ parameter values.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Pairwise estimation performed (IBM estimation method).</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ######### Samples 1 with 2 #########</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Estimated weight of the unknown distribution in the 1st sample:  0.409 </span></span>
-<span><span class="co">#&gt; Estimated weight of the unknown distribution in the 2nd sample:  0.725 </span></span>
-<span><span class="co">#&gt; Estimated variance of the latter weight in the 1st sample:  NA </span></span>
-<span><span class="co">#&gt; Estimated variance of the latter weight in the 2nd sample:  NA</span></span></code></pre></div>
+<span><span class="co">#&gt; ------ Samples #1 with #2 ------</span></span>
+<span><span class="co">#&gt; Estimated mixing weight of the unknown distribution in the 1st sample: 0.409 </span></span>
+<span><span class="co">#&gt; Estimated mixing weight of the unknown distribution in the 2nd sample: 0.725 </span></span>
+<span><span class="co">#&gt; Variance of the estimated weight in the 1st sample: NA </span></span>
+<span><span class="co">#&gt; Variance of the estimated weight in the 2nd sample: NA</span></span></code></pre></div>
 <p>Indeed, one can see that the two unknown proportions were
 consistently estimated.</p>
 </div>
@@ -254,12 +251,11 @@ example.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Pairwise estimation performed (IBM estimation method).</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ######### Samples 1 with 2 #########</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Estimated weight of the unknown distribution in the 1st sample:  0.332 </span></span>
-<span><span class="co">#&gt; Estimated weight of the unknown distribution in the 2nd sample:  0.655 </span></span>
-<span><span class="co">#&gt; Estimated variance of the latter weight in the 1st sample:  NA </span></span>
-<span><span class="co">#&gt; Estimated variance of the latter weight in the 2nd sample:  NA</span></span></code></pre></div>
+<span><span class="co">#&gt; ------ Samples #1 with #2 ------</span></span>
+<span><span class="co">#&gt; Estimated mixing weight of the unknown distribution in the 1st sample: 0.332 </span></span>
+<span><span class="co">#&gt; Estimated mixing weight of the unknown distribution in the 2nd sample: 0.655 </span></span>
+<span><span class="co">#&gt; Variance of the estimated weight in the 1st sample: NA </span></span>
+<span><span class="co">#&gt; Variance of the estimated weight in the 2nd sample: NA</span></span></code></pre></div>
 <p>In such a framework, it is therefore better to use the estimator by
 <span class="citation">(Patra and Sen 2016)</span>, which shows better
 performance:</p>
@@ -270,11 +266,13 @@ performance:</p>
 <span><span class="co">#&gt; Call:admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, </span></span>
 <span><span class="co">#&gt;     admixMod2), est_method = "PS")</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ######### Sample 1 #########</span></span>
-<span><span class="co">#&gt; Estimate of mixing weight (proportion of the unknown component):  0.45</span></span>
+<span><span class="co">#&gt; ------ Sample #1 ------</span></span>
+<span><span class="co">#&gt;  Estimated mixing weight (of the unknown component): 0.45</span></span>
+<span><span class="co">#&gt;  The chosen value c_n is 0.19 </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ######### Sample 2 #########</span></span>
-<span><span class="co">#&gt; Estimate of mixing weight (proportion of the unknown component):  0.73</span></span></code></pre></div>
+<span><span class="co">#&gt; ------ Sample #2 ------</span></span>
+<span><span class="co">#&gt;  Estimated mixing weight (of the unknown component): 0.727</span></span>
+<span><span class="co">#&gt;  The chosen value c_n is 0.186</span></span></code></pre></div>
 </div>
 </div>
 </div>

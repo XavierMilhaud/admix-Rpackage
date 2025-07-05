@@ -4,12 +4,12 @@
 \alias{plot.twoComp_mixt}
 \title{Plots several mixture densities on the same graph}
 \usage{
-\method{plot}{twoComp_mixt}(x, add.plot = FALSE, ...)
+\method{plot}{twoComp_mixt}(x, add_plot = FALSE, ...)
 }
 \arguments{
 \item{x}{Object of class 'twoComp_mixt' from which the density will be plotted.}
 
-\item{add.plot}{(default to FALSE) Option to plot another mixture distribution on the same graph.}
+\item{add_plot}{(default to FALSE) Option to plot another mixture distribution on the same graph.}
 
 \item{...}{further classical arguments and graphical parameters for methods plot and hist.}
 }
