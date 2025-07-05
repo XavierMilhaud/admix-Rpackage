@@ -144,7 +144,7 @@ plot.twoComp_mixt <- function(x, add_plot = FALSE, ...)
                         names = names(table(x$mixt.data)), space = 2, width = 0.5, ...)
     } else {
       densities <- stats::density(x$mixt.data)
-      base::plot(densities, xlab = "observations", ylab = "density", main = "", ...)
+      base::plot(densities, ...)
     }
   } else {
     if (all(x$dist.type == "Discrete")) {
