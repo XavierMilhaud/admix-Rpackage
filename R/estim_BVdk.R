@@ -39,7 +39,8 @@
 #' admixMod <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                         knownComp_param = mixt1$comp.param[[2]])
 #' ## Perform the estimation of parameters in real-life:
-#' estim_BVdk(samples = data1, admixMod = admixMod, method = 'L-BFGS-B')
+#' ex <- estim_BVdk(samples = data1, admixMod = admixMod, method = 'L-BFGS-B')
+#' print.estim_BVdk(ex)
 #'
 #' ## Second example:
 #' mixt2 <- twoComp_mixt(n = 200, weight = 0.65,
@@ -50,8 +51,9 @@
 #' admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
 #'                         knownComp_param = mixt2$comp.param[[2]])
 #' ## Perform the estimation of parameters in real-life:
-#' estim_BVdk(samples = data2, admixMod = admixMod2, method = 'L-BFGS-B',
-#'            compute_var = TRUE)
+#' ex <- estim_BVdk(samples = data2, admixMod = admixMod2, method = 'L-BFGS-B',
+#'                  compute_var = TRUE)
+#' print.estim_BVdk(ex)
 #' }
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>

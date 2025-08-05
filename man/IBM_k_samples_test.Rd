@@ -82,8 +82,8 @@ admixMod3 <- admix_model(knownComp_dist = mixt3$comp.dist[[2]],
 ## Perform the 3-samples test:
 IBM_k_samples_test(samples = list(data1, data2, data3),
                    admixMod = list(admixMod1, admixMod2, admixMod3),
-                   conf_level = 0.95, sim_U = NULL, n_sim_tab = 8,
-                   tune_penalty = FALSE, parallel = FALSE, n_cpu = 2)
+                   conf_level = 0.95, sim_U = NULL, n_sim_tab = 5,
+                   tune_penalty = FALSE, parallel = FALSE)
 }
 
 }

@@ -30,19 +30,19 @@
 #' @examples
 #' \donttest{
 #' ## Simulate mixture data:
-#' mixt1 <- twoComp_mixt(n = 2600, weight = 0.8,
+#' mixt1 <- twoComp_mixt(n = 1600, weight = 0.8,
 #'                       comp.dist = list("gamma", "exp"),
 #'                       comp.param = list(list("shape" = 16, "scale" = 1/4),
 #'                                         list("rate" = 1/3.5)))
-#' mixt2 <- twoComp_mixt(n = 3000, weight = 0.7,
+#' mixt2 <- twoComp_mixt(n = 2000, weight = 0.7,
 #'                       comp.dist = list("gamma", "exp"),
 #'                       comp.param = list(list("shape" = 14, "scale" = 1/2),
 #'                                         list("rate" = 1/5)))
-#' mixt3 <- twoComp_mixt(n = 3500, weight = 0.6,
+#' mixt3 <- twoComp_mixt(n = 2500, weight = 0.6,
 #'                       comp.dist = list("gamma", "gamma"),
 #'                       comp.param = list(list("shape" = 16, "scale" = 1/4),
 #'                                         list("shape" = 12, "scale" = 1/2)))
-#' mixt4 <- twoComp_mixt(n = 4800, weight = 0.5,
+#' mixt4 <- twoComp_mixt(n = 3800, weight = 0.5,
 #'                       comp.dist = list("gamma", "exp"),
 #'                       comp.param = list(list("shape" = 14, "scale" = 1/2),
 #'                                         list("rate" = 1/7)))
@@ -62,7 +62,7 @@
 #' ## Clustering procedure:
 #' admix_cluster(samples = list(data1, data2, data3, data4),
 #'               admixMod = list(admixMod1, admixMod2, admixMod3, admixMod4),
-#'               conf_level = 0.95, tune_penalty = TRUE, n_sim_tab = 30)
+#'               conf_level = 0.95, tune_penalty = TRUE, n_sim_tab = 10)
 #' }
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
@@ -324,3 +324,55 @@ summary.admix_cluster <- function(object, ...)
   print(object$discrepancy_matrix)
 }
 
+
+#' Extractor for object of class 'admix_cluster'
+#'
+#' Extract the clusters that were discovered among K samples, where belonging to
+#' one given cluster means having equal unknown component distributions.
+#'
+#' @param x An object of class 'admix_cluster'.
+#'
+#' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
+#' @export
+
+get_cluster_members <- function(x)
+{
+  if (!inherits(x, "admix_cluster"))
+    stop("This function must be used with objects of class 'admix_cluster'")
+  x$clusters
+}
+
+
+#' Extractor for object of class 'admix_cluster'
+#'
+#' Provide the number of samples in each cluster.
+#'
+#' @param x An object of class 'admix_cluster'.
+#'
+#' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
+#' @export
+
+get_cluster_sizes <- function(x)
+{
+  if (!inherits(x, "admix_cluster"))
+    stop("This function must be used with objects of class 'admix_cluster'")
+  x$clust_sizes
+}
+
+
+#' Extractor for object of class 'admix_cluster'
+#'
+#' Provide the matrix storing discrepancies between all couples
+#' among the K samples under study.
+#'
+#' @param x An object of class 'admix_cluster'.
+#'
+#' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
+#' @export
+
+get_discrepancy_matrix <- function(x)
+{
+  if (!inherits(x, "admix_cluster"))
+    stop("This function must be used with objects of class 'admix_cluster'")
+  x$discrepancy_matrix
+}

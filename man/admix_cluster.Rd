@@ -50,19 +50,19 @@ using Inversion - Best Matching (IBM) approach, see 'Details' below for further 
 \examples{
 \donttest{
 ## Simulate mixture data:
-mixt1 <- twoComp_mixt(n = 2600, weight = 0.8,
+mixt1 <- twoComp_mixt(n = 1600, weight = 0.8,
                       comp.dist = list("gamma", "exp"),
                       comp.param = list(list("shape" = 16, "scale" = 1/4),
                                         list("rate" = 1/3.5)))
-mixt2 <- twoComp_mixt(n = 3000, weight = 0.7,
+mixt2 <- twoComp_mixt(n = 2000, weight = 0.7,
                       comp.dist = list("gamma", "exp"),
                       comp.param = list(list("shape" = 14, "scale" = 1/2),
                                         list("rate" = 1/5)))
-mixt3 <- twoComp_mixt(n = 3500, weight = 0.6,
+mixt3 <- twoComp_mixt(n = 2500, weight = 0.6,
                       comp.dist = list("gamma", "gamma"),
                       comp.param = list(list("shape" = 16, "scale" = 1/4),
                                         list("shape" = 12, "scale" = 1/2)))
-mixt4 <- twoComp_mixt(n = 4800, weight = 0.5,
+mixt4 <- twoComp_mixt(n = 3800, weight = 0.5,
                       comp.dist = list("gamma", "exp"),
                       comp.param = list(list("shape" = 14, "scale" = 1/2),
                                         list("rate" = 1/7)))
@@ -82,7 +82,7 @@ admixMod4 <- admix_model(knownComp_dist = mixt4$comp.dist[[2]],
 ## Clustering procedure:
 admix_cluster(samples = list(data1, data2, data3, data4),
               admixMod = list(admixMod1, admixMod2, admixMod3, admixMod4),
-              conf_level = 0.95, tune_penalty = TRUE, n_sim_tab = 30)
+              conf_level = 0.95, tune_penalty = TRUE, n_sim_tab = 10)
 }
 
 }

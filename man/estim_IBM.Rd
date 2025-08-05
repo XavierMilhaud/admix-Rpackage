@@ -48,8 +48,9 @@ admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
                          knownComp_param = mixt2$comp.param[[2]])
 ## Estimate the mixture weights of the two admixture models (provide only hat(theta)_n):
-estim_IBM(samples = list(data1,data2),
-          admixMod = list(admixMod1,admixMod2), n.integ = 1000)
+ex <- estim_IBM(samples = list(data1,data2),
+                admixMod = list(admixMod1,admixMod2), n.integ = 1000)
+print.estim_IBM(ex)
 
 ## Example 2: multinomial distribution (discrete case).
 mixt1 <- twoComp_mixt(n = 1500, weight = 0.8,

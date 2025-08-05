@@ -133,8 +133,8 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
     ## asymetric unknown distributions:
     PS_est1 <- estim_PS(samples = samples[[1]], admixMod = admixMod[[1]], ...)
     PS_est2 <- estim_PS(samples = samples[[2]], admixMod = admixMod[[2]], ...)
-    hat.p1 <- getmixingWeight(PS_est1)
-    hat.p2 <- getmixingWeight(PS_est2)
+    hat.p1 <- get_mixing_weights(PS_est1)
+    hat.p2 <- get_mixing_weights(PS_est2)
   } else {
     BVdk_est1 <- estim_BVdk(samples = data.p1, admixMod = admixMod[[1]], compute_var = TRUE, ...)
     BVdk_est2 <- estim_BVdk(samples = data.p2, admixMod = admixMod[[2]], compute_var = TRUE, ...)

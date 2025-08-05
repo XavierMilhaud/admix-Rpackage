@@ -65,7 +65,8 @@ data1 <- getmixtData(mixt1)
 admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
                          knownComp_param = mixt1$comp.param[[2]])
 ## Estimation step:
-estim_PS(samples = data1, admixMod = admixMod1, method = 'fixed')
+ex <- estim_PS(samples = data1, admixMod = admixMod1, method = 'fixed')
+print.estim_PS(ex)
 }
 
 }

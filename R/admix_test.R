@@ -91,7 +91,7 @@ admix_test <- function(samples, admixMod, test_method = c("poly","icv"), conf_le
 
   } else stop("Please choose appropriately the arguments of the function.")
 
-  #class(test_res) <- c("htest", specific_class)
+  #class(test_res) <- c(specific_class, "htest")
   class(test_res) <- "htest"
   test_res$call <- match.call()
   return(test_res)

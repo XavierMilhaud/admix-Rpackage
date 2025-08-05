@@ -91,7 +91,7 @@ admix_estim <- function(samples, admixMod, est_method = c("PS","BVdk","IBM"), ..
                            "PS" = "estim_PS",
                            "IBM" = "estim_IBM")
 
-  class(estimators) <- c("admix_estim", specific_class)
+  class(estimators) <- c(specific_class, "admix_estim")
   estimators$call <- match.call()
   return(estimators)
 }
@@ -169,7 +169,7 @@ summary.admix_estim <- function(object, ...)
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-getmixingWeight <- function(x)
+get_mixing_weights <- function(x)
 {
   if (!inherits(x, "admix_estim") & !inherits(x, "admix_test"))
     stop("This function must be used with objects of class 'admix_estim' or 'admix_test'")
