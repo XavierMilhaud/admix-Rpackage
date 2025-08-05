@@ -20,7 +20,10 @@
 <url><loc>/reference/estim_IBM.html</loc></url>
 <url><loc>/reference/estim_PS.html</loc></url>
 <url><loc>/reference/gaussianity_test.html</loc></url>
-<url><loc>/reference/getmixingWeight.html</loc></url>
+<url><loc>/reference/get_cluster_members.html</loc></url>
+<url><loc>/reference/get_cluster_sizes.html</loc></url>
+<url><loc>/reference/get_discrepancy_matrix.html</loc></url>
+<url><loc>/reference/get_mixing_weights.html</loc></url>
 <url><loc>/reference/getmixtData.html</loc></url>
 <url><loc>/reference/index.html</loc></url>
 <url><loc>/reference/milkyWay.html</loc></url>
