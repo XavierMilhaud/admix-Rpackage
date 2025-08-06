@@ -29,7 +29,8 @@
 #'         to the null hypothesis has been considered; 12) the value of penalized test statistics; 13) the selected optimal 'gamma' parameter
 #'         (see reference below); 14) the selected optimal constant involved in the penalization process (see also the reference); 15) the
 #'         tabulated distribution of the contrast; 16) the estimated mixing proportions (not implemented yet, since that makes sense only
-#'         in case of equal unknown component distributions); 17) the matrix of pairwise contrasts (distance between two samples).
+#'         in case of equal unknown component distributions); 17) the matrix of pairwise contrasts (distance between two samples); 18) the
+#'         matrix of the ranks of pairwise contrasts; and 19) the matrix of identifiers of pairwise contrasts.
 #'
 #' @examples
 #' \dontrun{
@@ -47,9 +48,9 @@
 #'                       comp.dist = list("norm", "exp"),
 #'                       comp.param = list(list("mean" = -2, "sd" = 0.5),
 #'                                         list("rate" = 1)))
-#' data1 <- getmixtData(mixt1)
-#' data2 <- getmixtData(mixt2)
-#' data3 <- getmixtData(mixt3)
+#' data1 <- get_mixture_data(mixt1)
+#' data2 <- get_mixture_data(mixt2)
+#' data3 <- get_mixture_data(mixt3)
 #' ## Define the admixture models:
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                          knownComp_param = mixt1$comp.param[[2]])
@@ -295,7 +296,9 @@ IBM_k_samples_test <- function(samples, admixMod, conf_level = 0.95, sim_U = NUL
     finalStat_name <- stat.terms_final[selected.index]
     finalStat_value <- cumsum(sorted_contrasts)[selected.index]
     ## Test decision:
-    final_test <- finalStat_value > q_H[1]
+    null_val <- q_H[1]
+    names(null_val) <- "test statistic value"
+    final_test <- finalStat_value > null_val
     ## Corresponding p-value:
     CDF_U <- stats::ecdf(sim_U)
     p_value <- 1 - CDF_U(finalStat_value)
@@ -307,7 +310,7 @@ IBM_k_samples_test <- function(samples, admixMod, conf_level = 0.95, sim_U = NUL
     names(estimated_values) <- c("Tuned Gamma","Tuned constant C")
 
     obj <- list(
-      null.value = unique(q_H),
+      null.value = null_val,
       alternative = "greater",
       method = "Equality test of the unknown distributions (with ICV/IBM)",
       estimate = estimated_values,
@@ -325,7 +328,9 @@ IBM_k_samples_test <- function(samples, admixMod, conf_level = 0.95, sim_U = NUL
       penalty_nullHyp = penalty_rule,
       penalized_stat = penalized.stats,
       tabulated_dist = sim_U,
-      contrast_matrix = contrast.matrix
+      discrepancy_matrix = contrast.matrix,
+      discrepancy_rank = discrepancy.rank,
+      discrepancy_id = discrepancy.id
     )
 
     class(obj) <- c("IBM_test", "htest")
@@ -443,8 +448,8 @@ summary.IBM_test <- function(object, ...)
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 1, "sd" = 0.5),
 #'                                         list("mean" = 1, "sd" = 1)))
-#' data1 <- getmixtData(mixt1)
-#' data2 <- getmixtData(mixt2)
+#' data1 <- get_mixture_data(mixt1)
+#' data2 <- get_mixture_data(mixt2)
 #'
 #' ## Define the admixture models:
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
@@ -544,7 +549,9 @@ IBM_2samples_test <- function(samples, admixMod, conf_level = 0.95, parallel = F
     penalty_nullHyp = NA,
     penalized_stat = NA,
     tabulated_dist = sim_U,
-    contrast_matrix = NA
+    discrepancy_matrix = NA,
+    discrepancy_rank = NA,
+    discrepancy_id = NA
   )
 
   class(obj) <- c("IBM_test", "htest")
@@ -584,8 +591,8 @@ IBM_2samples_test <- function(samples, admixMod, conf_level = 0.95, parallel = F
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = -2, "sd" = 0.5),
 #'                                         list("mean" = 1, "sd" = 1)))
-#' data1 <- getmixtData(mixt1)
-#' data2 <- getmixtData(mixt2)
+#' data1 <- get_mixture_data(mixt1)
+#' data2 <- get_mixture_data(mixt2)
 #' ## Define the admixture models:
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                          knownComp_param = mixt1$comp.param[[2]])
@@ -672,8 +679,8 @@ IBM_greenLight_criterion <- function(estim_obj, samples, admixMod, alpha = 0.05)
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = -2, "sd" = 0.5),
 #'                                         list("mean" = 1, "sd" = 1)))
-#' data1 <- getmixtData(mixt1)
-#' data2 <- getmixtData(mixt2)
+#' data1 <- get_mixture_data(mixt1)
+#' data2 <- get_mixture_data(mixt2)
 #' ## Define the admixture models:
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                          knownComp_param = mixt1$comp.param[[2]])

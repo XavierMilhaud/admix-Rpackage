@@ -2,14 +2,19 @@
 #'
 #' Simulate a two-component mixture model following the probability density function (pdf) l such that l = p*f + (1-p)*g,
 #' with f and g the mixture component distributions, and p the mixing weight.
+
 #'
 #' @param n Number of observations to be simulated.
 #' @param weight Weight of the first component distribution (distribution f) in the mixture.
-#' @param comp.dist A list of two elements corresponding to the component distributions (specified with R native names)
-#'                  involved in the mixture model. These elements respectively refer to the two component distributions f and g.
+#' @param comp.dist A list of two elements corresponding to the component distributions (with available names listed in object 'Distribution.df'
+#'                  in package EnvStats) involved in the mixture model. These elements respectively refer to the two component distributions f and g.
+#'                  By convention, in the framework of admixture models where one of the two components is unknown, the first element of the list
+#'                  corresponds to the 'unknown' component distribution, whereas the second one refers to the known one.
 #' @param comp.param A list of two elements corresponding to the parameters of the component distributions, each element being a list
-#'                   itself. The names used in each list must correspond to the native R argument names for these distributions.
-#'                   These elements respectively refer to the parameters of f and g distributions of the mixture model.
+#'                   itself. The names used in each list must correspond to the available parameters listed in object 'Distribution.df'
+#'                   in package EnvStats. These elements respectively refer to the parameters of f and g distributions of the mixture model.
+#'                   By convention, in the framework of admixture models where one of the two components is unknown, the first element of the list
+#'                   corresponds to the 'unknown' component parameters, whereas the second one refers to the known ones.
 #'
 #' @return An object of class \link[admix]{twoComp_mixt}, containing eight attributes: 1) the number of simulated observations, 2) the simulated mixture
 #'         data, 3) the support of the distributions, 4) the name of the component distributions, 5) the name of the parameters of the
@@ -73,7 +78,7 @@ twoComp_mixt <- function(n = 1000, weight = 0.5, comp.dist = list("norm", "norm"
       stopifnot("Name of parameters not appropriate" = all(names(comp.param[[k]]) == c("shape","rate")))
     } else {
       if (!all(as.character(dist_table[rownames(dist_table) == comp.dist[[k]], 4:(4+nparam_theo[k]-1)]) == names(comp.param[[k]]))) {
-        cat("Name of parameters not appropriate, please provide the following parameters /",
+        cat("Name of parameters not appropriate (see Distribution.df in package 'EnvStats'), please provide the following parameters :",
               as.character(dist_table[rownames(dist_table) == comp.dist[[k]], 4:(4+nparam_theo[k]-1)]), sep = " / ")
         cat("\n")
         stop()
@@ -243,7 +248,7 @@ summary.twoComp_mixt <- function(object, ...)
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-getmixtData <- function(x)
+get_mixture_data <- function(x)
 {
   x$mixt.data
 }

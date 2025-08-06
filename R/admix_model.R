@@ -39,7 +39,7 @@ admix_model <- function(knownComp_dist, knownComp_param)
     stopifnot("Name of parameters not appropriate" = all(names(knownComp_param) == c("shape","rate")))
   } else {
     if (!all(as.character(dist_table[rownames(dist_table) == knownComp_dist, 4:(4+nparam_theo-1)]) == names(knownComp_param))) {
-      cat("Name of parameters not appropriate, please provide the following parameters /",
+      cat("Name of parameters not appropriate (see Distribution.df in package 'EnvStats'), please provide the following parameters :",
           as.character(dist_table[rownames(dist_table) == knownComp_dist, 4:(4+nparam_theo-1)]), sep = " / ")
       cat("\n")
       stop()

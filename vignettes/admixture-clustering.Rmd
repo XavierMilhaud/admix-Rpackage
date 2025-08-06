@@ -76,11 +76,11 @@ mixt5 <- twoComp_mixt(n = 6000, weight = 0.5,
                       comp.dist = list("gamma", "exp"),
                       comp.param = list(list("shape" = 14, "scale" = 1/2),
                                         list("rate" = 1/6)))
-data1 <- getmixtData(mixt1)
-data2 <- getmixtData(mixt2)
-data3 <- getmixtData(mixt3)
-data4 <- getmixtData(mixt4)
-data5 <- getmixtData(mixt5)
+data1 <- get_mixture_data(mixt1)
+data2 <- get_mixture_data(mixt2)
+data3 <- get_mixture_data(mixt3)
+data4 <- get_mixture_data(mixt4)
+data5 <- get_mixture_data(mixt5)
 admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
                          knownComp_param = mixt1$comp.param[[2]])
 admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],

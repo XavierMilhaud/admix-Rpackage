@@ -16,7 +16,7 @@
 #' @details For further details on the different estimation techniques, see references below on i) Patra and Sen estimator ;
 #'          ii) Bordes and Vandekerkhove estimator ; iii) Inversion Best-Matching approach. Important note: estimation by 'IBM'
 #'          requires at least two samples at hand, and provides unbiased estimators only if the distributions of unknown components
-#'          are equal (meaning that it requires to perform previously this test between the pairs of samples, see ?admix_test).
+#'          are equal (meaning that it requires to perform previously this test between the pairs of samples, see \link[admix]{admix_test}.
 #'
 #' @references
 #' \insertRef{PatraSen2016}{admix}
@@ -40,8 +40,8 @@
 #'                       comp.dist = list("norm", "exp"),
 #'                       comp.param = list(list("mean" = -2, "sd" = 0.5),
 #'                                         list("rate" = 1)))
-#' data1 <- getmixtData(mixt1)
-#' data2 <- getmixtData(mixt2)
+#' data1 <- get_mixture_data(mixt1)
+#' data2 <- get_mixture_data(mixt2)
 #' ## Define the admixture models:
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                          knownComp_param = mixt1$comp.param[[2]])
@@ -49,6 +49,7 @@
 #'                          knownComp_param = mixt2$comp.param[[2]])
 #' # Estimation by different methods:
 #' admix_estim(samples=list(data1), admixMod=list(admixMod1), est_method = "BVdk")
+#' admix_estim(samples=list(data1), admixMod=list(admixMod1), est_method = "PS")
 #' admix_estim(samples=list(data1,data2), admixMod=list(admixMod1,admixMod2), est_method = "PS")
 #' admix_estim(samples=list(data1,data2), admixMod=list(admixMod1,admixMod2), est_method = "IBM")
 #'
@@ -57,6 +58,8 @@
 
 admix_estim <- function(samples, admixMod, est_method = c("PS","BVdk","IBM"), ...)
 {
+  if (!is.list(samples))
+    stop("Please provide sample(s) and admixture model(s) in lists, also with only one sample!")
   if (!all(sapply(X = admixMod, FUN = inherits, what = "admix_model")))
     stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
 
@@ -93,6 +96,7 @@ admix_estim <- function(samples, admixMod, est_method = c("PS","BVdk","IBM"), ..
 
   class(estimators) <- c(specific_class, "admix_estim")
   estimators$call <- match.call()
+
   return(estimators)
 }
 
@@ -114,13 +118,13 @@ print.admix_estim <- function(x, ...)
   if (inherits(x, what = "estim_IBM")) {
     cat("\nPairwise estimation performed (IBM estimation method).\n\n")
     for (i in 2:n_samples) {
-      cat("------ Samples #1 with #", i, " ------", sep = "")
+      cat("******** Samples #1 with #", i, " ********", sep = "")
       print(x$estim_objects[[i]], ...)
     }
   } else {
     cat("\n")
     for (i in 1:n_samples) {
-      cat("------ Sample #", i, " ------", sep = "")
+      cat("******** Sample #", i, " ********", sep = "")
       print(x$estim_objects[[i]], ...)
     }
   }
@@ -144,35 +148,16 @@ summary.admix_estim <- function(object, ...)
   if (inherits(object, what = "estim_IBM")) {
     cat("\nPairwise estimation performed (IBM estimation method).\n\n")
     for (i in 2:n_samples) {
-      cat("------ Samples #1 with #", i, " ------\n", sep = "")
+      cat("******** Samples #1 with #", i, " ********\n", sep = "")
       summary(object$estim_objects[[i]], ...)
     }
   } else {
     cat("\n")
     for (i in 1:n_samples) {
-      cat("------ Sample #", i, " ------\n\n", sep = "")
+      cat("******** Sample #", i, " ********\n\n", sep = "")
       summary(object$estim_objects[[i]], ...)
       cat("\n")
     }
   }
   cat("\n")
-}
-
-
-#' Extractor for object of class 'admix_estim'
-#'
-#' Get the estimated unknown mixing proportion related to the weight of
-#' the unknown component distribution of the admixture model.
-#'
-#' @param x An object of class 'admix_estim'.
-#'
-#' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @export
-
-get_mixing_weights <- function(x)
-{
-  if (!inherits(x, "admix_estim") & !inherits(x, "admix_test"))
-    stop("This function must be used with objects of class 'admix_estim' or 'admix_test'")
-  weights <- sapply(X = x$estim_objects, "[[", 'estimated_mixing_weights')
-  unlist(Filter(Negate(is.null), weights))
 }

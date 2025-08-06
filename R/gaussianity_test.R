@@ -35,7 +35,7 @@
 #'                       comp.dist = list("norm", "exp"),
 #'                       comp.param = list(list("mean" = -2, "sd" = 0.5),
 #'                                         list("rate" = 1)))
-#' data1 <- getmixtData(mixt1)
+#' data1 <- get_mixture_data(mixt1)
 #' ## Define the admixture models:
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                          knownComp_param = mixt1$comp.param[[2]])
@@ -185,17 +185,20 @@ gaussianity_test <- function(sample, admixMod, conf_level = 0.95, ask_poly_param
 	p.value <- 1 - stats::pchisq(stat_value, 1)
 
 	## If the test statistic is greater that the quantile of interest, reject the null hypothesis (otherwise do not reject):
-	rej <- FALSE
-  if (stat_value > stats::qchisq(conf_level,1)) { rej <- TRUE }
-
 	names(stat_value) <- "Chi-square"
-	stat_param <- 1 ; names(stat_param) <- "df"
+	stat_param <- 1
+	names(stat_param) <- "df"
+	null_val <- stats::qchisq(conf_level,1)
+	names(null_val) <- "test statistic value"
+	rej <- FALSE
+  if (stat_value > null_val) rej <- TRUE
+
 	estimated_values <- vector(mode = "numeric", length = 3L)
 	estimated_values <- c(hat_p, hat_loc, sqrt(hat_s2))
 	names(estimated_values) <- c("Weight","Location","Variance")
 
 	obj <- list(
-	  null.value = stats::qchisq(conf_level,1),
+	  null.value = null_val,
 	  alternative = "greater",
 	  method = "Gaussianity test of the unknown component distribution",
 	  estimate = estimated_values,

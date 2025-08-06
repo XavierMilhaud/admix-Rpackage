@@ -34,7 +34,7 @@
 #'                       comp.param = list(list("mean" = -2, "sd" = 0.5),
 #'                                         list("mean" = 0, "sd" = 1)))
 #' ## Retrieves the mixture data:
-#' data1 <- getmixtData(mixt1)
+#' data1 <- get_mixture_data(mixt1)
 #' ## Define the admixture model:
 #' admixMod <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                         knownComp_param = mixt1$comp.param[[2]])
@@ -47,7 +47,7 @@
 #'                       comp.dist = list("norm", "exp"),
 #'                       comp.param = list(list("mean" = -1, "sd" = 0.5),
 #'                                         list("rate" = 1)))
-#' data2 <- getmixtData(mixt2)
+#' data2 <- get_mixture_data(mixt2)
 #' admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
 #'                         knownComp_param = mixt2$comp.param[[2]])
 #' ## Perform the estimation of parameters in real-life:
@@ -74,11 +74,14 @@ estim_BVdk <- function(samples, admixMod, method = c("L-BFGS-B","Nelder-Mead"), 
                     "=", admixMod$comp.param$known, sep = "", collapse = ","), ")", sep="")
   ## Initialization of the parameters: localization parameter is initialized depending on whether the global mean
   ## of the sample is lower than the mean of the known component (or not).
+  Seed <- .Random.seed
   if (mean(samples) > mean(eval(parse(text = expr.sim)))) {
     init.param <- c(0.5, 0.99 * max(samples))
   } else {
     init.param <- c(0.5, (min(samples) + 0.01 * abs(min(samples))))
   }
+  ## To get the same estimated parameters at the end after the latter simulations:
+  .Random.seed <- Seed
 
   ## Select the bandwith :
   bandw <- stats::density(samples)$bw
@@ -158,7 +161,7 @@ summary.estim_BVdk <- function(object, ...)
   cat("Call:")
   print(object$call)
   cat("\n")
-  cat("------- Sample -------\n")
+  cat("------- Sample characteristics -------\n")
   cat("Sample size: ", object$population_sizes, "\n")
   cat("-> Distribution of the known component:", object$admixture_models$comp.dist$known, "\n", sep="")
   cat("-> Parameter(s) of the known component:", paste(names(object$admixture_models$comp.param$known), object$admixture_models$comp.param$known, collapse="\t", sep="="), sep="")
@@ -199,7 +202,7 @@ summary.estim_BVdk <- function(object, ...)
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
 #'                                         list("mean" = 0, "sd" = 1)))
-#' data1 <- getmixtData(mixt1)
+#' data1 <- get_mixture_data(mixt1)
 #' ## Define the admixture model:
 #' admixMod <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                         knownComp_param = mixt1$comp.param[[2]])
@@ -263,7 +266,7 @@ BVdk_contrast <- function(param, data, admixMod, h)
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
 #'                                         list("mean" = 0, "sd" = 1)))
-#' data1 <- getmixtData(mixt1)
+#' data1 <- get_mixture_data(mixt1)
 #' ## Define the admixture model:
 #' admixMod <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                         knownComp_param = mixt1$comp.param[[2]])
@@ -346,7 +349,7 @@ BVdk_contrast_gradient <- function(param, data, admixMod, h)
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = -2, "sd" = 0.5),
 #'                                         list("mean" = 0, "sd" = 1)))
-#' data1 <- getmixtData(mixt1)
+#' data1 <- get_mixture_data(mixt1)
 #' ## Define the admixture model:
 #' admixMod <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                         knownComp_param = mixt1$comp.param[[2]])
@@ -567,7 +570,7 @@ Donsker_correl_old <- function(u, v, obs.data)
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 4, "sd" = 1),
 #'                                         list("mean" = 7, "sd" = 0.5)))
-#' data1 <- getmixtData(mixt1)
+#' data1 <- get_mixture_data(mixt1)
 #'
 #' ## Define the admixture models:
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],

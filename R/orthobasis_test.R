@@ -40,14 +40,14 @@
 #'                       comp.dist = list("norm", "exp"),
 #'                       comp.param = list(list("mean" = 1, "sd" = 1),
 #'                                         list("rate" = 0.33)))
-#' data1 <- getmixtData(mixt1)
+#' data1 <- get_mixture_data(mixt1)
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                         knownComp_param = mixt1$comp.param[[2]])
 #' mixt2 <- twoComp_mixt(n = 500, weight = 0.62,
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 1, "sd" = 1),
 #'                                         list("mean" = -2, "sd" = 0.5)))
-#' data2 <- getmixtData(mixt2)
+#' data2 <- get_mixture_data(mixt2)
 #' admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
 #'                         knownComp_param = mixt2$comp.param[[2]])
 #' ## Test procedure:
@@ -76,7 +76,6 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
   if ((meth == "PS") & (nb_echBoot <= 1)) stop("Patra & Sen estimator is not square-root n consistent: bootstrap
                                                is necessary to assess the variance of the statistic for the test
                                                to be performed. Please specify a number of bootstrap samples > 1.")
-
   if (ask_poly_param) {
     K.user <- as.numeric(base::readline("Please enter 'K' (integer), the order for the polynomial expansion in the orthonormal basis: "))
     s.user <- as.numeric(base::readline("Please enter 's' in ]0,0.5[, involved in the penalization rule for model selection where lower values of 's' lead to more powerful tests: "))
@@ -219,8 +218,10 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
   stat_value <- T.stat[indice.opt]
 
   ##---- Decision to reject the null hypothesis (or not) ----##
+  null_val <- stats::qchisq(conf_level,1)
+  names(null_val) <- "test statistic value"
   rej <- FALSE
-  if (stat_value > stats::qchisq(conf_level,1)) rej <- TRUE
+  if (stat_value > null_val) rej <- TRUE
   ## p-value of the test:
   pvalu <- 1 - stats::pchisq(stat_value, 1)
 
@@ -235,7 +236,7 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
   names(estimated_values) <- c("Weight in 1st sample","Weight in 2nd sample")
 
   obj <- list(
-    null.value = stats::qchisq(conf_level,1),
+    null.value = null_val,
     alternative = "greater",
     method = "Equality test of unknown dist. (polynom. expansions of pdfs)",
     estimate = estimated_values,

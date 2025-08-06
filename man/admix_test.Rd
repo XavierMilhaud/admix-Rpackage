@@ -57,8 +57,8 @@ mixt2 <- twoComp_mixt(n = 350, weight = 0.85,
                       comp.dist = list("norm", "norm"),
                       comp.param = list(list("mean" = -2, "sd" = 0.5),
                                         list("mean" = -1, "sd" = 1)))
-data1 <- getmixtData(mixt1)
-data2 <- getmixtData(mixt2)
+data1 <- get_mixture_data(mixt1)
+data2 <- get_mixture_data(mixt2)
 admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
                          knownComp_param = mixt1$comp.param[[2]])
 admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],

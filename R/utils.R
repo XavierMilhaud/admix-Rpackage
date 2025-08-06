@@ -44,21 +44,22 @@ admixStartupMessage <- function()
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
 #'                                         list("mean" = 0, "sd" = 1)))
-#' data1 <- getmixtData(mixt1)
+#' data1 <- get_mixture_data(mixt1)
 #' mixt2 <- twoComp_mixt(n = 2000, weight = 0.7,
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
 #'                                         list("mean" = 5, "sd" = 2)))
-#' data2 <- getmixtData(mixt2)
+#' data2 <- get_mixture_data(mixt2)
 #' ## Test the type of support:
 #' detect_support_type(data1, data2)
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @noRd
+#' @export
 
 detect_support_type <- function(sample1, sample2 = NULL)
 {
   if (is.null(sample2)) {
+    ## Number of different observed values compared to total number of observed values
     if ((length(unique(sample1)) / length(sample1)) < 0.03) { support <- "Discrete"
     } else { support <- "Continuous" }
   } else {
@@ -90,7 +91,7 @@ detect_support_type <- function(sample1, sample2 = NULL)
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = -2, "sd" = 0.5),
 #'                                         list("mean" = 0, "sd" = 1)))
-#' data1 <- getmixtData(mixt1)
+#' data1 <- get_mixture_data(mixt1)
 #'
 #' ## Define the admixture models:
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
@@ -120,12 +121,12 @@ sim_gaussianProcess <- function(mean_vec, varCov_mat, from = 0, to = 1, start = 
 }
 
 
-#' Equality of known components in 2 admixture models
+#' Equality of known components in two admixture models
 #'
-#' Test if the known component distributions coming from 2 two-components admixtures are identical.
+#' Test if the known component distributions coming from two admixture models are identical.
 #'
-#' @param admixMod1 An object of class 'admix_model' for the first admixture model.
-#' @param admixMod2 An object of class 'admix_model' for the second admixture model.
+#' @param admixMod1 An object of class 'admix_model' related to the first admixture model.
+#' @param admixMod2 An object of class 'admix_model' related to the second admixture model.
 #'
 #' @return A boolean (TRUE if the known components are the same, otherwise FALSE).
 #'
@@ -143,14 +144,12 @@ sim_gaussianProcess <- function(mean_vec, varCov_mat, from = 0, to = 1, start = 
 #' is_equal_knownComp(admixMod1, admixMod2)
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @noRd
+#' @export
 
 is_equal_knownComp <- function(admixMod1, admixMod2)
 {
-  if (!inherits(x = admixMod1, what = "admix_model"))
-    stop("Argument 'admixMod1' is not correctly specified. See ?admix_model.")
-  if (!inherits(x = admixMod2, what = "admix_model"))
-    stop("Argument 'admixMod2' is not correctly specified. See ?admix_model.")
+  if (!inherits(x = admixMod1, what = "admix_model") | !inherits(x = admixMod2, what = "admix_model"))
+    stop("Argument 'admixMod1' and/or 'admixMod2' is not correctly specified. See ?admix_model.")
 
   if ( (admixMod1$comp.dist$known == admixMod2$comp.dist$known) &
        all(names(admixMod1$comp.param$known) == names(admixMod2$comp.param$known)) &
@@ -224,7 +223,7 @@ kernel_density <- function(u, h)
 #'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
 #'                                         list("mean" = 0, "sd" = 1)))
 #' plot(mixt1)
-#' data1 <- getmixtData(mixt1)
+#' data1 <- get_mixture_data(mixt1)
 #'
 #' ## Define the admixture models:
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
@@ -400,7 +399,7 @@ orthoBasis_coef <- function(data, supp = c('Real','Integer','Positive','Bounded.
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 12, "sd" = 0.4),
 #'                                         list("mean" = 16, "sd" = 0.7)))
-#' data1 <- getmixtData(mixt1)
+#' data1 <- get_mixture_data(mixt1)
 #' ## Compute the variance-covariance matrix of the corresponding empirical process:
 #' t <- seq(from = min(data1), to = max(data1), length = 50)
 #' S2 <- sapply(t, function(s1) {

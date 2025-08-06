@@ -35,7 +35,7 @@ The unknown quantities p_i and f_i then have to be estimated.
 For further details on the different estimation techniques, see references below on i) Patra and Sen estimator ;
 ii) Bordes and Vandekerkhove estimator ; iii) Inversion Best-Matching approach. Important note: estimation by 'IBM'
 requires at least two samples at hand, and provides unbiased estimators only if the distributions of unknown components
-are equal (meaning that it requires to perform previously this test between the pairs of samples, see ?admix_test).
+are equal (meaning that it requires to perform previously this test between the pairs of samples, see \link[admix]{admix_test}.
 }
 \examples{
 ## Simulate mixture data:
@@ -47,8 +47,8 @@ mixt2 <- twoComp_mixt(n = 250, weight = 0.85,
                       comp.dist = list("norm", "exp"),
                       comp.param = list(list("mean" = -2, "sd" = 0.5),
                                         list("rate" = 1)))
-data1 <- getmixtData(mixt1)
-data2 <- getmixtData(mixt2)
+data1 <- get_mixture_data(mixt1)
+data2 <- get_mixture_data(mixt2)
 ## Define the admixture models:
 admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
                          knownComp_param = mixt1$comp.param[[2]])
@@ -56,6 +56,7 @@ admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
                          knownComp_param = mixt2$comp.param[[2]])
 # Estimation by different methods:
 admix_estim(samples=list(data1), admixMod=list(admixMod1), est_method = "BVdk")
+admix_estim(samples=list(data1), admixMod=list(admixMod1), est_method = "PS")
 admix_estim(samples=list(data1,data2), admixMod=list(admixMod1,admixMod2), est_method = "PS")
 admix_estim(samples=list(data1,data2), admixMod=list(admixMod1,admixMod2), est_method = "IBM")
 

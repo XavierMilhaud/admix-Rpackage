@@ -39,7 +39,7 @@
 #'                       comp.dist = list("gamma", "exp"),
 #'                       comp.param = list(list("shape" = 2, "scale" = 0.5),
 #'                                         list("rate" = 0.25)))
-#' data1 <- getmixtData(mixt1)
+#' data1 <- get_mixture_data(mixt1)
 #' ## Define the admixture model:
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                          knownComp_param = mixt1$comp.param[[2]])
@@ -177,7 +177,7 @@ summary.estim_PS <- function(object, ...)
   cat("Call:")
   print(object$call)
   cat("\n")
-  cat("------- Sample -------\n")
+  cat("------- Sample characteristics -------\n")
   cat("Sample size: ", object$population_sizes, "\n")
   cat("-> Distribution of the known component:", object$admixture_models$comp.dist$known, "\n", sep="")
   cat("-> Parameter(s) of the known component:", paste(names(object$admixture_models$comp.param$known), object$admixture_models$comp.param$known, collapse="\t", sep="="), sep="")
@@ -234,7 +234,7 @@ summary.estim_PS <- function(object, ...)
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
 #'                                         list("mean" = 0, "sd" = 1)))
-#' data1 <- getmixtData(mixt1)
+#' data1 <- get_mixture_data(mixt1)
 #'
 #' ## Define the admixture model:
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
@@ -404,7 +404,7 @@ cv.score <- function(tr.data, test.data, c.n)
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
 #'                                         list("mean" = 0, "sd" = 1)))
-#' data1 <- getmixtData(mixt1)
+#' data1 <- get_mixture_data(mixt1)
 #' ## Define the admixture model:
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                          knownComp_param = mixt1$comp.param[[2]])
@@ -516,7 +516,7 @@ print.PS_dist_fun <- function(x,...){
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
 #'                                         list("mean" = 0, "sd" = 1)))
-#' data1 <- getmixtData(mixt1)
+#' data1 <- get_mixture_data(mixt1)
 #' ## Define the admixture model:
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                          knownComp_param = mixt1$comp.param[[2]])

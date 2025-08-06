@@ -16,12 +16,16 @@ twoComp_mixt(
 
 \item{weight}{Weight of the first component distribution (distribution f) in the mixture.}
 
-\item{comp.dist}{A list of two elements corresponding to the component distributions (specified with R native names)
-involved in the mixture model. These elements respectively refer to the two component distributions f and g.}
+\item{comp.dist}{A list of two elements corresponding to the component distributions (with available names listed in object 'Distribution.df'
+in package EnvStats) involved in the mixture model. These elements respectively refer to the two component distributions f and g.
+By convention, in the framework of admixture models where one of the two components is unknown, the first element of the list
+corresponds to the 'unknown' component distribution, whereas the second one refers to the known one.}
 
 \item{comp.param}{A list of two elements corresponding to the parameters of the component distributions, each element being a list
-itself. The names used in each list must correspond to the native R argument names for these distributions.
-These elements respectively refer to the parameters of f and g distributions of the mixture model.}
+itself. The names used in each list must correspond to the available parameters listed in object 'Distribution.df'
+in package EnvStats. These elements respectively refer to the parameters of f and g distributions of the mixture model.
+By convention, in the framework of admixture models where one of the two components is unknown, the first element of the list
+corresponds to the 'unknown' component parameters, whereas the second one refers to the known ones.}
 }
 \value{
 An object of class \link[admix]{twoComp_mixt}, containing eight attributes: 1) the number of simulated observations, 2) the simulated mixture

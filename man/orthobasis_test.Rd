@@ -71,14 +71,14 @@ mixt1 <- twoComp_mixt(n = 300, weight = 0.77,
                       comp.dist = list("norm", "exp"),
                       comp.param = list(list("mean" = 1, "sd" = 1),
                                         list("rate" = 0.33)))
-data1 <- getmixtData(mixt1)
+data1 <- get_mixture_data(mixt1)
 admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
                         knownComp_param = mixt1$comp.param[[2]])
 mixt2 <- twoComp_mixt(n = 500, weight = 0.62,
                       comp.dist = list("norm", "norm"),
                       comp.param = list(list("mean" = 1, "sd" = 1),
                                         list("mean" = -2, "sd" = 0.5)))
-data2 <- getmixtData(mixt2)
+data2 <- get_mixture_data(mixt2)
 admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
                         knownComp_param = mixt2$comp.param[[2]])
 ## Test procedure:

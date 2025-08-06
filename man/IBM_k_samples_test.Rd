@@ -44,7 +44,8 @@ tabulated distribution; 8) the test statistic value; 9) the selected rank (numbe
 to the null hypothesis has been considered; 12) the value of penalized test statistics; 13) the selected optimal 'gamma' parameter
 (see reference below); 14) the selected optimal constant involved in the penalization process (see also the reference); 15) the
 tabulated distribution of the contrast; 16) the estimated mixing proportions (not implemented yet, since that makes sense only
-in case of equal unknown component distributions); 17) the matrix of pairwise contrasts (distance between two samples).
+in case of equal unknown component distributions); 17) the matrix of pairwise contrasts (distance between two samples); 18) the
+matrix of the ranks of pairwise contrasts; and 19) the matrix of identifiers of pairwise contrasts.
 }
 \description{
 Equality test of the unknown component distributions coming from K (K > 1) admixture models, based on the Inversion - Best
@@ -69,9 +70,9 @@ mixt3 <- twoComp_mixt(n = 400, weight = 0.8,
                       comp.dist = list("norm", "exp"),
                       comp.param = list(list("mean" = -2, "sd" = 0.5),
                                         list("rate" = 1)))
-data1 <- getmixtData(mixt1)
-data2 <- getmixtData(mixt2)
-data3 <- getmixtData(mixt3)
+data1 <- get_mixture_data(mixt1)
+data2 <- get_mixture_data(mixt2)
+data3 <- get_mixture_data(mixt3)
 ## Define the admixture models:
 admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
                          knownComp_param = mixt1$comp.param[[2]])

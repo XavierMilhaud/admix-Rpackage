@@ -66,10 +66,10 @@ mixt4 <- twoComp_mixt(n = 3800, weight = 0.5,
                       comp.dist = list("gamma", "exp"),
                       comp.param = list(list("shape" = 14, "scale" = 1/2),
                                         list("rate" = 1/7)))
-data1 <- getmixtData(mixt1)
-data2 <- getmixtData(mixt2)
-data3 <- getmixtData(mixt3)
-data4 <- getmixtData(mixt4)
+data1 <- get_mixture_data(mixt1)
+data2 <- get_mixture_data(mixt2)
+data3 <- get_mixture_data(mixt3)
+data4 <- get_mixture_data(mixt4)
 ## Define the admixture models:
 admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
                          knownComp_param = mixt1$comp.param[[2]])

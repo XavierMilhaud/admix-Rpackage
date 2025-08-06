@@ -45,7 +45,7 @@ mixt1 <- twoComp_mixt(n = 200, weight = 0.4,
                       comp.param = list(list("mean" = -2, "sd" = 0.5),
                                         list("mean" = 0, "sd" = 1)))
 ## Retrieves the mixture data:
-data1 <- getmixtData(mixt1)
+data1 <- get_mixture_data(mixt1)
 ## Define the admixture model:
 admixMod <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
                         knownComp_param = mixt1$comp.param[[2]])
@@ -58,7 +58,7 @@ mixt2 <- twoComp_mixt(n = 200, weight = 0.65,
                       comp.dist = list("norm", "exp"),
                       comp.param = list(list("mean" = -1, "sd" = 0.5),
                                         list("rate" = 1)))
-data2 <- getmixtData(mixt2)
+data2 <- get_mixture_data(mixt2)
 admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
                         knownComp_param = mixt2$comp.param[[2]])
 ## Perform the estimation of parameters in real-life:

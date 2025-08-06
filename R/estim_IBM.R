@@ -30,12 +30,12 @@
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
 #'                                         list("mean" = 0, "sd" = 1)))
-#' data1 <- getmixtData(mixt1)
+#' data1 <- get_mixture_data(mixt1)
 #' mixt2 <- twoComp_mixt(n = 2000, weight = 0.7,
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
 #'                                         list("mean" = 5, "sd" = 2)))
-#' data2 <- getmixtData(mixt2)
+#' data2 <- get_mixture_data(mixt2)
 #' ## Define the admixture models:
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                          knownComp_param = mixt1$comp.param[[2]])
@@ -51,12 +51,12 @@
 #'                       comp.dist = list("multinom", "multinom"),
 #'                       comp.param = list(list("size" = 1, "prob" = c(0.2,0.3,0.5)),
 #'                                         list("size" = 1, "prob" = c(0.1,0.6,0.3))))
-#' data1 <- getmixtData(mixt1)
+#' data1 <- get_mixture_data(mixt1)
 #' mixt2 <- twoComp_mixt(n = 2000, weight = 0.3,
 #'                       comp.dist = list("multinom", "multinom"),
 #'                       comp.param = list(list("size" = 1, "prob" = c(0.2,0.3,0.5)),
 #'                                         list("size" = 1, "prob" = c(0.7,0.1,0.2))))
-#' data2 <- getmixtData(mixt2)
+#' data2 <- get_mixture_data(mixt2)
 #' ## Define the admixture models:
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                          knownComp_param = mixt1$comp.param[[2]])
@@ -85,7 +85,11 @@ estim_IBM <- function(samples, admixMod, n.integ = 1000, compute_var = FALSE)
   ## Ideally, this distribution should put more weight to locations where differences between F1 and F2 are expected.
   support <- detect_support_type(samples[[1]], samples[[2]])
   if (support == "Continuous") {
+    ## Store the current seed for pseudo random number generation:
+    Seed <- .Random.seed
     G <- stats::runif(n.integ, min = min(c(samples[[1]], samples[[2]])), max = max(c(samples[[1]], samples[[2]])))
+    ## Set the random seed to the last recorded seed (allow to get the same estimation results with the same input data):
+    .Random.seed <- Seed
   } else {
     G <- unique(sort(c(unique(samples[[1]]), unique(samples[[2]]))))
   }
@@ -224,7 +228,7 @@ summary.estim_IBM <- function(object, ...)
   cat("Call:")
   print(object$call)
   cat("\n")
-  cat("----- Samples -----\n")
+  cat("----- Samples characteristics -----\n")
   cat("Number of samples: ", object$n_populations, "\n")
   cat("Sample sizes: ", object$population_sizes, "\n")
   for (k in 1:object$n_populations) {
@@ -278,12 +282,12 @@ summary.estim_IBM <- function(object, ...)
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
 #'                                         list("mean" = 0, "sd" = 1)))
-#' data1 <- getmixtData(mixt1)
+#' data1 <- get_mixture_data(mixt1)
 #' mixt2 <- twoComp_mixt(n = 2000, weight = 0.7,
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
 #'                                         list("mean" = 5, "sd" = 2)))
-#' data2 <- getmixtData(mixt2)
+#' data2 <- get_mixture_data(mixt2)
 #'
 #' ## Create the distribution on which the contrast will be integrated:
 #' G <- stats::rnorm(n = 1000, mean = sample(c(data1, data2), size = 1000, replace = TRUE),
@@ -407,13 +411,13 @@ IBM_empirical_contrast <- function(par, samples, admixMod, G, fixed.p.X = NULL)
 #'                       comp.param = list(list("mean" = 2, "sd" = 3),
 #'                                         list("mean" = -2, "sd" = 1)))
 #' plot(mixt1, xlim = c(0,30), ylim = c(0,0.15))
-#' data1 <- getmixtData(mixt1)
+#' data1 <- get_mixture_data(mixt1)
 #' mixt2 <- twoComp_mixt(n = 1500, weight = 0.5,
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 2, "sd" = 3),
 #'                                         list("mean" = 6, "sd" = 1)))
 #' plot(mixt2, add.plot = TRUE, xlim = c(0,30), ylim = c(0,0.15), col = "blue")
-#' data2 <- getmixtData(mixt2)
+#' data2 <- get_mixture_data(mixt2)
 #'
 #' ## Define the admixture models:
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
@@ -997,12 +1001,12 @@ IBM_Sigma2 <- function(x, y, par, fixed_prop, samples, admixMod, integration_sup
 #'                       comp.dist = list("gamma", "exp"),
 #'                       comp.param = list(list("shape" = 2, "scale" = 3),
 #'                                         list("rate" = 1/3)))
-#' data1 <- getmixtData(mixt1)
+#' data1 <- get_mixture_data(mixt1)
 #' mixt2 <- twoComp_mixt(n = 10000, weight = 0.5,
 #'                       comp.dist = list("gamma", "exp"),
 #'                       comp.param = list(list("shape" = 2, "scale" = 3),
 #'                                         list("rate" = 1/5)))
-#' data2 <- getmixtData(mixt2)
+#' data2 <- get_mixture_data(mixt2)
 #'
 #' ## Define the admixture models:
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
@@ -1203,12 +1207,12 @@ IBM_hessian_contrast <- function(par, fixed_prop, samples, admixMod, integration
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
 #'                                         list("mean" = 0, "sd" = 1)))
-#' data1 <- getmixtData(mixt1)
+#' data1 <- get_mixture_data(mixt1)
 #' mixt2 <- twoComp_mixt(n = 2000, weight = 0.7,
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
 #'                                         list("mean" = 5, "sd" = 2)))
-#' data2 <- getmixtData(mixt2)
+#' data2 <- get_mixture_data(mixt2)
 #' ## Define the admixture models:
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                          knownComp_param = mixt1$comp.param[[2]])
@@ -1279,12 +1283,12 @@ IBM_gap <- function(z, par, samples, admixMod)
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
 #'                                         list("mean" = 0, "sd" = 1)))
-#' data1 <- getmixtData(mixt1)
+#' data1 <- get_mixture_data(mixt1)
 #' mixt2 <- twoComp_mixt(n = 2000, weight = 0.7,
 #'                       comp.dist = list("norm", "norm"),
 #'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
 #'                                         list("mean" = 5, "sd" = 2)))
-#' data2 <- getmixtData(mixt2)
+#' data2 <- get_mixture_data(mixt2)
 #' IBM_theoretical_gap(z = 2.8, par = c(0.5,0.7), known.p = c(0.5,0.7),
 #'                     mixtMod = list(mixt1, mixt2))
 #'
