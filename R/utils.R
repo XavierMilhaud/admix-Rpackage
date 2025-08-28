@@ -240,35 +240,71 @@ knownComp_to_uniform <- function(data, admixMod)
   if (!inherits(x = admixMod, what = "admix_model"))
     stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
 
-  ## Extracts the information about component distributions for inversion
-  ## (transformation to uniform distribution of the known component):
-  comp.dist.inv <- paste0("p", admixMod$comp.dist$known)
-  if (comp.dist.inv == "pmultinom") eff <- as.numeric(table(data))
-  comp.inv <- sapply(X = comp.dist.inv, FUN = get, mode = "function")
-  assign(x = names(comp.inv)[1], value = comp.inv[[1]])
-
-  ## Creates the adequate expression:
-  make.expr.multinom <- function(z) {
-    paste(names(comp.inv)[1],"(q = eff, n = sum(eff), prob = ",
-          paste("c(", paste(admixMod$comp.param$known$prob, collapse = ","), "), lower.tail=TRUE)", sep = ""), sep = "")
-  }
-  #make.expr.multinom <- function(z) {
-  #  paste(names(comp.inv)[1],"(q=c(rep(0,", z-1, "), 1, rep(0,", length(admixMod$comp.param$known$prob)-z, ")), n = 1, ",
-  #        paste("c(", paste(admixMod$comp.param$known$prob, collapse = ","), "), lower.tail=TRUE)", sep = ""), sep = "")
-  #}
-  make.expr.inv <- function(z) paste(names(comp.inv)[1],"(q=", z, ",", paste(names(admixMod$comp.param$known),
-                                     "=", admixMod$comp.param$known, sep="", collapse=","), ")", sep="")
-  if (comp.dist.inv == "pmultinom") {
-    expr.inv <- parse(text = make.expr.multinom(data))
+  support <- detect_support_type(data)
+  if (support == "Continuous") {
+    pF <- paste0("p", admixMod$comp.dist$known)
+    args_pF <- eval(
+      parse(text = paste("list(",paste(names(admixMod$comp.param$known), "=",
+                                       admixMod$comp.param$known, sep="", collapse=","),")", sep=""))
+      )
+    data_transformed <- do.call(pF, c(list(q = data), args_pF))  # U = F(X)
   } else {
-    expr.inv <- parse(text = make.expr.inv(data))
+    domain <- unique(sort(data))
+    pmf_expr <- paste0("d", admixMod$comp.dist$known)
+    args_pmf <- eval(
+      parse(text = paste("list(",paste(names(admixMod$comp.param$known), "=",
+                                       admixMod$comp.param$known, sep="", collapse=","),")", sep=""))
+      )
+    ## Define prob. mass function:
+    if (pmf_expr != "dmultinom") { pmf <- do.call(pmf_expr, c(list(x = domain), args_pmf))
+    } else { pmf <- args_pmf$prob }
+    pmf <- pmf / sum(pmf)  # normalization to have sum(prob)=1
+    stopifnot(abs(sum(pmf) - 1) < 1e-8, length(domain) == length(pmf))
+    cdf <- c(0, cumsum(pmf))  # CDF cumulative avec F(support[i-1])
+    names(cdf) <- c(-Inf, domain)
+    ## Associate each data value to the appropriate interval:
+    idx <- match(data, domain)
+    ## Uniform draws in the interval:
+    u <- stats::runif(length(data))
+    data_transformed <- cdf[idx] + u * pmf[idx]
   }
-
-  ## Inversion of the second component to get a Uniform distribution for the second component:
-  data.transformed <- sapply(expr.inv, eval)
-
-  return(data.transformed)
+  return(data_transformed)
 }
+
+#knownComp_to_uniform <- function(data, admixMod)
+#{
+#  if (!inherits(x = admixMod, what = "admix_model"))
+#    stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
+#
+#  ## Extracts the information about component distributions for inversion
+#  ## (transformation to uniform distribution of the known component):
+#  comp.dist.inv <- paste0("p", admixMod$comp.dist$known)
+#  if (comp.dist.inv == "pmultinom") eff <- as.numeric(table(data))
+#  comp.inv <- sapply(X = comp.dist.inv, FUN = get, mode = "function")
+#  assign(x = names(comp.inv)[1], value = comp.inv[[1]])
+#
+#  ## Creates the adequate expression:
+#  make.expr.multinom <- function(z) {
+#    paste(names(comp.inv)[1],"(q = eff, n = sum(eff), prob = ",
+#          paste("c(", paste(admixMod$comp.param$known$prob, collapse = ","), "), lower.tail=TRUE)", sep = ""), sep = "")
+#  }
+#  #make.expr.multinom <- function(z) {
+#  #  paste(names(comp.inv)[1],"(q=c(rep(0,", z-1, "), 1, rep(0,", length(admixMod$comp.param$known$prob)-z, ")), n = 1, ",
+#  #        paste("c(", paste(admixMod$comp.param$known$prob, collapse = ","), "), lower.tail=TRUE)", sep = ""), sep = "")
+#  #}
+#  make.expr.inv <- function(z) paste(names(comp.inv)[1],"(q=", z, ",", paste(names(admixMod$comp.param$known),
+#                                     "=", admixMod$comp.param$known, sep="", collapse=","), ")", sep="")
+#  if (comp.dist.inv == "pmultinom") {
+#    expr.inv <- parse(text = make.expr.multinom(data))
+#  } else {
+#    expr.inv <- parse(text = make.expr.inv(data))
+#  }
+#
+#  ## Inversion of the second component to get a Uniform distribution for the second component:
+#  data.transformed <- sapply(expr.inv, eval)
+#
+#  return(data.transformed)
+#}
 
 
 #' Builds a polynomial orthonormal basis
