@@ -218,10 +218,10 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
   stat_value <- T.stat[indice.opt]
 
   ##---- Decision to reject the null hypothesis (or not) ----##
-  null_val <- stats::qchisq(conf_level,1)
-  names(null_val) <- "test statistic value"
+  null_val <- 1
+  names(null_val) <- "Test statistic is not Chi-square distributed which degree of freedom"
   rej <- FALSE
-  if (stat_value > null_val) rej <- TRUE
+  if (stat_value > stats::qchisq(conf_level,1)) rej <- TRUE
   ## p-value of the test:
   pvalu <- 1 - stats::pchisq(stat_value, 1)
 
@@ -229,15 +229,16 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
   rm(data.coef1) ; rm(data.coef2) ; rm(data.p1) ; rm(data.p2)
   rm(moy.coef1) ; rm(moy.coef2) ; rm(var.coef1) ; rm(var.coef2)
 
-  names(stat_value) <- "Chi-square"
-  stat_param <- 1 ; names(stat_param) <- "df"
+  names(stat_value) <- "test statistic value T"
+  stat_param <- indice.opt
+  names(stat_param) <- "order expansion S"
   estimated_values <- vector(mode = "numeric", length = 2L)
   estimated_values <- c(hat.p1,hat.p2)
   names(estimated_values) <- c("Weight in 1st sample","Weight in 2nd sample")
 
   obj <- list(
     null.value = null_val,
-    alternative = "greater",
+    alternative = "",
     method = "Equality test of unknown dist. (polynom. expansions of pdfs)",
     estimate = estimated_values,
     data.name = deparse(substitute(samples)),

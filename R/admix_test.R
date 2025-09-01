@@ -56,7 +56,7 @@
 admix_test <- function(samples, admixMod, test_method = c("poly","icv"), conf_level = 0.95, ...)
 {
   if (!is.list(samples))
-    stop("Please provide sample(s) and admixture model(s) in lists, also with only one sample!")
+    stop("Please provide sample(s) and admixture model(s) in a list, also with only one sample!")
   if (!all(sapply(X = admixMod, FUN = inherits, what = "admix_model")))
     stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
 
@@ -94,8 +94,6 @@ admix_test <- function(samples, admixMod, test_method = c("poly","icv"), conf_le
   } else stop("Please choose appropriately the arguments of the function.")
 
   class(test_res) <- c(specific_class, "htest")
-  #class(test_res) <- "htest"
   test_res$call <- match.call()
   return(test_res)
 }
-

@@ -297,21 +297,22 @@ IBM_k_samples_test <- function(samples, admixMod, conf_level = 0.95, sim_U = NUL
     finalStat_value <- cumsum(sorted_contrasts)[selected.index]
     ## Test decision:
     null_val <- q_H[1]
-    names(null_val) <- "test statistic value"
+    names(null_val) <- "U is greater than the calibrated quantile, whose value"
     final_test <- finalStat_value > null_val
     ## Corresponding p-value:
     CDF_U <- stats::ecdf(sim_U)
     p_value <- 1 - CDF_U(finalStat_value)
 
-    names(finalStat_value) <- "Test statistic value"
-    stat_param <- NA ; names(stat_param) <- ""
+    names(finalStat_value) <- "test statistic value U"
+    stat_param <- selected.index
+    names(stat_param) <- "number of terms S"
     estimated_values <- vector(mode = "numeric", length = 2L)
     estimated_values <- c(gamma_opt, cst_selected)
-    names(estimated_values) <- c("Tuned Gamma","Tuned constant C")
+    names(estimated_values) <- c("tuned Gamma","tuned C")
 
     obj <- list(
       null.value = null_val,
-      alternative = "greater",
+      alternative = "",
       method = "Equality test of the unknown distributions (with ICV/IBM)",
       estimate = estimated_values,
       data.name = deparse(substitute(samples)),
@@ -508,6 +509,7 @@ IBM_2samples_test <- function(samples, admixMod, conf_level = 0.95, parallel = F
     reject <- TRUE
     p_value <- 1e-12
     sim_U <- extreme_quantile <- NA
+    null_val <- NULL
   } else {
     if (is.null(sim_U)) {
       tab_dist <- IBM_tabul_stochasticInteg(samples = samples, admixMod = admixMod, min_size = min_size, n.varCovMat = 80,
@@ -519,40 +521,60 @@ IBM_2samples_test <- function(samples, admixMod, conf_level = 0.95, parallel = F
     reject <- contrast_val > extreme_quantile
     CDF_U <- stats::ecdf(sim_U)
     p_value <- 1 - CDF_U(contrast_val)
+    null_val <- unique(extreme_quantile)
+    names(null_val) <- "T is greater than the calibrated quantile, whose value"
   }
+  names(contrast_val) <- "T"
 
-  names(contrast_val) <- "Test statistic value"
-  stat_param <- NA ; names(stat_param) <- ""
-  if (length(estim.weights) > 1) {
-    estimated_values <- estim.weights
-  } else {
-    estimated_values <- c(0.2,estim.weights)
-  }
+  if (length(estim.weights) > 1) { estimated_values <- estim.weights
+  } else { estimated_values <- c(0.2,estim.weights) }
   names(estimated_values) <- c("Weight in 1st sample","Weight in 2nd sample")
 
-  obj <- list(
-    null.value = unique(extreme_quantile),
-    alternative = "greater",
-    method = "Equality test of the unknown distributions (with ICV/IBM)",
-    estimate = estimated_values,
-    data.name = deparse(substitute(samples)),
-    statistic = contrast_val,
-    parameters = stat_param,
-    p.value = p_value,
-    n_populations = 2,
-    population_sizes = sapply(X = samples, FUN = length),
-    admixture_models = admixMod,
-    reject_decision = reject,
-    confidence_level = conf_level,
-    selected_rank = NA,
-    statistic_name = NA,
-    penalty_nullHyp = NA,
-    penalized_stat = NA,
-    tabulated_dist = sim_U,
-    discrepancy_matrix = NA,
-    discrepancy_rank = NA,
-    discrepancy_id = NA
-  )
+  if (!is.null(null_val)) {
+    obj <- list(
+      null.value = null_val,
+      alternative = "",
+      method = "Equality test of the unknown distributions (with ICV/IBM)",
+      estimate = estimated_values,
+      data.name = deparse(substitute(samples)),
+      statistic = contrast_val,
+      p.value = p_value,
+      n_populations = 2,
+      population_sizes = sapply(X = samples, FUN = length),
+      admixture_models = admixMod,
+      reject_decision = reject,
+      confidence_level = conf_level,
+      selected_rank = NA,
+      statistic_name = NA,
+      penalty_nullHyp = NA,
+      penalized_stat = NA,
+      tabulated_dist = sim_U,
+      discrepancy_matrix = NA,
+      discrepancy_rank = NA,
+      discrepancy_id = NA
+    )
+  } else {
+    obj <- list(
+      method = "Equality test of the unknown distributions (with ICV/IBM)",
+      estimate = estimated_values,
+      data.name = deparse(substitute(samples)),
+      statistic = contrast_val,
+      p.value = p_value,
+      n_populations = 2,
+      population_sizes = sapply(X = samples, FUN = length),
+      admixture_models = admixMod,
+      reject_decision = reject,
+      confidence_level = conf_level,
+      selected_rank = NA,
+      statistic_name = NA,
+      penalty_nullHyp = NA,
+      penalized_stat = NA,
+      tabulated_dist = sim_U,
+      discrepancy_matrix = NA,
+      discrepancy_rank = NA,
+      discrepancy_id = NA
+    )
+  }
 
   class(obj) <- c("IBM_test", "htest")
   obj$call <- match.call()

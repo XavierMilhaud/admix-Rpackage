@@ -72,7 +72,7 @@
 admix_estim <- function(samples, admixMod, est_method = c("PS","BVdk","IBM"), ...)
 {
   if (!is.list(samples))
-    stop("Please provide sample(s) and admixture model(s) in lists, also with only one sample!")
+    stop("Please provide sample(s) and admixture model(s) in a list, also with only one sample!")
   if (!all(sapply(X = admixMod, FUN = inherits, what = "admix_model")))
     stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
 
@@ -106,7 +106,6 @@ admix_estim <- function(samples, admixMod, est_method = c("PS","BVdk","IBM"), ..
   specific_class <- switch(meth, "BVdk" = "estim_BVdk",
                            "PS" = "estim_PS",
                            "IBM" = "estim_IBM")
-
   class(estimators) <- c(specific_class, "admix_estim")
   estimators$call <- match.call()
 

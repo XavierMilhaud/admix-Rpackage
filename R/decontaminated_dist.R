@@ -29,8 +29,11 @@
 #' est <- admix_estim(samples = list(data1), admixMod = list(admixMod1),
 #'                    est_method = 'PS')
 #' ## Determine the decontaminated version of the unknown density by inversion:
-#' decontaminated_density(sample1 = data1, estim.p = est$estimated_mixing_weights[1],
+#' x <- decontaminated_density(sample1 = data1, estim.p = get_mixing_weights(est),
 #'                        admixMod = admixMod1)
+#' print(x)
+#' summary(x)
+#' plot(x, type = "l")
 #'
 #' ####### Discrete support:
 #' mixt1 <- twoComp_mixt(n = 5000, weight = 0.6,
@@ -52,8 +55,10 @@
 #' est <- admix_estim(samples = list(data1, data2),
 #'                    admixMod = list(admixMod1, admixMod2), est_method = 'IBM')
 #' ## Determine the decontaminated version of the unknown density by inversion:
-#' decontaminated_density(sample1 = data1, estim.p = est$estimated_mixing_weights[1],
+#' x <- decontaminated_density(sample1 = data1, estim.p = get_mixing_weights(est)[1],
 #'                        admixMod = admixMod1)
+#' summary(x)
+#' plot(x)
 #'
 #' ####### Finite discrete support:
 #' mixt1 <- twoComp_mixt(n = 12000, weight = 0.6,
@@ -75,8 +80,10 @@
 #' est <- admix_estim(samples = list(data1, data2),
 #'                    admixMod = list(admixMod1, admixMod2), est_method = 'IBM')
 #' ## Determine the decontaminated version of the unknown density by inversion:
-#' decontaminated_density(sample1 = data1, estim.p = est$estimated_mixing_weights[1],
+#' x <- decontaminated_density(sample1 = data1, estim.p = get_mixing_weights(est)[1],
 #'                        admixMod = admixMod1)
+#' summary(x)
+#' plot(x)
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
@@ -149,7 +156,8 @@ print.decontaminated_density <- function(x, ...)
   cat("Call:")
   print(x$call)
   cat("\n")
-  print(x$decontaminated_density_fun)
+  cat("Statistics about the estimated decontaminated density function:\n")
+  print(summary(x$decontaminated_density_fun(x$data)))
   cat("\n")
 }
 
@@ -172,7 +180,15 @@ summary.decontaminated_density <- function(object, ...)
   print(object$call)
   cat("\n")
   cat("Type of support: ", object$support, sep = "")
-  cat("\n\n")
+  cat("\n")
+  if (object$support == "Continuous") {
+    cat("Statistical indicators about the support:\n")
+    print(summary(object$data))
+  } else {
+    cat("Count table:")
+    print(table(object$data))
+  }
+  cat("\n")
   cat("Statistics about the estimated decontaminated density function:\n")
   print(summary(object$decontaminated_density_fun(object$data)))
   cat("\n")
@@ -223,7 +239,9 @@ summary.decontaminated_density <- function(object, ...)
 #' res2 <- decontaminated_density(sample1 = data2, estim.p = prop[2],
 #'                                admixMod = admixMod2)
 #' ## Use appropriate sequence of x values:
-#' plot(x = res1, x_val = seq(from = 0, to = 6, length.out = 100), add_plot = FALSE)
+#' plot(x = res1)
+#' plot(x = res2, col="red", add_plot=TRUE)
+#' plot(x = res1, x_val = seq(from=0, to=6, length.out=100), type = "l")
 #' plot(x = res2, x_val = seq(from=0, to=6, length.out=100), col="red", add_plot=TRUE)
 #'
 #' ####### Countable discrete support:
@@ -252,8 +270,8 @@ summary.decontaminated_density <- function(object, ...)
 #' res2 <- decontaminated_density(sample1 = data2, estim.p = prop[2],
 #'                                admixMod = admixMod2)
 #' ## Use appropriate sequence of x values:
-#' plot(x = res1, x_val = seq(from = 0, to = 15, by = 1), add_plot = FALSE)
-#' plot(x = res2, x_val = seq(from = 0, to = 15, by = 1), add_plot = TRUE, col = "red")
+#' plot(x = res1, add_plot = FALSE)
+#' plot(x = res2, add_plot = TRUE, col = "red")
 #'
 #' ####### Finite discrete support:
 #' mixt1 <- twoComp_mixt(n = 4000, weight = 0.7,
@@ -281,16 +299,25 @@ summary.decontaminated_density <- function(object, ...)
 #' res2 <- decontaminated_density(sample1 = data2, estim.p = prop[2],
 #'                                admixMod = admixMod2)
 #' ## Use appropriate sequence of x values:
-#' plot(x = res1, x_val = seq(from=1, to=3, by=1), add_plot = FALSE)
-#' plot(x = res2, x_val = seq(from=1, to=3, by=1), add_plot = TRUE, col = "red")
+#' plot(x = res1, add_plot = FALSE)
+#' plot(x = res2, add_plot = TRUE, col = "red")
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-plot.decontaminated_density <- function(x, x_val, add_plot = FALSE, ...)
+plot.decontaminated_density <- function(x, x_val = NULL, add_plot = FALSE, ...)
 {
   support <- x$support
-  decontamin_dens_values <- x$decontaminated_density_fun(x_val)
+  if (!is.null(x_val)) {
+    decontamin_dens_values <- x$decontaminated_density_fun(x_val)
+  } else {
+    if (support == "Discrete") {
+      x_val <- seq(from = min(x$data), to = max(x$data))
+    } else {
+      x_val <- seq(from = min(x$data), to = max(x$data), length.out = 100)
+    }
+    decontamin_dens_values <- x$decontaminated_density_fun(x_val)
+  }
   decontamin_dens_values[which(is.na(decontamin_dens_values))] <- 0
   decontamin_dens_values <- pmax(decontamin_dens_values, 0)
   y.range <- c(min(decontamin_dens_values), max(decontamin_dens_values)*1.1)

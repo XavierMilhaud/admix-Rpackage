@@ -4,7 +4,7 @@
 \alias{plot.decontaminated_density}
 \title{Plot method for object of class 'decontaminated_density'}
 \usage{
-\method{plot}{decontaminated_density}(x, x_val, add_plot = FALSE, ...)
+\method{plot}{decontaminated_density}(x, x_val = NULL, add_plot = FALSE, ...)
 }
 \arguments{
 \item{x}{An object of class 'decontaminated_density' (see ?decontaminated_density).}
@@ -55,7 +55,9 @@ res1 <- decontaminated_density(sample1 = data1, estim.p = prop[1],
 res2 <- decontaminated_density(sample1 = data2, estim.p = prop[2],
                                admixMod = admixMod2)
 ## Use appropriate sequence of x values:
-plot(x = res1, x_val = seq(from = 0, to = 6, length.out = 100), add_plot = FALSE)
+plot(x = res1, type = "l")
+plot(x = res2, col="red", add_plot=TRUE)
+plot(x = res1, x_val = seq(from=0, to=6, length.out=100), type = "l")
 plot(x = res2, x_val = seq(from=0, to=6, length.out=100), col="red", add_plot=TRUE)
 
 ####### Countable discrete support:
@@ -84,8 +86,8 @@ res1 <- decontaminated_density(sample1 = data1, estim.p = prop[1],
 res2 <- decontaminated_density(sample1 = data2, estim.p = prop[2],
                                admixMod = admixMod2)
 ## Use appropriate sequence of x values:
-plot(x = res1, x_val = seq(from = 0, to = 15, by = 1), add_plot = FALSE)
-plot(x = res2, x_val = seq(from = 0, to = 15, by = 1), add_plot = TRUE, col = "red")
+plot(x = res1, add_plot = FALSE)
+plot(x = res2, add_plot = TRUE, col = "red")
 
 ####### Finite discrete support:
 mixt1 <- twoComp_mixt(n = 4000, weight = 0.7,
@@ -113,8 +115,8 @@ res1 <- decontaminated_density(sample1 = data1, estim.p = prop[1],
 res2 <- decontaminated_density(sample1 = data2, estim.p = prop[2],
                                admixMod = admixMod2)
 ## Use appropriate sequence of x values:
-plot(x = res1, x_val = seq(from=1, to=3, by=1), add_plot = FALSE)
-plot(x = res2, x_val = seq(from=1, to=3, by=1), add_plot = TRUE, col = "red")
+plot(x = res1, add_plot = FALSE)
+plot(x = res2, add_plot = TRUE, col = "red")
 
 }
 \author{
