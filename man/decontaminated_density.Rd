@@ -43,7 +43,9 @@ est <- admix_estim(samples = list(data1), admixMod = list(admixMod1),
 ## Determine the decontaminated version of the unknown density by inversion:
 x <- decontaminated_density(sample1 = data1, estim.p = get_mixing_weights(est),
                        admixMod = admixMod1)
+print(x)
 summary(x)
+plot(x, type = "l")
 
 ####### Discrete support:
 mixt1 <- twoComp_mixt(n = 5000, weight = 0.6,
@@ -68,6 +70,7 @@ est <- admix_estim(samples = list(data1, data2),
 x <- decontaminated_density(sample1 = data1, estim.p = get_mixing_weights(est)[1],
                        admixMod = admixMod1)
 summary(x)
+plot(x)
 
 ####### Finite discrete support:
 mixt1 <- twoComp_mixt(n = 12000, weight = 0.6,
@@ -92,6 +95,7 @@ est <- admix_estim(samples = list(data1, data2),
 x <- decontaminated_density(sample1 = data1, estim.p = get_mixing_weights(est)[1],
                        admixMod = admixMod1)
 summary(x)
+plot(x)
 
 }
 \author{

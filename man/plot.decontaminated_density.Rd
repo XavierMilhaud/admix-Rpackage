@@ -55,7 +55,7 @@ res1 <- decontaminated_density(sample1 = data1, estim.p = prop[1],
 res2 <- decontaminated_density(sample1 = data2, estim.p = prop[2],
                                admixMod = admixMod2)
 ## Use appropriate sequence of x values:
-plot(x = res1, type = "l")
+plot(x = res1)
 plot(x = res2, col="red", add_plot=TRUE)
 plot(x = res1, x_val = seq(from=0, to=6, length.out=100), type = "l")
 plot(x = res2, x_val = seq(from=0, to=6, length.out=100), col="red", add_plot=TRUE)

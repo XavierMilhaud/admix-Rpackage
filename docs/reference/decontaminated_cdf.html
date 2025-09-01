@@ -14,7 +14,7 @@ L = p*F + (1-p)*G, with g a known CDF and p and f unknown quantities."><!-- math
     
     <a class="navbar-brand me-2" href="../index.html">admix</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -50,7 +50,7 @@ L = p*F + (1-p)*G, with g a known CDF and p and f unknown quantities."><!-- math
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Estimates the decontaminated CDF of the unknown component in an admixture</h1>
-      <small class="dont-index">Source: <a href="https://github.com/XavierMilhaud/admix-Rpackage/blob/HEAD/R/decontaminated_density.R" class="external-link"><code>R/decontaminated_density.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/XavierMilhaud/admix-Rpackage/blob/HEAD/R/decontaminated_dist.R" class="external-link"><code>R/decontaminated_dist.R</code></a></small>
       <div class="d-none name"><code>decontaminated_cdf.Rd</code></div>
     </div>
 
@@ -107,8 +107,8 @@ unknown component F after having estimated p. This means that F = (1/hat(p)) * (
 <span class="r-in"><span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"norm"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">3</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                                        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">5</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">data1</span> <span class="op">&lt;-</span> <span class="fu"><a href="getmixtData.html">getmixtData</a></span><span class="op">(</span><span class="va">mixt1</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">data2</span> <span class="op">&lt;-</span> <span class="fu"><a href="getmixtData.html">getmixtData</a></span><span class="op">(</span><span class="va">mixt2</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">data1</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_mixture_data.html">get_mixture_data</a></span><span class="op">(</span><span class="va">mixt1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">data2</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_mixture_data.html">get_mixture_data</a></span><span class="op">(</span><span class="va">mixt2</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co">## Define the admixture models:</span></span></span>
 <span class="r-in"><span><span class="va">admixMod1</span> <span class="op">&lt;-</span> <span class="fu"><a href="admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt1</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>                         knownComp_param <span class="op">=</span> <span class="va">mixt1</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
@@ -117,7 +117,7 @@ unknown component F after having estimated p. This means that F = (1/hat(p)) * (
 <span class="r-in"><span><span class="co">## Estimation:</span></span></span>
 <span class="r-in"><span><span class="va">est</span> <span class="op">&lt;-</span> <span class="fu"><a href="admix_estim.html">admix_estim</a></span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>,<span class="va">data2</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                   admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>,<span class="va">admixMod2</span><span class="op">)</span>, est_method <span class="op">=</span> <span class="st">'PS'</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">prop</span> <span class="op">&lt;-</span> <span class="fu"><a href="getmixingWeight.html">getmixingWeight</a></span><span class="op">(</span><span class="va">est</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">prop</span> <span class="op">&lt;-</span> <span class="fu"><a href="get_mixing_weights.html">get_mixing_weights</a></span><span class="op">(</span><span class="va">est</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co">## Determine the decontaminated version of the unknown CDF by inversion:</span></span></span>
 <span class="r-in"><span><span class="va">F1</span> <span class="op">&lt;-</span> <span class="fu">decontaminated_cdf</span><span class="op">(</span>sample1 <span class="op">=</span> <span class="va">data1</span>, estim.p <span class="op">=</span> <span class="va">prop</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>, admixMod <span class="op">=</span> <span class="va">admixMod1</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">F2</span> <span class="op">&lt;-</span> <span class="fu">decontaminated_cdf</span><span class="op">(</span>sample1 <span class="op">=</span> <span class="va">data2</span>, estim.p <span class="op">=</span> <span class="va">prop</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>, admixMod <span class="op">=</span> <span class="va">admixMod2</span><span class="op">)</span></span></span>

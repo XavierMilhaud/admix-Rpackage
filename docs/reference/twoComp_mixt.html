@@ -12,7 +12,7 @@ with f and g the mixture component distributions, and p the mixing weight."><!--
     
     <a class="navbar-brand me-2" href="../index.html">admix</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,14 +78,18 @@ with f and g the mixture component distributions, and p the mixing weight.</p>
 
 
 <dt>comp.dist</dt>
-<dd><p>A list of two elements corresponding to the component distributions (specified with R native names)
-involved in the mixture model. These elements respectively refer to the two component distributions f and g.</p></dd>
+<dd><p>A list of two elements corresponding to the component distributions (with available names listed in object 'Distribution.df'
+in package EnvStats) involved in the mixture model. These elements respectively refer to the two component distributions f and g.
+By convention, in the framework of admixture models where one of the two components is unknown, the first element of the list
+corresponds to the 'unknown' component distribution, whereas the second one refers to the known one.</p></dd>
 
 
 <dt>comp.param</dt>
 <dd><p>A list of two elements corresponding to the parameters of the component distributions, each element being a list
-itself. The names used in each list must correspond to the native R argument names for these distributions.
-These elements respectively refer to the parameters of f and g distributions of the mixture model.</p></dd>
+itself. The names used in each list must correspond to the available parameters listed in object 'Distribution.df'
+in package EnvStats. These elements respectively refer to the parameters of f and g distributions of the mixture model.
+By convention, in the framework of admixture models where one of the two components is unknown, the first element of the list
+corresponds to the 'unknown' component parameters, whereas the second one refers to the known ones.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -118,11 +122,11 @@ component distributions and their values, 6) the mixing proportion, 7) the obser
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of observations: 2000 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simulated data (first 5 obs.): </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.206385 1.232268 -0.3577786 1.270016 2.84398</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.9196336 0.1282442 -1.206804 3.864726 3.427327</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simulated observations coming from the 1st component (first 5 obs.): </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  2.84398 3.249245 2.711279 3.826636 2.513299</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  3.864726 3.427327 3.004985 2.588117 3.753374</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Simulated observations coming from the 2nd component (first 5 obs.): </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.206385 1.232268 -0.3577786 1.270016 1.462084</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.9196336 0.1282442 -1.206804 -0.5814184 -0.2850104</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="va">sim.Y</span> <span class="op">&lt;-</span> <span class="fu">twoComp_mixt</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1200</span>, weight <span class="op">=</span> <span class="fl">0.7</span>,</span></span>
 <span class="r-in"><span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"exp"</span><span class="op">)</span>,</span></span>
