@@ -100,15 +100,20 @@ unknown component f after having estimated p.</p>
 <span class="r-in"><span><span class="va">est</span> <span class="op">&lt;-</span> <span class="fu"><a href="admix_estim.html">admix_estim</a></span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span><span class="op">)</span>, admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                   est_method <span class="op">=</span> <span class="st">'PS'</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co">## Determine the decontaminated version of the unknown density by inversion:</span></span></span>
-<span class="r-in"><span><span class="fu">decontaminated_density</span><span class="op">(</span>sample1 <span class="op">=</span> <span class="va">data1</span>, estim.p <span class="op">=</span> <span class="va">est</span><span class="op">$</span><span class="va">estimated_mixing_weights</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">decontaminated_density</span><span class="op">(</span>sample1 <span class="op">=</span> <span class="va">data1</span>, estim.p <span class="op">=</span> <span class="fu"><a href="get_mixing_weights.html">get_mixing_weights</a></span><span class="op">(</span><span class="va">est</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                       admixMod <span class="op">=</span> <span class="va">admixMod1</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Call:decontaminated_density(sample1 = data1, estim.p = est$estimated_mixing_weights[1], </span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call:decontaminated_density(sample1 = data1, estim.p = get_mixing_weights(est), </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     admixMod = admixMod1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> function (x) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (1/estim.p) * (l1_emp(x) - (1 - estim.p) * g1(x))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x558afa2baec0&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x558afa2bbb00&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Type of support: Continuous</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Statistical indicators about the support:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -3.3584 -1.8533 -0.8103 -0.7550  0.2527  2.4840 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Statistics about the estimated decontaminated density function:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -0.048343 -0.006841  0.115283  0.223855  0.493001  0.641186 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">####### Discrete support:</span></span></span>
@@ -133,15 +138,20 @@ unknown component f after having estimated p.</p>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span> IBM estimators of two unknown proportions are reliable only if the two</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>     corresponding unknown component distributions have been tested equal (see ?admix_test).</span>
 <span class="r-in"><span><span class="co">## Determine the decontaminated version of the unknown density by inversion:</span></span></span>
-<span class="r-in"><span><span class="fu">decontaminated_density</span><span class="op">(</span>sample1 <span class="op">=</span> <span class="va">data1</span>, estim.p <span class="op">=</span> <span class="va">est</span><span class="op">$</span><span class="va">estimated_mixing_weights</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">decontaminated_density</span><span class="op">(</span>sample1 <span class="op">=</span> <span class="va">data1</span>, estim.p <span class="op">=</span> <span class="fu"><a href="get_mixing_weights.html">get_mixing_weights</a></span><span class="op">(</span><span class="va">est</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>                       admixMod <span class="op">=</span> <span class="va">admixMod1</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Call:decontaminated_density(sample1 = data1, estim.p = est$estimated_mixing_weights[1], </span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call:decontaminated_density(sample1 = data1, estim.p = get_mixing_weights(est)[1], </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     admixMod = admixMod1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> function (x) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (1/estim.p) * (l1_emp(x) - (1 - estim.p) * g1(x))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x558afa2baec0&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x558aff087830&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Type of support: Discrete</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Count table:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    0    1    2    3    4    5    6    7    8    9   10   11 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  408  975 1241 1026  695  380  174   61   25    9    3    3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Statistics about the estimated decontaminated density function:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.0009149 0.1525870 0.1663390 0.1698903 0.2190739 0.2356054 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">####### Finite discrete support:</span></span></span>
@@ -166,15 +176,20 @@ unknown component f after having estimated p.</p>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span> IBM estimators of two unknown proportions are reliable only if the two</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span>     corresponding unknown component distributions have been tested equal (see ?admix_test).</span>
 <span class="r-in"><span><span class="co">## Determine the decontaminated version of the unknown density by inversion:</span></span></span>
-<span class="r-in"><span><span class="fu">decontaminated_density</span><span class="op">(</span>sample1 <span class="op">=</span> <span class="va">data1</span>, estim.p <span class="op">=</span> <span class="va">est</span><span class="op">$</span><span class="va">estimated_mixing_weights</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu">decontaminated_density</span><span class="op">(</span>sample1 <span class="op">=</span> <span class="va">data1</span>, estim.p <span class="op">=</span> <span class="fu"><a href="get_mixing_weights.html">get_mixing_weights</a></span><span class="op">(</span><span class="va">est</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>                       admixMod <span class="op">=</span> <span class="va">admixMod1</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Call:decontaminated_density(sample1 = data1, estim.p = est$estimated_mixing_weights[1], </span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call:decontaminated_density(sample1 = data1, estim.p = get_mixing_weights(est)[1], </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     admixMod = admixMod1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> function (x) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> (1/estim.p) * (l1_emp(x) - (1 - estim.p) * g1(x))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x558afa2baec0&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: 0x558afea8e318&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Type of support: Discrete</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Count table:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    1    2    3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5053 4301 2646 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Statistics about the estimated decontaminated density function:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  0.3006  0.3021  0.3021  0.3359  0.3973  0.3973 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
