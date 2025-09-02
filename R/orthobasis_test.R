@@ -229,7 +229,7 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
   rm(data.coef1) ; rm(data.coef2) ; rm(data.p1) ; rm(data.p2)
   rm(moy.coef1) ; rm(moy.coef2) ; rm(var.coef1) ; rm(var.coef2)
 
-  names(stat_value) <- "statistic value T"
+  names(stat_value) <- "stat val T"
   stat_param <- indice.opt
   names(stat_param) <- "expansion order S"
   estimated_values <- vector(mode = "numeric", length = 2L)

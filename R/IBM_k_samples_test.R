@@ -524,7 +524,7 @@ IBM_2samples_test <- function(samples, admixMod, conf_level = 0.95, parallel = F
     null_val <- unique(extreme_quantile)
     names(null_val) <- "T is greater than the calibrated quantile,\n whose value"
   }
-  names(contrast_val) <- "statistic value T"
+  names(contrast_val) <- "stat val T"
 
   if (length(estim.weights) > 1) { estimated_values <- estim.weights
   } else { estimated_values <- c(0.2,estim.weights) }

@@ -185,7 +185,7 @@ gaussianity_test <- function(sample, admixMod, conf_level = 0.95, ask_poly_param
 	p.value <- 1 - stats::pchisq(stat_value, 1)
 
 	## If the test statistic is greater that the quantile of interest, reject the null hypothesis (otherwise do not reject):
-	names(stat_value) <- "statistic value T"
+	names(stat_value) <- "stat val T"
 	stat_param <- selected.index
 	names(stat_param) <- "expansion order S"
 	null_val <- 1   # degree of freedom of the Chi-2 dist. under the null hypothesis
