@@ -297,13 +297,13 @@ IBM_k_samples_test <- function(samples, admixMod, conf_level = 0.95, sim_U = NUL
     finalStat_value <- cumsum(sorted_contrasts)[selected.index]
     ## Test decision:
     null_val <- q_H[1]
-    names(null_val) <- "U is greater than the calibrated quantile, whose value"
+    names(null_val) <- "U is greater than the calibrated quantile,\n whose value"
     final_test <- finalStat_value > null_val
     ## Corresponding p-value:
     CDF_U <- stats::ecdf(sim_U)
     p_value <- 1 - CDF_U(finalStat_value)
 
-    names(finalStat_value) <- "test statistic value U"
+    names(finalStat_value) <- "statistic value U"
     stat_param <- selected.index
     names(stat_param) <- "number of terms S"
     estimated_values <- vector(mode = "numeric", length = 2L)
@@ -522,9 +522,9 @@ IBM_2samples_test <- function(samples, admixMod, conf_level = 0.95, parallel = F
     CDF_U <- stats::ecdf(sim_U)
     p_value <- 1 - CDF_U(contrast_val)
     null_val <- unique(extreme_quantile)
-    names(null_val) <- "T is greater than the calibrated quantile, whose value"
+    names(null_val) <- "T is greater than the calibrated quantile,\n whose value"
   }
-  names(contrast_val) <- "T"
+  names(contrast_val) <- "statistic value T"
 
   if (length(estim.weights) > 1) { estimated_values <- estim.weights
   } else { estimated_values <- c(0.2,estim.weights) }

@@ -219,7 +219,7 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
 
   ##---- Decision to reject the null hypothesis (or not) ----##
   null_val <- 1
-  names(null_val) <- "Test statistic is not Chi-square distributed which degree of freedom"
+  names(null_val) <- "Test statistic is not Chi-square \n distributed, where the degree of freedom"
   rej <- FALSE
   if (stat_value > stats::qchisq(conf_level,1)) rej <- TRUE
   ## p-value of the test:
@@ -229,9 +229,9 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
   rm(data.coef1) ; rm(data.coef2) ; rm(data.p1) ; rm(data.p2)
   rm(moy.coef1) ; rm(moy.coef2) ; rm(var.coef1) ; rm(var.coef2)
 
-  names(stat_value) <- "test statistic value T"
+  names(stat_value) <- "statistic value T"
   stat_param <- indice.opt
-  names(stat_param) <- "order expansion S"
+  names(stat_param) <- "expansion order S"
   estimated_values <- vector(mode = "numeric", length = 2L)
   estimated_values <- c(hat.p1,hat.p2)
   names(estimated_values) <- c("Weight in 1st sample","Weight in 2nd sample")

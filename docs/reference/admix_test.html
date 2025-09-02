@@ -169,16 +169,16 @@ Pommeret D, Vandekerkhove P (2019).
 <span class="r-in"><span>           conf_level <span class="op">=</span> <span class="fl">0.95</span>, test_method <span class="op">=</span> <span class="st">"poly"</span>, ask_poly_param <span class="op">=</span> <span class="cn">FALSE</span>, support <span class="op">=</span> <span class="st">"Real"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   Testing using polynomial basis expansions requires in theory a square-root n consistent estimation</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   of the proportions of the unknown component distributions (thus using 'BVdk' estimation by default,</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   associated to unknown component distributions with symmetric densities). However, it is allowed to</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   use 'PS' estimation in practice (argument 'est_method' has therefore to be set to 'PS'. In this case,</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span>   the variance of estimators is obtained by boostrapping.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   associated to unknown component distributions with symmetric densities). However, for practical</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   considerations, it is allowed to use 'PS' estimator in the 2-sample case (argument 'est_method' has</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   therefore to be set to 'PS'). In this case, the variance of estimators is obtained by boostrapping.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 	Equality test of unknown dist. (polynom. expansions of pdfs)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> data:  samples</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> test statistic value T = 0.31727, order expansion S = 1, p-value =</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 0.5733</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true Test statistic is not Chi-square distributed which degree of freedom is  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> statistic value T = 0.31727, expansion order S = 1, p-value = 0.5733</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alternative hypothesis: true Test statistic is not Chi-square </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  distributed, where the degree of freedom is  1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> sample estimates:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Weight in 1st sample Weight in 2nd sample </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            0.7597361            0.9223977 </span>
