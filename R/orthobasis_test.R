@@ -66,10 +66,6 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
   if (!all(sapply(X = admixMod, FUN = inherits, what = "admix_model")))
     stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
 
-  old_options_warn <- base::options()$warn
-  on.exit(base::options(warn = old_options_warn))
-  base::options(warn = -1)
-
   support <- match.arg(support)
   meth <- match.arg(est_method)
 
@@ -77,8 +73,8 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
                                                is necessary to assess the variance of the statistic for the test
                                                to be performed. Please specify a number of bootstrap samples > 1.")
   if (ask_poly_param) {
-    K.user <- as.numeric(base::readline("Please enter 'K' (integer), the order for the polynomial expansion in the orthonormal basis: "))
-    s.user <- as.numeric(base::readline("Please enter 's' in ]0,0.5[, involved in the penalization rule for model selection where lower values of 's' lead to more powerful tests: "))
+    K.user <- as.numeric(base::readline("Enter 'K' (integer), the order for the polynomial expansion in the orthonormal basis: "))
+    s.user <- as.numeric(base::readline("Enter 's' in ]0,0.5[, involved in the penalization rule for model selection where lower values of 's' lead to more powerful tests: "))
   } else {
     K.user <- K
     s.user <- s
@@ -129,19 +125,17 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
   ##---- Estimate nonparametrically the mixture weights (and the estimators variance) ----##
   if (meth == "PS") {
     ## Despite Patra & Sen estimator is not square-root-n consistent, it can be useful when working with
-    ## asymetric unknown distributions:
-    PS_est1 <- estim_PS(samples = samples[[1]], admixMod = admixMod[[1]], ...)
-    PS_est2 <- estim_PS(samples = samples[[2]], admixMod = admixMod[[2]], ...)
-    hat.p1 <- get_mixing_weights(PS_est1)
-    hat.p2 <- get_mixing_weights(PS_est2)
+    ## asymetric densities for unknown components distributions:
+    suppressMessages(PS_est <- admix_estim(samples = list(data.p1,data.p2), admixMod = list(admixMod[[1]],admixMod[[2]]), est_method = "PS", ...))
+    hat.p1 <- get_mixing_weights(PS_est)[1]
+    hat.p2 <- get_mixing_weights(PS_est)[2]
   } else {
-    BVdk_est1 <- estim_BVdk(samples = data.p1, admixMod = admixMod[[1]], compute_var = TRUE, ...)
-    BVdk_est2 <- estim_BVdk(samples = data.p2, admixMod = admixMod[[2]], compute_var = TRUE, ...)
-    hat.p1 <- BVdk_est1$estimated_mixing_weights
-    hat.p2 <- BVdk_est2$estimated_mixing_weights
+    suppressMessages(BVdk_est <- admix_estim(samples = list(data.p1,data.p2), admixMod = list(admixMod[[1]],admixMod[[2]]), est_method = "BVdk", compute_var = TRUE, ...))
+    hat.p1 <- get_mixing_weights(BVdk_est)[1]
+    hat.p2 <- get_mixing_weights(BVdk_est)[2]
     ## Estimation of the variances of the estimators :
-    var_hat.p1 <- BVdk_est1$mix_weight_variance
-    var_hat.p2 <- BVdk_est2$mix_weight_variance
+    var_hat.p1 <- BVdk_est$estim_objects[[1]]$mix_weight_variance
+    var_hat.p2 <- BVdk_est$estim_objects[[2]]$mix_weight_variance
   }
 
   ##-------- Computation of the test statistic U -----------##
@@ -154,11 +148,9 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
   ## With Patra & Sen estimator, we do not have the explicit expression of the variance of the estimators.
   ## With Bordes & Vandekerkhove estimator, we already computed them above.
   if (meth == "PS") {
-    message("Testing using Patra & Sen estimator is implemented,
-    but is likely to lead to wrong conclusions since the estimator
-    variance remains unknown (and so the variance of the test
-    statistic). The variance of the test statistic is thus recovered
-    using bootstrap, which do not guarantee to provide consistent results.")
+    message("\n  Testing using the 'PS' estimator for mixing proportions can lead to wrong
+  conclusions, because of unknown variance. The variance of the test statistic
+  is thus recovered using bootstrap, not ensuring consistent results.")
     vect.p1 <- vect.p2 <- NULL
     ## Create bootstrap samples: differentiates the cases to estimate weights and the one to estimate the polynomial coefficients.
     indices.bootstrap1 <- t(replicate(n = nb_echBoot, sample.int(n.p1, size = n.p1, replace = TRUE), simplify = "array"))
@@ -229,7 +221,7 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
   rm(data.coef1) ; rm(data.coef2) ; rm(data.p1) ; rm(data.p2)
   rm(moy.coef1) ; rm(moy.coef2) ; rm(var.coef1) ; rm(var.coef2)
 
-  names(stat_value) <- "stat val T"
+  names(stat_value) <- "T"
   stat_param <- indice.opt
   names(stat_param) <- "expansion order S"
   estimated_values <- vector(mode = "numeric", length = 2L)
@@ -237,10 +229,10 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
   names(estimated_values) <- c("Weight in 1st sample","Weight in 2nd sample")
 
   obj <- list(
-    null.value = null_val,
-    alternative = "",
-    method = "Equality test of unknown dist. (polynom. expansions of pdfs)",
-    estimate = estimated_values,
+    #null.value = null_val,
+    alternative = "Distributions of unknown components involved \n                        in the contamination models are different",
+    method = "Equality test of unknown distributions with polynomial expansions of pdfs",
+    #estimate = estimated_values,
     data.name = deparse(substitute(samples)),
     statistic = stat_value,
     parameters = stat_param,

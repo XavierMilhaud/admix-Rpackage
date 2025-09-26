@@ -64,8 +64,6 @@ estim_BVdk <- function(samples, admixMod, method = c("L-BFGS-B","Nelder-Mead"), 
   if (!inherits(x = admixMod, what = "admix_model"))
     stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
 
-  warning("Estimation by 'BVdk' assumes the unknown component distribution
-  to have a symmetric probability density function.\n")
   ## Extract useful information about known component distribution:
   comp.dist.sim <- paste0("r", admixMod$comp.dist$known)
   comp.sim <- sapply(X = comp.dist.sim, FUN = get, mode = "function")
@@ -140,8 +138,10 @@ print.estim_BVdk <- function(x, ...)
   cat("\n")
   cat("Estimated mixing weight:", round(x$estimated_mixing_weights,3),
       "/ Estimated location shift:", round(x$estimated_locations,3),"\n")
-  cat("Variance of weight estimator:", round(x$mix_weight_variance,5),
-      "/ Variance of loc. estimator:", round(x$location_variance,5), "\n")
+  if (!is.na(x$mix_weight_variance) & !is.na(x$location_variance)) {
+    cat("Variance of weight estimator:", round(x$mix_weight_variance,5),
+        "/ Variance of loc. estimator:", round(x$location_variance,5), "\n")
+  }
   cat("\n")
 }
 
@@ -169,9 +169,11 @@ summary.estim_BVdk <- function(object, ...)
   cat("\n------- Estimation results -------\n")
   cat("Estimated mixing proportion:", object$estimated_mixing_weights, "\n")
   cat("Estimated location shift parameter:", object$estimated_locations, "\n")
-  cat("Variance of the mixing proportion estimator:", object$mix_weight_variance, "\n")
-  cat("Variance of the location estimator:", object$location_variance, "\n\n")
-  cat("------- Optimization -------\n")
+  if (!is.na(object$mix_weight_variance) & !is.na(object$location_variance)) {
+    cat("Variance of the mixing proportion estimator:", object$mix_weight_variance, "\n")
+    cat("Variance of the location estimator:", object$location_variance, "\n")
+  }
+  cat("\n------- Optimization -------\n")
   cat("Optimization method: ", object$optim_method)
   cat("\n")
 }
@@ -643,7 +645,7 @@ BVdk_ML_varCov_estimators <- function(data, admixMod, hat_w, hat_loc, hat_var)
   variances <- (1/length(data)) * ( (-matvar[1,1] * matvar[1,2] + matvar[1,1] * matvar[2,2]) /
                                       (-(matvar[1,3])^2 * matvar[2,2] + matvar[1,1] * matvar[1,3] * matvar[2,3] + matvar[1,2] * matvar[1,3] * matvar[2,3] - matvar[1,1] * matvar[2,3]^2 -
                                          matvar[1,1] * matvar[1,2] * matvar[3,3] + matvar[1,1] * matvar[2,2] * matvar[3,3]) )
-  if (variances < 0) warning("Plug-in strategy has led to a negative estimated variance with ML estimation.")
+  if (variances < 0) stop("Plug-in strategy has led to a negative estimated variance with ML estimation.")
 
   return(variances)
 }

@@ -1,4 +1,4 @@
-#' Estimates weights of unknown components from 2 admixtures using IBM
+#' Estimate weights of unknown components from two admixtures using IBM
 #'
 #' Estimation of the component weights from the Inversion - Best Matching (IBM) method, related to two admixture models
 #' with respective probability density function (pdf) l1 and l2, such that:
@@ -77,9 +77,6 @@ estim_IBM <- function(samples, admixMod, n.integ = 1000, compute_var = FALSE)
   if (!all(sapply(X = admixMod, FUN = inherits, what = "admix_model")))
     stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
 
-  warning(" IBM estimators of two unknown proportions are reliable only if the two
-    corresponding unknown component distributions have been tested equal (see ?admix_test).\n")
-
   ##------- Defines the support for integration by simulation --------##
   ## Allows to integrate the gap between F1 and F2 in the contrast computation. span(G) must contain span(X) and span(Y).
   ## Ideally, this distribution should put more weight to locations where differences between F1 and F2 are expected.
@@ -98,12 +95,7 @@ estim_IBM <- function(samples, admixMod, n.integ = 1000, compute_var = FALSE)
   G1equalG2 <- is_equal_knownComp(admixMod[[1]], admixMod[[2]])
   if (G1equalG2) {
     ## Leads to a one-dimensional optimization because known components of mixture distributions are the same.
-    ## Set arbitrarily the proportion to 1/2, could be any other value belonging to ]0,1[:
-    warning("In 'estim_IBM': in case of identical known components, the mixing weight of the unknown
-  component in the first sample was arbitrarily set to 0.2.
-  Furthermore, when both the known and unknown component distributions of the mixture
-  models are identical, the IBM approach provides an estimation of the ratio of the
-  actual mixing weights rather than an estimation of the unknown weights themselves.\n")
+    ## Set arbitrarily the proportion to 0.2, could be any other value belonging to ]0,1[:
     fixed.p.X <- 0.2
     par.init <- 0.5
   } else {
@@ -201,13 +193,17 @@ print.estim_IBM <- function(x, ...)
   if (x$equal.knownComp) {
     cat("Fixed mixing weight of the unknown distribution in the 1st sample (equal known components):", x$p.X.fixed, "\n")
     cat("Estimated mixing weight of the unknown distribution in the 2nd sample:", round(x$estimated_mixing_weights,3), "\n")
-    cat("Variance of the estimated weight in the 1st sample (no variance since fixed):", round(x$variance_est_p1,5), "\n")
-    cat("Variance of the estimated weight in the 2nd sample:", round(x$variance_est_p2,5), "\n")
+    if (!is.na(x$variance_est_p2)) {
+      cat("Variance of the estimated weight in the 1st sample (no variance since fixed):", round(x$variance_est_p1,5), "\n")
+      cat("Variance of the estimated weight in the 2nd sample:", round(x$variance_est_p2,5), "\n")
+    }
   } else {
     cat("Estimated mixing weight of the unknown distribution in the 1st sample:", round(x$estimated_mixing_weights[1],3), "\n")
     cat("Estimated mixing weight of the unknown distribution in the 2nd sample:", round(x$estimated_mixing_weights[2],3), "\n")
-    cat("Variance of the estimated weight in the 1st sample:", round(x$variance_est_p1,5), "\n")
-    cat("Variance of the estimated weight in the 2nd sample:", round(x$variance_est_p2,5), "\n")
+    if (!is.na(x$variance_est_p1) & !is.na(x$variance_est_p2)) {
+      cat("Variance of the estimated weight in the 1st sample:", round(x$variance_est_p1,5), "\n")
+      cat("Variance of the estimated weight in the 2nd sample:", round(x$variance_est_p2,5), "\n")
+    }
   }
   cat("\n")
 }
@@ -231,24 +227,28 @@ summary.estim_IBM <- function(object, ...)
   cat("----- Samples characteristics -----\n")
   cat("Number of samples: ", object$n_populations, "\n")
   cat("Sample sizes: ", object$population_sizes, "\n")
+  cat("Are the known component distributions equal? ", object$equal.knownComp,"\n")
   for (k in 1:object$n_populations) {
-    cat("-> Distribution of the known component for admixture model #", k, ":", object$admixture_models[[k]]$comp.dist$known, "\n", sep="")
-    cat("-> Parameter(s) of the known component for admixture model #", k, ":",
+    cat("-> Distribution of the known component for admixture model #", k, ": ", object$admixture_models[[k]]$comp.dist$known, "\n", sep="")
+    cat("-> Parameter(s) of the known component for admixture model #", k, ": ",
         paste(names(object$admixture_models[[k]]$comp.param$known), object$admixture_models[[k]]$comp.param$known, collapse="\t", sep="="), sep="")
     cat("\n")
   }
-  cat("Are the known component distributions equal? ", object$equal.knownComp,"\n")
   cat("\n----- Estimation results -----\n")
   if (object$equal.knownComp) {
     cat("Fixed weight of the unknown distribution in the 1st sample (equal known components):", object$p.X.fixed, "\n")
     cat("Estimated weight of the unknown distribution in the 2nd sample:", round(object$estimated_mixing_weights,3), "\n")
-    cat("Estimated variance of the latter weight in the 1st sample (no variance since fixed):", round(object$variance_est_p1,6), "\n")
-    cat("Estimated variance of the latter weight in the 2nd sample:", round(object$variance_est_p2,6), "\n")
+    if (!is.na(object$variance_est_p2)) {
+      cat("Variance of the estimated weight in the 1st sample (no variance since fixed):", round(object$variance_est_p1,5), "\n")
+      cat("Variance of the estimated weight in the 2nd sample:", round(object$variance_est_p2,5), "\n")
+    }
   } else {
     cat("Estimated weight of the unknown distribution in the 1st sample:", round(object$estimated_mixing_weights[1],3), "\n")
     cat("Estimated weight of the unknown distribution in the 2nd sample:", round(object$estimated_mixing_weights[2],3), "\n")
-    cat("Estimated variance of the latter weight in the 1st sample:", round(object$variance_est_p1,6), "\n")
-    cat("Estimated variance of the latter weight in the 2nd sample:", round(object$variance_est_p2,6), "\n")
+    if (!is.na(object$variance_est_p1) & !is.na(object$variance_est_p2)) {
+      cat("Variance of the estimated weight in the 1st sample:", round(object$variance_est_p1,5), "\n")
+      cat("Variance of the estimated weight in the 2nd sample:", round(object$variance_est_p2,5), "\n")
+    }
   }
   cat("\n----- Support -----\n")
   cat("Integration support:", paste(round(utils::head(object$integ.supp,3),3), collapse=" "), "...",
@@ -1258,7 +1258,7 @@ IBM_gap <- function(z, par, samples, admixMod)
 
   ##------- Differentiates the cases where G1 = G2 or not --------##
   G1equalG2 <- is_equal_knownComp(admixMod[[1]], admixMod[[2]])
-  warning("In function 'IBM_gap': in case of identical known components, the mixing weight of the unknown
+  message("In function 'IBM_gap': in case of identical known components, the mixing weight of the unknown
   component in the first sample, named 'fixed.p.X', was arbitrarily set to 0.2")
   if (G1equalG2) { fixed.p.X <- 0.2
   } else { fixed.p.X <- NULL }

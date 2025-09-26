@@ -218,6 +218,23 @@ get_tabulated_dist.IBM_test <- function(x)
 }
 
 
+#' Extractor for object of class 'admix_cluster'
+#'
+#' Provide the list of tabulated distributions that allow to define
+#' the extreme quantiles against which the test statistics are compared.
+#'
+#' @param x An object of class 'admix_cluster'.
+#'
+#' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
+#' @export
+#'
+get_tabulated_dist.admix_cluster <- function(x)
+{
+  if (!inherits(x, "admix_cluster")) stop("This method must be used with objects of class 'admix_cluster'.")
+  x$tab_distributions
+}
+
+
 #' Extractor for object of class 'IBM_test'
 #'
 #' Provide the matrix storing the ranks of discrepancies using Inversion-Best Matching

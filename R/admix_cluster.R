@@ -71,14 +71,14 @@
 admix_cluster <- function(samples, admixMod, conf_level = 0.95, tune_penalty = TRUE,
                           tabul_dist = NULL, echo = TRUE, ...)
 {
-  if (!is.list(samples))
-    stop("Please provide sample(s) and admixture model(s) in lists!")
+  if (!is.list(samples) | !is.list(admixMod))
+    stop("Please provide sample(s) AND admixture model(s) in a list!")
   if (!all(sapply(X = admixMod, FUN = inherits, what = "admix_model")))
     stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
 
-  old_options_warn <- base::options()$warn
-  on.exit(base::options(warn = old_options_warn))
-  base::options(warn = -1)
+  #old_options_warn <- base::options()$warn
+  #on.exit(base::options(warn = old_options_warn))
+  #base::options(warn = -1)
 
   if (length(sapply(samples, length)) == 1) return("One single sample, no clusters to be found.")
   ## Get the minimal size among all sample sizes, useful for future tabulation (adjustment of variance-covariance):
@@ -125,17 +125,18 @@ admix_cluster <- function(samples, admixMod, conf_level = 0.95, tune_penalty = T
   clusters <- tab_distrib <- vector(mode = "list")
   closest_couple <- couples.list[which.min(empirical.contr), ]
   tab_distrib <- NULL
+  ## In a 2-sample test, it is useless to tune the penalty:
   if (is.null(tabul_dist)) {
     twoSample_test <- IBM_k_samples_test(samples = samples[closest_couple], admixMod = admixMod[closest_couple],
                                          conf_level = conf_level, sim_U = NULL, tune_penalty = FALSE, ...)
-    tab_distrib <- twoSample_test$tabulated_dist
+    tab_distrib <- list(get_tabulated_dist(twoSample_test))
   } else {
     twoSample_test <- IBM_k_samples_test(samples = samples[closest_couple], admixMod = admixMod[closest_couple],
                                          conf_level = conf_level, sim_U = tabul_dist[[1]], tune_penalty = FALSE, ...)
-    tab_distrib <- tabul_dist[[1]]
+    tab_distrib <- list(tabul_dist[[1]])
   }
 
-  Usim <- twoSample_test$tabulated_dist
+  Usim <- get_tabulated_dist(twoSample_test)
   if (!all(is.na(Usim))) {
     CDF_U <- stats::ecdf(Usim)
     p_value <- 1 - CDF_U(empirical.contr[[which.min(empirical.contr)]])
@@ -144,7 +145,7 @@ admix_cluster <- function(samples, admixMod, conf_level = 0.95, tune_penalty = T
     p_value <- 1e-16
   }
 
-  if (!twoSample_test$reject_decision) {
+  if (!reject_nullHyp(twoSample_test)) {
     CDF_U <- NULL
     clusters[[1]] <- as.character(closest_couple)
     ## Detect which are the neighboors of the current cluster under study:
@@ -178,18 +179,18 @@ admix_cluster <- function(samples, admixMod, conf_level = 0.95, tune_penalty = T
     new_sample <- setdiff(x = c(first_sample,second_sample), y = alreadyGrouped_samples)
     alreadyGrouped_samples <- c(alreadyGrouped_samples, new_sample)
 
-    ## k-sample test (can be 2-sample test):
+    ## k-sample test (can be a 2-sample test):
     index_samples <- unique(sort(as.numeric(c(clusters[[length(clusters)]], first_sample, second_sample))))
     if (is.null(tabul_dist)) {
       k_sample_test <- IBM_k_samples_test(samples = samples[index_samples], admixMod = admixMod[index_samples],
                                           conf_level = conf_level, sim_U = Usim, tune_penalty = tune_penalty, ...)
-      tab_distrib <- append(tab_distrib, list(k_sample_test$tabulated_dist))
+      tab_distrib <- append(tab_distrib, list(get_tabulated_dist(k_sample_test)))
     } else {
       k_sample_test <- IBM_k_samples_test(samples = samples[index_samples], admixMod = admixMod[index_samples],
                                           conf_level = conf_level, sim_U = tabul_dist[[n_clust]], tune_penalty = tune_penalty, ...)
-      tab_distrib <- append(tab_distrib, tabul_dist[[n_clust]])
+      tab_distrib <- append(tab_distrib, list(tabul_dist[[n_clust]]))
     }
-    p_value <- c(p_value, k_sample_test$p_value)
+    p_value <- c(p_value, k_sample_test$p.value)
 
     if (k_sample_test$reject_decision) {
       n_clust <- n_clust + 1
@@ -245,7 +246,8 @@ admix_cluster <- function(samples, admixMod, conf_level = 0.95, tune_penalty = T
     clust_sizes = sapply(X = clusters_components, length),
     clust_weights = clusters_weights,
     discrepancy_matrix = contrast.matrix,
-    tab_distributions = lapply(X = unique(tab_distrib[-which(lapply(tab_distrib, length) == 1)]), FUN = sort)
+    tab_distributions = unique(tab_distrib)
+    #tab_distributions = lapply(X = unique(tab_distrib[-which(lapply(tab_distrib, length) == 1)]), FUN = sort)
   )
   class(obj) <- "admix_cluster"
   obj$call <- match.call()
@@ -271,8 +273,8 @@ print.admix_cluster <- function(x, ...)
   cat("\nNumber of detected clusters: ", x$n_clust, ".\n", sep = "")
   cat("List of samples involved in each built cluster:\n",
       gsub("\\)", "", gsub("c\\(", "", paste("  - Cluster #", 1:length(x$clust_pop), ": samples ",
-                                             x$clust_pop, collapse="\n", sep = ""))))
-  cat("\n")
+                                             x$clust_pop, collapse="\n ", sep = ""))))
+  cat("\n\n")
 }
 
 
@@ -292,7 +294,7 @@ summary.admix_cluster <- function(object, ...)
   cat("Call:\n")
   print(object$call)
   cat("\n------ About samples ------\n")
-  cat("The number of populations/samples under study is ", object$n_populations, ".\n", sep = "")
+  cat("Number of samples under study: ", object$n_populations, ".\n", sep = "")
   cat(paste("Size of sample ", 1:object$n_populations, ": ", object$population_sizes, sep = ""), sep = "\n")
   cat("\n----- About contamination (admixture) models -----")
   cat("\n")
@@ -302,13 +304,13 @@ summary.admix_cluster <- function(object, ...)
     cat("\n")
   }
   cat("\n------ About clustering ------\n")
-  cat("Test level of the underlying k-sample testing procedure: ", (1-object$confidence_level)*100, "%.", sep = "")
-  cat("\nNumber of detected clusters across the samples provided: ", object$n_clust, ".", sep = "")
-  cat("\np-values of the k-sample tests (showing when to close the clusters (i.e. p-value < ", (1-object$confidence_level), ") equal: ",
-      paste(object$pval_clust, collapse=", "), ".", sep="")
-  cat("\n\nList of samples involved in each built cluster:\n",
+  cat("* Test level of the underlying k-sample testing procedure: ", (1-object$confidence_level)*100, "%.", sep = "")
+  cat("\n* Number of detected clusters across the samples provided: ", object$n_clust, ".", sep = "")
+  cat("\n* Samples involved in each detected cluster:\n",
       gsub("\\)", "", gsub("c\\(", "", paste("  - Cluster #", 1:length(object$clust_pop), ": samples ",
-                                             object$clust_pop, collapse="\n", sep = ""))))
+                                             object$clust_pop, collapse="\n ", sep = ""))))
+  cat("\n* List of p-values for underlying k-sample tests (showing when \n  to close the clusters, i.e. p-value < ", (1-object$confidence_level), "): ",
+      paste(object$pval_clust, collapse=", "), ".", sep="")
   weights.list <- vector(mode = "list", length = length(object$clust_weights))
   for (i in 1:length(object$clust_weights)) {
     if (object$clust_sizes[i] > 2) {
@@ -318,10 +320,11 @@ summary.admix_cluster <- function(object, ...)
       weights.list[[i]] <- c(round(object$clust_weights[[i]], 2))
     }
   }
-  cat("\n\nList of estimated weights for the unknown distributions in each detected cluster
-      (in the same order as listed samples in each detected clusters) :\n",
-      gsub("\\)", "", gsub("c\\(", "", paste("- Estimated weights of the unknown distributions for cluster ",
-                                             1:length(object$clust_pop), ": ", weights.list, collapse="\n", sep=""))))
-  cat("\n\nMatrix of discrepancies between samples (used for clustering):\n")
-  print(object$discrepancy_matrix)
+  cat("\n* Estimated weights for the unknown component distributions in detected
+    clusters (in the same order as listed samples in detected clusters):\n",
+      gsub("\\)", "", gsub("c\\(", "", paste("- Mixing weights of unknown components in Cluster #",
+                                             1:length(object$clust_pop), ": ", weights.list, collapse="\n ", sep=""))))
+  #cat("\n* Matrix of discrepancies between samples (used for clustering):\n")
+  #print(object$discrepancy_matrix)
+  cat("\n\n")
 }

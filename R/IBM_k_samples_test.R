@@ -74,10 +74,6 @@ IBM_k_samples_test <- function(samples, admixMod, conf_level = 0.95, sim_U = NUL
   if (!all(sapply(X = admixMod, FUN = inherits, what = "admix_model")))
     stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
 
-  old_options_warn <- base::options()$warn
-  on.exit(base::options(warn = old_options_warn))
-  base::options(warn = -1)
-
   ## Control whether parallel computations were asked for or not:
   if (parallel) {
     `%fun%` <- doRNG::`%dorng%`
@@ -112,13 +108,10 @@ IBM_k_samples_test <- function(samples, admixMod, conf_level = 0.95, sim_U = NUL
           foreach::foreach(l = 1:ncol(subsample2_index), .inorder = TRUE, .errorhandling = 'pass', .export = ls(globalenv())) %fun% {
             subsample2_index[ ,l] <- c(1:length(samples[[k]]))[-subsample1_index[ ,l]]
             ## Comparison between the two populations :
-            XY <- estim_IBM(samples = list(samples[[k]][subsample1_index[ ,l]], samples[[k]][subsample2_index[ ,l]]),
-                            admixMod = list(admixMod[[k]], admixMod[[k]]), n.integ = 1000)
-            F_i1 <- decontaminated_cdf(sample1 = samples[[k]][subsample1_index[ ,l]], estim.p = XY$estimated_mixing_weights[1],
-                                       admixMod = admixMod[[k]])
-            F_i2 <- decontaminated_cdf(sample1 = samples[[k]][subsample2_index[ ,l]], estim.p = XY$estimated_mixing_weights[1],
-                                       admixMod = admixMod[[k]])
-
+            suppressMessages(XY <- admix_estim(samples = list(samples[[k]][subsample1_index[ ,l]], samples[[k]][subsample2_index[ ,l]]),
+                              admixMod = list(admixMod[[k]], admixMod[[k]]), est_method = "IBM", n.integ = 1000))
+            F_i1 <- decontaminated_cdf(sample1 = samples[[k]][subsample1_index[ ,l]], estim.p = get_mixing_weights(XY), admixMod = admixMod[[k]])
+            F_i2 <- decontaminated_cdf(sample1 = samples[[k]][subsample2_index[ ,l]], estim.p = get_mixing_weights(XY), admixMod = admixMod[[k]])
             ## Assessment of the difference of interest at each specified x-value:
             max( sqrt(length(samples[[k]])/2) * abs(F_i1(x_val) - F_i2(x_val)) )
           }
@@ -141,29 +134,32 @@ IBM_k_samples_test <- function(samples, admixMod, conf_level = 0.95, sim_U = NUL
                                      size = length(subsample1_index), replace = FALSE, prob = NULL)
           subsample3_index <- c(1:length(samples[[i]]))[-sort(c(subsample1_index, subsample2_index))]
           ## Compute the test statistics for each combination of subsets :
-          XY <- estim_IBM(samples = list(samples[[i]][subsample1_index], samples[[i]][subsample2_index]),
-                          admixMod = list(admixMod[[i]], admixMod[[i]]), n.integ = 1000)
-          if (is.numeric(XY$estimated_mixing_weights)) {
+          suppressMessages(XY <- admix_estim(samples = list(samples[[i]][subsample1_index], samples[[i]][subsample2_index]),
+                            admixMod = list(admixMod[[i]], admixMod[[i]]), est_method = "IBM", n.integ = 1000))
+          if (is.numeric(get_mixing_weights(XY))) {
             T_12 <- (length(samples[[i]])/3) *
-              IBM_empirical_contrast(par = XY$estimated_mixing_weights, samples = list(samples[[i]][subsample1_index], samples[[i]][subsample2_index]),
-                                     admixMod = list(admixMod[[i]], admixMod[[i]]),
-                                     G = XY$integ.supp, fixed.p.X = XY$p.X.fixed)
+              IBM_empirical_contrast(par = get_mixing_weights(XY), samples = list(samples[[i]][subsample1_index], samples[[i]][subsample2_index]),
+                                     admixMod = list(admixMod[[i]], admixMod[[i]]), G = XY$estim_objects[[1]]$integ.supp, fixed.p.X = XY$estim_objects[[1]]$p.X.fixed)
           } else T_12 <- NA
-          XZ <- estim_IBM(samples = list(samples[[i]][subsample1_index], samples[[i]][subsample3_index]),
-                          admixMod = list(admixMod[[i]], admixMod[[i]]), n.integ = 1000)
-          if (is.numeric(XZ$estimated_mixing_weights)) {
+          suppressMessages(XZ <- admix_estim(samples = list(samples[[i]][subsample1_index], samples[[i]][subsample3_index]),
+                            admixMod = list(admixMod[[i]], admixMod[[i]]), est_method = "IBM", n.integ = 1000))
+          if (is.numeric(get_mixing_weights(XZ))) {
             T_13 <- (length(samples[[i]])/3) *
-              IBM_empirical_contrast(par = XZ$estimated_mixing_weights, samples = list(samples[[i]][subsample1_index], samples[[i]][subsample3_index]),
-                                     admixMod = list(admixMod[[i]], admixMod[[i]]),
-                                     G = XZ$integ.supp, fixed.p.X = XZ[["p.X.fixed"]])
+              IBM_empirical_contrast(par = get_mixing_weights(XZ), samples = list(samples[[i]][subsample1_index], samples[[i]][subsample3_index]),
+                                     admixMod = list(admixMod[[i]], admixMod[[i]]), G = XZ$estim_objects[[1]]$integ.supp, fixed.p.X = XZ$estim_objects[[1]][["p.X.fixed"]])
           } else T_13 <- NA
-          YZ <- estim_IBM(samples = list(samples[[i]][subsample2_index], samples[[i]][subsample3_index]),
-                          admixMod = list(admixMod[[i]], admixMod[[i]]), n.integ = 1000)
-          if (is.numeric(YZ$estimated_mixing_weights)) {
+          #YZ <- estim_IBM(samples = list(samples[[i]][subsample2_index], samples[[i]][subsample3_index]),
+          #                admixMod = list(admixMod[[i]], admixMod[[i]]), n.integ = 1000)
+          suppressMessages(YZ <- admix_estim(samples = list(samples[[i]][subsample2_index], samples[[i]][subsample3_index]),
+                            admixMod = list(admixMod[[i]], admixMod[[i]]), est_method = "IBM", n.integ = 1000))
+          if (is.numeric(get_mixing_weights(YZ))) {
+          #  if (is.numeric(YZ$estimated_mixing_weights)) {
             T_23 <- (length(samples[[i]])/3) *
-              IBM_empirical_contrast(par = YZ$estimated_mixing_weights, samples = list(samples[[i]][subsample2_index], samples[[i]][subsample3_index]),
-                                     admixMod = list(admixMod[[i]], admixMod[[i]]),
-                                     G = YZ$integ.supp, fixed.p.X = YZ[["p.X.fixed"]])
+              IBM_empirical_contrast(par = get_mixing_weights(YZ), samples = list(samples[[i]][subsample2_index], samples[[i]][subsample3_index]),
+                                     admixMod = list(admixMod[[i]], admixMod[[i]]), G = YZ$estim_objects[[1]]$integ.supp, fixed.p.X = YZ$estim_objects[[1]][["p.X.fixed"]])
+            #T_23 <- (length(samples[[i]])/3) *
+            #  IBM_empirical_contrast(par = YZ$estimated_mixing_weights, samples = list(samples[[i]][subsample2_index], samples[[i]][subsample3_index]),
+            #                         admixMod = list(admixMod[[i]], admixMod[[i]]), G = YZ$integ.supp, fixed.p.X = YZ[["p.X.fixed"]])
           } else T_23 <- NA
           cumsum(x = c(T_12, T_13, T_23))
         }
@@ -197,22 +193,26 @@ IBM_k_samples_test <- function(samples, admixMod, conf_level = 0.95, sim_U = NUL
     S_ij <-
       foreach::foreach (k = 1:nrow(couples.list), .inorder = TRUE, .errorhandling = 'pass', .export = ls(globalenv())) %fun% {
         ## Comparison between the two populations :
-        XY <- estim_IBM(samples = samples[as.numeric(couples.list[k, ])], admixMod = admixMod[as.numeric(couples.list[k, ])], n.integ = 1000)
-        emp.contr <- minimal_size * IBM_empirical_contrast(XY$estimated_mixing_weights,
-                                                           samples = samples[as.numeric(couples.list[k, ])],
-                                                           admixMod = admixMod[as.numeric(couples.list[k, ])],
-                                                           G = XY$integ.supp, fixed.p.X = XY$p.X.fixed)
+        suppressMessages(XY <- admix_estim(samples = samples[as.numeric(couples.list[k, ])], admixMod = admixMod[as.numeric(couples.list[k, ])],
+                          est_method = "IBM", n.integ = 1000))
+        #XY <- estim_IBM(samples = samples[as.numeric(couples.list[k, ])], admixMod = admixMod[as.numeric(couples.list[k, ])], n.integ = 1000)
+        #emp.contr <- minimal_size * IBM_empirical_contrast(XY$estimated_mixing_weights,
+        #                                                   samples = samples[as.numeric(couples.list[k, ])],
+        #                                                   admixMod = admixMod[as.numeric(couples.list[k, ])],
+        #                                                   G = XY$integ.supp, fixed.p.X = XY$p.X.fixed)
+        emp.contr <- minimal_size * IBM_empirical_contrast(get_mixing_weights(XY), samples = samples[as.numeric(couples.list[k, ])], admixMod = admixMod[as.numeric(couples.list[k, ])],
+                                                           G = XY$estim_objects[[1]]$integ.supp, fixed.p.X = XY$estim_objects[[1]]$p.X.fixed)
         x_val <- seq(from = min(samples[[couples.list[k, ][1]]], samples[[couples.list[k, ][2]]]),
                      to = max(samples[[couples.list[k, ][1]]], samples[[couples.list[k, ][2]]]), length.out = 1000)
-        if (length(XY$estimated_mixing_weights) == 2) {
-          F_1 <- decontaminated_cdf(sample1 = samples[[couples.list[k, ][1]]], estim.p = XY$estimated_mixing_weights[1],
+        if (length(get_mixing_weights(XY)) == 2) {
+          F_1 <- decontaminated_cdf(sample1 = samples[[couples.list[k, ][1]]], estim.p = get_mixing_weights(XY)[1],
                                     admixMod = admixMod[[couples.list[k, ][1]]])
-          F_2 <- decontaminated_cdf(sample1 = samples[[couples.list[k, ][2]]], estim.p = XY$estimated_mixing_weights[2],
+          F_2 <- decontaminated_cdf(sample1 = samples[[couples.list[k, ][2]]], estim.p = get_mixing_weights(XY)[2],
                                     admixMod = admixMod[[couples.list[k, ][2]]])
         } else {
-          F_1 <- decontaminated_cdf(sample1 = samples[[couples.list[k, ][1]]], estim.p = XY$p.X.fixed,
+          F_1 <- decontaminated_cdf(sample1 = samples[[couples.list[k, ][1]]], estim.p = XY$estim_objects[[1]]$p.X.fixed,
                                     admixMod = admixMod[[couples.list[k, ][1]]])
-          F_2 <- decontaminated_cdf(sample1 = samples[[couples.list[k, ][2]]], estim.p = XY$estimated_mixing_weights,
+          F_2 <- decontaminated_cdf(sample1 = samples[[couples.list[k, ][2]]], estim.p = get_mixing_weights(XY),
                                     admixMod = admixMod[[couples.list[k, ][2]]])
         }
         ## Assessment of the supremum:
@@ -303,7 +303,7 @@ IBM_k_samples_test <- function(samples, admixMod, conf_level = 0.95, sim_U = NUL
     CDF_U <- stats::ecdf(sim_U)
     p_value <- 1 - CDF_U(finalStat_value)
 
-    names(finalStat_value) <- "statistic value U"
+    names(finalStat_value) <- "U"
     stat_param <- selected.index
     names(stat_param) <- "number of terms S"
     estimated_values <- vector(mode = "numeric", length = 2L)
@@ -311,10 +311,10 @@ IBM_k_samples_test <- function(samples, admixMod, conf_level = 0.95, sim_U = NUL
     names(estimated_values) <- c("tuned Gamma","tuned C")
 
     obj <- list(
-      null.value = null_val,
-      alternative = "",
-      method = "Equality test of the unknown distributions (with ICV/IBM)",
-      estimate = estimated_values,
+      #null.value = null_val,
+      alternative = "Distributions of unknown components involved \n                        in the contamination models are different",
+      method = "Equality test of unknown distributions using Inner ConVergence regime",
+      #estimate = estimated_values,
       data.name = deparse(substitute(samples)),
       statistic = finalStat_value,
       parameters = stat_param,
@@ -394,22 +394,22 @@ summary.IBM_test <- function(object, ...)
     }
   }
   cat("\n----- Test decision -----\n")
-  cat("Method: ", object$method, "\n", sep = "")
-  cat("Is the null hypothesis rejected (equality of unknown distributions)? ",
+  cat("* Method: ", object$method, "\n", sep = "")
+  cat("* Is the null hypothesis rejected (equality of unknown distributions)? ",
       ifelse(object$reject_decision, "Yes", "No"), sep="")
-  cat("\nConfidence level of the test: ", object$confidence_level, sep="")
-  cat("\np-value of the test: ", round(object$p.value,3), sep="")
+  cat("\n* Confidence level of the test: ", object$confidence_level, sep="")
+  cat("\n* p-value of the test: ", round(object$p.value,3), sep="")
   cat("\n\n----- Test statistic -----\n")
-  cat("Selected rank of the test statistic (following penalization rule): ", object$selected_rank, sep="")
-  cat("\nValue of the test statistic: ", round(object$statistic,2), "\n", sep="")
-  cat("Discrepancy terms involved in the statistic: ", paste(object$statistic_name, sep = ""), "\n", sep = "")
-  cat("Optimal tuning parameters (if argument 'tune.penalty' is true):\n")
-  cat("Gamma: ", object$estimate["Tuned Gamma"], "\n", sep = "")
-  cat("Constant: ", object$estimate["Tuned constant C"], "\n", sep = "")
-  cat("Chosen penalty rule: ", ifelse(object$penalty_nullHyp, "H0", "H1"), sep = "")
+  cat("* Selected rank of the test statistic (following penalization rule): ", object$selected_rank, sep="")
+  cat("\n* Value of the test statistic: ", round(object$statistic,2), "\n", sep="")
+  cat("* Discrepancy terms involved in the statistic: ", paste(object$statistic_name, sep = ""), "\n", sep = "")
+  cat("* Optimal tuning parameters (if argument 'tune.penalty' is true):\n")
+  cat("- Gamma: ", object$estimate["Tuned Gamma"], "\n", sep = "")
+  cat("- Constant: ", object$estimate["Tuned constant C"], "\n", sep = "")
+  cat("* Chosen penalty rule: ", ifelse(object$penalty_nullHyp, "H0", "H1"), sep = "")
   cat("\n\n----- Tabulated test statistic distribution -----\n")
-  cat("Quantile at level ", object$confidence_level*100, "%: ", round(object$null.value, 3), "\n", sep = "")
-  cat("Tabulated distribution: ", paste(utils::head(round(sort(object$tabulated_dist),2),3), collapse = " "), "....",
+  cat("* Quantile at level ", object$confidence_level*100, "%: ", round(object$null.value, 3), "\n", sep = "")
+  cat("* Tabulated distribution: ", paste(utils::head(round(sort(object$tabulated_dist),2),3), collapse = " "), "....",
       paste(utils::tail(round(sort(object$tabulated_dist),2),3), collapse = " "), "\n", sep = "")
   cat("\n")
 }
@@ -470,11 +470,12 @@ IBM_2samples_test <- function(samples, admixMod, conf_level = 0.95, parallel = F
 {
   min_size <- min(length(samples[[1]]), length(samples[[2]]))
   ## Estimate the proportions of the mixtures:
-  estim <- try(suppressWarnings(estim_IBM(samples = samples, admixMod = admixMod, n.integ = 1000)), silent = TRUE)
+  estim <- try(suppressMessages(admix_estim(samples = samples, admixMod = admixMod, est_method = "IBM", n.integ = 1000)), silent = TRUE)
+  #estim <- try(suppressMessages(estim_IBM(samples = samples, admixMod = admixMod, n.integ = 1000)), silent = TRUE)
   count_error <- 0
   while ((inherits(x = estim, what = "try-error", which = FALSE)) & (count_error < 3)) {
     estim <- NULL
-    estim <- try(suppressWarnings(estim_IBM(samples = samples, admixMod = admixMod, n.integ = 1000)), silent = TRUE)
+    estim <- try(suppressMessages(admix_estim(samples = samples, admixMod = admixMod, est_method = "IBM", n.integ = 1000)), silent = TRUE)
     count_error <- count_error + 1
   }
 
@@ -482,10 +483,13 @@ IBM_2samples_test <- function(samples, admixMod, conf_level = 0.95, parallel = F
     estim.weights <- c(NA,NA)
     contrast_val <- NA
   } else {
-    estim.weights <- estim$estimated_mixing_weights
-    min_size <- min(length(samples[[1]]), length(samples[[2]]))
+    #estim.weights <- estim$estimated_mixing_weights
+    estim.weights <- get_mixing_weights(estim)
+    #min_size <- min(length(samples[[1]]), length(samples[[2]]))
+    #contrast_val <- min_size * IBM_empirical_contrast(par = estim.weights, samples = samples, admixMod = admixMod,
+    #                                                  G = estim$integ.supp, fixed.p.X = estim$p.X.fixed)
     contrast_val <- min_size * IBM_empirical_contrast(par = estim.weights, samples = samples, admixMod = admixMod,
-                                                      G = estim$integ.supp, fixed.p.X = estim$p.X.fixed)
+                                                      G = estim$estim_objects[[1]]$integ.supp, fixed.p.X = estim$estim_objects[[1]]$p.X.fixed)
     ## Identify boolean 'green light' criterion to known whether we need to perform the test with stochastic integral tabulation:
     # green_light <- IBM_greenLight_criterion(estim_obj = estim, samples = samples, admixMod = admixMod, alpha = (1-conf_level))
     # if (green_light) {
@@ -524,57 +528,34 @@ IBM_2samples_test <- function(samples, admixMod, conf_level = 0.95, parallel = F
     null_val <- unique(extreme_quantile)
     names(null_val) <- "T is greater than the calibrated quantile,\n whose value"
   }
-  names(contrast_val) <- "stat val T"
+  names(contrast_val) <- "T"
 
   if (length(estim.weights) > 1) { estimated_values <- estim.weights
   } else { estimated_values <- c(0.2,estim.weights) }
   names(estimated_values) <- c("Weight in 1st sample","Weight in 2nd sample")
 
-  if (!is.null(null_val)) {
-    obj <- list(
-      null.value = null_val,
-      alternative = "",
-      method = "Equality test of the unknown distributions (with ICV/IBM)",
-      estimate = estimated_values,
-      data.name = deparse(substitute(samples)),
-      statistic = contrast_val,
-      p.value = p_value,
-      n_populations = 2,
-      population_sizes = sapply(X = samples, FUN = length),
-      admixture_models = admixMod,
-      reject_decision = reject,
-      confidence_level = conf_level,
-      selected_rank = NA,
-      statistic_name = NA,
-      penalty_nullHyp = NA,
-      penalized_stat = NA,
-      tabulated_dist = sim_U,
-      discrepancy_matrix = NA,
-      discrepancy_rank = NA,
-      discrepancy_id = NA
-    )
-  } else {
-    obj <- list(
-      method = "Equality test of the unknown distributions (with ICV/IBM)",
-      estimate = estimated_values,
-      data.name = deparse(substitute(samples)),
-      statistic = contrast_val,
-      p.value = p_value,
-      n_populations = 2,
-      population_sizes = sapply(X = samples, FUN = length),
-      admixture_models = admixMod,
-      reject_decision = reject,
-      confidence_level = conf_level,
-      selected_rank = NA,
-      statistic_name = NA,
-      penalty_nullHyp = NA,
-      penalized_stat = NA,
-      tabulated_dist = sim_U,
-      discrepancy_matrix = NA,
-      discrepancy_rank = NA,
-      discrepancy_id = NA
-    )
-  }
+  obj <- list(
+    #null.value = null_val,
+    alternative = "Distributions of unknown components involved \n                        in the contamination models are different",
+    method = "Equality test of unknown distributions using Inner ConVergence regime",
+    #estimate = estimated_values,
+    data.name = deparse(substitute(samples)),
+    statistic = contrast_val,
+    p.value = p_value,
+    n_populations = 2,
+    population_sizes = sapply(X = samples, FUN = length),
+    admixture_models = admixMod,
+    reject_decision = reject,
+    confidence_level = conf_level,
+    selected_rank = NA,
+    statistic_name = NA,
+    penalty_nullHyp = NA,
+    penalized_stat = NA,
+    tabulated_dist = sim_U,
+    discrepancy_matrix = NA,
+    discrepancy_rank = NA,
+    discrepancy_id = NA
+  )
 
   class(obj) <- c("IBM_test", "htest")
   obj$call <- match.call()

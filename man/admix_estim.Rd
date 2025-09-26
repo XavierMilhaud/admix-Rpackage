@@ -26,7 +26,7 @@ mixture model). In case of 'BVdk' estimation, one additional attribute correspon
 is included.
 }
 \description{
-Estimate the unknown component weight (and location shift parameter in case of a symmetric unknown component density),
+Estimate the unknown component weight (and possibly location shift parameter in case of a symmetric unknown component density),
 using different estimation techniques. We remind that the i-th admixture model has probability density function (pdf) l_i such that:
 l_i = p_i * f_i + (1-p_i) * g_i, where g_i is the known component density.
 The unknown quantities p_i and f_i then have to be estimated.

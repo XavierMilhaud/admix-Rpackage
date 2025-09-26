@@ -78,7 +78,7 @@ estim_PS <- function(samples, admixMod, method = c("fixed", "lwr.bnd", "cv"),
 
 	if (method == "fixed"){
 		if (is.null(c.n)) {
-			warning("\n'c.n' is not given. Fixing it to be '0.1*log(log(n))\n")
+			message("\n'c.n' is not given. Fixing it to be '0.1*log(log(n))\n")
 			c.n <- 0.1 *log(log(n))
 		}
 		dist.out <- PS_dist_calc(samples, gridsize = gridsize)
@@ -146,7 +146,7 @@ print.estim_PS <- function(x, ...){
   cat("\n")
   if(x$method != "lwr.bnd"){
     cat(paste(" Estimated mixing weight (of the unknown component):" , round(x$estimated_mixing_weights,3)))
-    cat("\n", paste("The chosen value c_n is", round(x$c.n, 3)), "\n")
+    cat("\n", paste("Selected c_n equals", round(x$c.n, 3)), "in the penalization term. See ?estim_PS\n")
 #    if( !is.null(x$cv.out)){
 #      old_par <- graphics::par()$mfrow
 #      on.exit(graphics::par(old_par))
@@ -183,8 +183,8 @@ summary.estim_PS <- function(object, ...)
   cat("-> Parameter(s) of the known component:", paste(names(object$admixture_models$comp.param$known), object$admixture_models$comp.param$known, collapse="\t", sep="="), sep="")
   cat("\n")
   cat("\n------- Estimation results -------\n")
-  cat(paste("Estimate of the mixing weight (proportion of the unknown component distribution) is" , round(object$estimated_mixing_weights,3)))
-  cat("\n", paste(" The chosen value c_n is", round(object$c.n,3)))
+  cat(paste("Estimated mixing weight (of the unknown component):" , round(object$estimated_mixing_weights,3)))
+  cat("\n", paste("Selected c_n equals", round(object$c.n, 3)), "in the penalization term. See ?estim_PS\n")
   cat("\n")
 }
 

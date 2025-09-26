@@ -55,8 +55,8 @@
 
 admix_test <- function(samples, admixMod, test_method = c("poly","icv"), conf_level = 0.95, ...)
 {
-  if (!is.list(samples))
-    stop("Please provide sample(s) and admixture model(s) in a list, also with only one sample!")
+  if (!is.list(samples) | !is.list(admixMod))
+    stop("Please provide sample(s) AND admixture model(s) in a list, also with only one sample!")
   if (!all(sapply(X = admixMod, FUN = inherits, what = "admix_model")))
     stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
 
@@ -64,17 +64,11 @@ admix_test <- function(samples, admixMod, test_method = c("poly","icv"), conf_le
   n_samples <- length(samples)
 
   ## Check right specification of arguments:
-  if ((n_samples > 2) & (meth == "poly")) stop("Testing using polynomial basis expansions involves at most TWO samples.\n")
-  if ((n_samples == 1) & (meth == "icv")) stop("Testing using the inner convergence property (obtained from IBM estimation) requires at least TWO samples.\n")
-  if (meth == "poly") message("  Testing using polynomial basis expansions requires in theory a square-root n consistent estimation
-  of the proportions of the unknown component distributions (thus using 'BVdk' estimation by default,
-  associated to unknown component distributions with symmetric densities). However, for practical
-  considerations, it is allowed to use 'PS' estimator in the 2-sample case (argument 'est_method' has
-  therefore to be set to 'PS'). In this case, the variance of estimators is obtained by boostrapping.\n")
-
-  old_options_warn <- base::options()$warn
-  on.exit(base::options(warn = old_options_warn))
-  base::options(warn = -1)
+  if ((n_samples > 2) & (meth == "poly")) stop("Testing using polynomial basis expansions ('poly') involves at most TWO samples.\n")
+  if ((n_samples == 1) & (meth == "icv")) stop("Testing using the Inner ConVergence property ('icv') requires at least TWO samples.\n")
+  if (meth == "poly") message("  Default estimation method is 'BVdk' when testing with polynomial basis expansions (ensuring
+  theoretical guarantees, but relying on symmetric unknown component densities). To consider
+  other frameworks in the 2-sample case, use 'PS' estimator (setting argument 'est_method' to 'PS').")
 
   if (meth == "icv") {
     if (n_samples >= 2) {

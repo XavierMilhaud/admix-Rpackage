@@ -63,7 +63,7 @@ gaussianity_test <- function(sample, admixMod, conf_level = 0.95, ask_poly_param
     s.user <- s
   }
 
-  if (any(admixMod$comp.dist == "multinom")) stop("Gaussianity test for those mixture distribution is not supported.\n")
+  if (any(admixMod$comp.dist == "multinom")) stop("Gaussianity test for contamination models with multinomial known distribution is not supported.\n")
   if ((s.user <= 0) | (s.user >= 0.5)) stop("The penalty exponent 's' was not correctly defined.")
 
   ## Extract the information on component distributions:
@@ -97,16 +97,13 @@ gaussianity_test <- function(sample, admixMod, conf_level = 0.95, ask_poly_param
 	n.BVdk <- length(data.BVdk)	                        # for the estimation of mixing weight / location shift
 
 	##-------- Estimation of parameters and corresponding variances -----------##
-	old_options_warn <- base::options()$warn
-	on.exit(base::options(warn = old_options_warn))
-	base::options(warn = -1)
 	## Focus on parameters (weight, localization and variance), consider independent subsamples of the original data:
-	BVdk <- estim_BVdk(samples = data.BVdk, admixMod = admixMod, compute_var = TRUE, ...)
-	hat_p <- BVdk$estimated_mixing_weights
-	hat_loc <- BVdk$estimated_locations
+	suppressMessages(BVdk <- admix_estim(samples = list(data.BVdk), admixMod = list(admixMod), est_method = "BVdk", compute_var = TRUE, ...))
+	hat_p <- get_mixing_weights(BVdk)
+	hat_loc <- BVdk$estim_objects[[1]]$estimated_locations
 	## Then variances of the estimators: semiparametric estimation (time-consuming), based on results by Bordes & Vandekerkhove (2010)
-	var.hat_p <- BVdk$mix_weight_variance
-	var.hat_loc <- BVdk$location_variance
+	var.hat_p <- BVdk$estim_objects[[1]]$mix_weight_variance
+	var.hat_loc <- BVdk$estim_objects[[1]]$location_variance
 	## Estimation of the variance of the variance estimator:
 	#var.hat_s2 <- BVdk_ML_varCov_estimators(data = sample, hat_w = hat_p, hat_loc = hat_loc, hat_var = hat_s2,
 	#                                        comp.dist = comp.dist, comp.param = comp.param)
@@ -185,7 +182,7 @@ gaussianity_test <- function(sample, admixMod, conf_level = 0.95, ask_poly_param
 	p.value <- 1 - stats::pchisq(stat_value, 1)
 
 	## If the test statistic is greater that the quantile of interest, reject the null hypothesis (otherwise do not reject):
-	names(stat_value) <- "stat val T"
+	names(stat_value) <- "T"
 	stat_param <- selected.index
 	names(stat_param) <- "expansion order S"
 	null_val <- 1   # degree of freedom of the Chi-2 dist. under the null hypothesis
@@ -198,9 +195,9 @@ gaussianity_test <- function(sample, admixMod, conf_level = 0.95, ask_poly_param
 	names(estimated_values) <- c("Weight","Location","Variance")
 
 	obj <- list(
-	  null.value = null_val,
-	  alternative = "",
-	  method = "Gaussianity test of the unknown component distribution",
+	  #null.value = null_val,
+	  alternative = "Unknown component of the contamination \n                       model is not normally distributed",
+	  method = "Gaussianity test for the unknown component distribution",
 	  estimate = estimated_values,
 	  data.name = deparse1(substitute(sample)),
 	  statistic = stat_value,

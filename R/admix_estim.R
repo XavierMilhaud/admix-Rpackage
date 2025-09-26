@@ -1,6 +1,6 @@
 #' Estimate the unknown weight in the admixture model
 #'
-#' Estimate the unknown component weight (and location shift parameter in case of a symmetric unknown component density),
+#' Estimate the unknown component weight (and possibly location shift parameter in case of a symmetric unknown component density),
 #' using different estimation techniques. We remind that the i-th admixture model has probability density function (pdf) l_i such that:
 #'    l_i = p_i * f_i + (1-p_i) * g_i, where g_i is the known component density.
 #' The unknown quantities p_i and f_i then have to be estimated.
@@ -71,8 +71,8 @@
 
 admix_estim <- function(samples, admixMod, est_method = c("PS","BVdk","IBM"), ...)
 {
-  if (!is.list(samples))
-    stop("Please provide sample(s) and admixture model(s) in a list, also with only one sample!")
+  if (!is.list(samples) | !is.list(admixMod))
+    stop("Please provide sample(s) AND admixture model(s) in a list, also with only one sample!")
   if (!all(sapply(X = admixMod, FUN = inherits, what = "admix_model")))
     stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
 
@@ -88,6 +88,8 @@ admix_estim <- function(samples, admixMod, est_method = c("PS","BVdk","IBM"), ..
   n_obs <- sapply(X = samples, FUN = length)
   estimate <- vector(mode = "list", length = n_samples)
   if (meth == "BVdk") {
+    message("Mixing weight estimation using 'BVdk' assumes the unknown component
+distribution to have a symmetric probability density function.")
     for (k in 1:n_samples) {
       estimate[[k]] <- estim_BVdk(samples = samples[[k]], admixMod = admixMod[[k]], ...)
     }
@@ -96,10 +98,19 @@ admix_estim <- function(samples, admixMod, est_method = c("PS","BVdk","IBM"), ..
       estimate[[k]] <- estim_PS(samples = samples[[k]], admixMod = admixMod[[k]], ...)
     }
   } else if (meth == "IBM") {
+    message(" IBM estimators of two unknown proportions are reliable only if the two corresponding
+ unknown component distributions have previously been tested equal (see ?admix_test).")
+    any_knownComp_equal <- vector(mode = "logical", length = (n_samples-1))
+    for (k in 2:n_samples) { any_knownComp_equal[k-1] <- is_equal_knownComp(admixMod[[1]], admixMod[[k]]) }
+    if (any(any_knownComp_equal == TRUE)) {
+      message("/n When both the known and unknown component distributions of the mixture models are
+ identical, IBM provides an estimated ratio of the mixing weights (and not the weights).\n")
+    }
     for (k in 2:n_samples) {
       estimate[[k]] <- estim_IBM(samples = list(samples[[1]], samples[[k]]),
                                  admixMod = list(admixMod[[1]], admixMod[[k]]), ...)
     }
+    estimate[[1]] <- NULL
   } else stop("Please choose appropriately the arguments of the function.")
 
   estimators <- list(estim_objects = estimate)
@@ -126,14 +137,15 @@ print.admix_estim <- function(x, ...)
   cat("\n")
   cat("Call:")
   print(x$call)
-  n_samples <- length(x$estim_objects)
   if (inherits(x, what = "estim_IBM")) {
+    n_samples <- length(x$estim_objects) + 1
     cat("\nPairwise estimation performed (IBM estimation method).\n\n")
-    for (i in 2:n_samples) {
-      cat("******** Samples #1 with #", i, " ********", sep = "")
+    for (i in 1:(n_samples-1)) {
+      cat("******** Samples #1 with #", (i+1), " ********", sep = "")
       print(x$estim_objects[[i]], ...)
     }
   } else {
+    n_samples <- length(x$estim_objects)
     cat("\n")
     for (i in 1:n_samples) {
       cat("******** Sample #", i, " ********", sep = "")
@@ -156,14 +168,15 @@ print.admix_estim <- function(x, ...)
 
 summary.admix_estim <- function(object, ...)
 {
-  n_samples <- length(object$estim_objects)
   if (inherits(object, what = "estim_IBM")) {
+    n_samples <- length(object$estim_objects) + 1
     cat("\nPairwise estimation performed (IBM estimation method).\n\n")
-    for (i in 2:n_samples) {
-      cat("******** Samples #1 with #", i, " ********\n", sep = "")
+    for (i in 1:(n_samples-1)) {
+      cat("******** Samples #1 with #", (i+1), " ********\n", sep = "")
       summary(object$estim_objects[[i]], ...)
     }
   } else {
+    n_samples <- length(object$estim_objects)
     cat("\n")
     for (i in 1:n_samples) {
       cat("******** Sample #", i, " ********\n\n", sep = "")
@@ -171,5 +184,5 @@ summary.admix_estim <- function(object, ...)
       cat("\n")
     }
   }
-  cat("\n")
+#  cat("\n")
 }

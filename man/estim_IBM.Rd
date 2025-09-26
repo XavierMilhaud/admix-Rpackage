@@ -2,7 +2,7 @@
 % Please edit documentation in R/estim_IBM.R
 \name{estim_IBM}
 \alias{estim_IBM}
-\title{Estimates weights of unknown components from 2 admixtures using IBM}
+\title{Estimate weights of unknown components from two admixtures using IBM}
 \usage{
 estim_IBM(samples, admixMod, n.integ = 1000, compute_var = FALSE)
 }
