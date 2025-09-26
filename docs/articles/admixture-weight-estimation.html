@@ -140,8 +140,7 @@ weight.</p>
 <span><span class="co">#&gt;     est_method = "BVdk")</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ******** Sample #1 ********</span></span>
-<span><span class="co">#&gt; Estimated mixing weight: 0.665 / Estimated location shift: 2.976 </span></span>
-<span><span class="co">#&gt; Variance of weight estimator: NA / Variance of loc. estimator: NA</span></span></code></pre></div>
+<span><span class="co">#&gt; Estimated mixing weight: 0.665 / Estimated location shift: 2.976</span></span></code></pre></div>
 <p>Because this estimation method relies on the symmetry of the unknown
 component density, the estimator provides both the estimated mixing
 weight of the unknown component distribution and the estimated location
@@ -160,7 +159,7 @@ distribution), we use the Patra and Sen estimator, see <span class="citation">(P
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ******** Sample #1 ********</span></span>
 <span><span class="co">#&gt;  Estimated mixing weight (of the unknown component): 0.641</span></span>
-<span><span class="co">#&gt;  The chosen value c_n is 0.179</span></span></code></pre></div>
+<span><span class="co">#&gt;  Selected c_n equals 0.179 in the penalization term. See ?estim_PS</span></span></code></pre></div>
 <p>In this case, the only estimated parameter is the mixing proportion
 related to the unknown component distribution.</p>
 </div>
@@ -212,9 +211,7 @@ parameter values.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ******** Samples #1 with #2 ********</span></span>
 <span><span class="co">#&gt; Estimated mixing weight of the unknown distribution in the 1st sample: 0.409 </span></span>
-<span><span class="co">#&gt; Estimated mixing weight of the unknown distribution in the 2nd sample: 0.725 </span></span>
-<span><span class="co">#&gt; Variance of the estimated weight in the 1st sample: NA </span></span>
-<span><span class="co">#&gt; Variance of the estimated weight in the 2nd sample: NA</span></span></code></pre></div>
+<span><span class="co">#&gt; Estimated mixing weight of the unknown distribution in the 2nd sample: 0.725</span></span></code></pre></div>
 <p>Indeed, one can see that the two unknown proportions were
 consistently estimated.</p>
 </div>
@@ -253,9 +250,7 @@ example.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ******** Samples #1 with #2 ********</span></span>
 <span><span class="co">#&gt; Estimated mixing weight of the unknown distribution in the 1st sample: 0.332 </span></span>
-<span><span class="co">#&gt; Estimated mixing weight of the unknown distribution in the 2nd sample: 0.655 </span></span>
-<span><span class="co">#&gt; Variance of the estimated weight in the 1st sample: NA </span></span>
-<span><span class="co">#&gt; Variance of the estimated weight in the 2nd sample: NA</span></span></code></pre></div>
+<span><span class="co">#&gt; Estimated mixing weight of the unknown distribution in the 2nd sample: 0.655</span></span></code></pre></div>
 <p>In such a framework, it is therefore better to use the estimator by
 <span class="citation">(Patra and Sen 2016)</span>, which shows better
 performance:</p>
@@ -268,11 +263,11 @@ performance:</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ******** Sample #1 ********</span></span>
 <span><span class="co">#&gt;  Estimated mixing weight (of the unknown component): 0.45</span></span>
-<span><span class="co">#&gt;  The chosen value c_n is 0.19 </span></span>
+<span><span class="co">#&gt;  Selected c_n equals 0.19 in the penalization term. See ?estim_PS</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ******** Sample #2 ********</span></span>
 <span><span class="co">#&gt;  Estimated mixing weight (of the unknown component): 0.727</span></span>
-<span><span class="co">#&gt;  The chosen value c_n is 0.186</span></span></code></pre></div>
+<span><span class="co">#&gt;  Selected c_n equals 0.186 in the penalization term. See ?estim_PS</span></span></code></pre></div>
 </div>
 </div>
 </div>
