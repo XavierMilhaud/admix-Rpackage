@@ -2,16 +2,20 @@
 % Please edit documentation in R/extractors.R
 \name{get_discrepancy_matrix}
 \alias{get_discrepancy_matrix}
-\title{Extractor for object of class 'IBM_test' or 'admix_cluster'}
+\title{Extractor for discrepancies b/w admixtures}
 \usage{
 get_discrepancy_matrix(x)
 }
 \arguments{
-\item{x}{An object of class 'IBM_test' or 'admix_cluster'.}
+\item{x}{An object of class \code{IBM_test} or \code{admix_cluster}.}
+}
+\value{
+A matrix of pairwise discrepancies among the K (K>2) samples
+under study.
 }
 \description{
 Provide the matrix storing discrepancies using Inversion-Best Matching
-approach between all couples among the K samples under study.
+approach between all couples among the K (K>2) samples under study.
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

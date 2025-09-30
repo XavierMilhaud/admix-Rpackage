@@ -2,12 +2,12 @@
 % Please edit documentation in R/extractors.R
 \name{get_cluster_sizes}
 \alias{get_cluster_sizes}
-\title{Extractor for object of class 'admix_cluster'}
+\title{Extractor for cluster sizes}
 \usage{
 get_cluster_sizes(x)
 }
 \arguments{
-\item{x}{An object of class 'admix_cluster'.}
+\item{x}{An object of class \code{admix_cluster}.}
 }
 \description{
 Provide the number of samples in each cluster.

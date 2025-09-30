@@ -2,18 +2,42 @@
 % Please edit documentation in R/extractors.R
 \name{which_rank}
 \alias{which_rank}
-\title{Extractor for object of class 'htest'}
+\title{Extractor for selected rank in the test statistic}
 \usage{
 which_rank(x)
 }
 \arguments{
-\item{x}{An object of class 'htest'.}
+\item{x}{An object of class \code{gaussianity_test}, \code{orthobasis_test} or \code{IBM_test}.}
+}
+\value{
+An integer corresponding to the selected rank in the test statistics,
+i.e. how many terms were kept in the test statistic.
 }
 \description{
 Provide the selected rank of the test statistic (connected to the expansion order
 of the densities in the orthonormal polynomial basis if method 'poly' was chosen;
 or to the number of terms, i.e. discrepancies between couples of samples, included
-in the test statistic).
+in the test statistic with method 'icv').
+}
+\examples{
+mixt1 <- twoComp_mixt(n = 380, weight = 0.7,
+                      comp.dist = list("norm", "norm"),
+                      comp.param = list(list("mean" = -2, "sd" = 0.5),
+                                        list("mean" = 0, "sd" = 1)))
+mixt2 <- twoComp_mixt(n = 350, weight = 0.85,
+                      comp.dist = list("norm", "norm"),
+                      comp.param = list(list("mean" = -2, "sd" = 0.5),
+                                        list("mean" = -1, "sd" = 1)))
+data1 <- get_mixture_data(mixt1)
+data2 <- get_mixture_data(mixt2)
+admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
+                         knownComp_param = mixt1$comp.param[[2]])
+admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
+                         knownComp_param = mixt2$comp.param[[2]])
+x <- admix_test(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
+                conf_level = 0.95, test_method = "poly", ask_poly_param = FALSE, support = "Real")
+which_rank(x)
+
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

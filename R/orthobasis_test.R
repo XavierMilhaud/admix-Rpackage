@@ -233,6 +233,7 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
     alternative = "Distributions of unknown components involved \n                        in the contamination models are different",
     method = "Equality test of unknown distributions with polynomial expansions of pdfs",
     #estimate = estimated_values,
+    weights = estimated_values,
     data.name = deparse(substitute(samples)),
     statistic = stat_value,
     parameters = stat_param,

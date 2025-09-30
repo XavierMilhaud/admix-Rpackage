@@ -67,55 +67,22 @@
     <loc>/reference/gaussianity_test.html</loc>
   </url>
   <url>
-    <loc>/reference/get_cluster_members.admix_cluster.html</loc>
-  </url>
-  <url>
     <loc>/reference/get_cluster_members.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_cluster_sizes.admix_cluster.html</loc>
   </url>
   <url>
     <loc>/reference/get_cluster_sizes.html</loc>
   </url>
   <url>
-    <loc>/reference/get_discrepancy_id.IBM_test.html</loc>
-  </url>
-  <url>
     <loc>/reference/get_discrepancy_id.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_discrepancy_matrix.IBM_test.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_discrepancy_matrix.admix_cluster.html</loc>
   </url>
   <url>
     <loc>/reference/get_discrepancy_matrix.html</loc>
   </url>
   <url>
-    <loc>/reference/get_discrepancy_rank.IBM_test.html</loc>
-  </url>
-  <url>
     <loc>/reference/get_discrepancy_rank.html</loc>
   </url>
   <url>
-    <loc>/reference/get_known_component.admix_cluster.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_known_component.admix_estim.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_known_component.htest.html</loc>
-  </url>
-  <url>
     <loc>/reference/get_known_component.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_mixing_weights.admix_estim.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_mixing_weights.htest.html</loc>
   </url>
   <url>
     <loc>/reference/get_mixing_weights.html</loc>
@@ -124,16 +91,7 @@
     <loc>/reference/get_mixture_data.html</loc>
   </url>
   <url>
-    <loc>/reference/get_statistic_components.IBM_test.html</loc>
-  </url>
-  <url>
     <loc>/reference/get_statistic_components.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_tabulated_dist.IBM_test.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_tabulated_dist.admix_cluster.html</loc>
   </url>
   <url>
     <loc>/reference/get_tabulated_dist.html</loc>
@@ -187,9 +145,6 @@
     <loc>/reference/print.twoComp_mixt.html</loc>
   </url>
   <url>
-    <loc>/reference/reject_nullHyp.htest.html</loc>
-  </url>
-  <url>
     <loc>/reference/reject_nullHyp.html</loc>
   </url>
   <url>
@@ -221,9 +176,6 @@
   </url>
   <url>
     <loc>/reference/twoComp_mixt.html</loc>
-  </url>
-  <url>
-    <loc>/reference/which_rank.htest.html</loc>
   </url>
   <url>
     <loc>/reference/which_rank.html</loc>

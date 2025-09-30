@@ -2,12 +2,16 @@
 % Please edit documentation in R/extractors.R
 \name{get_statistic_components}
 \alias{get_statistic_components}
-\title{Extractor for object of class 'IBM_test'}
+\title{Extractor for components involved in test statistic}
 \usage{
 get_statistic_components(x)
 }
 \arguments{
-\item{x}{An object of class 'IBM_test'.}
+\item{x}{An object of class \code{IBM_test}.}
+}
+\value{
+The components finally included in the test statistic, i.e. the discrepancies
+of the couples that were aggregated in the built sequence of statistics.
 }
 \description{
 Provide the terms (or discrepancies) that compose the test statistic

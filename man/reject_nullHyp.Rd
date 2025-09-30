@@ -2,16 +2,40 @@
 % Please edit documentation in R/extractors.R
 \name{reject_nullHyp}
 \alias{reject_nullHyp}
-\title{Extractor for object of class 'htest'}
+\title{Extractor for the test decision}
 \usage{
 reject_nullHyp(x)
 }
 \arguments{
-\item{x}{An object of class 'htest'.}
+\item{x}{An object of class \code{gaussianity_test}, \code{orthobasis_test} or \code{IBM_test}.}
+}
+\value{
+A boolean giving the result of the test, TRUE if the null
+hypothesis is rejected, otherwise FALSE.
 }
 \description{
 Provide the decision of the statistical test: reject or
 do not reject the null hypothesis.
+}
+\examples{
+mixt1 <- twoComp_mixt(n = 380, weight = 0.7,
+                      comp.dist = list("norm", "norm"),
+                      comp.param = list(list("mean" = -2, "sd" = 0.5),
+                                        list("mean" = 0, "sd" = 1)))
+mixt2 <- twoComp_mixt(n = 350, weight = 0.85,
+                      comp.dist = list("norm", "norm"),
+                      comp.param = list(list("mean" = -2, "sd" = 0.5),
+                                        list("mean" = -1, "sd" = 1)))
+data1 <- get_mixture_data(mixt1)
+data2 <- get_mixture_data(mixt2)
+admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
+                         knownComp_param = mixt1$comp.param[[2]])
+admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
+                         knownComp_param = mixt2$comp.param[[2]])
+x <- admix_test(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
+                conf_level = 0.95, test_method = "poly", ask_poly_param = FALSE, support = "Real")
+reject_nullHyp(x)
+
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

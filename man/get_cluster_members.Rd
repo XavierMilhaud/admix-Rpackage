@@ -2,16 +2,58 @@
 % Please edit documentation in R/extractors.R
 \name{get_cluster_members}
 \alias{get_cluster_members}
-\title{Extractor for object of class 'admix_cluster'}
+\title{Extractor for members of clusters}
 \usage{
 get_cluster_members(x)
 }
 \arguments{
-\item{x}{An object of class 'admix_cluster'.}
+\item{x}{An object of class \code{admix_cluster}.}
+}
+\value{
+The samples included in each detected cluster.
 }
 \description{
 Extract the clusters that were discovered among K samples, where belonging to
 one given cluster means having equal unknown component distributions.
+}
+\examples{
+\donttest{
+## Simulate mixture data:
+mixt1 <- twoComp_mixt(n = 1600, weight = 0.8,
+                      comp.dist = list("gamma", "exp"),
+                      comp.param = list(list("shape" = 16, "scale" = 1/4),
+                                        list("rate" = 1/3.5)))
+mixt2 <- twoComp_mixt(n = 2000, weight = 0.7,
+                      comp.dist = list("gamma", "exp"),
+                      comp.param = list(list("shape" = 14, "scale" = 1/2),
+                                        list("rate" = 1/5)))
+mixt3 <- twoComp_mixt(n = 2500, weight = 0.6,
+                      comp.dist = list("gamma", "gamma"),
+                      comp.param = list(list("shape" = 16, "scale" = 1/4),
+                                        list("shape" = 12, "scale" = 1/2)))
+mixt4 <- twoComp_mixt(n = 3800, weight = 0.5,
+                      comp.dist = list("gamma", "exp"),
+                      comp.param = list(list("shape" = 14, "scale" = 1/2),
+                                        list("rate" = 1/7)))
+data1 <- get_mixture_data(mixt1) ; data2 <- get_mixture_data(mixt2)
+data3 <- get_mixture_data(mixt3) ; data4 <- get_mixture_data(mixt4)
+## Define the admixture models:
+admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
+                         knownComp_param = mixt1$comp.param[[2]])
+admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
+                         knownComp_param = mixt2$comp.param[[2]])
+admixMod3 <- admix_model(knownComp_dist = mixt3$comp.dist[[2]],
+                         knownComp_param = mixt3$comp.param[[2]])
+admixMod4 <- admix_model(knownComp_dist = mixt4$comp.dist[[2]],
+                         knownComp_param = mixt4$comp.param[[2]])
+## Clustering procedure:
+x <- admix_cluster(samples = list(data1, data2, data3, data4),
+              admixMod = list(admixMod1, admixMod2, admixMod3, admixMod4),
+              conf_level = 0.95, tune_penalty = TRUE, n_sim_tab = 10)
+get_cluster_members(x)
+get_cluster_sizes(x)
+}
+
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

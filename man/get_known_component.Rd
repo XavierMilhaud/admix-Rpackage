@@ -2,15 +2,38 @@
 % Please edit documentation in R/extractors.R
 \name{get_known_component}
 \alias{get_known_component}
-\title{Extractor for objects of class 'admix_estim', 'htest' or 'admix_cluster'}
+\title{Extractor for known component of admixture model}
 \usage{
 get_known_component(x)
 }
 \arguments{
-\item{x}{An object of class 'admix_estim', 'htest', or 'admix_cluster'.}
+\item{x}{An object of class \code{admix_estim}, \code{gaussianity_test}, \code{orthobasis_test},
+\code{IBM_test}, or \code{admix_cluster}.}
+}
+\value{
+A list providing information on the known component (distribution, parameters).
 }
 \description{
-Get the known component(s) of admixture model(s) considered for estimation, test, or clustering.
+Get the known component of the admixture model considered for estimation,
+test, or clustering.
+}
+\details{
+This is a generic extractor, providing with the same information whatever the object class.
+}
+\examples{
+## Simulate a two-component Gaussian mixture:
+mixt1 <- twoComp_mixt(n = 380, weight = 0.7,
+                      comp.dist = list("norm", "norm"),
+                      comp.param = list(list("mean" = -2, "sd" = 0.5),
+                                        list("mean" = 0, "sd" = 1)))
+data1 <- get_mixture_data(mixt1)
+admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
+                         knownComp_param = mixt1$comp.param[[2]])
+## Estimate the unknown quantities:
+x <- admix_estim(samples = list(data1), admixMod = list(admixMod1), est_method = "BVdk")
+## Extract the information about the known component:
+get_known_component(x)
+
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

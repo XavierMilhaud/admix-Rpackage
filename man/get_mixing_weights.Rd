@@ -2,16 +2,43 @@
 % Please edit documentation in R/extractors.R
 \name{get_mixing_weights}
 \alias{get_mixing_weights}
-\title{Extractor for objects of class 'admix_estim' or 'htest'}
+\title{Extractor for estimated mixing weights}
 \usage{
 get_mixing_weights(x)
 }
 \arguments{
-\item{x}{An object of class 'admix_estim' or 'htest'.}
+\item{x}{An object of class \code{admix_estim}, \code{gaussianity_test} or
+\code{orthobasis_test}.}
+}
+\value{
+A numeric vector of estimated mixing weight(s).
 }
 \description{
-Get the estimated unknown mixing proportion(s) related to the weight(s) of
-the unknown component distribution(s) of the admixture model(s).
+Extracts the estimated mixing weights from fitted objects of class
+\code{admix_estim}, \code{gaussianity_test} and \code{orthobasis_test}.
+}
+\details{
+This is a generic extractor. The exact behavior depends on the class
+of the input object:
+\itemize{
+\item \code{admix_estim}: returns the estimated mixture proportions.
+\item \code{gaussianity_test}, \code{orthobasis_test}: returns weights derived from hypothesis testing results.
+}
+}
+\examples{
+## Simulate a two-component Gaussian mixture:
+mixt1 <- twoComp_mixt(n = 380, weight = 0.7,
+                      comp.dist = list("norm", "norm"),
+                      comp.param = list(list("mean" = -2, "sd" = 0.5),
+                                        list("mean" = 0, "sd" = 1)))
+data1 <- get_mixture_data(mixt1)
+admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
+                         knownComp_param = mixt1$comp.param[[2]])
+## Estimate the unknown quantities:
+x <- admix_estim(samples = list(data1), admixMod = list(admixMod1), est_method = "BVdk")
+## Extract the information about the known component:
+get_mixing_weights(x)
+
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

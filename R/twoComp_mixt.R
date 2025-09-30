@@ -237,18 +237,3 @@ summary.twoComp_mixt <- function(object, ...)
   }
   cat("\n")
 }
-
-
-#' Extractor for object of class 'twoComp_mixt'
-#'
-#' Get the mixture data generated from method 'twoComp_mixt'.
-#'
-#' @param x An object of class 'twoComp_mixt'.
-#'
-#' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @export
-
-get_mixture_data <- function(x)
-{
-  x$mixt.data
-}

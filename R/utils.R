@@ -17,8 +17,6 @@ admixStartupMessage <- function()
 
 .onAttach <- function(lib, pkg)
 {
-  # unlock .admix variable allowing its modification
-  #unlockBinding(".admix", asNamespace("admix"))
   # startup message
   msg <- admixStartupMessage()
   if(!interactive())
@@ -26,6 +24,109 @@ admixStartupMessage <- function()
   base::packageStartupMessage(msg)
   base::invisible()
 }
+
+
+.onLoad <- function(libname, pkgname) {
+  ns <- asNamespace(pkgname)
+  # si les fonctions méthodes existent dans le namespace, enregistre-les
+  if (exists("get_mixture_data.twoComp_mixt", envir = ns, inherits = FALSE)) {
+    registerS3method("get_mixture_data", "twoComp_mixt",
+                     get("get_mixture_data.twoComp_mixt", envir = ns), envir = ns)
+  }
+  if (exists("get_known_component.admix_estim", envir = ns, inherits = FALSE)) {
+    registerS3method("get_known_component", "admix_estim",
+                     get("get_known_component.admix_estim", envir = ns), envir = ns)
+  }
+  if (exists("get_known_component.gaussianity_test", envir = ns, inherits = FALSE)) {
+    registerS3method("get_known_component", "gaussianity_test",
+                     get("get_known_component.gaussianity_test", envir = ns), envir = ns)
+  }
+  if (exists("get_known_component.orthobasis_test", envir = ns, inherits = FALSE)) {
+    registerS3method("get_known_component", "orthobasis_test",
+                     get("get_known_component.orthobasis_test", envir = ns), envir = ns)
+  }
+  if (exists("get_known_component.IBM_test", envir = ns, inherits = FALSE)) {
+    registerS3method("get_known_component", "IBM_test",
+                     get("get_known_component.IBM_test", envir = ns), envir = ns)
+  }
+  if (exists("get_known_component.admix_cluster", envir = ns, inherits = FALSE)) {
+    registerS3method("get_known_component", "admix_cluster",
+                     get("get_known_component.admix_cluster", envir = ns), envir = ns)
+  }
+  if (exists("get_mixing_weights.admix_estim", envir = ns, inherits = FALSE)) {
+    registerS3method("get_mixing_weights", "admix_estim",
+                     get("get_mixing_weights.admix_estim", envir = ns), envir = ns)
+  }
+  if (exists("get_mixing_weights.gaussianity_test", envir = ns, inherits = FALSE)) {
+    registerS3method("get_mixing_weights", "gaussianity_test",
+                     get("get_mixing_weights.gaussianity_test", envir = ns), envir = ns)
+  }
+  if (exists("get_mixing_weights.orthobasis_test", envir = ns, inherits = FALSE)) {
+    registerS3method("get_mixing_weights", "orthobasis_test",
+                     get("get_mixing_weights.orthobasis_test", envir = ns), envir = ns)
+  }
+  if (exists("reject_nullHyp.gaussianity_test", envir = ns, inherits = FALSE)) {
+    registerS3method("reject_nullHyp", "gaussianity_test",
+                     get("reject_nullHyp.gaussianity_test", envir = ns), envir = ns)
+  }
+  if (exists("reject_nullHyp.orthobasis_test", envir = ns, inherits = FALSE)) {
+    registerS3method("reject_nullHyp", "orthobasis_test",
+                     get("reject_nullHyp.orthobasis_test", envir = ns), envir = ns)
+  }
+  if (exists("reject_nullHyp.IBM_test", envir = ns, inherits = FALSE)) {
+    registerS3method("reject_nullHyp", "IBM_test",
+                     get("reject_nullHyp.IBM_test", envir = ns), envir = ns)
+  }
+  if (exists("which_rank.gaussianity_test", envir = ns, inherits = FALSE)) {
+    registerS3method("which_rank", "gaussianity_test",
+                     get("which_rank.gaussianity_test", envir = ns), envir = ns)
+  }
+  if (exists("which_rank.orthobasis_test", envir = ns, inherits = FALSE)) {
+    registerS3method("which_rank", "orthobasis_test",
+                     get("which_rank.orthobasis_test", envir = ns), envir = ns)
+  }
+  if (exists("which_rank.IBM_test", envir = ns, inherits = FALSE)) {
+    registerS3method("which_rank", "IBM_test",
+                     get("which_rank.IBM_test", envir = ns), envir = ns)
+  }
+  if (exists("get_tabulated_dist.IBM_test", envir = ns, inherits = FALSE)) {
+    registerS3method("get_tabulated_dist", "IBM_test",
+                     get("get_tabulated_dist.IBM_test", envir = ns), envir = ns)
+  }
+  if (exists("get_tabulated_dist.admix_cluster", envir = ns, inherits = FALSE)) {
+    registerS3method("get_tabulated_dist", "admix_cluster",
+                     get("get_tabulated_dist.admix_cluster", envir = ns), envir = ns)
+  }
+  if (exists("get_discrepancy_rank.IBM_test", envir = ns, inherits = FALSE)) {
+    registerS3method("get_discrepancy_rank", "IBM_test",
+                     get("get_discrepancy_rank.IBM_test", envir = ns), envir = ns)
+  }
+  if (exists("get_discrepancy_id.IBM_test", envir = ns, inherits = FALSE)) {
+    registerS3method("get_discrepancy_id", "IBM_test",
+                     get("get_discrepancy_id.IBM_test", envir = ns), envir = ns)
+  }
+  if (exists("get_discrepancy_matrix.IBM_test", envir = ns, inherits = FALSE)) {
+    registerS3method("get_discrepancy_matrix", "IBM_test",
+                     get("get_discrepancy_matrix.IBM_test", envir = ns), envir = ns)
+  }
+  if (exists("get_discrepancy_matrix.admix_cluster", envir = ns, inherits = FALSE)) {
+    registerS3method("get_discrepancy_matrix", "admix_cluster",
+                     get("get_discrepancy_matrix.admix_cluster", envir = ns), envir = ns)
+  }
+  if (exists("get_statistic_components.IBM_test", envir = ns, inherits = FALSE)) {
+    registerS3method("get_statistic_components", "IBM_test",
+                     get("get_statistic_components.IBM_test", envir = ns), envir = ns)
+  }
+  if (exists("get_cluster_members.admix_cluster", envir = ns, inherits = FALSE)) {
+    registerS3method("get_cluster_members", "admix_cluster",
+                     get("get_cluster_members.admix_cluster", envir = ns), envir = ns)
+  }
+  if (exists("get_cluster_sizes.admix_cluster", envir = ns, inherits = FALSE)) {
+    registerS3method("get_cluster_sizes", "admix_cluster",
+                     get("get_cluster_sizes.admix_cluster", envir = ns), envir = ns)
+  }
+}
+
 
 #' Detect the type of support of some random variables
 #'

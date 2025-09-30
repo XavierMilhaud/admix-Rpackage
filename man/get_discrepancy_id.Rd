@@ -2,16 +2,20 @@
 % Please edit documentation in R/extractors.R
 \name{get_discrepancy_id}
 \alias{get_discrepancy_id}
-\title{Extractor for object of class 'IBM_test'}
+\title{Extractor for indexes of discrepancies}
 \usage{
 get_discrepancy_id(x)
 }
 \arguments{
-\item{x}{An object of class 'IBM_test'.}
+\item{x}{An object of class \code{IBM_test}.}
+}
+\value{
+A matrix of identifiers of couples, pairwisely considered in the computation
+of discrepancies.
 }
 \description{
 Provide the matrix storing the identifiers of discrepancies using Inversion-Best Matching
-approach between all couples among the K samples under study.
+approach between all couples among the K (K>2) samples under study.
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}
