@@ -253,9 +253,9 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
 }
 
 
-#' Print method for objects of class 'orthobasis_test'
+#' Print method for objects of class \code{orthobasis_test}
 #'
-#' @param x An object of class 'orthobasis_test'.
+#' @param x An object of class \code{orthobasis_test}.
 #' @param ... A list of additional parameters belonging to the default method.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
@@ -278,9 +278,9 @@ print.orthobasis_test <- function(x, ...)
 }
 
 
-#' Summary method for objects of class 'orthobasis_test'
+#' Summary method for objects of class \code{orthobasis_test}
 #'
-#' @param object An object of class 'orthobasis_test'.
+#' @param object An object of class \code{orthobasis_test}.
 #' @param ... A list of additional parameters belonging to the default method.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>

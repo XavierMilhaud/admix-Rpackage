@@ -211,7 +211,7 @@ summary.estim_PS <- function(object, ...)
 #' penalization, see 'Details' below for further information.
 #'
 #' @param data Sample where the known component density of the admixture model has been transformed into a Uniform(0,1) distribution.
-#' @param admixMod An object of class 'admix_model', containing the information about the known component distribution and its parameter(s).
+#' @param admixMod An object of class \code{admix_model}, containing the information about the known component distribution and its parameter(s).
 #' @param folds (default to 10) Number of folds used for cross-validation.
 #' @param reps (default to 1) Number of replications for cross-validation.
 #' @param cn.s (default to NULL) A sequence of 'c.n' to be used for cross-validation (vector of values).

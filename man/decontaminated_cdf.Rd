@@ -12,7 +12,7 @@ decontaminated_cdf(sample1, estim.p, admixMod)
 \item{estim.p}{The estimated weight of the unknown component distribution, related to the proportion of the unknown component
 in the admixture model studied.}
 
-\item{admixMod}{An object of class 'admix_model', containing useful information about distributions and parameters.}
+\item{admixMod}{An object of class \code{admix_model}, containing useful information about distributions and parameters.}
 }
 \value{
 The decontaminated CDF F of the admixture model, of class 'stepfun' (step function).

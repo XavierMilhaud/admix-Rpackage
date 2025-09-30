@@ -190,7 +190,7 @@ summary.estim_BVdk <- function(object, ...)
 #' @param param Numeric vector of two elements, corresponding to the two parameters (first the unknown component weight, and
 #'              then the location shift parameter of the symmetric unknown component distribution).
 #' @param data Numeric vector of observations following the mixture model given by the pdf l.
-#' @param admixMod An object of class 'admix_model', containing useful information about distributions and parameters.
+#' @param admixMod An object of class \code{admix_model}, containing useful information about distributions and parameters.
 #' @param h Width of the window used in the kernel estimations.
 #'
 #' @references
@@ -254,7 +254,7 @@ BVdk_contrast <- function(param, data, admixMod, h)
 #' @param param A numeric vector with two elements corresponding to the parameters to be estimated. First the unknown component
 #'              weight, and second the location shift parameter of the symmetric unknown component distribution.
 #' @param data A vector of observations following the admixture model given by the pdf l.
-#' @param admixMod An object of class 'admix_model', containing useful information about distributions and parameters.
+#' @param admixMod An object of class \code{admix_model}, containing useful information about distributions and parameters.
 #' @param h The window width used in the kernel estimations.
 #'
 #' @references
@@ -333,7 +333,7 @@ BVdk_contrast_gradient <- function(param, data, admixMod, h)
 #' @param mixing_weight Estimators of the unknown mixing weights in the admixture models.
 #' @param location Estimators of the unknown shift location parameters in the admixture models.
 #' @param data The observed sample under study.
-#' @param admixMod An object of class 'admix_model', containing useful information about distributions and parameters.
+#' @param admixMod An object of class \code{admix_model}, containing useful information about distributions and parameters.
 #'
 #' @details See formulas pp.28--30 in Appendix of Bordes, L. and Vandekerkhove, P. (2010).
 #'
@@ -549,7 +549,7 @@ Donsker_correl_old <- function(u, v, obs.data)
 #' f is made by maximum likelihood optimization through the information matrix, with the assumption that the unknown f is gaussian.
 #'
 #' @param data The observed sample under study.
-#' @param admixMod An object of class 'admix_model', containing useful information about distributions and parameters.
+#' @param admixMod An object of class \code{admix_model}, containing useful information about distributions and parameters.
 #' @param hat_w Estimate of the unknown component weight.
 #' @param hat_loc Estimate of the location shift parameter.
 #' @param hat_var Estimate of the variance of the symmetric density f, obtained by plugging-in the previous estimates. See 'Details'

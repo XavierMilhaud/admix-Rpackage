@@ -7,9 +7,9 @@
 is_equal_knownComp(admixMod1, admixMod2)
 }
 \arguments{
-\item{admixMod1}{An object of class 'admix_model' related to the first admixture model.}
+\item{admixMod1}{An object of class \code{admix_model} related to the first admixture model.}
 
-\item{admixMod2}{An object of class 'admix_model' related to the second admixture model.}
+\item{admixMod2}{An object of class \code{admix_model} related to the second admixture model.}
 }
 \value{
 A boolean (TRUE if the known components are the same, otherwise FALSE).

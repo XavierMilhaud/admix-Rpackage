@@ -2,7 +2,7 @@
 % Please edit documentation in R/admix_test.R
 \name{admix_test}
 \alias{admix_test}
-\title{Equality test for the unknown components of admixture models}
+\title{Equality test for the unknown components in admixture models}
 \usage{
 admix_test(
   samples,

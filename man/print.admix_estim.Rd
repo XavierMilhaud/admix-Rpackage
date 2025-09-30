@@ -2,17 +2,17 @@
 % Please edit documentation in R/admix_estim.R
 \name{print.admix_estim}
 \alias{print.admix_estim}
-\title{Print method for object of class 'admix_estim'}
+\title{Print method for object of class \code{admix_estim}}
 \usage{
 \method{print}{admix_estim}(x, ...)
 }
 \arguments{
-\item{x}{An object of class 'admix_estim' (see ?admix_estim).}
+\item{x}{An object of class \code{admix_estim} (see ?admix_estim).}
 
 \item{...}{further arguments passed to or from other methods.}
 }
 \description{
-Print method for object of class 'admix_estim'
+Print method for object of class \code{admix_estim}
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

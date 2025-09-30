@@ -2,7 +2,7 @@
 % Please edit documentation in R/extractors.R
 \name{which_rank}
 \alias{which_rank}
-\title{Extractor for selected rank in the test statistic}
+\title{Extractor for the selected rank in the test statistic}
 \usage{
 which_rank(x)
 }

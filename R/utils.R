@@ -101,10 +101,6 @@ admixStartupMessage <- function()
     registerS3method("get_discrepancy_rank", "IBM_test",
                      get("get_discrepancy_rank.IBM_test", envir = ns), envir = ns)
   }
-  if (exists("get_discrepancy_id.IBM_test", envir = ns, inherits = FALSE)) {
-    registerS3method("get_discrepancy_id", "IBM_test",
-                     get("get_discrepancy_id.IBM_test", envir = ns), envir = ns)
-  }
   if (exists("get_discrepancy_matrix.IBM_test", envir = ns, inherits = FALSE)) {
     registerS3method("get_discrepancy_matrix", "IBM_test",
                      get("get_discrepancy_matrix.IBM_test", envir = ns), envir = ns)
@@ -226,8 +222,8 @@ sim_gaussianProcess <- function(mean_vec, varCov_mat, from = 0, to = 1, start = 
 #'
 #' Test if the known component distributions coming from two admixture models are identical.
 #'
-#' @param admixMod1 An object of class 'admix_model' related to the first admixture model.
-#' @param admixMod2 An object of class 'admix_model' related to the second admixture model.
+#' @param admixMod1 An object of class \code{admix_model} related to the first admixture model.
+#' @param admixMod2 An object of class \code{admix_model} related to the second admixture model.
 #'
 #' @return A boolean (TRUE if the known components are the same, otherwise FALSE).
 #'
@@ -312,7 +308,7 @@ kernel_density <- function(u, h)
 #' Useful when dealing with the Patra and Sen estimator (for the estimation of the unknown weight p).
 #'
 #' @param data Observations of the sample under study, following an admixture distribution.
-#' @param admixMod An object of class 'admix_model', containing useful information about the known components and their parameter(s).
+#' @param admixMod An object of class \code{admix_model}, containing useful information about the known components and their parameter(s).
 #'
 #' @return The transformed data, i.e. the transformed mixture distribution where the known component g now follows a
 #'         Uniform(0,1) distribution.

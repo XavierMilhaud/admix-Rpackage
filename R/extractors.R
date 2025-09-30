@@ -1,5 +1,5 @@
 
-#' Extractor for known component of admixture model
+#' Extractor for known component(s) in admixture model(s)
 #'
 #' Get the known component of the admixture model considered for estimation,
 #' test, or clustering.
@@ -62,7 +62,7 @@ get_known_component.admix_cluster <- function(x)
   x$admixture_models
 }
 
-#' Extractor for object of class \code{twoComp_mixt}
+#' Extractor for simulated data from two-component mixture
 #'
 #' Get the mixture data generated from method \code{twoComp_mixt()}.
 #'
@@ -201,7 +201,7 @@ reject_nullHyp.IBM_test <- function(x)
 }
 
 
-#' Extractor for selected rank in the test statistic
+#' Extractor for the selected rank in the test statistic
 #'
 #' Provide the selected rank of the test statistic (connected to the expansion order
 #' of the densities in the orthonormal polynomial basis if method 'poly' was chosen;
@@ -257,7 +257,7 @@ which_rank.IBM_test <- function(x)
 }
 
 
-#' Extractor for tabulated distribution in the test
+#' Extractor for tabulated distribution in the k-sample test
 #'
 #' Provide (the list of) tabulated distribution(s) that allow to define
 #' the extreme quantile(s) against which the test statistic(s) is compared.
@@ -340,7 +340,6 @@ get_tabulated_dist.admix_cluster <- function(x)
 #' x <- admix_test(samples = list(data1,data2,data3),
 #'                 admixMod = list(admixMod1,admixMod2,admixMod3),
 #'                 conf_level = 0.95, test_method = "icv", n_sim_tab = 10)
-#' get_discrepancy_id(x)
 #' get_discrepancy_rank(x)
 #' get_discrepancy_matrix(x)
 #' get_statistic_components(x)
@@ -359,35 +358,11 @@ get_discrepancy_rank.IBM_test <- function(x)
   } else { print("Two-sample test, hence no discrepancy ranks to be stored.") }
 }
 
-#' Extractor for indexes of discrepancies
-#'
-#' Provide the matrix storing the identifiers of discrepancies using Inversion-Best Matching
-#' approach between all couples among the K (K>2) samples under study.
-#'
-#' @param x An object of class \code{IBM_test}.
-#'
-#' @return A matrix of identifiers of couples, pairwisely considered in the computation
-#'         of discrepancies.
-#'
-#' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @export
-#'
-get_discrepancy_id <- function(x)
-{
-  UseMethod("get_discrepancy_id",x)
-}
-get_discrepancy_id.IBM_test <- function(x)
-{
-  if (!inherits(x, "IBM_test")) stop("This method must be used with objects of class 'IBM_test'.")
-  if (!all(is.na(x$discrepancy_id))) { x$discrepancy_id
-  } else { print("Two-sample test, hence no need to store discrepancy id.") }
-}
 
-
-#' Extractor for discrepancies b/w admixtures
+#' Extractor for discrepancies b/w unknown components
 #'
-#' Provide the matrix storing discrepancies using Inversion-Best Matching
-#' approach between all couples among the K (K>2) samples under study.
+#' Provide the matrix storing pairwise discrepancies b/w unknown components
+#' in admixture models, using Inversion-Best Matching approach.
 #'
 #' @param x An object of class \code{IBM_test} or \code{admix_cluster}.
 #'

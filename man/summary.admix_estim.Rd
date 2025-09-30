@@ -2,12 +2,12 @@
 % Please edit documentation in R/admix_estim.R
 \name{summary.admix_estim}
 \alias{summary.admix_estim}
-\title{Summary method for object of class 'admix_estim'}
+\title{Summary method for object of class \code{admix_estim}}
 \usage{
 \method{summary}{admix_estim}(object, ...)
 }
 \arguments{
-\item{object}{An object of class 'admix_estim' (see ?admix_estim).}
+\item{object}{An object of class \code{admix_estim} (see ?admix_estim).}
 
 \item{...}{further arguments passed to or from other methods.}
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/extractors.R
 \name{get_discrepancy_matrix}
 \alias{get_discrepancy_matrix}
-\title{Extractor for discrepancies b/w admixtures}
+\title{Extractor for discrepancies b/w unknown components}
 \usage{
 get_discrepancy_matrix(x)
 }
@@ -14,8 +14,8 @@ A matrix of pairwise discrepancies among the K (K>2) samples
 under study.
 }
 \description{
-Provide the matrix storing discrepancies using Inversion-Best Matching
-approach between all couples among the K (K>2) samples under study.
+Provide the matrix storing pairwise discrepancies b/w unknown components
+in admixture models, using Inversion-Best Matching approach.
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

@@ -340,9 +340,9 @@ IBM_k_samples_test <- function(samples, admixMod, conf_level = 0.95, sim_U = NUL
   }
 }
 
-#' Print method for objects 'IBM_test'
+#' Print method for objects \code{IBM_test}
 #'
-#' @param x An object of class 'IBM_test'.
+#' @param x An object of class \code{IBM_test}.
 #' @param ... A list of additional parameters belonging to the default method.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
@@ -365,9 +365,9 @@ print.IBM_test <- function(x, ...)
 }
 
 
-#' Summary method for objects 'IBM_test'
+#' Summary method for objects \code{IBM_test}
 #'
-#' @param object An object of class 'IBM_test'.
+#' @param object An object of class \code{IBM_test}.
 #' @param ... A list of additional parameters belonging to the default method.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
@@ -423,7 +423,7 @@ summary.IBM_test <- function(object, ...)
 #' Perform the following hypothesis test: H0 : f1 = f2 versus H1 : f1 differs from f2.
 #'
 #' @param samples A list of the two samples under study.
-#' @param admixMod A list of two objects of class 'admix_model', containing useful information about distributions and parameters.
+#' @param admixMod A list of two objects of class \code{admix_model}, containing useful information about distributions and parameters.
 #' @param conf_level (default to 0.95) The confidence level of the 2-samples test, i.e. the quantile level to which the test statistic is compared.
 #' @param sim_U Random draws of the inner convergence part of the contrast as defined in the IBM approach (see 'Details' below).
 #' @param n_sim_tab (default to 100) Number of simulated Gaussian processes when tabulating the inner convergence distribution
@@ -572,7 +572,7 @@ IBM_2samples_test <- function(samples, admixMod, conf_level = 0.95, parallel = F
 #' @param estim_obj Object of class 'estim_IBM', obtained from the estimation of the component weights related to the
 #'                  proportions of the unknown component in each of the two admixture models studied.
 #' @param samples (list) A list of the two samples under study.
-#' @param admixMod (list) A list of two objects of class 'admix_model', containing useful information about distributions and parameters.
+#' @param admixMod (list) A list of two objects of class \code{admix_model}, containing useful information about distributions and parameters.
 #' @param alpha Confidence region is defined by the probability (1-alpha), used to compute the confidence bands of the estimators
 #'              of the unknown component weights.
 #'
@@ -655,7 +655,7 @@ IBM_greenLight_criterion <- function(estim_obj, samples, admixMod, alpha = 0.05)
 #' of interest. See 'Details' below and the cited paper therein for further information.
 #'
 #' @param samples A list of the two samples under study.
-#' @param admixMod A list of two objects of class 'admix_model', with information about distributions and parameters.
+#' @param admixMod A list of two objects of class \code{admix_model}, with information about distributions and parameters.
 #' @param min_size (optional, NULL by default) In the k-sample case, useful to provide the minimal size among all samples
 #'                 (needed to take into account the correction factor for variance-covariance assessment). Otherwise, useless.
 #' @param n.varCovMat (default to 80) Number of time points at which the Gaussian processes are simulated.

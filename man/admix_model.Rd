@@ -19,7 +19,7 @@ involved in the two-component mixture model (the unknown and the known ones); 2)
 the corresponding parameters of those distributions.
 }
 \description{
-Create an object of class 'admix_model', containing the information about the known component distribution in the admixture model.
+Create an object of class \code{admix_model}, containing the information about the known component distribution in the admixture model.
 An admixture (aka contamination) model is a two-component mixture model with one known component.
 Both the second component distribution and the mixing weight are unknown.
 }

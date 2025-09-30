@@ -2,14 +2,14 @@
 % Please edit documentation in R/decontaminated_dist.R
 \name{summary.decontaminated_density}
 \alias{summary.decontaminated_density}
-\title{Summary method for object of class 'decontaminated_density'}
+\title{Summary method for object of class \code{decontaminated_density}}
 \usage{
 \method{summary}{decontaminated_density}(object, ...)
 }
 \arguments{
-\item{object}{An object of class 'decontaminated_density' (see ?decontaminated_density).}
+\item{object}{An object of class \code{decontaminated_density} (see ?decontaminated_density).}
 
-\item{...}{Arguments to be passed to generic method 'summary'.}
+\item{...}{Arguments to be passed to generic method \code{summary}.}
 }
 \value{
 Classical statistical indicators about the decontaminated density.

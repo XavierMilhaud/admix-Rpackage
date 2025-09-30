@@ -1,6 +1,6 @@
 #' Define the distribution/parameter(s) of the known component
 #'
-#' Create an object of class 'admix_model', containing the information about the known component distribution in the admixture model.
+#' Create an object of class \code{admix_model}, containing the information about the known component distribution in the admixture model.
 #' An admixture (aka contamination) model is a two-component mixture model with one known component.
 #' Both the second component distribution and the mixing weight are unknown.
 #'
@@ -57,13 +57,13 @@ admix_model <- function(knownComp_dist, knownComp_param)
 }
 
 
-#' Print method for objects of class 'admix_model'
+#' Print method for objects of class \code{admix_model}
 #'
 #' Print an object of class 'admix_mod'. An admixture model has probability density function (pdf) l_i such that:
 #'    l_i = p_i * f_i + (1-p_i) * g_i, with g_i the known component density.
 #' The unknown quantities are therefore p_i and f_i.
 #'
-#' @param x An object of class 'admix_model'.
+#' @param x An object of class \code{admix_model}.
 #' @param ... A list of additional parameters belonging to the default method.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
@@ -81,14 +81,14 @@ print.admix_model <- function(x, ...)
 }
 
 
-#' Plot method for objects of class 'admix_model'
+#' Plot method for objects of class \code{admix_model}
 #'
 #' Plots the probability density function of the known component of the admixture model, where
 #' we recall that an admixture model has probability density function (pdf) l_i such that:
 #'    l_i = p_i * f_i + (1-p_i) * g_i, with g_i the known component density.
 #' The unknown quantities are therefore p_i and f_i.
 #'
-#' @param x An object of class 'admix_model'.
+#' @param x An object of class \code{admix_model}.
 #' @param ... A list of additional parameters belonging to the default method.
 #'
 #' @examples
@@ -130,14 +130,14 @@ plot.admix_model <- function(x, ...)
 }
 
 
-#' Summary method for objects of class 'admix_model'
+#' Summary method for objects of class \code{admix_model}
 #'
 #' Summarizes the information related to the known component of the two-component mixture.
 #' An admixture model has probability density function (pdf) l_i such that:
 #'    l_i = p_i * f_i + (1-p_i) * g_i, with g_i the known component density.
 #' The unknown quantities are therefore p_i and f_i.
 #'
-#' @param object An object of class 'admix_model'.
+#' @param object An object of class \code{admix_model}.
 #' @param ... A list of additional parameters belonging to the default method.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>

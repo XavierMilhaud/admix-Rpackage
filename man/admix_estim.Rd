@@ -2,7 +2,7 @@
 % Please edit documentation in R/admix_estim.R
 \name{admix_estim}
 \alias{admix_estim}
-\title{Estimate the unknown weight in the admixture model}
+\title{Estimate the unknown weight in an admixture model}
 \usage{
 admix_estim(samples, admixMod, est_method = c("PS", "BVdk", "IBM"), ...)
 }

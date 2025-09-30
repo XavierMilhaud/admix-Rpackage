@@ -6,12 +6,12 @@
 #'
 #' @param sample1 Sample under study.
 #' @param estim.p The estimated weight, related to the proportion of the unknown component distribution in the admixture model studied.
-#' @param admixMod An object of class 'admix_model', containing useful information about known distribution(s) and parameter(s).
+#' @param admixMod An object of class \code{admix_model}, containing useful information about known distribution(s) and parameter(s).
 #'
 #' @details The decontaminated density is obtained by inverting the admixture density, given by l = p*f + (1-p)*g, to isolate the
 #'          unknown component f after having estimated p.
 #'
-#' @return An object of class 'decontaminated_density', containing 3 attributes: 1) the data under study;
+#' @return An object of class \code{decontaminated_density}, containing 3 attributes: 1) the data under study;
 #'         2) the type of support for the underlying distribution (either discrete or continuous, useful for plots);
 #'         3) the decontaminated density function.
 #'
@@ -139,12 +139,12 @@ decontaminated_density <- function(sample1, estim.p, admixMod)
 }
 
 
-#' Print method for object of class 'decontaminated_density'
+#' Print method for object of class \code{decontaminated_density}
 #'
 #' Print some overview of the decontaminated density function.
 #'
-#' @param x An object of class 'decontaminated_density' (see ?decontaminated_density).
-#' @param ... Arguments to be passed to generic method 'plot', such as graphical parameters (see par).
+#' @param x An object of class \code{decontaminated_density} (see ?decontaminated_density).
+#' @param ... Arguments to be passed to generic method \code{plot}, such as graphical parameters (see ?par).
 #'
 #' @return The function related to the estimated decontaminated density.
 #'
@@ -162,12 +162,12 @@ print.decontaminated_density <- function(x, ...)
 }
 
 
-#' Summary method for object of class 'decontaminated_density'
+#' Summary method for object of class \code{decontaminated_density}
 #'
 #' Summarizes information about the estimated decontaminated density function.
 #'
-#' @param object An object of class 'decontaminated_density' (see ?decontaminated_density).
-#' @param ... Arguments to be passed to generic method 'summary'.
+#' @param object An object of class \code{decontaminated_density} (see ?decontaminated_density).
+#' @param ... Arguments to be passed to generic method \code{summary}.
 #'
 #' @return Classical statistical indicators about the decontaminated density.
 #'
@@ -195,16 +195,16 @@ summary.decontaminated_density <- function(object, ...)
 }
 
 
-#' Plot method for object of class 'decontaminated_density'
+#' Plot method for object of class \code{decontaminated_density}
 #'
 #' Plot the decontaminated density of the unknown component from some admixture model, after inversion of the admixture
 #' cumulative distribution functions.
 #'
-#' @param x An object of class 'decontaminated_density' (see ?decontaminated_density).
+#' @param x An object of class \code{decontaminated_density} (see ?decontaminated_density).
 #' @param x_val (numeric) A vector of points at which to evaluate the probability mass/density function.
 #' @param add_plot (default to FALSE) A boolean specifying if one plots the decontaminated density over an existing plot. Used for visual
 #'                 comparison purpose.
-#' @param ... Arguments to be passed to generic method 'plot', such as graphical parameters (see ?par).
+#' @param ... Arguments to be passed to generic method \code{plot}, such as graphical parameters (see ?par).
 #'
 #' @details The decontaminated density is obtained by inverting the admixture density, given by l = p*f + (1-p)*g, to isolate the
 #'          unknown component f after having estimated p and l.
@@ -349,7 +349,7 @@ plot.decontaminated_density <- function(x, x_val = NULL, add_plot = FALSE, ...)
 #' @param sample1 Observations of the sample under study.
 #' @param estim.p The estimated weight of the unknown component distribution, related to the proportion of the unknown component
 #'                  in the admixture model studied.
-#' @param admixMod An object of class 'admix_model', containing useful information about distributions and parameters.
+#' @param admixMod An object of class \code{admix_model}, containing useful information about distributions and parameters.
 #'
 #' @details The decontaminated CDF is obtained by inverting the admixture CDF, given by L = p*F + (1-p)*G, to isolate the
 #'          unknown component F after having estimated p. This means that F = (1/hat(p)) * (hat(L)-(1-p)*G).

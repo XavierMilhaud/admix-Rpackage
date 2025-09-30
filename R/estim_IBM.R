@@ -265,7 +265,7 @@ summary.estim_IBM <- function(object, ...)
 #' @param par Numeric vector with two elements, corresponding to the two parameter values at which to compute the contrast. In practice
 #'            the component weights for the two admixture models.
 #' @param samples (List) List of the two considered samples.
-#' @param admixMod (List) List of objects of class 'admix_model', one for each sample.
+#' @param admixMod (List) List of objects of class \code{admix_model}, one for each sample.
 #' @param G Distribution on which to integrate when calculating the contrast.
 #' @param fixed.p.X (default to NULL) Arbitrary value chosen by the user for the component weight related to the unknown component of
 #'                  the first admixture model. Only useful for optimization when the known components of the two models are identical
@@ -394,9 +394,9 @@ IBM_empirical_contrast <- function(par, samples, admixMod, G, fixed.p.X = NULL)
 #'
 #' @param x Time point at which the 1st (related to the 1st parameter) underlying empirical process is looked through.
 #' @param y Time point at which the 2nd (related to the 2nd parameter) underlying empirical process is looked through.
-#' @param IBMestim.obj An object of class 'estim_IBM'.
+#' @param IBMestim.obj An object of class \code{estim_IBM}.
 #' @param samples A list of the two considered samples.
-#' @param admixMod A list of objects of class 'admix_model', one for each sample.
+#' @param admixMod A list of objects of class \code{admix_model}, one for each sample.
 #'
 #' @references
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2024a}{admix}
@@ -987,7 +987,7 @@ IBM_Sigma2 <- function(x, y, par, fixed_prop, samples, admixMod, integration_sup
 #' @param par Numeric vector with two elements (corresponding to the two unknown component weights) at which the hessian is computed.
 #' @param fixed_prop the fixed proportion of the first sample when studying admixture sharing the same known component.
 #' @param samples A list of the two considered samples.
-#' @param admixMod A list of objects of class 'admix_model', one for each sample.
+#' @param admixMod A list of objects of class \code{admix_model}, one for each sample.
 #' @param integration_supp Distribution on which to integrate when calculating the contrast.
 #'
 #' @references
@@ -1194,7 +1194,7 @@ IBM_hessian_contrast <- function(par, fixed_prop, samples, admixMod, integration
 #' @param z the point at which the difference between both unknown (estimated) component distributions is computed.
 #' @param par Numeric vector with two elements, corresponding to the weights of the unknown component for the two admixture models.
 #' @param samples A list of the two considered samples.
-#' @param admixMod A list of objects of class 'admix_model', one for each sample.
+#' @param admixMod A list of objects of class \code{admix_model}, one for each sample.
 #'
 #' @references
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2024a}{admix}

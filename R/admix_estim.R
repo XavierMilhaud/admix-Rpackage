@@ -1,4 +1,4 @@
-#' Estimate the unknown weight in the admixture model
+#' Estimate the unknown weight in an admixture model
 #'
 #' Estimate the unknown component weight (and possibly location shift parameter in case of a symmetric unknown component density),
 #' using different estimation techniques. We remind that the i-th admixture model has probability density function (pdf) l_i such that:
@@ -124,9 +124,9 @@ distribution to have a symmetric probability density function.")
 }
 
 
-#' Print method for object of class 'admix_estim'
+#' Print method for object of class \code{admix_estim}
 #'
-#' @param x An object of class 'admix_estim' (see ?admix_estim).
+#' @param x An object of class \code{admix_estim} (see ?admix_estim).
 #' @param ... further arguments passed to or from other methods.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
@@ -154,13 +154,13 @@ print.admix_estim <- function(x, ...)
   }
 }
 
-#' Summary method for object of class 'admix_estim'
+#' Summary method for object of class \code{admix_estim}
 #'
 #' Summarize the estimated weight(s) of the unknown component(s), and admixture model(s) under study.
 #' Recall that an admixture model follows the cumulative distribution function (CDF) L, where
 #' L = p*F + (1-p)*G, with G a known CDF, and p and F unknown quantities.
 #'
-#' @param object An object of class 'admix_estim' (see ?admix_estim).
+#' @param object An object of class \code{admix_estim} (see ?admix_estim).
 #' @param ... further arguments passed to or from other methods.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>

@@ -2,7 +2,7 @@
 % Please edit documentation in R/extractors.R
 \name{get_known_component}
 \alias{get_known_component}
-\title{Extractor for known component of admixture model}
+\title{Extractor for known component(s) in admixture model(s)}
 \usage{
 get_known_component(x)
 }

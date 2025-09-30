@@ -2,19 +2,19 @@
 % Please edit documentation in R/decontaminated_dist.R
 \name{plot.decontaminated_density}
 \alias{plot.decontaminated_density}
-\title{Plot method for object of class 'decontaminated_density'}
+\title{Plot method for object of class \code{decontaminated_density}}
 \usage{
 \method{plot}{decontaminated_density}(x, x_val = NULL, add_plot = FALSE, ...)
 }
 \arguments{
-\item{x}{An object of class 'decontaminated_density' (see ?decontaminated_density).}
+\item{x}{An object of class \code{decontaminated_density} (see ?decontaminated_density).}
 
 \item{x_val}{(numeric) A vector of points at which to evaluate the probability mass/density function.}
 
 \item{add_plot}{(default to FALSE) A boolean specifying if one plots the decontaminated density over an existing plot. Used for visual
 comparison purpose.}
 
-\item{...}{Arguments to be passed to generic method 'plot', such as graphical parameters (see ?par).}
+\item{...}{Arguments to be passed to generic method \code{plot}, such as graphical parameters (see ?par).}
 }
 \value{
 The plot of the decontaminated density.

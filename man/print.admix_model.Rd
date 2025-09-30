@@ -2,12 +2,12 @@
 % Please edit documentation in R/admix_model.R
 \name{print.admix_model}
 \alias{print.admix_model}
-\title{Print method for objects of class 'admix_model'}
+\title{Print method for objects of class \code{admix_model}}
 \usage{
 \method{print}{admix_model}(x, ...)
 }
 \arguments{
-\item{x}{An object of class 'admix_model'.}
+\item{x}{An object of class \code{admix_model}.}
 
 \item{...}{A list of additional parameters belonging to the default method.}
 }

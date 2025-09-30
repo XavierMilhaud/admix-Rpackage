@@ -218,9 +218,9 @@ gaussianity_test <- function(sample, admixMod, conf_level = 0.95, ask_poly_param
 
 
 
-#' Print method for objects 'gaussianity_test'
+#' Print method for objects \code{gaussianity_test}
 #'
-#' @param x An object of class 'gaussianity_test'.
+#' @param x An object of class \code{gaussianity_test}.
 #' @param ... A list of additional parameters belonging to the default method.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
@@ -243,9 +243,9 @@ print.gaussianity_test <- function(x, ...)
 }
 
 
-#' Summary method for objects 'gaussianity_test'
+#' Summary method for objects \code{gaussianity_test}
 #'
-#' @param object An object of class 'gaussianity_test'.
+#' @param object An object of class \code{gaussianity_test}.
 #' @param ... A list of additional parameters belonging to the default method.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>

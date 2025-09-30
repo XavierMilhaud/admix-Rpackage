@@ -1,4 +1,4 @@
-#' Equality test for the unknown components of admixture models
+#' Equality test for the unknown components in admixture models
 #'
 #' Perform hypothesis test between unknown components of a list of admixture models, where we remind that the i-th admixture
 #' model has probability density function (pdf) l_i such that:

@@ -42,7 +42,6 @@ admixMod3 <- admix_model(knownComp_dist = mixt3$comp.dist[[2]],
 x <- admix_test(samples = list(data1,data2,data3),
                 admixMod = list(admixMod1,admixMod2,admixMod3),
                 conf_level = 0.95, test_method = "icv", n_sim_tab = 10)
-get_discrepancy_id(x)
 get_discrepancy_rank(x)
 get_discrepancy_matrix(x)
 get_statistic_components(x)

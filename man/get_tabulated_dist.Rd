@@ -2,7 +2,7 @@
 % Please edit documentation in R/extractors.R
 \name{get_tabulated_dist}
 \alias{get_tabulated_dist}
-\title{Extractor for tabulated distribution in the test}
+\title{Extractor for tabulated distribution in the k-sample test}
 \usage{
 get_tabulated_dist(x)
 }

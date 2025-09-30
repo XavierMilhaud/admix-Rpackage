@@ -2,7 +2,7 @@
 % Please edit documentation in R/extractors.R
 \name{get_mixture_data}
 \alias{get_mixture_data}
-\title{Extractor for object of class \code{twoComp_mixt}}
+\title{Extractor for simulated data from two-component mixture}
 \usage{
 get_mixture_data(x)
 }

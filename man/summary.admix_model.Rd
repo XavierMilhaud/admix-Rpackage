@@ -2,12 +2,12 @@
 % Please edit documentation in R/admix_model.R
 \name{summary.admix_model}
 \alias{summary.admix_model}
-\title{Summary method for objects of class 'admix_model'}
+\title{Summary method for objects of class \code{admix_model}}
 \usage{
 \method{summary}{admix_model}(object, ...)
 }
 \arguments{
-\item{object}{An object of class 'admix_model'.}
+\item{object}{An object of class \code{admix_model}.}
 
 \item{...}{A list of additional parameters belonging to the default method.}
 }
