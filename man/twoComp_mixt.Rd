@@ -56,7 +56,17 @@ sim.X <- twoComp_mixt(n = 2000, weight = 0.5,
                       comp.dist = list("multinom", "multinom"),
                       comp.param = list(list("size"=1, "prob"=c(0.3,0.4,0.3)),
                                         list("size"=1, "prob"=c(0.1,0.2,0.7))))
-plot(sim.X)
+sim.Y <- twoComp_mixt(n = 1800, weight = 0.7,
+                      comp.dist = list("multinom", "multinom"),
+                      comp.param = list(list("size"=1, "prob"=c(0.3,0.4,0.3)),
+                                        list("size"=1, "prob"=c(0.6,0.2,0.2))))
+sim.Z <- twoComp_mixt(n = 1800, weight = 0.3,
+                      comp.dist = list("multinom", "multinom"),
+                      comp.param = list(list("size"=1, "prob"=c(0.2,0.1,0.7)),
+                                        list("size"=1, "prob"=c(1/3,1/3,1/3))))
+plot(sim.X, offset = -0.05, bar_width = 0.05, col = "steelblue")
+plot(sim.Y, add_plot = TRUE, offset = 0, bar_width = 0.05, col = "orange")
+plot(sim.Z, add_plot = TRUE, offset = +0.05, bar_width = 0.05, col = "red")
 
 }
 \author{

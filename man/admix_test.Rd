@@ -25,14 +25,15 @@ only 'poly' is available and the test is a gaussianity test. For further details
 \item{conf_level}{The confidence level of the K-sample test.}
 
 \item{...}{Depending on the choice made by the user for the test method ('poly' or 'icv'), optional arguments to
-\link[admix]{gaussianity_test} or \link[admix]{orthobasis_test} (in case of 'poly'), and to \link[admix]{IBM_k_samples_test}
+\link[admix]{gaussianity_test}, \link[admix]{orthobasis_test} (in case of 'poly'), or \link[admix]{IBM_k_samples_test}
 in case of 'icv'.}
 }
 \value{
-An object of class 'htest' containing the classical attributes of the latter class, as well as
-other attributes specific to the inherited object class. Usually, the test decision (reject the null hypothesis or not);
-the confidence level of the test (1-alpha, where alpha denotes the level of the test or equivalently the type-I error);
-the number of samples under study; the respective size of each sample; the information about known mixture components.
+An object of class \code{gaussianity_test}, \code{orthobasis_test}, or \code{IBM_test} (that inherits from
+class \code{htest}), containing attributes specific to the object class (in addition to classical attributes
+from \code{htest}). Usually, the test decision (reject the null hypothesis or not); the confidence level of
+the test (1-alpha, where alpha denotes the level of the test or equivalently the type-I error); the number
+of samples under study; the respective size of each sample; the information about known mixture components.
 }
 \description{
 Perform hypothesis test between unknown components of a list of admixture models, where we remind that the i-th admixture

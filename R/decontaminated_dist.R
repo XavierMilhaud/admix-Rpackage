@@ -33,57 +33,45 @@
 #'                        admixMod = admixMod1)
 #' print(x)
 #' summary(x)
-#' plot(x, type = "l")
+#' plot(x)
 #'
 #' ####### Discrete support:
-#' mixt1 <- twoComp_mixt(n = 5000, weight = 0.6,
+#' mixt1 <- twoComp_mixt(n = 4000, weight = 0.6,
 #'                       comp.dist = list("pois", "pois"),
 #'                       comp.param = list(list("lambda" = 3),
 #'                                         list("lambda" = 2)))
-#' mixt2 <- twoComp_mixt(n = 4000, weight = 0.8,
+#' mixt2 <- twoComp_mixt(n = 3000, weight = 0.8,
 #'                       comp.dist = list("pois", "pois"),
 #'                       comp.param = list(list("lambda" = 3),
 #'                                         list("lambda" = 4)))
+#' mixt3 <- twoComp_mixt(n = 1500, weight = 0.5,
+#'                       comp.dist = list("pois", "pois"),
+#'                       comp.param = list(list("lambda" = 7),
+#'                                         list("lambda" = 1)))
 #' data1 <- get_mixture_data(mixt1)
 #' data2 <- get_mixture_data(mixt2)
+#' data3 <- get_mixture_data(mixt3)
 #' ## Define the admixture models:
 #' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
 #'                          knownComp_param = mixt1$comp.param[[2]])
 #' admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
 #'                          knownComp_param = mixt2$comp.param[[2]])
+#' admixMod3 <- admix_model(knownComp_dist = mixt3$comp.dist[[2]],
+#'                          knownComp_param = mixt3$comp.param[[2]])
 #' ## Estimation:
-#' est <- admix_estim(samples = list(data1, data2),
-#'                    admixMod = list(admixMod1, admixMod2), est_method = 'IBM')
+#' est <- admix_estim(samples = list(data1,data2),
+#'                    admixMod = list(admixMod1,admixMod2), est_method = 'IBM')
+#' est2 <- admix_estim(samples = list(data3), admixMod = list(admixMod3), est_method = 'PS')
 #' ## Determine the decontaminated version of the unknown density by inversion:
 #' x <- decontaminated_density(sample1 = data1, estim.p = get_mixing_weights(est)[1],
 #'                        admixMod = admixMod1)
-#' summary(x)
-#' plot(x)
-#'
-#' ####### Finite discrete support:
-#' mixt1 <- twoComp_mixt(n = 12000, weight = 0.6,
-#'                       comp.dist = list("multinom", "multinom"),
-#'                       comp.param = list(list("size" = 1, "prob" = c(0.3,0.4,0.3)),
-#'                                         list("size" = 1, "prob" = c(0.6,0.3,0.1))))
-#' mixt2 <- twoComp_mixt(n = 10000, weight = 0.8,
-#'                       comp.dist = list("multinom", "multinom"),
-#'                       comp.param = list(list("size" = 1, "prob" = c(0.3,0.4,0.3)),
-#'                                         list("size" = 1, "prob" = c(0.2,0.6,0.2))))
-#' data1 <- get_mixture_data(mixt1)
-#' data2 <- get_mixture_data(mixt2)
-#' ## Define the admixture models:
-#' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
-#'                          knownComp_param = mixt1$comp.param[[2]])
-#' admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
-#'                          knownComp_param = mixt2$comp.param[[2]])
-#' ## Estimation:
-#' est <- admix_estim(samples = list(data1, data2),
-#'                    admixMod = list(admixMod1, admixMod2), est_method = 'IBM')
-#' ## Determine the decontaminated version of the unknown density by inversion:
-#' x <- decontaminated_density(sample1 = data1, estim.p = get_mixing_weights(est)[1],
-#'                        admixMod = admixMod1)
-#' summary(x)
-#' plot(x)
+#' y <- decontaminated_density(sample1 = data2, estim.p = get_mixing_weights(est)[2],
+#'                        admixMod = admixMod2)
+#' z <- decontaminated_density(sample1 = data3, estim.p = get_mixing_weights(est2),
+#'                        admixMod = admixMod3)
+#' plot(x, offset = -0.2, bar_width = 0.2, col = "steelblue")
+#' plot(y, add_plot = TRUE, offset = 0, bar_width = 0.2, col = "red")
+#' plot(z, add_plot = TRUE, offset = 0.2, bar_width = 0.2, col = "orange")
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
@@ -201,111 +189,22 @@ summary.decontaminated_density <- function(object, ...)
 #' cumulative distribution functions.
 #'
 #' @param x An object of class \code{decontaminated_density} (see ?decontaminated_density).
-#' @param x_val (numeric) A vector of points at which to evaluate the probability mass/density function.
-#' @param add_plot (default to FALSE) A boolean specifying if one plots the decontaminated density over an existing plot. Used for visual
-#'                 comparison purpose.
+#' @param x_val Values at which to evaluate the decontaminated density.
+#' @param add_plot Boolean, TRUE when a new plot is added to the existing one.
+#' @param offset Numeric. Position of the bars relative to the labels on the x-axis.
+#' @param bar_width Width of bars to be plotted.
 #' @param ... Arguments to be passed to generic method \code{plot}, such as graphical parameters (see ?par).
 #'
 #' @details The decontaminated density is obtained by inverting the admixture density, given by l = p*f + (1-p)*g, to isolate the
 #'          unknown component f after having estimated p and l.
 #'
-#' @return The plot of the decontaminated density.
-#'
-#' @examples
-#' ####### Continuous support:
-#' ## Simulate mixture data:
-#' mixt1 <- twoComp_mixt(n = 400, weight = 0.4,
-#'                       comp.dist = list("norm", "norm"),
-#'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
-#'                                         list("mean" = 0, "sd" = 1)))
-#' mixt2 <- twoComp_mixt(n = 350, weight = 0.6,
-#'                       comp.dist = list("norm", "norm"),
-#'                       comp.param = list(list("mean" = 3, "sd" = 0.5),
-#'                                         list("mean" = 5, "sd" = 2)))
-#' data1 <- get_mixture_data(mixt1)
-#' data2 <- get_mixture_data(mixt2)
-#' ## Define the admixture models:
-#' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
-#'                          knownComp_param = mixt1$comp.param[[2]])
-#' admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
-#'                          knownComp_param = mixt2$comp.param[[2]])
-#' ## Estimation:
-#' est <- admix_estim(samples = list(data1,data2),
-#'                    admixMod = list(admixMod1,admixMod2), est_method = 'PS')
-#' prop <- get_mixing_weights(est)
-#' ## Determine the decontaminated version of the unknown density by inversion:
-#' res1 <- decontaminated_density(sample1 = data1, estim.p = prop[1],
-#'                                admixMod = admixMod1)
-#' res2 <- decontaminated_density(sample1 = data2, estim.p = prop[2],
-#'                                admixMod = admixMod2)
-#' ## Use appropriate sequence of x values:
-#' plot(x = res1)
-#' plot(x = res2, col="red", add_plot=TRUE)
-#' plot(x = res1, x_val = seq(from=0, to=6, length.out=100), type = "l")
-#' plot(x = res2, x_val = seq(from=0, to=6, length.out=100), col="red", add_plot=TRUE)
-#'
-#' ####### Countable discrete support:
-#' mixt1 <- twoComp_mixt(n = 4000, weight = 0.7,
-#'                       comp.dist = list("pois", "pois"),
-#'                       comp.param = list(list("lambda" = 3),
-#'                                         list("lambda" = 2)))
-#' mixt2 <- twoComp_mixt(n = 3500, weight = 0.85,
-#'                       comp.dist = list("pois", "pois"),
-#'                       comp.param = list(list("lambda" = 3),
-#'                                         list("lambda" = 4)))
-#' data1 <- get_mixture_data(mixt1)
-#' data2 <- get_mixture_data(mixt2)
-#' ## Define the admixture models:
-#' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
-#'                          knownComp_param = mixt1$comp.param[[2]])
-#' admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
-#'                          knownComp_param = mixt2$comp.param[[2]])
-#' ## Estimation:
-#' est <- admix_estim(samples = list(data1,data2),
-#'                    admixMod = list(admixMod1,admixMod2), est_method = "IBM")
-#' prop <- get_mixing_weights(est)
-#' ## Determine the decontaminated version of the unknown density by inversion:
-#' res1 <- decontaminated_density(sample1 = data1, estim.p = prop[1],
-#'                                admixMod = admixMod1)
-#' res2 <- decontaminated_density(sample1 = data2, estim.p = prop[2],
-#'                                admixMod = admixMod2)
-#' ## Use appropriate sequence of x values:
-#' plot(x = res1, add_plot = FALSE)
-#' plot(x = res2, add_plot = TRUE, col = "red")
-#'
-#' ####### Finite discrete support:
-#' mixt1 <- twoComp_mixt(n = 4000, weight = 0.7,
-#'                       comp.dist = list("multinom", "multinom"),
-#'                       comp.param = list(list("size" = 1, "prob" = c(0.3,0.4,0.3)),
-#'                                         list("size" = 1, "prob" = c(0.6,0.3,0.1))))
-#' mixt2 <- twoComp_mixt(n = 3500, weight = 0.85,
-#'                       comp.dist = list("multinom", "multinom"),
-#'                       comp.param = list(list("size" = 1, "prob" = c(0.3,0.4,0.3)),
-#'                                         list("size" = 1, "prob" = c(0.2,0.6,0.2))))
-#' data1 <- get_mixture_data(mixt1)
-#' data2 <- get_mixture_data(mixt2)
-#' ## Define the admixture models:
-#' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
-#'                          knownComp_param = mixt1$comp.param[[2]])
-#' admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
-#'                          knownComp_param = mixt2$comp.param[[2]])
-#' ## Estimation:
-#' est <- admix_estim(samples = list(data1,data2),
-#'                    admixMod = list(admixMod1,admixMod2), est_method = "IBM")
-#' prop <- get_mixing_weights(est)
-#' ## Determine the decontaminated version of the unknown density by inversion:
-#' res1 <- decontaminated_density(sample1 = data1, estim.p = prop[1],
-#'                                admixMod = admixMod1)
-#' res2 <- decontaminated_density(sample1 = data2, estim.p = prop[2],
-#'                                admixMod = admixMod2)
-#' ## Use appropriate sequence of x values:
-#' plot(x = res1, add_plot = FALSE)
-#' plot(x = res2, add_plot = TRUE, col = "red")
+#' @return The plot of the decontaminated density if one sample is provided, or the comparison of decontaminated
+#'         densities plotted on the same graph in the case of multiple samples.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-plot.decontaminated_density <- function(x, x_val = NULL, add_plot = FALSE, ...)
+plot.decontaminated_density <- function(x, x_val = NULL, add_plot = FALSE, offset = 0, bar_width = 0.3, ...)
 {
   support <- x$support
   if (!is.null(x_val)) {
@@ -318,24 +217,28 @@ plot.decontaminated_density <- function(x, x_val = NULL, add_plot = FALSE, ...)
     }
     decontamin_dens_values <- x$decontaminated_density_fun(x_val)
   }
-  decontamin_dens_values[which(is.na(decontamin_dens_values))] <- 0
+  decontamin_dens_values[is.na(decontamin_dens_values)] <- 0
   decontamin_dens_values <- pmax(decontamin_dens_values, 0)
-  y.range <- c(min(decontamin_dens_values), max(decontamin_dens_values)*1.1)
 
   if (!add_plot) {
     if (support == "Discrete") {
-      graphics::barplot(height = decontamin_dens_values, names = as.character(x_val), space = 2,
-                        width = 0.5, ...)
+      ## initialise an empty plot
+      plot(range(x_val), range(0, decontamin_dens_values * 1.1),
+           type="n", xaxt="n", xlab="x", ylab="Density", ...)
+      graphics::axis(1, at=x_val, labels=as.character(x_val))
     } else {
-      plot(x = x_val, y = decontamin_dens_values, ...)
+      plot(x = x_val, y = decontamin_dens_values, type="l", ...)
+    }
+  }
+
+  if (support == "Discrete") {
+    for (i in seq_along(x_val)) {
+      graphics::rect(xleft = x_val[i] - bar_width/2 + offset,
+                     xright = x_val[i] + bar_width/2 + offset,
+                     ybottom = 0, ytop = decontamin_dens_values[i])
     }
   } else {
-    if (support == "Discrete") {
-      graphics::barplot(height = decontamin_dens_values, names = NULL, add = add_plot,
-                        width = 0.5, space = c(3,rep(2,length(x_val)-1)), ...)
-    } else {
-      graphics::lines(x = x_val, y = decontamin_dens_values, ...)
-    }
+    graphics::lines(x = x_val, y = decontamin_dens_values, ...)
   }
 }
 

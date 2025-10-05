@@ -1,180 +1,62 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>/articles/admixture-clustering.html</loc>
-  </url>
-  <url>
-    <loc>/articles/admixture-weight-estimation.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/articles/test-hypothesis.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/IBM_k_samples_test.html</loc>
-  </url>
-  <url>
-    <loc>/reference/admix-package.html</loc>
-  </url>
-  <url>
-    <loc>/reference/admix_cluster.html</loc>
-  </url>
-  <url>
-    <loc>/reference/admix_estim.html</loc>
-  </url>
-  <url>
-    <loc>/reference/admix_model.html</loc>
-  </url>
-  <url>
-    <loc>/reference/admix_test.html</loc>
-  </url>
-  <url>
-    <loc>/reference/allGalaxies.html</loc>
-  </url>
-  <url>
-    <loc>/reference/decontaminated_cdf.html</loc>
-  </url>
-  <url>
-    <loc>/reference/decontaminated_density.html</loc>
-  </url>
-  <url>
-    <loc>/reference/detect_support_type.html</loc>
-  </url>
-  <url>
-    <loc>/reference/estim_BVdk.html</loc>
-  </url>
-  <url>
-    <loc>/reference/estim_IBM.html</loc>
-  </url>
-  <url>
-    <loc>/reference/estim_PS.html</loc>
-  </url>
-  <url>
-    <loc>/reference/gaussianity_test.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_cluster_members.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_cluster_sizes.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_discrepancy_matrix.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_discrepancy_rank.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_known_component.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_mixing_weights.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_mixture_data.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_statistic_components.html</loc>
-  </url>
-  <url>
-    <loc>/reference/get_tabulated_dist.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/is_equal_knownComp.html</loc>
-  </url>
-  <url>
-    <loc>/reference/milkyWay.html</loc>
-  </url>
-  <url>
-    <loc>/reference/mortality_sample.html</loc>
-  </url>
-  <url>
-    <loc>/reference/orthobasis_test.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot.admix_model.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot.decontaminated_density.html</loc>
-  </url>
-  <url>
-    <loc>/reference/plot.twoComp_mixt.html</loc>
-  </url>
-  <url>
-    <loc>/reference/print.admix_cluster.html</loc>
-  </url>
-  <url>
-    <loc>/reference/print.admix_estim.html</loc>
-  </url>
-  <url>
-    <loc>/reference/print.admix_model.html</loc>
-  </url>
-  <url>
-    <loc>/reference/print.decontaminated_density.html</loc>
-  </url>
-  <url>
-    <loc>/reference/print.estim_BVdk.html</loc>
-  </url>
-  <url>
-    <loc>/reference/print.estim_IBM.html</loc>
-  </url>
-  <url>
-    <loc>/reference/print.estim_PS.html</loc>
-  </url>
-  <url>
-    <loc>/reference/print.twoComp_mixt.html</loc>
-  </url>
-  <url>
-    <loc>/reference/reject_nullHyp.html</loc>
-  </url>
-  <url>
-    <loc>/reference/stmf_small.html</loc>
-  </url>
-  <url>
-    <loc>/reference/summary.admix_cluster.html</loc>
-  </url>
-  <url>
-    <loc>/reference/summary.admix_estim.html</loc>
-  </url>
-  <url>
-    <loc>/reference/summary.admix_model.html</loc>
-  </url>
-  <url>
-    <loc>/reference/summary.decontaminated_density.html</loc>
-  </url>
-  <url>
-    <loc>/reference/summary.estim_BVdk.html</loc>
-  </url>
-  <url>
-    <loc>/reference/summary.estim_IBM.html</loc>
-  </url>
-  <url>
-    <loc>/reference/summary.estim_PS.html</loc>
-  </url>
-  <url>
-    <loc>/reference/summary.twoComp_mixt.html</loc>
-  </url>
-  <url>
-    <loc>/reference/twoComp_mixt.html</loc>
-  </url>
-  <url>
-    <loc>/reference/which_rank.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/LICENSE.html</loc></url>
+<url><loc>/articles/admixture-clustering.html</loc></url>
+<url><loc>/articles/admixture-weight-estimation.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/articles/test-hypothesis.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/reference/IBM_k_samples_test.html</loc></url>
+<url><loc>/reference/admix-package.html</loc></url>
+<url><loc>/reference/admix_cluster.html</loc></url>
+<url><loc>/reference/admix_estim.html</loc></url>
+<url><loc>/reference/admix_model.html</loc></url>
+<url><loc>/reference/admix_test.html</loc></url>
+<url><loc>/reference/allGalaxies.html</loc></url>
+<url><loc>/reference/decontaminated_cdf.html</loc></url>
+<url><loc>/reference/decontaminated_density.html</loc></url>
+<url><loc>/reference/detect_support_type.html</loc></url>
+<url><loc>/reference/estim_BVdk.html</loc></url>
+<url><loc>/reference/estim_IBM.html</loc></url>
+<url><loc>/reference/estim_PS.html</loc></url>
+<url><loc>/reference/gaussianity_test.html</loc></url>
+<url><loc>/reference/get_cluster_members.html</loc></url>
+<url><loc>/reference/get_cluster_sizes.html</loc></url>
+<url><loc>/reference/get_discrepancy_matrix.html</loc></url>
+<url><loc>/reference/get_discrepancy_rank.html</loc></url>
+<url><loc>/reference/get_known_component.html</loc></url>
+<url><loc>/reference/get_mixing_weights.html</loc></url>
+<url><loc>/reference/get_mixture_data.html</loc></url>
+<url><loc>/reference/get_statistic_components.html</loc></url>
+<url><loc>/reference/get_tabulated_dist.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/is_equal_knownComp.html</loc></url>
+<url><loc>/reference/milkyWay.html</loc></url>
+<url><loc>/reference/mortality_sample.html</loc></url>
+<url><loc>/reference/orthobasis_test.html</loc></url>
+<url><loc>/reference/plot.admix_model.html</loc></url>
+<url><loc>/reference/plot.decontaminated_density.html</loc></url>
+<url><loc>/reference/plot.twoComp_mixt.html</loc></url>
+<url><loc>/reference/print.admix_cluster.html</loc></url>
+<url><loc>/reference/print.admix_estim.html</loc></url>
+<url><loc>/reference/print.admix_model.html</loc></url>
+<url><loc>/reference/print.decontaminated_density.html</loc></url>
+<url><loc>/reference/print.estim_BVdk.html</loc></url>
+<url><loc>/reference/print.estim_IBM.html</loc></url>
+<url><loc>/reference/print.estim_PS.html</loc></url>
+<url><loc>/reference/print.twoComp_mixt.html</loc></url>
+<url><loc>/reference/reject_nullHyp.html</loc></url>
+<url><loc>/reference/stmf_small.html</loc></url>
+<url><loc>/reference/summary.admix_cluster.html</loc></url>
+<url><loc>/reference/summary.admix_estim.html</loc></url>
+<url><loc>/reference/summary.admix_model.html</loc></url>
+<url><loc>/reference/summary.decontaminated_density.html</loc></url>
+<url><loc>/reference/summary.estim_BVdk.html</loc></url>
+<url><loc>/reference/summary.estim_IBM.html</loc></url>
+<url><loc>/reference/summary.estim_PS.html</loc></url>
+<url><loc>/reference/summary.twoComp_mixt.html</loc></url>
+<url><loc>/reference/twoComp_mixt.html</loc></url>
+<url><loc>/reference/which_rank.html</loc></url>
 </urlset>
+

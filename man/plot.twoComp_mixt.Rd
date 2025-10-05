@@ -2,22 +2,26 @@
 % Please edit documentation in R/twoComp_mixt.R
 \name{plot.twoComp_mixt}
 \alias{plot.twoComp_mixt}
-\title{Plots several mixture densities on the same graph}
+\title{Plot the empirical mixture pdf}
 \usage{
-\method{plot}{twoComp_mixt}(x, add_plot = FALSE, ...)
+\method{plot}{twoComp_mixt}(x, add_plot = FALSE, offset = 0, bar_width = 0.2, ...)
 }
 \arguments{
-\item{x}{Object of class 'twoComp_mixt' from which the density will be plotted.}
+\item{x}{Object of class \code{twoComp_mixt} from which the density will be plotted.}
 
 \item{add_plot}{(default to FALSE) Option to plot another mixture distribution on the same graph.}
+
+\item{offset}{Numeric. Position of the bars relative to the labels on the x-axis.}
+
+\item{bar_width}{Width of bars to be plotted.}
 
 \item{...}{further classical arguments and graphical parameters for methods plot and hist.}
 }
 \value{
-a plot with the densities of the samples provided as inputs.
+A plot with the densities of the samples provided as inputs.
 }
 \description{
-Plots the empirical densities of the samples with optional arguments to improve the visualization.
+Plots the empirical densities of the samples provided, with optional arguments to improve the visualization.
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

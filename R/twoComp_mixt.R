@@ -40,7 +40,17 @@
 #'                       comp.dist = list("multinom", "multinom"),
 #'                       comp.param = list(list("size"=1, "prob"=c(0.3,0.4,0.3)),
 #'                                         list("size"=1, "prob"=c(0.1,0.2,0.7))))
-#' plot(sim.X)
+#' sim.Y <- twoComp_mixt(n = 1800, weight = 0.7,
+#'                       comp.dist = list("multinom", "multinom"),
+#'                       comp.param = list(list("size"=1, "prob"=c(0.3,0.4,0.3)),
+#'                                         list("size"=1, "prob"=c(0.6,0.2,0.2))))
+#' sim.Z <- twoComp_mixt(n = 1800, weight = 0.3,
+#'                       comp.dist = list("multinom", "multinom"),
+#'                       comp.param = list(list("size"=1, "prob"=c(0.2,0.1,0.7)),
+#'                                         list("size"=1, "prob"=c(1/3,1/3,1/3))))
+#' plot(sim.X, offset = -0.05, bar_width = 0.05, col = "steelblue")
+#' plot(sim.Y, add_plot = TRUE, offset = 0, bar_width = 0.05, col = "orange")
+#' plot(sim.Z, add_plot = TRUE, offset = +0.05, bar_width = 0.05, col = "red")
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
@@ -125,53 +135,13 @@ twoComp_mixt <- function(n = 1000, weight = 0.5, comp.dist = list("norm", "norm"
 }
 
 
-#' Plots several mixture densities on the same graph
+#' Print method for objects \code{twoComp_mixt}
 #'
-#' Plots the empirical densities of the samples with optional arguments to improve the visualization.
-#'
-#' @param x Object of class 'twoComp_mixt' from which the density will be plotted.
-#' @param add_plot (default to FALSE) Option to plot another mixture distribution on the same graph.
-#' @param ... further classical arguments and graphical parameters for methods plot and hist.
-#'
-#' @return a plot with the densities of the samples provided as inputs.
-#'
-#' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
-#' @export
-
-plot.twoComp_mixt <- function(x, add_plot = FALSE, ...)
-{
-  old_par_new <- graphics::par()$new
-  on.exit(graphics::par(new = old_par_new))
-
-  if (!add_plot) {
-    if (all(x$dist.type == "Discrete")) {
-      graphics::barplot(height = as.numeric(table(x$mixt.data)) / sum(as.numeric(table(x$mixt.data))),
-                        names = names(table(x$mixt.data)), space = 2, width = 0.5, ...)
-    } else {
-      densities <- stats::density(x$mixt.data)
-      base::plot(densities, ...)
-    }
-  } else {
-    if (all(x$dist.type == "Discrete")) {
-      x_val <- as.numeric(names(table(x$mixt.data)))
-      graphics::barplot(height = as.numeric(table(x$mixt.data)) / sum(as.numeric(table(x$mixt.data))),
-                        names = NULL, add = add_plot,
-                        width = 0.5, space = c(3,rep(2,length(x_val)-1)), ...)
-    } else {
-      densities <- stats::density(x$mixt.data)
-      graphics::lines(densities, ...)
-    }
-  }
-}
-
-
-#' Print method for objects 'twoComp_mixt'
-#'
-#' Print an object of class 'twoComp_mixt'. A two-component mixture model has probability density function (pdf) l such that:
+#' Print an object of class \code{twoComp_mixt}. A two-component mixture model has probability density function (pdf) l such that:
 #'    l = p * f + (1-p) * g,
 #' where p is the mixing proportion, and f and g are the component distributions.
 #'
-#' @param x An object of class 'twoComp_mixt'.
+#' @param x An object of class \code{twoComp_mixt}.
 #' @param ... A list of additional parameters belonging to the default method.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
@@ -197,14 +167,14 @@ print.twoComp_mixt <- function(x, ...)
 }
 
 
-#' Summary method for objects 'twoComp_mixt'
+#' Summary method for objects \code{twoComp_mixt}
 #'
-#' Provides statistical indicators of an object of class 'twoComp_mixt'.
+#' Provides statistical indicators of an object of class \code{twoComp_mixt}.
 #' A two-component mixture model has probability density function (pdf) l such that:
 #'    l = p * f + (1-p) * g,
 #' where p is the mixing proportion, and f and g are the component distributions.
 #'
-#' @param object An object of class 'twoComp_mixt'.
+#' @param object An object of class \code{twoComp_mixt}.
 #' @param ... A list of additional parameters belonging to the default method.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
@@ -236,4 +206,47 @@ summary.twoComp_mixt <- function(object, ...)
     print(summary(object$comp2.data))
   }
   cat("\n")
+}
+
+
+#' Plot the empirical mixture pdf
+#'
+#' Plots the empirical densities of the samples provided, with optional arguments to improve the visualization.
+#'
+#' @param x Object of class \code{twoComp_mixt} from which the density will be plotted.
+#' @param add_plot (default to FALSE) Option to plot another mixture distribution on the same graph.
+#' @param offset Numeric. Position of the bars relative to the labels on the x-axis.
+#' @param bar_width Width of bars to be plotted.
+#' @param ... further classical arguments and graphical parameters for methods plot and hist.
+#'
+#' @return A plot with the densities of the samples provided as inputs.
+#'
+#' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
+#' @export
+#'
+plot.twoComp_mixt <- function(x, add_plot = FALSE, offset = 0, bar_width = 0.2, ...)
+{
+  if (all(x$dist.type == "Discrete")) {
+    ## Discrete data and density
+    freq <- as.numeric(table(x$mixt.data))
+    x_val <- as.numeric(names(table(x$mixt.data)))
+    heights <- freq / sum(freq)
+    if (!add_plot) {
+      ## Initialise graphic window
+      plot(range(x_val), range(0, heights * 1.1), type="n", xaxt="n",
+           xlab="x", ylab="Probability", ...)
+      graphics::axis(1, at=x_val, labels=as.character(x_val))
+    }
+    ## Bars
+    for (i in seq_along(x_val)) {
+      graphics::rect(xleft  = x_val[i] - bar_width/2 + offset,
+                     xright = x_val[i] + bar_width/2 + offset,
+                     ybottom = 0, ytop = heights[i], ...)
+    }
+  } else {
+    ## Continuous case: densities
+    densities <- stats::density(x$mixt.data)
+    if (!add_plot) { plot(densities, ...)
+    } else { graphics::lines(densities, ...) }
+  }
 }

@@ -315,35 +315,6 @@ get_tabulated_dist.admix_cluster <- function(x)
 #' @return A matrix of ranks, from the closest couple (rank 1) in terms of discrepancy
 #'         measure to the most different one.
 #'
-#' @examples
-#' mixt1 <- twoComp_mixt(n = 380, weight = 0.7,
-#'                       comp.dist = list("norm", "norm"),
-#'                       comp.param = list(list("mean" = -2, "sd" = 0.5),
-#'                                         list("mean" = 0, "sd" = 1)))
-#' mixt2 <- twoComp_mixt(n = 350, weight = 0.85,
-#'                       comp.dist = list("norm", "norm"),
-#'                       comp.param = list(list("mean" = -2, "sd" = 0.5),
-#'                                         list("mean" = -1, "sd" = 1)))
-#' mixt3 <- twoComp_mixt(n = 500, weight = 0.6,
-#'                       comp.dist = list("gamma", "gamma"),
-#'                       comp.param = list(list("shape" = 16, "scale" = 1/4),
-#'                                         list("shape" = 12, "scale" = 1/2)))
-#' data1 <- get_mixture_data(mixt1)
-#' data2 <- get_mixture_data(mixt2)
-#' data3 <- get_mixture_data(mixt3)
-#' admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
-#'                          knownComp_param = mixt1$comp.param[[2]])
-#' admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
-#'                          knownComp_param = mixt2$comp.param[[2]])
-#' admixMod3 <- admix_model(knownComp_dist = mixt3$comp.dist[[2]],
-#'                          knownComp_param = mixt3$comp.param[[2]])
-#' x <- admix_test(samples = list(data1,data2,data3),
-#'                 admixMod = list(admixMod1,admixMod2,admixMod3),
-#'                 conf_level = 0.95, test_method = "icv", n_sim_tab = 10)
-#' get_discrepancy_rank(x)
-#' get_discrepancy_matrix(x)
-#' get_statistic_components(x)
-#'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 #'

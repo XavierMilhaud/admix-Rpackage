@@ -24,11 +24,11 @@
 #' \insertRef{BordesVandekerkhove2010}{admix}
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2024a}{admix}
 #'
-#' @return An object of class \link[admix]{admix_estim}, containing at least 5 attributes: 1) the number of samples under study; 2) the information
-#'         about the mixture components (distributions and parameters); 3) the sizes of the samples; 4) the chosen estimation technique
-#'         (one of 'BVdk', 'PS' or 'IBM'); 5) the estimated mixing proportions (weights of the unknown component distributions in the
-#'         mixture model). In case of 'BVdk' estimation, one additional attribute corresponding to the estimated location shift parameter
-#'         is included.
+#' @return An object of class \code{estim_BVdk}, \code{estim_PS} or \code{estim_IBM} (that inherits from class \link[admix]{admix_estim}),
+#'         containing at least 5 attributes: 1) the number of samples under study; 2) the information about the mixture components
+#'         (distributions and parameters); 3) the sizes of the samples; 4) the chosen estimation technique (one of 'BVdk', 'PS' or 'IBM');
+#'         5) the estimated mixing proportions (weights of the unknown component distributions in the mixture model). In case of 'BVdk'
+#'         estimation, one additional attribute corresponding to the estimated location shift parameter is included.
 #'
 #' @examples
 #' ## Simulate mixture data:
@@ -184,5 +184,4 @@ summary.admix_estim <- function(object, ...)
       cat("\n")
     }
   }
-#  cat("\n")
 }
