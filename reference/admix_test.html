@@ -96,16 +96,17 @@ only 'poly' is available and the test is a gaussianity test. For further details
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
 <dd><p>Depending on the choice made by the user for the test method ('poly' or 'icv'), optional arguments to
-<a href="gaussianity_test.html">gaussianity_test</a> or <a href="orthobasis_test.html">orthobasis_test</a> (in case of 'poly'), and to <a href="IBM_k_samples_test.html">IBM_k_samples_test</a>
+<a href="gaussianity_test.html">gaussianity_test</a>, <a href="orthobasis_test.html">orthobasis_test</a> (in case of 'poly'), or <a href="IBM_k_samples_test.html">IBM_k_samples_test</a>
 in case of 'icv'.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class 'htest' containing the classical attributes of the latter class, as well as
-other attributes specific to the inherited object class. Usually, the test decision (reject the null hypothesis or not);
-the confidence level of the test (1-alpha, where alpha denotes the level of the test or equivalently the type-I error);
-the number of samples under study; the respective size of each sample; the information about known mixture components.</p>
+    <p>An object of class <code>gaussianity_test</code>, <code>orthobasis_test</code>, or <code>IBM_test</code> (that inherits from
+class <code>htest</code>), containing attributes specific to the object class (in addition to classical attributes
+from <code>htest</code>). Usually, the test decision (reject the null hypothesis or not); the confidence level of
+the test (1-alpha, where alpha denotes the level of the test or equivalently the type-I error); the number
+of samples under study; the respective size of each sample; the information about known mixture components.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
