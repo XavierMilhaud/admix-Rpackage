@@ -235,7 +235,7 @@ plot.decontaminated_density <- function(x, x_val = NULL, add_plot = FALSE, offse
     for (i in seq_along(x_val)) {
       graphics::rect(xleft = x_val[i] - bar_width/2 + offset,
                      xright = x_val[i] + bar_width/2 + offset,
-                     ybottom = 0, ytop = decontamin_dens_values[i])
+                     ybottom = 0, ytop = decontamin_dens_values[i], ...)
     }
   } else {
     graphics::lines(x = x_val, y = decontamin_dens_values, ...)
