@@ -1,19 +1,30 @@
 #' Probability density function of the unknown component
 #'
-#' Estimate the decontaminated density of the unknown component in the admixture model under study, after inversion of the admixture
-#' cumulative distribution function. Recall that an admixture model follows the cumulative distribution function (CDF) L, where
-#' L = p*F + (1-p)*G, with g a known CDF and p and f unknown quantities.
+#' Estimates the decontaminated probability density function (PDF) of the unknown component in
+#' an admixture model, based on the inversion of the admixture density equation \eqn{l = p f + (1-p) g}.
 #'
-#' @param sample1 Sample under study.
-#' @param estim.p The estimated weight, related to the proportion of the unknown component distribution in the admixture model studied.
+#' @param sample1 Numeric vector, sample under study.
 #' @param admixMod An object of class \code{admix_model}, containing useful information about known distribution(s) and parameter(s).
+#' @param estim.p Numeric. The estimated mixing proportion \eqn{\hat{p}} of the unknown component.
 #'
-#' @details The decontaminated density is obtained by inverting the admixture density, given by l = p*f + (1-p)*g, to isolate the
-#'          unknown component f after having estimated p.
+#' @details
+#' The decontaminated density \eqn{f} is computed as:
+#' \deqn{f(x) = (1 / \hat{p}) [ \hat{l}(x) - (1 - \hat{p}) g(x) ]}
+#' where:
+#' \itemize{
+#'   \item \eqn{\hat{l}(x)} is the empirical density of the sample,
+#'   \item \eqn{g(x)} is the known component’s theoretical density,
+#'   \item \eqn{\hat{p}} is the estimated mixture weight.
+#' }
+#' For continuous data, \eqn{\hat{l}(x)} is estimated using kernel density estimation.
+#' For discrete data, it is approximated from normalized frequencies.
 #'
-#' @return An object of class \code{decontaminated_density}, containing 3 attributes: 1) the data under study;
-#'         2) the type of support for the underlying distribution (either discrete or continuous, useful for plots);
-#'         3) the decontaminated density function.
+#' @return An object of class \code{decontaminated_density} containing:
+#' \describe{
+#'   \item{data}{Original sample.}
+#'   \item{support}{Type of support ("Continuous" or "Discrete").}
+#'   \item{decontaminated_density_fun}{A function returning the estimated decontaminated density.}
+#' }
 #'
 #' @examples
 #' ## Simulate mixture data:
@@ -29,8 +40,8 @@
 #' est <- admix_estim(samples = list(data1), admixMod = list(admixMod1),
 #'                    est_method = 'PS')
 #' ## Determine the decontaminated version of the unknown density by inversion:
-#' x <- decontaminated_density(sample1 = data1, estim.p = get_mixing_weights(est),
-#'                        admixMod = admixMod1)
+#' x <- decontaminated_density(sample1 = data1, admixMod = admixMod1,
+#'                             estim.p = get_mixing_weights(est))
 #' print(x)
 #' summary(x)
 #' plot(x)
@@ -63,69 +74,77 @@
 #'                    admixMod = list(admixMod1,admixMod2), est_method = 'IBM')
 #' est2 <- admix_estim(samples = list(data3), admixMod = list(admixMod3), est_method = 'PS')
 #' ## Determine the decontaminated version of the unknown density by inversion:
-#' x <- decontaminated_density(sample1 = data1, estim.p = get_mixing_weights(est)[1],
-#'                        admixMod = admixMod1)
-#' y <- decontaminated_density(sample1 = data2, estim.p = get_mixing_weights(est)[2],
-#'                        admixMod = admixMod2)
-#' z <- decontaminated_density(sample1 = data3, estim.p = get_mixing_weights(est2),
-#'                        admixMod = admixMod3)
+#' x <- decontaminated_density(sample1 = data1, admixMod = admixMod1,
+#'                             estim.p = get_mixing_weights(est)[1])
+#' y <- decontaminated_density(sample1 = data2, admixMod = admixMod2,
+#'                             estim.p = get_mixing_weights(est)[2])
+#' z <- decontaminated_density(sample1 = data3, admixMod = admixMod3,
+#'                             estim.p = get_mixing_weights(est2))
 #' plot(x, offset = -0.2, bar_width = 0.2, col = "steelblue")
 #' plot(y, add_plot = TRUE, offset = 0, bar_width = 0.2, col = "red")
 #' plot(z, add_plot = TRUE, offset = 0.2, bar_width = 0.2, col = "orange")
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
+#'
 
-decontaminated_density <- function(sample1, estim.p, admixMod)
+decontaminated_density <- function(sample1, admixMod, estim.p)
 {
+  ##--- Safety checks ---##
   if (!inherits(x = admixMod, what = "admix_model"))
-    stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
+    stop("Argument 'admixMod' must be of class 'admix_model'. See ?admix_model.")
+  if (!is.numeric(sample1) || !is.numeric(estim.p))
+    stop("'sample1' and 'estim.p' must be numeric.")
+  if (estim.p <= 0 || estim.p > 1)
+    stop("'estim.p' must be in (0,1].")
 
-  ## Extract the information on component distributions:
+  ##--- Extract known component density ---##
   knownComp.dens <- paste0("d", admixMod$comp.dist$known)
-  if (any(knownComp.dens == "dmultinom")) { knownComp.dens[which(knownComp.dens == "dmultinom")] <- "approxfun" }
-  comp_dens <- sapply(X = knownComp.dens, FUN = get, mode = "function")
-  for (i in 1:length(comp_dens)) assign(x = names(comp_dens)[i], value = comp_dens[[i]])
-
-  ## Create the expression involved in future assessments of the densities:
-  if (knownComp.dens == "approxfun") {
-    expr <- paste(names(comp_dens),"(x = 1:", length(admixMod$comp.param$known$prob), paste(", y = c(",
-                                paste(paste(admixMod$comp.param$known$prob, collapse = ","), ")", sep = ""), ")", sep = ""), sep = "")
-  } else {
-    expr <- paste(names(comp_dens),"(x,", paste(names(admixMod$comp.param$known), "=", admixMod$comp.param$known,
-                                                sep = "", collapse = ","), ")", sep="")
-  }
-
-  ## Evaluate density of known components, differentiates the case of the multinomial distribution from others:
-  if (any(knownComp.dens == "approxfun")) {
+  if (knownComp.dens == "dmultinom") knownComp.dens <- "approxfun"
+  comp_dens_fun <- get(knownComp.dens, mode = "function")
+  if (knownComp.dens == "approxfun") { # Discrete case
+    expr <- paste0("approxfun(x = 1:", length(admixMod$comp.param$known$prob),
+                   ", y = c(", paste(admixMod$comp.param$known$prob, collapse = ","), "))")
     g1.fun <- eval(parse(text = expr))
     g1 <- function(x) g1.fun(x)
-  } else {
-    g1 <- function(x) { eval(parse(text = expr)) }
+  } else { # Continuous distribution
+    expr <- paste0(knownComp.dens, "(x, ",
+                   paste(names(admixMod$comp.param$known), "=", admixMod$comp.param$known,
+                         collapse = ", "), ")")
+    g1 <- function(x) eval(parse(text = expr))
   }
 
-  ##------- Defines the support --------##
+  ##--- Detect support type ---##
   support <- detect_support_type(sample1)
 
-  ## Retrieves the empirical cumulative distribution functions:
+  ##--- Empirical density estimation ---##
   if (support == "Continuous") {
-    l1_dens <- stats::density(sample1)
-    l1_emp <- stats::approxfun(x = l1_dens$x, y = l1_dens$y)
+    l1_dens <- stats::density(sample1, n = 2048)
+    l1_emp <- stats::approxfun(l1_dens$x, l1_dens$y, yleft = 0, yright = 0)
   } else {
-    l1_emp <- stats::approxfun(x = as.numeric(names(table(sample1))),
-                               y = table(sample1) / sum(table(sample1)), method = "constant")
+    tbl <- table(sample1)
+    l1_emp <- stats::approxfun(
+      x = as.numeric(names(tbl)),
+      y = as.numeric(tbl) / sum(tbl),
+      method = "constant", yleft = 0, yright = 0
+    )
   }
-  f1_decontamin <- function(x) (1/estim.p) * (l1_emp(x) - (1-estim.p) * g1(x))
-
-  obj <- list(data = sample1,
-              support = support,
-              decontaminated_density_fun = f1_decontamin)
+  ##--- Compute decontaminated density ---##
+  f1_decontamin <- function(x) {
+    val <- (1 / estim.p) * (l1_emp(x) - (1 - estim.p) * g1(x))
+    val[val < 0] <- 0  # avoid negatives due to estimation noise
+    return(val)
+  }
+  ##--- Construct output object ---##
+  obj <- list(
+    data = sample1,
+    support = support,
+    decontaminated_density_fun = f1_decontamin,
+    call = match.call()
+  )
   class(obj) <- "decontaminated_density"
-  obj$call <- match.call()
-
   return(obj)
 }
-
 
 #' Print method for object of class \code{decontaminated_density}
 #'
@@ -250,9 +269,9 @@ plot.decontaminated_density <- function(x, x_val = NULL, add_plot = FALSE, offse
 #' L = p*F + (1-p)*G, with g a known CDF and p and f unknown quantities.
 #'
 #' @param sample1 Observations of the sample under study.
+#' @param admixMod An object of class \code{admix_model}, containing useful information about distributions and parameters.
 #' @param estim.p The estimated weight of the unknown component distribution, related to the proportion of the unknown component
 #'                  in the admixture model studied.
-#' @param admixMod An object of class \code{admix_model}, containing useful information about distributions and parameters.
 #'
 #' @details The decontaminated CDF is obtained by inverting the admixture CDF, given by L = p*F + (1-p)*G, to isolate the
 #'          unknown component F after having estimated p. This means that F = (1/hat(p)) * (hat(L)-(1-p)*G).
@@ -281,18 +300,18 @@ plot.decontaminated_density <- function(x, x_val = NULL, add_plot = FALSE, offse
 #'                    admixMod = list(admixMod1,admixMod2), est_method = 'PS')
 #' prop <- get_mixing_weights(est)
 #' ## Determine the decontaminated version of the unknown CDF by inversion:
-#' F1 <- decontaminated_cdf(sample1 = data1, estim.p = prop[1], admixMod = admixMod1)
-#' F2 <- decontaminated_cdf(sample1 = data2, estim.p = prop[2], admixMod = admixMod2)
+#' F1 <- decontaminated_cdf(sample1 = data1, admixMod = admixMod1, estim.p = prop[1])
+#' F2 <- decontaminated_cdf(sample1 = data2, admixMod = admixMod2, estim.p = prop[2])
 #' abs <- seq(from=-1, to=4, length.out=100)
-#' plot(x=abs, y=F1(abs), xlim=c(-1,4), ylim=c(0,1), type="l")
+#' plot(x=abs, y=F1(abs), xlim=c(2,4), ylim=c(0,1), type="l")
 #' par(new = TRUE)
-#' plot(x=abs, y=F2(abs), xlim=c(-1,4), ylim=c(0,1), type="l", col="red")
+#' plot(x=abs, y=F2(abs), xlim=c(2,4), ylim=c(0,1), type="l", col="red")
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @keywords internal
 #' @export
 
-decontaminated_cdf <- function(sample1, estim.p, admixMod)
+decontaminated_cdf <- function(sample1, admixMod, estim.p)
 {
   if (!inherits(x = admixMod, what = "admix_model"))
     stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
@@ -333,11 +352,10 @@ decontaminated_cdf <- function(sample1, estim.p, admixMod)
 
   F1_decontamin <- sapply(X = x_values, FUN = function(x) (1/estim.p) * (L1(x) - (1-estim.p) * G1(x)))
   F1_decontamin[which(is.na(F1_decontamin))] <- 0
-  F1_decontamin <- pmax(F1_decontamin, 0)
-  F1_decontamin <- pmin(F1_decontamin, 1)
+  F1_monotonous <- Iso::pava(y = c(0, F1_decontamin), decreasing = FALSE)
+  F1_monotonous[which(F1_monotonous <= 0)] <- 0
+  F1_monotonous[which(F1_monotonous >= 1)] <- 1
+  F1_fun <- stats::stepfun(x = x_values, y = F1_monotonous)
 
-  F1_fun <- stats::stepfun(x = x_values, y = c(0,F1_decontamin))
-  #F1_fun <- Iso::pava(y = c(0,F1_decontamin), decreasing = FALSE, stepfun = TRUE)
-  #plot.stepfun(x = F1_fun, xlim = c(min(x_values[knots(F1_fun)-1]), max(x_values[knots(F1_fun)-1])))
   return(F1_fun)
 }

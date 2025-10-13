@@ -4,15 +4,15 @@
 \alias{decontaminated_cdf}
 \title{Estimates the decontaminated CDF of the unknown component in an admixture}
 \usage{
-decontaminated_cdf(sample1, estim.p, admixMod)
+decontaminated_cdf(sample1, admixMod, estim.p)
 }
 \arguments{
 \item{sample1}{Observations of the sample under study.}
 
+\item{admixMod}{An object of class \code{admix_model}, containing useful information about distributions and parameters.}
+
 \item{estim.p}{The estimated weight of the unknown component distribution, related to the proportion of the unknown component
 in the admixture model studied.}
-
-\item{admixMod}{An object of class \code{admix_model}, containing useful information about distributions and parameters.}
 }
 \value{
 The decontaminated CDF F of the admixture model, of class 'stepfun' (step function).
@@ -48,12 +48,12 @@ est <- admix_estim(samples = list(data1,data2),
                    admixMod = list(admixMod1,admixMod2), est_method = 'PS')
 prop <- get_mixing_weights(est)
 ## Determine the decontaminated version of the unknown CDF by inversion:
-F1 <- decontaminated_cdf(sample1 = data1, estim.p = prop[1], admixMod = admixMod1)
-F2 <- decontaminated_cdf(sample1 = data2, estim.p = prop[2], admixMod = admixMod2)
+F1 <- decontaminated_cdf(sample1 = data1, admixMod = admixMod1, estim.p = prop[1])
+F2 <- decontaminated_cdf(sample1 = data2, admixMod = admixMod2, estim.p = prop[2])
 abs <- seq(from=-1, to=4, length.out=100)
-plot(x=abs, y=F1(abs), xlim=c(-1,4), ylim=c(0,1), type="l")
+plot(x=abs, y=F1(abs), xlim=c(2,4), ylim=c(0,1), type="l")
 par(new = TRUE)
-plot(x=abs, y=F2(abs), xlim=c(-1,4), ylim=c(0,1), type="l", col="red")
+plot(x=abs, y=F2(abs), xlim=c(2,4), ylim=c(0,1), type="l", col="red")
 
 }
 \author{

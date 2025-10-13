@@ -417,9 +417,6 @@ cv.score <- function(tr.data, test.data, c.n)
 
 PS_dist_calc <- function(data, gridsize = 200)
 {
-  ## Transform the known component distribution into a Uniform distribution:
-  #data <- knownComp_to_uniform(data, admixMod)
-
   q <- 0.6792
   n <- length(data)         # length of the data set
   data <- sort(data)        # sorts the data set
