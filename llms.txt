@@ -1,0 +1,226 @@
+# Welcome to R package admix
+
+The goal of admix is to provide code for estimation, hypothesis testing
+and clustering methods in admixture models.
+
+We remind that an admixture model has the following cumulative
+distribution function (cdf)
+$$L(x) = pF(x) + (1 - p)G(x),\qquad x \in {\mathbb{R}},$$
+
+where $G$ is a perfectly known cdf, and $p$ and $F$ are unknown.
+
+The cdf $F$ relates to the contamination phenomenon that is added to the
+well-known signal $G$, with proportion $p$.
+
+The proportion of the unknown component in the two-component mixture
+model can be easily estimated under weak nonparametric assumptions on
+the related distribution. The decontaminated version of this unknown
+component distribution can then be tested against some other specified
+distribution (included another decontaminated unknown component).
+Finally, clustering of $K$ populations is made possible, based on
+hypothesis tests that compare unknown component distributions. The
+package is suited to one-sample as well as multi-samples analysis.
+
+# Installation
+
+You can install the released version of admix from
+[Github](https://github.com/XavierMilhaud/admix-Rpackage) with:
+
+``` r
+#once on CRAN with : install.package("admix")
+# from now on:
+remotes::install_git("git@github.com:XavierMilhaud/admix.git", build_manual = TRUE, build_vignettes = TRUE)
+```
+
+The optional argument build_vignettes can be set to TRUE to get
+vignettes that help to understand the functionalities of the package.
+
+To get some help about the functionalities of the package, do once
+installed:
+
+``` r
+help(package = 'admix')
+```
+
+More details can also be found through the vignettes, available in admix
+github-pages (see <https://xaviermilhaud.github.io/admix-Rpackage/>, in
+Menu Articles).
+
+## Example
+
+This is a basic example which shows you how to estimate the unknown
+component proportion and the localization shift parameters in an
+admixture model where the unknown component density is assumed to be
+symmetric. In practice, the cdf $L$ is given by
+$$L(x) = pF(x - \mu) + (1 - p)G(x),\qquad x \in {\mathbb{R}},$$ where
+$p$ is the unknown component weight, and $\mu$ is the localization shift
+parameter of the unknown cdf $F$ with symmetric density.
+
+The estimation would be made through the following commands:
+
+``` r
+library(admix)
+#> Package 'admix' version 2.3.1
+#> -------------------------------
+#> Type 'citation("admix")' for citing this R package in publications.
+#> -------------------------------
+#> This work was partly conducted within the Research Chair DIALog under the aegis of the Risk Foundation, an initiative by CNP Assurances.
+```
+
+``` r
+## Simulate mixture data:
+mixt1 <- twoComp_mixt(n = 450, weight = 0.4,
+                      comp.dist = list("norm", "norm"),
+                      comp.param = list(list("mean" = -2, "sd" = 0.5),
+                                        list("mean" = 0, "sd" = 1)))
+data1 <- get_mixture_data(mixt1)
+## Define the admixture models:
+admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
+                         knownComp_param = mixt1$comp.param[[2]])
+## Estimation step:
+admix_estim(samples = list(data1),
+            admixMod = list(admixMod1),
+            est_method = 'BVdk')
+#> Call:
+#> admix_estim(samples = list(data1), admixMod = list(admixMod1), 
+#>     est.method = "BVdk", sym.f = TRUE)
+#> 
+#> Estimated mixing weight of the unknown component distribution in Sample 1: 0.4
+#> 
+#> Estimated location parameters of the unknown component distribution in Sample 1: -2.09
+```
+
+# Package index
+
+## All functions
+
+- [`admix_cluster()`](admix_cluster.md) : Cluster K populations
+  following admixture models
+
+- [`admix_estim()`](admix_estim.md) : Estimate the unknown weight in an
+  admixture model
+
+- [`admix_model()`](admix_model.md) : Define the
+  distribution/parameter(s) of the known component
+
+- [`admix_test()`](admix_test.md) : Equality test for the unknown
+  components in admixture models
+
+- [`allGalaxies`](allGalaxies.md) : Measurements of heliocentric
+  velocities
+
+- [`decontaminated_density()`](decontaminated_density.md) : Probability
+  density function of the unknown component
+
+- [`detect_support_type()`](detect_support_type.md) : Detect the type of
+  support of some random variables
+
+- [`get_cluster_members()`](get_cluster_members.md) : Extractor for
+  members of clusters
+
+- [`get_cluster_sizes()`](get_cluster_sizes.md) : Extractor for cluster
+  sizes
+
+- [`get_discrepancy_matrix()`](get_discrepancy_matrix.md) : Extractor
+  for discrepancies b/w unknown components
+
+- [`get_discrepancy_rank()`](get_discrepancy_rank.md) : Extractor for
+  pairwise discrepancy rankings
+
+- [`get_known_component()`](get_known_component.md) : Extractor for
+  known component(s) in admixture model(s)
+
+- [`get_mixing_weights()`](get_mixing_weights.md) : Extractor for
+  estimated mixing weights
+
+- [`get_mixture_data()`](get_mixture_data.md) : Extractor for simulated
+  data from two-component mixture
+
+- [`get_statistic_components()`](get_statistic_components.md) :
+  Extractor for components involved in test statistic
+
+- [`get_tabulated_dist()`](get_tabulated_dist.md) : Extractor for
+  tabulated distribution in the k-sample test
+
+- [`is_equal_knownComp()`](is_equal_knownComp.md) : Equality of known
+  components in two admixture models
+
+- [`milkyWay`](milkyWay.md) : Dataset of heliocentric velocity for the
+  Milky Way
+
+- [`mortality_sample`](mortality_sample.md) : Dataset of deaths
+  statistics in 11 european countries
+
+- [`plot(`*`<admix_model>`*`)`](plot.admix_model.md) :
+
+  Plot method for objects of class `admix_model`
+
+- [`plot(`*`<decontaminated_density>`*`)`](plot.decontaminated_density.md)
+  :
+
+  Plot method for object of class `decontaminated_density`
+
+- [`plot(`*`<twoComp_mixt>`*`)`](plot.twoComp_mixt.md) : Plot the
+  empirical mixture pdf
+
+- [`print(`*`<admix_cluster>`*`)`](print.admix_cluster.md) : Print
+  method for object of class 'admix_cluster'
+
+- [`print(`*`<admix_estim>`*`)`](print.admix_estim.md) :
+
+  Print method for object of class `admix_estim`
+
+- [`print(`*`<admix_model>`*`)`](print.admix_model.md) :
+
+  Print method for objects of class `admix_model`
+
+- [`print(`*`<decontaminated_density>`*`)`](print.decontaminated_density.md)
+  :
+
+  Print method for object of class `decontaminated_density`
+
+- [`print(`*`<twoComp_mixt>`*`)`](print.twoComp_mixt.md) :
+
+  Print method for objects `twoComp_mixt`
+
+- [`reject_nullHyp()`](reject_nullHyp.md) : Extractor for the test
+  decision
+
+- [`stmf_small`](stmf_small.md) : Dataset of Short-term Mortality
+  Fluctuations (STMF) from HMD
+
+- [`summary(`*`<admix_cluster>`*`)`](summary.admix_cluster.md) : Summary
+  method for object of class 'admix_cluster'
+
+- [`summary(`*`<admix_estim>`*`)`](summary.admix_estim.md) :
+
+  Summary method for object of class `admix_estim`
+
+- [`summary(`*`<admix_model>`*`)`](summary.admix_model.md) :
+
+  Summary method for objects of class `admix_model`
+
+- [`summary(`*`<decontaminated_density>`*`)`](summary.decontaminated_density.md)
+  :
+
+  Summary method for object of class `decontaminated_density`
+
+- [`summary(`*`<twoComp_mixt>`*`)`](summary.twoComp_mixt.md) :
+
+  Summary method for objects `twoComp_mixt`
+
+- [`twoComp_mixt()`](twoComp_mixt.md) : Simulation of a two-component
+  mixture model
+
+- [`which_rank()`](which_rank.md) : Extractor for the selected rank in
+  the test statistic
+
+# Articles
+
+### All vignettes
+
+- [Clustering of unknown subpopulations in admixture
+  models](admixture-clustering.md):
+- [Estimation of unknown elements in admixture
+  models](admixture-weight-estimation.md):
+- [Hypothesis test in admixture models](test-hypothesis.md):

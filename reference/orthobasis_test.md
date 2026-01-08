@@ -1,0 +1,149 @@
+# Equality test of two unknown component distributions using polynomial expansions
+
+Tests the null hypothesis (H0: f1=f2) using the decomposition of unknown
+component densities of two admixture distributions in an adequate
+orthonormal polynomial basis. Recall that we have two admixture models
+with respective probability density functions (pdf) l1 = p1\*f1 +
+(1-p1)*g1 and l2 = p2*f2 + (1-p2)\*g2, where g1 and g2 are the only
+known elements and l1 and l2 are observed. The admixture weights p1 and
+p2 thus have to be estimated. For further information on this method,
+see 'Details' below.
+
+## Usage
+
+``` r
+orthobasis_test(
+  samples,
+  admixMod,
+  conf_level = 0.95,
+  est_method = c("BVdk", "PS"),
+  ask_poly_param = FALSE,
+  K = 3,
+  s = 0.25,
+  nb_echBoot = 100,
+  support = c("Real", "Integer", "Positive", "Bounded.continuous", "Bounded.discrete"),
+  bounds_supp = NULL,
+  ...
+)
+```
+
+## Arguments
+
+- samples:
+
+  List of the two samples, each one following the mixture distribution
+  given by l = p\*f + (1-p)\*g, with f and p unknown and g known.
+
+- admixMod:
+
+  A list of objects of class [admix_model](admix_model.md), containing
+  useful information about distributions and parameters.
+
+- conf_level:
+
+  The confidence level, default to 95 percent. Equals 1-alpha, where
+  alpha is the level of the test (type-I error).
+
+- est_method:
+
+  Estimation method to get the component weights, either 'PS' (Patra and
+  Sen estimation) or 'BVdk' (Bordes and Vendekerkhove estimation).
+  Choosing 'PS' requires to specify the number of bootstrap samples.
+
+- ask_poly_param:
+
+  (default to FALSE) If TRUE, ask the user to choose both the order 'K'
+  of expansion coefficients in the orthonormal polynomial basis, and the
+  penalization rate 's' involved on the penalization rule for the test.
+
+- K:
+
+  (K \> 0, default to 3) If not asked (see the previous argument),
+  number of coefficients considered for the polynomial basis expansion.
+
+- s:
+
+  (in \]0,1/2\[, default to 0.25) If not asked (see the previous
+  argument), rate at which the normalization factor is set in the
+  penalization rule for model selection (in \]0,1/2\[). Low values of
+  's' favors the detection of alternative hypothesis. See reference
+  below.
+
+  \[, default to 0.25) If not asked (see the previous argument), rate at
+  which the normalization factor is set in the penalization rule for
+  model selection (in \]:
+  R:,%20default%20to%200.25)%20If%20not%20asked%20(see%20the%20previous%20argument),%20rate%20at%20which%20the%20normalization%20factor%20is%20set%20in%0A%20%20%20%20%20%20%20%20%20%20the%20penalization%20rule%20for%20model%20selection%20(in%20
+
+- nb_echBoot:
+
+  (default to 100) Number of bootstrap samples, useful when choosing
+  'PS' estimation method.
+
+- support:
+
+  Support of the probability distributions, useful to choose the
+  appropriate polynomial orthonormal basis. One of 'Real', 'Integer',
+  'Positive', or 'Bounded.continuous'.
+
+- bounds_supp:
+
+  (default to NULL) Useful if support = 'Bounded.continuous', a list of
+  minimum and maximum bounds, specified as following: list(
+  list(min.f1,min.g1,min.f2,min.g2) , list(max.f1,max.g1,max.f2,max.g2)
+  )
+
+- ...:
+
+  Optional arguments to [estim_BVdk](estim_BVdk.md) or
+  [estim_PS](estim_PS.md), depending on the chosen argument 'est_method'
+  (see above).
+
+## Value
+
+An object of class orthobasis_test, containing ten attributes: 1) the
+number of populations under study (2 in this case); 2) the sizes of
+samples; 3) the information about the known component distribution; 4)
+the reject decision of the test; 5) the confidence level of the test, 6)
+the p-value of the test; 7) the value of the test statistic; 8) the
+variance of the test statistic at each order in the polynomial
+orthobasis expansion; 9) the selected rank (order) for the test
+statistic; 10) a vector of estimates, related to the estimated mixing
+proportions in the two samples.
+
+## References
+
+Milhaud X, Pommeret D, Salhi Y, Vandekerkhove P (2022). “Semiparametric
+two-sample admixture components comparison test: The symmetric case.”
+*Journal of Statistical Planning and Inference*, **216**, 135-150. ISSN
+0378-3758,
+[doi:10.1016/j.jspi.2021.05.010](https://doi.org/10.1016/j.jspi.2021.05.010)
+.
+
+## Author
+
+Xavier Milhaud <xavier.milhaud.research@gmail.com>
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+#### Under the null hypothesis H0.
+mixt1 <- twoComp_mixt(n = 300, weight = 0.77,
+                      comp.dist = list("norm", "exp"),
+                      comp.param = list(list("mean" = 1, "sd" = 1),
+                                        list("rate" = 0.33)))
+data1 <- get_mixture_data(mixt1)
+admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
+                        knownComp_param = mixt1$comp.param[[2]])
+mixt2 <- twoComp_mixt(n = 500, weight = 0.62,
+                      comp.dist = list("norm", "norm"),
+                      comp.param = list(list("mean" = 1, "sd" = 1),
+                                        list("mean" = -2, "sd" = 0.5)))
+data2 <- get_mixture_data(mixt2)
+admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
+                        knownComp_param = mixt2$comp.param[[2]])
+## Test procedure:
+orthobasis_test(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
+                conf_level = 0.95, est_method = 'BVdk', support = 'Real')
+} # }
+```

@@ -1,0 +1,123 @@
+# Estimates in an admixture using Patra and Sen approach
+
+Estimation of both the weight and the distribution of the unknown
+component in an admixture model, by Patra and Sen approach. Remind that
+the admixture probability density function (pdf) l is given by l =
+p\*f + (1-p)\*g, where g is the known component of the two-component
+mixture, p is the unknown proportion of the unknown component
+distribution f. More information in 'Details' below concerning the
+estimation method.
+
+## Usage
+
+``` r
+estim_PS(
+  samples,
+  admixMod,
+  method = c("fixed", "lwr.bnd", "cv"),
+  c.n = 0.1 * log(log(length(samples))),
+  folds = 10,
+  reps = 1,
+  cn.s = NULL,
+  cn.length = 100,
+  gridsize = 1200
+)
+```
+
+## Arguments
+
+- samples:
+
+  Sample to be studied.
+
+- admixMod:
+
+  An object of class [admix_model](admix_model.md), containing
+  information about the known component distribution and its
+  parameter(s).
+
+- method:
+
+  One of 'lwr.bnd', fixed' or 'cv': depending on whether compute some
+  lower bound of the mixing proportion, the estimate based on the value
+  of 'c.n' or use cross-validation for choosing 'c.n' (tuning
+  parameter).
+
+- c.n:
+
+  (default to NULL) A positive number for the penalization, see
+  reference below. If NULL, equals to 0.1\*log(log(n)).
+
+- folds:
+
+  (optional, default to 10) Number of folds used for cross-validation.
+
+- reps:
+
+  (optional, default to 1) Number of replications for cross-validation.
+
+- cn.s:
+
+  (optional) A sequence of 'c.n' to be used for cross-validation (vector
+  of values). Default is equally spaced grid of 100 values between .001
+  x log(log(n)) and 0.2 x log(log(n)).
+
+- cn.length:
+
+  (optional, default to 100) Number of equally spaced tuning parameter
+  (between .001 x log(log(n)) and 0.2 x log(log(n))). Values to search
+  from.
+
+- gridsize:
+
+  (default to 600) Number of equally spaced points (between 0 and 1) to
+  evaluate the distance function. Larger values are more computationally
+  intensive but also lead to more accurate estimates.
+
+## Value
+
+An object of class estim_PS, containing 10 attributes: 1) the number of
+samples studied (1 in this case); 2) the sample size; 3) the information
+about component distributions of the admixture model; 4) the estimation
+method 5patra and Sen here); 5) the estimated mixing weight (estimate of
+the unknown component proportion); 6) the estimated decontaminated CDF;
+7) an object of the class 'dist.fun' (that gives the distance); 8) the
+tuning parameter 'c.n'; 9) the lower bound of the estimated mixing
+proportion (if such an option has been chosen); 10) the number of
+observations.
+
+## References
+
+Patra RK, Sen B (2016). “Estimation of a two-component mixture model
+with applications to multiple testing.” *Journal of the Royal
+Statistical Society Series B*, **78**(4), 869-893.
+
+## See also
+
+[`print.estim_PS()`](print.estim_PS.md) for printing a short version of
+the results from this estimation method, and
+[`summary.estim_PS()`](summary.estim_PS.md) for more comprehensive
+results.
+
+## Author
+
+Xavier Milhaud <xavier.milhaud.research@gmail.com>
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+## Simulate mixture data:
+mixt1 <- twoComp_mixt(n = 800, weight = 0.33,
+                      comp.dist = list("gamma", "exp"),
+                      comp.param = list(list("shape" = 2, "scale" = 0.5),
+                                        list("rate" = 0.25)))
+data1 <- get_mixture_data(mixt1)
+## Define the admixture model:
+admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
+                         knownComp_param = mixt1$comp.param[[2]])
+## Estimation step:
+ex <- estim_PS(samples = data1, admixMod = admixMod1, method = 'fixed')
+print.estim_PS(ex)
+} # }
+```

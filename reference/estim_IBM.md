@@ -1,0 +1,112 @@
+# Estimate weights of unknown components from two admixtures using IBM
+
+Estimation of the component weights from the Inversion - Best Matching
+(IBM) method, related to two admixture models with respective
+probability density function (pdf) l1 and l2, such that: l1 = p1\*f1 +
+(1-p1)*g1 and l2 = p2*f2 + (1-p2)\*g2, where g1 and g2 are the known
+component densities. For further details about IBM approach, see
+'Details' below.
+
+## Usage
+
+``` r
+estim_IBM(samples, admixMod, n.integ = 1000, compute_var = FALSE)
+```
+
+## Arguments
+
+- samples:
+
+  A list of the two considered samples.
+
+- admixMod:
+
+  A list of two objects of class [admix_model](admix_model.md), one for
+  each sample.
+
+- n.integ:
+
+  Number of data points generated for the distribution on which to
+  integrate.
+
+- compute_var:
+
+  (default to FALSE) A boolean that indicates whether one computes the
+  variance of the estimators of unknown mixing proportions.
+
+## Value
+
+An object of class estim_IBM, containing 7 attributes: 1) the number of
+samples under study; 2) the sizes of samples; 3) the information about
+mixture components (distributions and parameters) for each sample; 4)
+the estimation method (Inversion Best Matching here, see the given
+reference); 5) the estimated mixing proportions (weights of the unknown
+component distributions in each sample); 6) the arbitrary value of the
+mixing weight in the first admixture sample (in case of equal known
+components, see the given reference); 7) the support of integration that
+was used in the computations.
+
+## References
+
+Milhaud X, Pommeret D, Salhi Y, Vandekerkhove P (2024). “Two-sample
+contamination model test.” *Bernoulli*, **30**(1), 170–197.
+[doi:10.3150/23-BEJ1593](https://doi.org/10.3150/23-BEJ1593) .
+
+## See also
+
+[`print.estim_IBM()`](print.estim_IBM.md) for printing a short version
+of the results from this estimation method, and
+[`summary.estim_IBM()`](summary.estim_IBM.md) for more comprehensive
+results.
+
+## Author
+
+Xavier Milhaud <xavier.milhaud.research@gmail.com>
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+## Continuous support: simulate mixture data.
+mixt1 <- twoComp_mixt(n = 1500, weight = 0.5,
+                      comp.dist = list("norm", "norm"),
+                      comp.param = list(list("mean" = 3, "sd" = 0.5),
+                                        list("mean" = 0, "sd" = 1)))
+data1 <- get_mixture_data(mixt1)
+mixt2 <- twoComp_mixt(n = 2000, weight = 0.7,
+                      comp.dist = list("norm", "norm"),
+                      comp.param = list(list("mean" = 3, "sd" = 0.5),
+                                        list("mean" = 5, "sd" = 2)))
+data2 <- get_mixture_data(mixt2)
+## Define the admixture models:
+admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
+                         knownComp_param = mixt1$comp.param[[2]])
+admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
+                         knownComp_param = mixt2$comp.param[[2]])
+## Estimate the mixture weights of the two admixture models (provide only hat(theta)_n):
+ex <- estim_IBM(samples = list(data1,data2),
+                admixMod = list(admixMod1,admixMod2), n.integ = 1000)
+print.estim_IBM(ex)
+
+## Example 2: multinomial distribution (discrete case).
+mixt1 <- twoComp_mixt(n = 1500, weight = 0.8,
+                      comp.dist = list("multinom", "multinom"),
+                      comp.param = list(list("size" = 1, "prob" = c(0.2,0.3,0.5)),
+                                        list("size" = 1, "prob" = c(0.1,0.6,0.3))))
+data1 <- get_mixture_data(mixt1)
+mixt2 <- twoComp_mixt(n = 2000, weight = 0.3,
+                      comp.dist = list("multinom", "multinom"),
+                      comp.param = list(list("size" = 1, "prob" = c(0.2,0.3,0.5)),
+                                        list("size" = 1, "prob" = c(0.7,0.1,0.2))))
+data2 <- get_mixture_data(mixt2)
+## Define the admixture models:
+admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
+                         knownComp_param = mixt1$comp.param[[2]])
+admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
+                         knownComp_param = mixt2$comp.param[[2]])
+## Estimate the mixture weights of the two admixture models (provide only hat(theta)_n):
+ex <- estim_IBM(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
+                compute_var = TRUE)
+print.estim_IBM(ex)
+} # }
+```

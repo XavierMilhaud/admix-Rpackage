@@ -1,0 +1,142 @@
+# Cluster K populations following admixture models
+
+Create clusters on the unknown components related to the K populations
+following admixture models. Based on the K-sample test using Inversion -
+Best Matching (IBM) approach, see 'Details' below for further
+information.
+
+## Usage
+
+``` r
+admix_cluster(
+  samples,
+  admixMod,
+  conf_level = 0.95,
+  tune_penalty = TRUE,
+  tabul_dist = NULL,
+  echo = TRUE,
+  ...
+)
+```
+
+## Arguments
+
+- samples:
+
+  A list of the K (K\>1) samples to be studied, all following admixture
+  distributions.
+
+- admixMod:
+
+  A list of objects of class [admix_model](admix_model.md), containing
+  useful information about distributions and parameters.
+
+- conf_level:
+
+  (default to 0.95) The confidence level of the k-sample tests used in
+  the clustering procedure.
+
+- tune_penalty:
+
+  (default to TRUE) A boolean that allows to choose between a classical
+  penalty term or an optimized penalty (embedding some tuning
+  parameters, automatically optimized). Optimized penalty is
+  particularly useful for low/mid-sized samples, or unbalanced sample
+  sizes to detect alternatives to the null hypothesis (H0). It is
+  recommended to use it.
+
+- tabul_dist:
+
+  (default to NULL) Only useful for comparisons of detected clusters at
+  different confidence levels. A list of the tabulated distributions of
+  the stochastic integral used in the k-sample test, each element for
+  each cluster previously detected.
+
+- echo:
+
+  (default to TRUE) Display the remaining computation time.
+
+- ...:
+
+  Optional arguments to [IBM_k_samples_test](IBM_k_samples_test.md);
+  namely 'n_sim_tab', 'parallel' and 'n_cpu'. These are crucial to
+  speed-up the building of clusters.
+
+## Value
+
+An object of class admix_cluster, containing 12 attributes: 1) the
+number of samples under study; 2) the sizes of samples; 3) the
+information about mixture components in each sample (distributions and
+parameters); 4) the number of detected clusters; 5) the list of p-values
+for each k-sample test at the origin of detected clusters; 6) the
+cluster affiliation for each sample; 7) the confidence level of
+statistical tests; 8) which samples in which cluster; 9) the size of
+clusters; 10) the estimated weights of the unknown component
+distributions inside each cluster (remind that estimated weights are
+consistent only if unknown components are tested to be identical, which
+is the case inside clusters); 11) the matrix of pairwise discrepancies
+across all samples; 12) the list of tabulated distributions used for
+statistical tests involved in building the clusters.
+
+## References
+
+Milhaud X, Pommeret D, Salhi Y, Vandekerkhove P (2024).
+“Contamination-source based K-sample clustering.” *Journal of Machine
+Learning Research*, **25**(287), 1–32.
+<https://jmlr.org/papers/v25/23-0914.html>.
+
+## Author
+
+Xavier Milhaud <xavier.milhaud.research@gmail.com>
+
+## Examples
+
+``` r
+# \donttest{
+## Simulate mixture data:
+mixt1 <- twoComp_mixt(n = 1600, weight = 0.8,
+                      comp.dist = list("gamma", "exp"),
+                      comp.param = list(list("shape" = 16, "scale" = 1/4),
+                                        list("rate" = 1/3.5)))
+mixt2 <- twoComp_mixt(n = 2000, weight = 0.7,
+                      comp.dist = list("gamma", "exp"),
+                      comp.param = list(list("shape" = 14, "scale" = 1/2),
+                                        list("rate" = 1/5)))
+mixt3 <- twoComp_mixt(n = 2500, weight = 0.6,
+                      comp.dist = list("gamma", "gamma"),
+                      comp.param = list(list("shape" = 16, "scale" = 1/4),
+                                        list("shape" = 12, "scale" = 1/2)))
+mixt4 <- twoComp_mixt(n = 3800, weight = 0.5,
+                      comp.dist = list("gamma", "exp"),
+                      comp.param = list(list("shape" = 14, "scale" = 1/2),
+                                        list("rate" = 1/7)))
+data1 <- get_mixture_data(mixt1)
+data2 <- get_mixture_data(mixt2)
+data3 <- get_mixture_data(mixt3)
+data4 <- get_mixture_data(mixt4)
+## Define the admixture models:
+admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
+                         knownComp_param = mixt1$comp.param[[2]])
+admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
+                         knownComp_param = mixt2$comp.param[[2]])
+admixMod3 <- admix_model(knownComp_dist = mixt3$comp.dist[[2]],
+                         knownComp_param = mixt3$comp.param[[2]])
+admixMod4 <- admix_model(knownComp_dist = mixt4$comp.dist[[2]],
+                         knownComp_param = mixt4$comp.param[[2]])
+## Clustering procedure:
+admix_cluster(samples = list(data1, data2, data3, data4),
+              admixMod = list(admixMod1, admixMod2, admixMod3, admixMod4),
+              conf_level = 0.95, tune_penalty = TRUE, n_sim_tab = 10)
+#>   |                                                          |                                                  |   0%  |                                                          |======                                            |  12%  |                                                          |======================================            |  75%  |                                                          |==================================================| 100%
+#> Call:
+#> admix_cluster(samples = list(data1, data2, data3, data4), admixMod = list(admixMod1, 
+#>     admixMod2, admixMod3, admixMod4), conf_level = 0.95, tune_penalty = TRUE, 
+#>     n_sim_tab = 10)
+#> 
+#> Number of detected clusters: 2.
+#> List of samples involved in each built cluster:
+#>    - Cluster #1: samples 1, 3
+#>    - Cluster #2: samples 2, 4
+#> 
+# }
+```

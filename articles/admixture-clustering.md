@@ -1,0 +1,118 @@
+# Clustering of unknown subpopulations in admixture models
+
+``` r
+library(admix)
+```
+
+The clustering of populations following admixture models is, for now,
+based on the K-sample test theory (see (Milhaud et al. 2024). Consider
+$K$ samples. For $i = 1,...,K$, sample
+$X^{(i)} = \left( X_{1}^{(i)},...,X_{n_{i}}^{(i)} \right)$ follows
+$$L_{i}(x) = p_{i}F_{i}(x) + \left( 1 - p_{i} \right)G_{i},\qquad x \in {\mathbb{R}}.$$
+
+We still use IBM approach to perform pairwise hypothesis testing. The
+idea is to adapt the K-sample test procedure to obtain a data-driven
+method that cluster the $K$ populations into $N$ subgroups,
+characterized by a common unknown mixture component. The advantages of
+such an approach is twofold:
+
+- the number $N$ of clusters is automatically chosen by the procedure,
+- Each subgroup is validated by the K-sample testing method, which has
+  theoretical guarantees.
+
+This clustering technique thus allows to cluster unobserved
+subpopulations instead of individuals. We call this algorithm the
+K-sample 2-component mixture clustering (K2MC).
+
+## Algorithm
+
+We now detail the steps of the algorithm.
+
+1.  Initialization: create the first cluster to be filled, i.e. $c = 1$.
+    By convention, $S_{0} = \varnothing$.
+2.  Select \$\\x,y\\={\rm argmin}\\d_n(i,j); i \neq j \in S \setminus
+    \bigcup\_{k=1}^c S\_{k-1}\\\$.
+3.  Test $H_{0}$ between $x$ and $y$.
+
+&nbsp;
+
+    If $H_0$ is not rejected then $S_1 = \{x,y\}$,\\
+    Else $S_1 = \{x\}$, $S_{c+1} = \{y\}$ and then $c=c+1$.
+
+4.  While $S\backslash\bigcup_{k = 1}^{c}S_{k} = \varnothing$ do
+
+&nbsp;
+
+    Select $u={\rm argmin}\{d(i,j); i\in S_c, j\in S\setminus \bigcup_{k=1}^c S_k\}$;
+    Test $H_0$ the simultaneous equality of all the $f_j$, $j\in S_c$ :\\
+      If $H_0$ not rejected, then put $S_c=S_c\bigcup \{u\}$;\\
+      Else $S_{c+1} = \{u\}$ and $c = c+1$.
+
+## Applications
+
+### On ${\mathbb{R}}^{+}$
+
+We present a case study with 5 populations to cluster on
+${\mathbb{R}}^{+}$, with Gamma-Exponential, Exponential-Exponential and
+Gamma-Gamma mixtures.
+
+``` r
+## Simulate mixture data:
+mixt1 <- twoComp_mixt(n = 6000, weight = 0.8,
+                      comp.dist = list("gamma", "exp"),
+                      comp.param = list(list("shape" = 16, "scale" = 1/4),
+                                        list("rate" = 1/3.5)))
+mixt2 <- twoComp_mixt(n = 6000, weight = 0.7,
+                      comp.dist = list("gamma", "exp"),
+                      comp.param = list(list("shape" = 14, "scale" = 1/2),
+                                        list("rate" = 1/5)))
+mixt3 <- twoComp_mixt(n = 6000, weight = 0.6,
+                      comp.dist = list("gamma", "gamma"),
+                      comp.param = list(list("shape" = 16, "scale" = 1/4),
+                                        list("shape" = 12, "scale" = 1/2)))
+mixt4 <- twoComp_mixt(n = 6000, weight = 0.5,
+                      comp.dist = list("exp", "exp"),
+                      comp.param = list(list("rate" = 1/2),
+                                        list("rate" = 1/7)))
+mixt5 <- twoComp_mixt(n = 6000, weight = 0.5,
+                      comp.dist = list("gamma", "exp"),
+                      comp.param = list(list("shape" = 14, "scale" = 1/2),
+                                        list("rate" = 1/6)))
+data1 <- get_mixture_data(mixt1)
+data2 <- get_mixture_data(mixt2)
+data3 <- get_mixture_data(mixt3)
+data4 <- get_mixture_data(mixt4)
+data5 <- get_mixture_data(mixt5)
+admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
+                         knownComp_param = mixt1$comp.param[[2]])
+admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
+                         knownComp_param = mixt2$comp.param[[2]])
+admixMod3 <- admix_model(knownComp_dist = mixt3$comp.dist[[2]],
+                         knownComp_param = mixt3$comp.param[[2]])
+admixMod4 <- admix_model(knownComp_dist = mixt4$comp.dist[[2]],
+                         knownComp_param = mixt4$comp.param[[2]])
+admixMod5 <- admix_model(knownComp_dist = mixt5$comp.dist[[2]],
+                         knownComp_param = mixt5$comp.param[[2]])
+## Look for the clusters:
+admix_cluster(samples = list(data1,data2,data3,data4,data5), 
+              admixMod = list(admixMod1,admixMod2,admixMod3,admixMod4,admixMod5),
+              conf_level = 0.95, tune_penalty = TRUE, tabul_dist = NULL, echo = FALSE,
+              n_sim_tab = 50, parallel = FALSE, n_cpu = 2)
+#> Call:
+#> admix_cluster(samples = list(data1, data2, data3, data4, data5), 
+#>     admixMod = list(admixMod1, admixMod2, admixMod3, admixMod4, 
+#>         admixMod5), conf_level = 0.95, tune_penalty = TRUE, tabul_dist = NULL, 
+#>     echo = FALSE, n_sim_tab = 50, parallel = FALSE, n_cpu = 2)
+#> 
+#> Number of detected clusters across the samples provided: 3.
+#> 
+#> List of samples involved in each built cluster (inside c()) :
+#>   - Cluster #1: samples c(2, 5)
+#>   - Cluster #2: samples 4
+#>   - Cluster #3: samples c(1, 3)
+```
+
+Milhaud, Xavier, Denys Pommeret, Yahia Salhi, and Pierre Vandekerkhove.
+2024. “Contamination-Source Based k-Sample Clustering.” *Journal of
+Machine Learning Research* 25 (287): 1–32.
+<https://jmlr.org/papers/v25/23-0914.html>.

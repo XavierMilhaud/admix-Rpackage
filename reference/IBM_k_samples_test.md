@@ -1,0 +1,138 @@
+# Equality test of K unknown component distributions
+
+Equality test of the unknown component distributions coming from K (K
+\> 1) admixture models, based on the Inversion - Best Matching (IBM)
+approach. Recall that we have K populations following admixture models,
+each one with probability density functions (pdf) l_k = p_k\*f_k +
+(1-p_k)\*g_k, where g_k is the known pdf and l_k corresponds to the
+observed sample. Perform the following hypothesis test: H0 : f_1 = ... =
+f_K against H1 : f_i differs from f_j (i different from j, and i,j in
+1,...,K).
+
+## Usage
+
+``` r
+IBM_k_samples_test(
+  samples,
+  admixMod,
+  conf_level = 0.95,
+  sim_U = NULL,
+  tune_penalty = TRUE,
+  n_sim_tab = 100,
+  parallel = FALSE,
+  n_cpu = 2
+)
+```
+
+## Arguments
+
+- samples:
+
+  A list of the K samples to be studied, all following admixture
+  distributions.
+
+- admixMod:
+
+  A list of objects of class [admix_model](admix_model.md), containing
+  useful information about distributions and parameters.
+
+- conf_level:
+
+  The confidence level of the K-sample test.
+
+- sim_U:
+
+  (default to NULL) Random draws of the inner convergence part of the
+  contrast as defined in the IBM approach (see references below).
+
+- tune_penalty:
+
+  (default to TRUE) A boolean that allows to choose between a classical
+  penalty term or an optimized penalty (embedding some tuning
+  parameters, automatically optimized). Optimized penalty is
+  particularly useful for low or unbalanced sample sizes to detect
+  alternatives to the null hypothesis (H0). It is recommended to set it
+  to TRUE.
+
+- n_sim_tab:
+
+  (default to 100) Number of simulated Gaussian processes when
+  tabulating the inner convergence distribution in the 'icv' testing
+  method using the IBM estimation approach.
+
+- parallel:
+
+  (default to FALSE) Boolean to indicate whether parallel computations
+  are performed (speed-up the tabulation).
+
+- n_cpu:
+
+  (default to 2) Number of cores used when paralleling computations.
+
+## Value
+
+An object of class 'IBM_test', containing 17 attributes: 1) the number
+of samples for the test; 2) the sizes of each sample; 3) the information
+about component distributions for each sample; 4) the reject decision of
+the test; 5) the confidence level of the test (1-alpha, where alpha
+refers to the first-type error); 6) the test p-value; 7) the
+95th-percentile of the contrast tabulated distribution; 8) the test
+statistic value; 9) the selected rank (number of terms involved in the
+test statistic); 10) the terms (pairwise contrasts) involved in the test
+statistic; 11) A boolean indicating whether the penalization corresponds
+to the null hypothesis has been considered; 12) the value of penalized
+test statistics; 13) the selected optimal 'gamma' parameter (see
+reference below); 14) the selected optimal constant involved in the
+penalization process (see also the reference); 15) the tabulated
+distribution of the contrast; 16) the estimated mixing proportions (not
+implemented yet, since that makes sense only in case of equal unknown
+component distributions); 17) the matrix of pairwise contrasts (distance
+between two samples); 18) the matrix of the ranks of pairwise contrasts;
+and 19) the matrix of identifiers of pairwise contrasts.
+
+## References
+
+Milhaud X, Pommeret D, Salhi Y, Vandekerkhove P (2024).
+“Contamination-source based K-sample clustering.” *Journal of Machine
+Learning Research*, **25**(287), 1–32.
+<https://jmlr.org/papers/v25/23-0914.html>.
+
+## Author
+
+Xavier Milhaud <xavier.milhaud.research@gmail.com>
+
+## Examples
+
+``` r
+if (FALSE) { # \dontrun{
+####### Under the null hypothesis H0 (with K=3 populations):
+## Simulate mixture data:
+mixt1 <- twoComp_mixt(n = 450, weight = 0.4,
+                      comp.dist = list("norm", "norm"),
+                      comp.param = list(list("mean" = -2, "sd" = 0.5),
+                                        list("mean" = 0, "sd" = 1)))
+mixt2 <- twoComp_mixt(n = 380, weight = 0.7,
+                      comp.dist = list("norm", "norm"),
+                      comp.param = list(list("mean" = -2, "sd" = 0.5),
+                                        list("mean" = 1, "sd" = 1)))
+mixt3 <- twoComp_mixt(n = 400, weight = 0.8,
+                      comp.dist = list("norm", "exp"),
+                      comp.param = list(list("mean" = -2, "sd" = 0.5),
+                                        list("rate" = 1)))
+data1 <- get_mixture_data(mixt1)
+data2 <- get_mixture_data(mixt2)
+data3 <- get_mixture_data(mixt3)
+## Define the admixture models:
+admixMod1 <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
+                         knownComp_param = mixt1$comp.param[[2]])
+admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
+                         knownComp_param = mixt2$comp.param[[2]])
+admixMod3 <- admix_model(knownComp_dist = mixt3$comp.dist[[2]],
+                         knownComp_param = mixt3$comp.param[[2]])
+## Perform the 3-samples test:
+IBM_k_samples_test(samples = list(data1, data2, data3),
+                   admixMod = list(admixMod1, admixMod2, admixMod3),
+                   conf_level = 0.95, sim_U = NULL, n_sim_tab = 5,
+                   tune_penalty = FALSE, parallel = FALSE)
+} # }
+```
