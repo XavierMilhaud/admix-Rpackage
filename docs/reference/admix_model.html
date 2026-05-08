@@ -11,7 +11,7 @@ Both the second component distribution and the mixing weight are unknown."></hea
 
     <a class="navbar-brand me-2" href="../index.html">admix</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.6.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,11 +59,11 @@ Both the second component distribution and the mixing weight are unknown.</p>
 
 <dl><dt id="arg-knowncomp-dist">knownComp_dist<a class="anchor" aria-label="anchor" href="#arg-knowncomp-dist"></a></dt>
 <dd><p>(Character) The name of the distribution (specified as in R glossary) of the known component
-of the admixture model</p></dd>
+of the admixture model.</p></dd>
 
 
 <dt id="arg-knowncomp-param">knownComp_param<a class="anchor" aria-label="anchor" href="#arg-knowncomp-param"></a></dt>
-<dd><p>(Character) A vector of the names of the parameters (specified as in R glossary) involved in
+<dd><p>(Character) A list of the names of the parameters (specified as in R glossary) involved in
 the chosen known distribution, with their values.</p></dd>
 
 </dl></div>
@@ -81,31 +81,45 @@ the corresponding parameters of those distributions.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">admix_model</span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="st">"norm"</span>, knownComp_param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"mean"</span><span class="op">=</span><span class="fl">0</span>, <span class="st">"sd"</span><span class="op">=</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Call:admix_model(knownComp_dist = "norm", knownComp_param = list(mean = 0, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> admix_model(knownComp_dist = "norm", knownComp_param = list(mean = 0, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     sd = 1))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Known component distribution:  norm </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Known component parameters: mean=0 sd=1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Admixture model</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Known component distribution: norm</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Known parameters:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - mean = 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - sd = 1</span>
 <span class="r-in"><span><span class="fu">admix_model</span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="st">"exp"</span>, knownComp_param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"rate"</span><span class="op">=</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Call:admix_model(knownComp_dist = "exp", knownComp_param = list(rate = 2))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> admix_model(knownComp_dist = "exp", knownComp_param = list(rate = 2))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Known component distribution:  exp </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Known component parameters: rate=2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Admixture model</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Known component distribution: exp</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Known parameters:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - rate = 2</span>
 <span class="r-in"><span><span class="fu">admix_model</span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="st">"pois"</span>, knownComp_param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"lambda"</span><span class="op">=</span><span class="fl">5</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Call:admix_model(knownComp_dist = "pois", knownComp_param = list(lambda = 5))</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> admix_model(knownComp_dist = "pois", knownComp_param = list(lambda = 5))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Known component distribution:  pois </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Known component parameters: lambda=5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Admixture model</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Known component distribution: pois</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Known parameters:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - lambda = 5</span>
+<span class="r-in"><span><span class="fu">admix_model</span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="st">"multinom"</span>, knownComp_param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"size"</span><span class="op">=</span><span class="fl">1</span>, <span class="st">"prob"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>,<span class="fl">0.8</span>,<span class="fl">0.1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Call:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> admix_model(knownComp_dist = "multinom", knownComp_param = list(size = 1, </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     prob = c(0.1, 0.8, 0.1)))</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="fu">admix_model</span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="st">"multinom"</span>, knownComp_param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"size"</span><span class="op">=</span><span class="fl">1</span>, <span class="st">"prob"</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>,<span class="fl">0.8</span>,<span class="fl">0.1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Call:admix_model(knownComp_dist = "multinom", knownComp_param = list(size = 1, </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     prob = c(0.2, 0.8, 0.1)))</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Known component distribution:  multinom </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Known component parameters: size=1 prob=c(0.2, 0.8, 0.1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Admixture model</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Known component distribution: multinom</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Known parameters:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - size = 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - prob = 0.1, 0.8, 0.1</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

@@ -1,12 +1,14 @@
-#' Equality test for the unknown components in admixture models
+#' Hypothesis test for the unknown component(s) in admixture model(s)
 #'
-#' Perform hypothesis test between unknown components of a list of admixture models, where we remind that the i-th admixture
-#' model has probability density function (pdf) l_i such that:
-#'    l_i = p_i * f_i + (1-p_i) * g_i, with g_i the known component density.
-#' The unknown quantities p_i and f_i are thus estimated, leading to the test given by the following null and alternative hypothesis:
-#' H0: f_i = f_j for all i != j   against H1 : there exists at least i != j such that f_i differs from f_j.
-#' The test can be performed using two methods, either the comparison of coefficients obtained through polynomial basis expansions
-#' of the component densities, or by the inner-convergence property obtained using the IBM approach. See 'Details' below for further information.
+#' Perform hypothesis test on the unknown component(s) of a list of admixture model(s), where we remind that the \eqn{i}-th admixture
+#' model has probability density function (pdf) \eqn{\ell_i} such that:
+#' \deqn{
+#'   \ell_i = p_i f_i + (1 - p_i) g_i,
+#' }
+#' with \eqn{g_i} the known component density, and where \eqn{\ell_i} can be estimated consistently thanks to the observations.
+#' The test is made on the \eqn{f_i}'s, can be performed using two methods: either the comparison of coefficients obtained through
+#' polynomial basis expansions of the component densities, or by the inner-convergence property obtained using the IBM approach.
+#' See 'Details' below for further information.
 #'
 #' @param samples A list of the K (K > 0) samples to be studied, each one assumed to follow a mixture distribution.
 #' @param admixMod A list of objects of class \link[admix]{admix_model}, containing useful information about distributions and parameters
@@ -19,8 +21,12 @@
 #'            \link[admix]{gaussianity_test}, \link[admix]{orthobasis_test} (in case of 'poly'), or \link[admix]{IBM_k_samples_test}
 #'            in case of 'icv'.
 #'
-#' @details For further details on implemented hypothesis tests, see the references hereafter.
-#'          .
+#' @details For further details on implemented hypothesis tests, see the references hereafter. When choosing the 'icv'
+#'          testing method, it is recommended to use parallel computing.
+#'
+#' @seealso [gaussianity_test()], [orthobasis_test()], [IBM_k_samples_test()], [get_known_component()], [get_mixing_weights()],
+#'          [reject_nullHyp()], [which_rank()]
+#'
 #' @references
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2024b}{admix}
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2022}{admix}

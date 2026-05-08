@@ -49,10 +49,15 @@ matrix of the ranks of pairwise contrasts; and 19) the matrix of identifiers of 
 }
 \description{
 Equality test of the unknown component distributions coming from K (K > 1) admixture models, based on the Inversion - Best
-Matching (IBM) approach. Recall that we have K populations following admixture models, each one with probability
-density functions (pdf) l_k = p_k*f_k + (1-p_k)*g_k, where g_k is the known pdf and l_k corresponds to the
-observed sample. Perform the following hypothesis test:
-H0 : f_1 = ... = f_K  against  H1 : f_i differs from f_j (i different from j, and i,j in 1,...,K).
+Matching (IBM) approach. Recall that we have K populations following admixture models, each one with probability density functions (pdf)
+\deqn{
+  \ell_k = p_k f_k + (1 - p_k) g_k, \quad k=1,...,K,
+}
+where \eqn{g_k} is the known pdf and \eqn{l_k} corresponds to the observed sample.
+In such a context, perform the following hypothesis test:
+\deqn{
+  H_0: \, f_1 = f_K \quad \mbox{against} \quad H_1: \, \exists \mbox{ at least } i \neq j \mbox{ such that } f_i \neq f_j, \; i \neq j, \, i,j \in \{1,...,K\}.
+}
 }
 \examples{
 \dontrun{
@@ -90,6 +95,11 @@ IBM_k_samples_test(samples = list(data1, data2, data3),
 }
 \references{
 \insertRef{MilhaudPommeretSalhiVandekerkhove2024b}{admix}
+}
+\seealso{
+\code{\link[=get_tabulated_dist]{get_tabulated_dist()}} to access the tabulated distribution under the null hypothesis, which defines the
+quantile against which the test statistics is tested; \code{\link[=get_discrepancy_rank]{get_discrepancy_rank()}}, \code{\link[=get_discrepancy_matrix]{get_discrepancy_matrix()}} to access the measure of
+discrepancy between pairs of samples; \code{\link[=get_statistic_components]{get_statistic_components()}} in k-sample test;
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

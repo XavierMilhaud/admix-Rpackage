@@ -3,7 +3,8 @@
 #' Create clusters on the unknown components related to the K populations following admixture models. Based on the K-sample test
 #' using Inversion - Best Matching (IBM) approach, see 'Details' below for further information.
 #'
-#' @param samples A list of the K (K>1) samples to be studied, all following admixture distributions.
+#' @param samples A named list of the K (K>1) samples to be studied, all following admixture distributions.
+#'                If names are provided, they are used in the output to identify samples; otherwise default labels are used.
 #' @param admixMod A list of objects of class \link[admix]{admix_model}, containing useful information about distributions and parameters.
 #' @param conf_level (default to 0.95) The confidence level of the k-sample tests used in the clustering procedure.
 #' @param tune_penalty (default to TRUE) A boolean that allows to choose between a classical penalty term or an optimized penalty (embedding
@@ -16,16 +17,22 @@
 #' @param ... Optional arguments to \link[admix]{IBM_k_samples_test}; namely 'n_sim_tab', 'parallel' and 'n_cpu'. These are crucial
 #'            to speed-up the building of clusters.
 #'
+#' @seealso [print.admix_cluster()], [summary.admix_cluster()], [get_known_component()], [get_cluster_members()], [get_cluster_sizes()],
+#'          [get_tabulated_dist()] to access the tabulated distribution under the null hypothesis, which defines the quantile against
+#'          which the test statistics is tested; [get_discrepancy_matrix()] for a pairwise measure of discrepancy between samples.
+#'
 #' @references
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2024b}{admix}
 #'
-#' @return An object of class \link[admix]{admix_cluster}, containing 12 attributes: 1) the number of samples under study; 2) the sizes of samples;
-#'         3) the information about mixture components in each sample (distributions and parameters); 4) the number of detected clusters;
-#'         5) the list of p-values for each k-sample test at the origin of detected clusters; 6) the cluster affiliation for each sample;
-#'         7) the confidence level of statistical tests; 8) which samples in which cluster; 9) the size of clusters; 10) the estimated
+#' @return An object of class \link[admix]{admix_cluster}, containing 14 attributes: 1) the number of samples under study; 2) the names of samples;
+#'         3) the sizes of samples;
+#'         4) the information about mixture components in each sample (distributions and parameters); 5) the number of detected clusters;
+#'         6) the list of p-values for each k-sample test at the origin of detected clusters; 7) the cluster affiliation for each sample;
+#'         8) the confidence level of statistical tests; 9) which samples in which cluster; 10) the size of clusters; 11) the estimated
 #'         weights of the unknown component distributions inside each cluster (remind that estimated weights are consistent only if
-#'         unknown components are tested to be identical, which is the case inside clusters); 11) the matrix of pairwise discrepancies
-#'         across all samples; 12) the list of tabulated distributions used for statistical tests involved in building the clusters.
+#'         unknown components are tested to be identical, which is the case inside clusters); 12) the matrix of pairwise discrepancies
+#'         across all samples; 13) the list of tabulated distributions used for statistical tests involved in building the clusters;
+#'         14) the call.
 #'
 #' @examples
 #' \donttest{
@@ -76,9 +83,23 @@ admix_cluster <- function(samples, admixMod, conf_level = 0.95, tune_penalty = T
   if (!all(sapply(X = admixMod, FUN = inherits, what = "admix_model")))
     stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
 
-  #old_options_warn <- base::options()$warn
-  #on.exit(base::options(warn = old_options_warn))
-  #base::options(warn = -1)
+  ## Retrieve sample names
+  sample_expr <- substitute(samples)
+  if (is.call(sample_expr) && sample_expr[[1]] == as.name("list")) {
+    expr_list <- as.list(sample_expr)[-1]
+    sample_names <- names(expr_list)
+    unnamed <- is.null(sample_names) || sample_names == ""
+    if (all(unnamed)) {
+      sample_names <- sapply(expr_list, deparse)
+    } else {
+      sample_names[unnamed] <- sapply(expr_list[unnamed], deparse)
+    }
+  } else {
+    sample_names <- names(samples)
+  }
+  if (is.null(sample_names) || any(sample_names == "")) {
+    sample_names <- paste0("Sample_", seq_along(samples))
+  }
 
   if (length(sapply(samples, length)) == 1) return("One single sample, no clusters to be found.")
   ## Get the minimal size among all sample sizes, useful for future tabulation (adjustment of variance-covariance):
@@ -236,6 +257,7 @@ admix_cluster <- function(samples, admixMod, conf_level = 0.95, tune_penalty = T
 
   obj <- list(
     n_populations = length(samples),
+    sample_names = sample_names,
     population_sizes = sapply(X = samples, FUN = length),
     admixture_models = admixMod,
     n_clust = n_clust_final,
@@ -270,11 +292,15 @@ print.admix_cluster <- function(x, ...)
 {
   cat("Call:\n")
   print(x$call)
-  cat("\nNumber of detected clusters: ", x$n_clust, ".\n", sep = "")
-  cat("List of samples involved in each built cluster:\n",
-      gsub("\\)", "", gsub("c\\(", "", paste("  - Cluster #", 1:length(x$clust_pop), ": samples ",
-                                             x$clust_pop, collapse="\n ", sep = ""))))
-  cat("\n\n")
+  cat("\n")
+  cat("Number of detected clusters:", x$n_clust, "\n")
+  cat("Samples involved in each cluster:\n")
+  for (k in seq_along(x$clust_pop)) {
+    sample_labels <- x$sample_names[x$clust_pop[[k]]]
+    cat(paste0("  - Cluster #", k, ": ", paste(sample_labels, collapse = ", ")), "\n")
+  }
+  cat("\n")
+  invisible(x)
 }
 
 
@@ -306,9 +332,11 @@ summary.admix_cluster <- function(object, ...)
   cat("\n------ About clustering ------\n")
   cat("* Test level of the underlying k-sample testing procedure: ", (1-object$confidence_level)*100, "%.", sep = "")
   cat("\n* Number of detected clusters across the samples provided: ", object$n_clust, ".", sep = "")
-  cat("\n* Samples involved in each detected cluster:\n",
-      gsub("\\)", "", gsub("c\\(", "", paste("  - Cluster #", 1:length(object$clust_pop), ": samples ",
-                                             object$clust_pop, collapse="\n ", sep = ""))))
+  cat("\n* Samples involved in each cluster:\n")
+  for (k in seq_along(object$clust_pop)) {
+    sample_labels <- object$sample_names[object$clust_pop[[k]]]
+    cat(paste0("  - Cluster #", k, ": ", paste(sample_labels, collapse = ", ")), "\n")
+  }
   cat("\n* List of p-values for underlying k-sample tests (showing when \n  to close the clusters, i.e. p-value < ", (1-object$confidence_level), "): ",
       paste(object$pval_clust, collapse=", "), ".", sep="")
   weights.list <- vector(mode = "list", length = length(object$clust_weights))
@@ -324,7 +352,6 @@ summary.admix_cluster <- function(object, ...)
     clusters (in the same order as listed samples in detected clusters):\n",
       gsub("\\)", "", gsub("c\\(", "", paste("- Mixing weights of unknown components in Cluster #",
                                              1:length(object$clust_pop), ": ", weights.list, collapse="\n ", sep=""))))
-  #cat("\n* Matrix of discrepancies between samples (used for clustering):\n")
-  #print(object$discrepancy_matrix)
   cat("\n\n")
+  invisible(object)
 }

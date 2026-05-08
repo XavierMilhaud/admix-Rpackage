@@ -20,22 +20,25 @@ choice made by the user for the estimation method.}
 }
 \value{
 An object of class \code{estim_BVdk}, \code{estim_PS} or \code{estim_IBM} (that inherits from class \link[admix]{admix_estim}),
-containing at least 5 attributes: 1) the number of samples under study; 2) the information about the mixture components
-(distributions and parameters); 3) the sizes of the samples; 4) the chosen estimation technique (one of 'BVdk', 'PS' or 'IBM');
-5) the estimated mixing proportions (weights of the unknown component distributions in the mixture model). In case of 'BVdk'
-estimation, one additional attribute corresponding to the estimated location shift parameter is included.
+with two attributes, 'class' and 'names'. The latter contains three elements, among which 'estim_objects' that lists for each
+sample under study all the information of the estimation procedure.
 }
 \description{
-Estimate the unknown component weight (and possibly location shift parameter in case of a symmetric unknown component density),
-using different estimation techniques. We remind that the i-th admixture model has probability density function (pdf) l_i such that:
-l_i = p_i * f_i + (1-p_i) * g_i, where g_i is the known component density.
-The unknown quantities p_i and f_i then have to be estimated.
+Estimate the unknown component weight (and possibly a location shift parameter
+in case of a symmetric unknown component density), using different estimation
+techniques. We recall that the \eqn{i}-th admixture model has probability density function
+\eqn{\ell_i} such that:
+\deqn{
+  \ell_i = p_i f_i + (1 - p_i) g_i,
+}
+where \eqn{g_i} is the known component density. The unknown quantities
+\eqn{p_i} and \eqn{f_i} then have to be estimated.
 }
 \details{
 For further details on the different estimation techniques, see references below on i) Patra and Sen estimator ;
 ii) Bordes and Vandekerkhove estimator ; iii) Inversion Best-Matching approach. Important note: estimation by 'IBM'
 requires at least two samples at hand, and provides unbiased estimators only if the distributions of unknown components
-are equal (meaning that it requires to perform previously this test between the pairs of samples, see \link[admix]{admix_test}.
+are equal (meaning that it requires to perform previously this test between the pairs of samples, see \link[admix]{admix_test}).
 }
 \examples{
 ## Simulate mixture data:
@@ -79,6 +82,14 @@ admix_estim(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2), e
 \insertRef{BordesDelmasVandekerkhove2006}{admix}
 \insertRef{BordesVandekerkhove2010}{admix}
 \insertRef{MilhaudPommeretSalhiVandekerkhove2024a}{admix}
+}
+\seealso{
+\code{\link[=get_mixing_weights]{get_mixing_weights()}} to access the estimated mixing weight(s), \code{\link[=get_known_component]{get_known_component()}} to access the known component(s), \code{\link[=print.admix_estim]{print.admix_estim()}} for a brief description of the results,
+and \code{\link[=summary.admix_estim]{summary.admix_estim()}} for an overview of the estimation process. More precisely, 1) the number of samples under study;
+2) the information about the known mixture components (distributions and parameters); 3) the sizes of the samples;
+4) the chosen estimation technique (one of 'BVdk', 'PS' or 'IBM'); 5) the estimated mixing proportions (weights of the
+unknown component distributions in the mixture model). In case of 'BVdk' estimation, one additional attribute corresponding
+to the estimated location shift parameter is included.
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

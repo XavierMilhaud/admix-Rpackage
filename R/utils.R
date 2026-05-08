@@ -124,6 +124,127 @@ admixStartupMessage <- function()
 }
 
 
+#' Check the validity of the specified distributions
+#'
+#' @param dist A single string naming the distribution under consideration.
+#'
+#' @return A vector composed of the names of the parameters of the distribution.
+#'
+#' @examples
+#' get_distribution_parameters("norm")
+#' get_distribution_parameters("gamma")
+#' get_distribution_parameters("weibull")
+#'
+#' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
+#' @export
+
+get_distribution_parameters <- function(dist) {
+
+  special_cases <- list(
+    multinom = c("size", "prob"),
+    gompertz = c("shape", "rate")
+  )
+  if (dist %in% names(special_cases)) { return(special_cases[[dist]])}
+
+  dname <- paste0("d", dist)
+  if (!exists(dname, mode = "function")) { stop("Unrecognized distribution: ", dist) }
+  fun <- get(dname, mode = "function")
+  args <- names(formals(fun))
+  excluded_args <- c("x", "q", "p", "n", "log", "log.p", "lower.tail")
+
+  setdiff(args, excluded_args)
+}
+
+
+#' Check the validity of the specified distribution and parameter(s)
+#'
+#' @param dist A single string naming the distribution under consideration.
+#' @param params A character vector composed of the names of the parameters for a given distribution.
+#'
+#' @return A vector composed of the names of the parameters of the distribution.
+#'
+#' @examples
+#' validate_distribution(dist = "norm", params = c("mean" = 0, "sd" = 1))
+#'
+#' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
+#' @export
+
+validate_distribution <- function(dist, params)
+{
+  ## Special cases not fully supported by the usual d/p/q/r distribution framework in base R:
+  special_cases <- list(
+    multinom = c("size", "prob"),
+    gompertz = c("shape", "rate")
+  )
+  ## --- Distribution existence check -----------------------------
+  if (dist %in% names(special_cases)) {
+    expected_params <- special_cases[[dist]]
+
+  } else {
+    dname <- paste0("d", dist)
+    if (!exists(dname, mode = "function")) {
+      stop("Unrecognized distribution: ", dist)
+    }
+    ## Extract formal arguments from density function:
+    fun <- get(dname, mode = "function")
+    args <- names(formals(fun))
+    ## Arguments that are not actual distribution parameters:
+    excluded_args <- c("x", "q", "p", "n", "log", "log.p", "lower.tail")
+
+    expected_params <- setdiff(args, excluded_args)
+
+    ## Handle distributions with alternative parameterizations:
+    if (dist == "gamma") {
+      valid_param_sets <- list(c("shape", "rate"), c("shape", "scale"))
+    } else if (dist == "nbinom") {
+      valid_param_sets <- list(c("size", "prob"), c("size", "mu"))
+    } else {
+      valid_param_sets <- list(expected_params)
+    }
+  }
+
+  ## Special cases:
+  if (dist %in% names(special_cases)) {
+    valid_param_sets <- list(expected_params)
+  }
+
+  ## --- Validation of supplied parameters ------------------------
+  supplied_params <- names(params)
+  ok <- any(vapply(valid_param_sets, function(x) identical(x, supplied_params), logical(1)))
+  if (!ok) {
+    expected_txt <- vapply(valid_param_sets, paste, collapse = ", ", FUN.VALUE = character(1))
+    stop("Invalid parameter names for distribution `", dist, "`.\nExpected:\n  - ", paste(expected_txt, collapse = "\n  - "))
+  }
+  invisible(TRUE)
+}
+
+
+#' Determine the type of distribution under consideration
+#'
+#' @param dist A single string naming the distribution under consideration.
+#'
+#' @return The type of distribution under study (continuous, discrete, or multivariate).
+#'
+#' @examples
+#' distribution_type("norm")
+#' distribution_type("pois")
+#' distribution_type("multinom")
+#' distribution_type("weibull")
+#'
+#' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
+#' @export
+
+distribution_type <- function(dist)
+{
+  if (dist == "multinom") { return("Multivariate") }
+  discrete <- c("binom", "pois", "geom", "hyper", "nbinom")
+  if (dist %in% discrete) {
+    return("Discrete")
+  }
+  "Continuous"
+}
+
+
 #' Detect the type of support of some random variables
 #'
 #' Given one or two sets of observations (samples), the function provides with the most plausible type of support for the

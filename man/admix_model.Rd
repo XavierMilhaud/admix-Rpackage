@@ -8,9 +8,9 @@ admix_model(knownComp_dist, knownComp_param)
 }
 \arguments{
 \item{knownComp_dist}{(Character) The name of the distribution (specified as in R glossary) of the known component
-of the admixture model}
+of the admixture model.}
 
-\item{knownComp_param}{(Character) A vector of the names of the parameters (specified as in R glossary) involved in
+\item{knownComp_param}{(Character) A list of the names of the parameters (specified as in R glossary) involved in
 the chosen known distribution, with their values.}
 }
 \value{
@@ -27,7 +27,7 @@ Both the second component distribution and the mixing weight are unknown.
 admix_model(knownComp_dist = "norm", knownComp_param = list("mean"=0, "sd"=1))
 admix_model(knownComp_dist = "exp", knownComp_param = list("rate"=2))
 admix_model(knownComp_dist = "pois", knownComp_param = list("lambda"=5))
-admix_model(knownComp_dist = "multinom", knownComp_param = list("size"=1, "prob"=c(0.2,0.8,0.1)))
+admix_model(knownComp_dist = "multinom", knownComp_param = list("size"=1, "prob"=c(0.1,0.8,0.1)))
 
 }
 \author{

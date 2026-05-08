@@ -22,19 +22,23 @@ An object of class \code{decontaminated_density} containing:
 }
 }
 \description{
-Estimates the decontaminated probability density function (PDF) of the unknown component in
-an admixture model, based on the inversion of the admixture density equation \eqn{l = p f + (1-p) g}.
+Estimates the decontaminated probability density function (pdf) of the unknown component in
+an admixture model, based on the inversion of the admixture density equation
+\deqn{
+   \ell = p f + (1-p) g,
+}
+where \eqn{p} and \eqn{f} are unknown, \eqn{\ell} is observed and \eqn{g} is the known component.
 }
 \details{
 The decontaminated density \eqn{f} is computed as:
-\deqn{f(x) = (1 / \hat{p}) [ \hat{l}(x) - (1 - \hat{p}) g(x) ]}
+\deqn{f(x) = (1 / \hat{p}) [ \hat{\ell}(x) - (1 - \hat{p}) g(x) ]}
 where:
 \itemize{
-\item \eqn{\hat{l}(x)} is the empirical density of the sample,
+\item \eqn{\hat{\ell}(x)} is the empirical density of the sample,
 \item \eqn{g(x)} is the known component’s theoretical density,
 \item \eqn{\hat{p}} is the estimated mixture weight.
 }
-For continuous data, \eqn{\hat{l}(x)} is estimated using kernel density estimation.
+For continuous data, \eqn{\hat{\ell}(x)} is estimated using kernel density estimation.
 For discrete data, it is approximated from normalized frequencies.
 }
 \examples{
@@ -55,7 +59,6 @@ x <- decontaminated_density(sample1 = data1, admixMod = admixMod1,
                             estim.p = get_mixing_weights(est))
 print(x)
 summary(x)
-plot(x)
 
 ####### Discrete support:
 mixt1 <- twoComp_mixt(n = 4000, weight = 0.6,
@@ -91,9 +94,9 @@ y <- decontaminated_density(sample1 = data2, admixMod = admixMod2,
                             estim.p = get_mixing_weights(est)[2])
 z <- decontaminated_density(sample1 = data3, admixMod = admixMod3,
                             estim.p = get_mixing_weights(est2))
-plot(x, offset = -0.2, bar_width = 0.2, col = "steelblue")
-plot(y, add_plot = TRUE, offset = 0, bar_width = 0.2, col = "red")
-plot(z, add_plot = TRUE, offset = 0.2, bar_width = 0.2, col = "orange")
+print(x)
+summary(y)
+print(z)
 
 }
 \author{

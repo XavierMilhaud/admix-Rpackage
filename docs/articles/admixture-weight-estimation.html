@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">admix</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.6.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -127,19 +127,25 @@ weight.</p>
 <code class="sourceCode R"><span><span class="co">## Simulate mixture data:</span></span>
 <span><span class="va">mixt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/twoComp_mixt.html">twoComp_mixt</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">400</span>, weight <span class="op">=</span> <span class="fl">0.7</span>,</span>
 <span>                      comp.dist <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"norm"</span>, <span class="st">"norm"</span><span class="op">)</span>,</span>
-<span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">3</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span>
-<span>                                        <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">0</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>                      comp.param <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">3</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>,</span>
+<span>                                        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"mean"</span> <span class="op">=</span> <span class="fl">0</span>, <span class="st">"sd"</span> <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">data1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_mixture_data.html">get_mixture_data</a></span><span class="op">(</span><span class="va">mixt1</span><span class="op">)</span></span>
 <span><span class="co">## Define the admixture model:</span></span>
 <span><span class="va">admixMod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/admix_model.html">admix_model</a></span><span class="op">(</span>knownComp_dist <span class="op">=</span> <span class="va">mixt1</span><span class="op">$</span><span class="va">comp.dist</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>,</span>
 <span>                        knownComp_param <span class="op">=</span> <span class="va">mixt1</span><span class="op">$</span><span class="va">comp.param</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/admix_estim.html">admix_estim</a></span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span><span class="op">)</span>, admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod</span><span class="op">)</span>, est_method <span class="op">=</span> <span class="st">'BVdk'</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Call:admix_estim(samples = list(data1), admixMod = list(admixMod), </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; admix_estim(samples = list(data1), admixMod = list(admixMod), </span></span>
 <span><span class="co">#&gt;     est_method = "BVdk")</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ******** Sample #1 ********</span></span>
-<span><span class="co">#&gt; Estimated mixing weight: 0.665 / Estimated location shift: 2.976</span></span></code></pre></div>
+<span><span class="co">#&gt; Method: BVdk </span></span>
+<span><span class="co">#&gt; Number of samples: 1 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  Sample Mixing weight location   n</span></span>
+<span><span class="co">#&gt;   data1         0.665     2.98 400</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  Use `?estim_BVdk` for details on the optimization method.</span></span></code></pre></div>
 <p>Because this estimation method relies on the symmetry of the unknown
 component density, the estimator provides both the estimated mixing
 weight of the unknown component distribution and the estimated location
@@ -153,12 +159,17 @@ distribution), we use the Patra and Sen estimator, see <span class="citation">(P
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/admix_estim.html">admix_estim</a></span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span><span class="op">)</span>, admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod</span><span class="op">)</span>, est_method <span class="op">=</span> <span class="st">'PS'</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Call:admix_estim(samples = list(data1), admixMod = list(admixMod), </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; admix_estim(samples = list(data1), admixMod = list(admixMod), </span></span>
 <span><span class="co">#&gt;     est_method = "PS")</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ******** Sample #1 ********</span></span>
-<span><span class="co">#&gt;  Estimated mixing weight (of the unknown component): 0.641</span></span>
-<span><span class="co">#&gt;  Selected c_n equals 0.179 in the penalization term. See ?estim_PS</span></span></code></pre></div>
+<span><span class="co">#&gt; Method: PS </span></span>
+<span><span class="co">#&gt; Number of samples: 1 </span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  Sample Mixing weight   n</span></span>
+<span><span class="co">#&gt;   data1         0.641 400</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  Use `?estim_PS` for details on the penalization term.</span></span></code></pre></div>
 <p>In this case, the only estimated parameter is the mixing proportion
 related to the unknown component distribution.</p>
 </div>
@@ -204,14 +215,17 @@ parameter values.</p>
 <span><span class="fu"><a href="../reference/admix_estim.html">admix_estim</a></span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>, <span class="va">data2</span><span class="op">)</span>, admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>, <span class="va">admixMod2</span><span class="op">)</span>,</span>
 <span>            est_method <span class="op">=</span> <span class="st">'IBM'</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Call:admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, </span></span>
 <span><span class="co">#&gt;     admixMod2), est_method = "IBM")</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Pairwise estimation performed (IBM estimation method).</span></span>
+<span><span class="co">#&gt; Method: IBM </span></span>
+<span><span class="co">#&gt; Pairwise estimation</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ******** Samples #1 with #2 ********</span></span>
-<span><span class="co">#&gt; Estimated mixing weight of the unknown distribution in the 1st sample: 0.409 </span></span>
-<span><span class="co">#&gt; Estimated mixing weight of the unknown distribution in the 2nd sample: 0.725</span></span></code></pre></div>
+<span><span class="co">#&gt;            Pair    p1    p2 var.p1 var.p2  n1  n2</span></span>
+<span><span class="co">#&gt;  data1 vs data2 0.409 0.725     NA     NA 450 380</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  Use `?estim_IBM` for further details.</span></span></code></pre></div>
 <p>Indeed, one can see that the two unknown proportions were
 consistently estimated.</p>
 </div>
@@ -244,14 +258,17 @@ as illustrated in the following example.</p>
 <span><span class="fu"><a href="../reference/admix_estim.html">admix_estim</a></span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>, <span class="va">data2</span><span class="op">)</span>, admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>, <span class="va">admixMod2</span><span class="op">)</span>,</span>
 <span>            est_method <span class="op">=</span> <span class="st">'IBM'</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Call:admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, </span></span>
 <span><span class="co">#&gt;     admixMod2), est_method = "IBM")</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Pairwise estimation performed (IBM estimation method).</span></span>
+<span><span class="co">#&gt; Method: IBM </span></span>
+<span><span class="co">#&gt; Pairwise estimation</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ******** Samples #1 with #2 ********</span></span>
-<span><span class="co">#&gt; Estimated mixing weight of the unknown distribution in the 1st sample: 0.332 </span></span>
-<span><span class="co">#&gt; Estimated mixing weight of the unknown distribution in the 2nd sample: 0.655</span></span></code></pre></div>
+<span><span class="co">#&gt;            Pair    p1    p2 var.p1 var.p2  n1  n2</span></span>
+<span><span class="co">#&gt;  data1 vs data2 0.332 0.655     NA     NA 800 600</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  Use `?estim_IBM` for further details.</span></span></code></pre></div>
 <p>In such a framework, it is therefore better to use the estimator by
 <span class="citation">(Patra and Sen 2016)</span>, which shows better
 performance:</p>
@@ -259,16 +276,18 @@ performance:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/admix_estim.html">admix_estim</a></span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>, <span class="va">data2</span><span class="op">)</span>, admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>, <span class="va">admixMod2</span><span class="op">)</span>,</span>
 <span>            est_method <span class="op">=</span> <span class="st">'PS'</span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Call:admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, </span></span>
+<span><span class="co">#&gt; Call:</span></span>
+<span><span class="co">#&gt; admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, </span></span>
 <span><span class="co">#&gt;     admixMod2), est_method = "PS")</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ******** Sample #1 ********</span></span>
-<span><span class="co">#&gt;  Estimated mixing weight (of the unknown component): 0.45</span></span>
-<span><span class="co">#&gt;  Selected c_n equals 0.19 in the penalization term. See ?estim_PS</span></span>
+<span><span class="co">#&gt; Method: PS </span></span>
+<span><span class="co">#&gt; Number of samples: 2 </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ******** Sample #2 ********</span></span>
-<span><span class="co">#&gt;  Estimated mixing weight (of the unknown component): 0.727</span></span>
-<span><span class="co">#&gt;  Selected c_n equals 0.186 in the penalization term. See ?estim_PS</span></span></code></pre></div>
+<span><span class="co">#&gt;  Sample Mixing weight   n</span></span>
+<span><span class="co">#&gt;   data1         0.450 800</span></span>
+<span><span class="co">#&gt;   data2         0.727 600</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;  Use `?estim_PS` for details on the penalization term.</span></span></code></pre></div>
 </div>
 </div>
 </div>

@@ -4,18 +4,19 @@
 \alias{plot.admix_model}
 \title{Plot method for objects of class \code{admix_model}}
 \usage{
-\method{plot}{admix_model}(x, ...)
+\method{plot}{admix_model}(x, n = 1000, main = "Known component distribution", ...)
 }
 \arguments{
 \item{x}{An object of class \code{admix_model}.}
 
+\item{n}{The number of 'x' values to consider for plotting the pdf in the continuous case.}
+
+\item{main}{The title of the plot.}
+
 \item{...}{A list of additional parameters belonging to the default method.}
 }
 \description{
-Plots the probability density function of the known component of the admixture model, where
-we recall that an admixture model has probability density function (pdf) l_i such that:
-l_i = p_i * f_i + (1-p_i) * g_i, with g_i the known component density.
-The unknown quantities are therefore p_i and f_i.
+Plots the probability density function of the known component of the admixture model.
 }
 \examples{
 plot(admix_model(knownComp_dist = "norm", knownComp_param = list("mean"=0, "sd"=1)))

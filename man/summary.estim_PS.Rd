@@ -4,10 +4,12 @@
 \alias{summary.estim_PS}
 \title{Summary method for objects 'estim_PS'}
 \usage{
-\method{summary}{estim_PS}(object, ...)
+\method{summary}{estim_PS}(object, show.call = TRUE, ...)
 }
 \arguments{
 \item{object}{An object of class 'estim_PS'.}
+
+\item{show.call}{A boolean to print the call.}
 
 \item{...}{A list of additional parameters belonging to the default method.}
 }

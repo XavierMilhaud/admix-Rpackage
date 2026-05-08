@@ -34,40 +34,32 @@ component distributions and their values, 6) the mixing proportion, 7) the obser
 8) the observations coming from the second component.
 }
 \description{
-Simulate a two-component mixture model following the probability density function (pdf) l such that l = p*f + (1-p)*g,
-with f and g the mixture component distributions, and p the mixing weight.
+Simulate a two-component mixture model following the probability density function (pdf) \eqn{\ell} such that
+\deqn{
+  \ell = p f + (1 - p) g,
+}
+with \eqn{f} and \eqn{g} the mixture component distributions, and \eqn{p} the mixing weight.
 }
 \examples{
 ## Mixture of continuous random variables:
-sim.X <- twoComp_mixt(n = 2000, weight = 0.5,
-                      comp.dist = list("norm", "norm"),
-                      comp.param = list(list("mean"=3, "sd"=0.5),
-                                        list("mean"=0, "sd"=1)))
-print(sim.X)
-sim.Y <- twoComp_mixt(n = 1200, weight = 0.7,
+sim.X <- twoComp_mixt(n = 1200, weight = 0.7,
                       comp.dist = list("norm", "exp"),
                       comp.param = list(list("mean"=-3, "sd"=0.5),
                                         list("rate"=1)))
-plot(sim.X, xlim=c(-5,5), ylim=c(0,0.5))
-plot(sim.Y, add_plot = TRUE, xlim=c(-5,5), ylim=c(0,0.5), col = "red")
+print(sim.X)
+data.X <- get_mixture_data(sim.X)
+plot(density(data.X))
 
 ## Mixture of discrete random variables:
-sim.X <- twoComp_mixt(n = 2000, weight = 0.5,
-                      comp.dist = list("multinom", "multinom"),
-                      comp.param = list(list("size"=1, "prob"=c(0.3,0.4,0.3)),
-                                        list("size"=1, "prob"=c(0.1,0.2,0.7))))
 sim.Y <- twoComp_mixt(n = 1800, weight = 0.7,
                       comp.dist = list("multinom", "multinom"),
                       comp.param = list(list("size"=1, "prob"=c(0.3,0.4,0.3)),
                                         list("size"=1, "prob"=c(0.6,0.2,0.2))))
-sim.Z <- twoComp_mixt(n = 1800, weight = 0.3,
-                      comp.dist = list("multinom", "multinom"),
-                      comp.param = list(list("size"=1, "prob"=c(0.2,0.1,0.7)),
-                                        list("size"=1, "prob"=c(1/3,1/3,1/3))))
-plot(sim.X, offset = -0.05, bar_width = 0.05, col = "steelblue")
-plot(sim.Y, add_plot = TRUE, offset = 0, bar_width = 0.05, col = "orange")
-plot(sim.Z, add_plot = TRUE, offset = +0.05, bar_width = 0.05, col = "red")
+print(sim.Y)
 
+}
+\seealso{
+\code{\link[=get_mixture_data]{get_mixture_data()}} to access the simulated mixture data.
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

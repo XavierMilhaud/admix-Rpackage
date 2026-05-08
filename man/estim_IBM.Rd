@@ -25,8 +25,11 @@ unknown component distributions in each sample); 6) the arbitrary value of the m
 }
 \description{
 Estimation of the component weights from the Inversion - Best Matching (IBM) method, related to two admixture models
-with respective probability density function (pdf) l1 and l2, such that:
-l1 = p1*f1 + (1-p1)\emph{g1 and l2 = p2}f2 + (1-p2)*g2, where g1 and g2 are the known component densities.
+with respective probability density function (pdf) \eqn{\ell_1} and \eqn{\ell_2}, such that:
+\deqn{
+  \ell_i = p_i f_i + (1 - p_i) g_i, \quad i=1,2,
+}
+where \eqn{g_1} and \eqn{g_2} are the known component densities.
 For further details about IBM approach, see 'Details' below.
 }
 \examples{

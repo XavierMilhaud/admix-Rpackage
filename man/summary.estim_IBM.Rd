@@ -4,10 +4,12 @@
 \alias{summary.estim_IBM}
 \title{Summary method for objects 'estim_IBM'}
 \usage{
-\method{summary}{estim_IBM}(object, ...)
+\method{summary}{estim_IBM}(object, show.call = TRUE, ...)
 }
 \arguments{
 \item{object}{An object of class 'estim_IBM'.}
+
+\item{show.call}{A boolean to print the call.}
 
 \item{...}{A list of additional parameters belonging to the default method.}
 }

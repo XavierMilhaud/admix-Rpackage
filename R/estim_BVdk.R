@@ -2,9 +2,11 @@
 #'
 #' Estimates parameters in an admixture model where the unknown component is assumed to have a symmetric density.
 #' More precisely, estimates the two parameters (mixture weight and location shift) in the admixture model with pdf:
-#'          l(x) = p*f(x-mu) + (1-p)*g(x), x in R,
-#' where g is the known component, p is the proportion and f is the unknown component with symmetric density.
-#' The localization shift parameter is denoted mu, and the component weight p.
+#' \deqn{
+#'   \ell(x) = p f(x-\mu) + (1 - p) g(x), \quad x \in \mathbb{R},
+#' }
+#' where \eqn{g} is the known component, \eqn{p} is the proportion and \eqn{f} is the unknown component with symmetric density.
+#' The localization shift parameter is denoted \eqn{\mu}, and the component weight \eqn{p}.
 #' See the reference below for further details.
 #'
 #' @param samples The observed sample under study.
@@ -111,8 +113,7 @@ estim_BVdk <- function(samples, admixMod, method = c("L-BFGS-B","Nelder-Mead"), 
     mix_weight_variance = ifelse(all(is.na(var_estimators)), NA, var_estimators$var.estim_prop),
     location_variance = ifelse(all(is.na(var_estimators)), NA, var_estimators$var.estim_location),
     optim_method = method,
-    data = samples,
-    data.name = deparse1(substitute(samples))
+    data = samples
   )
   class(obj) <- c("estim_BVdk", "admix_estim")
   obj$call <- match.call()
@@ -133,51 +134,77 @@ estim_BVdk <- function(samples, admixMod, method = c("L-BFGS-B","Nelder-Mead"), 
 
 print.estim_BVdk <- function(x, ...)
 {
-#  cat("\nCall:")
-#  print(x$call)
-  cat("\n")
-  cat("Estimated mixing weight:", round(x$estimated_mixing_weights,3),
-      "/ Estimated location shift:", round(x$estimated_locations,3),"\n")
-  if (!is.na(x$mix_weight_variance) & !is.na(x$location_variance)) {
-    cat("Variance of weight estimator:", round(x$mix_weight_variance,5),
-        "/ Variance of loc. estimator:", round(x$location_variance,5), "\n")
+  cat("\nEstimation (BVdk method)\n\n")
+  if (!is.null(x$population_sizes)) { cat("Sample size:", x$population_sizes, "\n") }
+  if (!is.null(x$estimated_mixing_weights)) {
+    cat("Mixing weight (unknown):", format(round(x$estimated_mixing_weights, 3), nsmall = 3), "\n")
   }
-  cat("\n")
-}
+  if (!is.null(x$estimated_locations)) {
+    cat("Location parameter:", format(round(x$estimated_locations, 3), nsmall = 3), "\n")
+  }
+  ## Variances
+  if (!is.na(x$mix_weight_variance) && !is.na(x$location_variance)) {
+    cat("Variance mixing weight:", format(round(x$mix_weight_variance, 5), nsmall = 5), "\n")
+    cat("Variance location:", format(round(x$location_variance, 5), nsmall = 5), "\n")
+  }
 
+  if (!is.null(x$optim_method)) {
+    cat("\nOptimization method:", x$optim_method, "\n")
+  }
+
+  cat("\nUse `?estim_BVdk` for details on the optimization method.\n")
+  invisible(x)
+}
 
 #' Summary method for objects 'estim_BVdk'
 #'
 #' Summarizes the results stored in an object of class 'estim_BVdk'.
 #'
 #' @param object An object of class 'estim_BVdk'.
+#' @param show.call A boolean to print the call.
 #' @param ... A list of additional parameters belonging to the default method.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @keywords internal
 
-summary.estim_BVdk <- function(object, ...)
+summary.estim_BVdk <- function(object, show.call = TRUE, ...)
 {
-  cat("Call:")
-  print(object$call)
-  cat("\n")
-  cat("------- Sample characteristics -------\n")
-  cat("Sample size: ", object$population_sizes, "\n")
-  cat("-> Distribution of the known component:", object$admixture_models$comp.dist$known, "\n", sep="")
-  cat("-> Parameter(s) of the known component:", paste(names(object$admixture_models$comp.param$known), object$admixture_models$comp.param$known, collapse="\t", sep="="), sep="")
-  cat("\n")
-  cat("\n------- Estimation results -------\n")
-  cat("Estimated mixing proportion:", object$estimated_mixing_weights, "\n")
-  cat("Estimated location shift parameter:", object$estimated_locations, "\n")
-  if (!is.na(object$mix_weight_variance) & !is.na(object$location_variance)) {
-    cat("Variance of the mixing proportion estimator:", object$mix_weight_variance, "\n")
-    cat("Variance of the location estimator:", object$location_variance, "\n")
+  if (show.call) {
+    cat("\nCall:\n")
+    print(object$call)
   }
-  cat("\n------- Optimization -------\n")
-  cat("Optimization method: ", object$optim_method)
-  cat("\n")
-}
 
+  cat("\nData\n")
+  cat("----\n")
+  cat("Sample size:", object$population_sizes, "\n")
+  cat("Known component:", object$admixture_models$comp.dist$known, "\n")
+  params <- object$admixture_models$comp.param$known
+  if (!is.null(params)) {
+    param_str <- paste(names(params), "=", params, collapse = ", ")
+    cat("Known parameters:", param_str, "\n")
+  }
+
+  cat("\nEstimation (BVdk method)\n")
+  cat("------------------------\n")
+  if (!is.null(object$estimated_mixing_weights)) {
+    cat("Mixing weight (unknown):", format(round(object$estimated_mixing_weights, 3), nsmall = 3), "\n")
+  }
+  if (!is.null(object$estimated_locations)) {
+    cat("Location parameter:", format(round(object$estimated_locations, 3), nsmall = 3), "\n")
+  }
+  ## Variances
+  if (!is.na(object$mix_weight_variance) && !is.na(object$location_variance)) {
+    cat("Variance mixing weight:", format(round(object$mix_weight_variance, 5), nsmall = 5), "\n")
+    cat("Variance location:", format(round(object$location_variance, 5), nsmall = 5), "\n")
+  }
+
+  cat("\nOptimization\n")
+  cat("------------\n")
+  if (!is.null(object$optim_method)) { cat("Method:", object$optim_method, "\n") }
+
+  cat("\nUse `?estim_BVdk` for details on the optimization method.\n")
+  invisible(object)
+}
 
 #' Contrast as defined in Bordes & Vandekerkhove (2010)
 #'

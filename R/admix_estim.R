@@ -1,9 +1,14 @@
 #' Estimate the unknown weight in an admixture model
 #'
-#' Estimate the unknown component weight (and possibly location shift parameter in case of a symmetric unknown component density),
-#' using different estimation techniques. We remind that the i-th admixture model has probability density function (pdf) l_i such that:
-#'    l_i = p_i * f_i + (1-p_i) * g_i, where g_i is the known component density.
-#' The unknown quantities p_i and f_i then have to be estimated.
+#' Estimate the unknown component weight (and possibly a location shift parameter
+#' in case of a symmetric unknown component density), using different estimation
+#' techniques. We recall that the \eqn{i}-th admixture model has probability density function
+#' \eqn{\ell_i} such that:
+#' \deqn{
+#'   \ell_i = p_i f_i + (1 - p_i) g_i,
+#' }
+#' where \eqn{g_i} is the known component density. The unknown quantities
+#' \eqn{p_i} and \eqn{f_i} then have to be estimated.
 #'
 #' @param samples A list of the K (K>0) samples to be studied, all following admixture distributions.
 #' @param admixMod A list of objects of class \link[admix]{admix_model}, containing useful information about distributions and parameters.
@@ -16,19 +21,24 @@
 #' @details For further details on the different estimation techniques, see references below on i) Patra and Sen estimator ;
 #'          ii) Bordes and Vandekerkhove estimator ; iii) Inversion Best-Matching approach. Important note: estimation by 'IBM'
 #'          requires at least two samples at hand, and provides unbiased estimators only if the distributions of unknown components
-#'          are equal (meaning that it requires to perform previously this test between the pairs of samples, see \link[admix]{admix_test}.
+#'          are equal (meaning that it requires to perform previously this test between the pairs of samples, see \link[admix]{admix_test}).
+#'
+#' @return An object of class \code{estim_BVdk}, \code{estim_PS} or \code{estim_IBM} (that inherits from class \link[admix]{admix_estim}),
+#'         with two attributes, 'class' and 'names'. The latter contains three elements, among which 'estim_objects' that lists for each
+#'         sample under study all the information of the estimation procedure.
+#'
+#' @seealso [get_mixing_weights()] to access the estimated mixing weight(s), [get_known_component()] to access the known component(s), [print.admix_estim()] for a brief description of the results,
+#'          and [summary.admix_estim()] for an overview of the estimation process. More precisely, 1) the number of samples under study;
+#'          2) the information about the known mixture components (distributions and parameters); 3) the sizes of the samples;
+#'          4) the chosen estimation technique (one of 'BVdk', 'PS' or 'IBM'); 5) the estimated mixing proportions (weights of the
+#'          unknown component distributions in the mixture model). In case of 'BVdk' estimation, one additional attribute corresponding
+#'          to the estimated location shift parameter is included.
 #'
 #' @references
 #' \insertRef{PatraSen2016}{admix}
 #' \insertRef{BordesDelmasVandekerkhove2006}{admix}
 #' \insertRef{BordesVandekerkhove2010}{admix}
 #' \insertRef{MilhaudPommeretSalhiVandekerkhove2024a}{admix}
-#'
-#' @return An object of class \code{estim_BVdk}, \code{estim_PS} or \code{estim_IBM} (that inherits from class \link[admix]{admix_estim}),
-#'         containing at least 5 attributes: 1) the number of samples under study; 2) the information about the mixture components
-#'         (distributions and parameters); 3) the sizes of the samples; 4) the chosen estimation technique (one of 'BVdk', 'PS' or 'IBM');
-#'         5) the estimated mixing proportions (weights of the unknown component distributions in the mixture model). In case of 'BVdk'
-#'         estimation, one additional attribute corresponding to the estimated location shift parameter is included.
 #'
 #' @examples
 #' ## Simulate mixture data:
@@ -96,6 +106,7 @@ distribution to have a symmetric probability density function.")
   } else if (meth == "PS") {
     for (k in 1:n_samples) {
       estimate[[k]] <- estim_PS(samples = samples[[k]], admixMod = admixMod[[k]], ...)
+      #estimate[[k]]$data.name <- sample_names[k]
     }
   } else if (meth == "IBM") {
     message(" IBM estimators of two unknown proportions are reliable only if the two corresponding
@@ -119,6 +130,13 @@ distribution to have a symmetric probability density function.")
                            "IBM" = "estim_IBM")
   class(estimators) <- c(specific_class, "admix_estim")
   estimators$call <- match.call()
+  ## Retrieve names of objects
+  sample_names <- NULL
+  sample_expr <- match.call()$samples
+  if (is.call(sample_expr) && sample_expr[[1]] == as.name("list")) { sample_names <- as.character(sample_expr)[-1] }
+  ## fallback if not retrievable
+  if (is.null(sample_names) || length(sample_names) != n_samples) { sample_names <- paste0("Sample_", seq_len(n_samples)) }
+  estimators$sample_names <- sample_names
 
   return(estimators)
 }
@@ -132,27 +150,83 @@ distribution to have a symmetric probability density function.")
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-print.admix_estim <- function(x, ...)
-{
-  cat("\n")
-  cat("Call:")
+print.admix_estim <- function(x, ...) {
+
+  cat("\nCall:\n")
   print(x$call)
-  if (inherits(x, what = "estim_IBM")) {
-    n_samples <- length(x$estim_objects) + 1
-    cat("\nPairwise estimation performed (IBM estimation method).\n\n")
-    for (i in 1:(n_samples-1)) {
-      cat("******** Samples #1 with #", (i+1), " ********", sep = "")
-      print(x$estim_objects[[i]], ...)
+  method <- class(x)[1]
+  method <- sub("estim_", "", method)
+  cat("\nMethod:", method, "\n")
+
+  if (inherits(x, "estim_IBM")) {
+    valid_objects <- Filter(Negate(is.null), x$estim_objects)
+    n_samples     <- length(valid_objects) + 1
+    cat("Pairwise estimation\n\n")
+    sample_names <- x$sample_names
+    if (is.null(sample_names)) { sample_names <- names(valid_objects) }
+    if (is.null(sample_names) || any(sample_names == "")) { sample_names <- paste0("Sample_", seq_len(n_samples)) }
+    pairs <- paste0(sample_names[1], " vs ", sample_names[-1])
+
+    rows <- lapply(seq_along(valid_objects), function(k) {
+      obj <- valid_objects[[k]]
+      w   <- obj$estimated_mixing_weights
+      variance.p1 <- obj$variance_est_p1
+      variance.p2 <- obj$variance_est_p2
+      if (isTRUE(obj$equal.knownComp)) {
+        data.frame(Pair = pairs[k], `p1 (fixed)` = format(round(obj$p.X.fixed, 3), nsmall=3), p2 = format(round(w,3), nsmall=3),
+                   var.p1 = format(round(variance.p1,5), nsmall=5), var.p2 = format(round(variance.p2,5), nsmall=5),
+                   n1 = obj$population_sizes[1], n2 = obj$population_sizes[2], check.names = FALSE)
+      } else {
+        data.frame(Pair = pairs[k], `p1` = format(round(w[1], 3), nsmall = 3), p2 = format(round(w[2], 3), nsmall = 3),
+                   var.p1 = format(round(variance.p1,5), nsmall=5), var.p2 = format(round(variance.p2,5), nsmall=5),
+                   n1 = obj$population_sizes[1], n2 = obj$population_sizes[2], check.names = FALSE)
+      }
+    })
+    ## Equivalent of dplyr::bind_rows (fills missing columns with NA)
+    has_fixed <- any(sapply(valid_objects, function(obj) isTRUE(obj$equal.knownComp)))
+    all_cols <- if (has_fixed) {
+      c("Pair", "p1 (fixed)", "p1", "p2", "var.p1", "var.p2", "n1", "n2")
+    } else {
+      c("Pair", "p1", "p2", "var.p1", "var.p2", "n1", "n2")
     }
+    df <- do.call(rbind, lapply(rows, function(r) {
+      missing <- setdiff(all_cols, names(r))
+      r[missing] <- NA
+      r[all_cols]
+    }))
+    print(df, row.names = FALSE, right = TRUE)
+
   } else {
     n_samples <- length(x$estim_objects)
-    cat("\n")
-    for (i in 1:n_samples) {
-      cat("******** Sample #", i, " ********", sep = "")
-      print(x$estim_objects[[i]], ...)
+    cat("Number of samples:", n_samples, "\n\n")
+    sample_names <- x$sample_names
+    if (is.null(sample_names)) { sample_names <- names(x$estim_objects) }
+    if (is.null(sample_names) || any(sample_names == "")) { sample_names <- paste0("Sample_", seq_len(n_samples)) }
+    weights <- sapply(x$estim_objects, function(obj) {
+      format(round(obj$estimated_mixing_weights, 3), nsmall = 3)
+    })
+    df <- data.frame(Sample = sample_names, `Mixing weight` = weights, check.names = FALSE)
+    if (inherits(x, "estim_BVdk")) {
+      df$location <- sapply(x$estim_objects, function(obj) { format(round(obj$estimated_locations, 2), nsmall = 2) })
+      if (!is.na(x$estim_objects[[1]]$mix_weight_variance) && !is.na(x$estim_objects[[1]]$location_variance)) {
+        df$var.weight <- sapply(x$estim_objects, function(obj) { format(round(obj$mix_weight_variance, 5), nsmall = 5) })
+        df$var.location <- sapply(x$estim_objects, function(obj) { format(round(obj$location_variance, 5), nsmall = 5) })
+      }
     }
+    df$n <- sapply(x$estim_objects, function(obj) { obj$population_sizes })
+    print(df, row.names = FALSE, right = TRUE)
   }
+
+  if (inherits(x, "estim_PS")) {
+    cat("\n Use `?estim_PS` for details on the penalization term.\n")
+  } else if (inherits(x, "estim_BVdk")) {
+    cat("\n Use `?estim_BVdk` for details on the optimization method.\n")
+  } else {
+    cat("\n Use `?estim_IBM` for further details.\n")
+  }
+  invisible(x)
 }
+
 
 #' Summary method for object of class \code{admix_estim}
 #'
@@ -166,22 +240,33 @@ print.admix_estim <- function(x, ...)
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-summary.admix_estim <- function(object, ...)
-{
-  if (inherits(object, what = "estim_IBM")) {
-    n_samples <- length(object$estim_objects) + 1
-    cat("\nPairwise estimation performed (IBM estimation method).\n\n")
-    for (i in 1:(n_samples-1)) {
-      cat("******** Samples #1 with #", (i+1), " ********\n", sep = "")
-      summary(object$estim_objects[[i]], ...)
+summary.admix_estim <- function(object, ...) {
+
+  cat("\nCall:\n")
+  print(object$call)
+
+  method <- sub("estim_", "", class(object)[1])
+  n_samples <- length(object$estim_objects)
+  sample_names <- object$sample_names
+  if (is.null(sample_names) || any(sample_names == "")) {
+    sample_names <- paste0("Sample_", seq_len(n_samples))
+  }
+
+  if (inherits(object, "estim_IBM")) {
+    ## Pairwise:
+    valid_names   <- sample_names[-1]
+    for (k in seq_along(object$estim_objects)) {
+      cat("\n==============================================\n")
+      cat("Pair:", sample_names[1], "vs", valid_names[k], "\n")
+      summary(object$estim_objects[[k]], show.call = FALSE, ...)
     }
+
   } else {
-    n_samples <- length(object$estim_objects)
-    cat("\n")
-    for (i in 1:n_samples) {
-      cat("******** Sample #", i, " ********\n\n", sep = "")
-      summary(object$estim_objects[[i]], ...)
-      cat("\n")
+    for (k in seq_along(object$estim_objects)) {
+      cat("\n==============================================\n")
+      cat("Sample:", sample_names[k], "\n")
+      summary(object$estim_objects[[k]], show.call = FALSE, ...)
     }
   }
+  invisible(object)
 }

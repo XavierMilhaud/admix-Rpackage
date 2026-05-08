@@ -9,7 +9,7 @@ using Inversion - Best Matching (IBM) approach, see 'Details' below for further 
 
     <a class="navbar-brand me-2" href="../index.html">admix</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.5.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.6.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,7 +63,8 @@ using Inversion - Best Matching (IBM) approach, see 'Details' below for further 
 
 
 <dl><dt id="arg-samples">samples<a class="anchor" aria-label="anchor" href="#arg-samples"></a></dt>
-<dd><p>A list of the K (K&gt;1) samples to be studied, all following admixture distributions.</p></dd>
+<dd><p>A named list of the K (K&gt;1) samples to be studied, all following admixture distributions.
+If names are provided, they are used in the output to identify samples; otherwise default labels are used.</p></dd>
 
 
 <dt id="arg-admixmod">admixMod<a class="anchor" aria-label="anchor" href="#arg-admixmod"></a></dt>
@@ -97,13 +98,15 @@ to speed-up the building of clusters.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class admix_cluster, containing 12 attributes: 1) the number of samples under study; 2) the sizes of samples;
-3) the information about mixture components in each sample (distributions and parameters); 4) the number of detected clusters;
-5) the list of p-values for each k-sample test at the origin of detected clusters; 6) the cluster affiliation for each sample;
-7) the confidence level of statistical tests; 8) which samples in which cluster; 9) the size of clusters; 10) the estimated
+    <p>An object of class admix_cluster, containing 14 attributes: 1) the number of samples under study; 2) the names of samples;
+3) the sizes of samples;
+4) the information about mixture components in each sample (distributions and parameters); 5) the number of detected clusters;
+6) the list of p-values for each k-sample test at the origin of detected clusters; 7) the cluster affiliation for each sample;
+8) the confidence level of statistical tests; 9) which samples in which cluster; 10) the size of clusters; 11) the estimated
 weights of the unknown component distributions inside each cluster (remind that estimated weights are consistent only if
-unknown components are tested to be identical, which is the case inside clusters); 11) the matrix of pairwise discrepancies
-across all samples; 12) the list of tabulated distributions used for statistical tests involved in building the clusters.</p>
+unknown components are tested to be identical, which is the case inside clusters); 12) the matrix of pairwise discrepancies
+across all samples; 13) the list of tabulated distributions used for statistical tests involved in building the clusters;
+14) the call.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -111,6 +114,12 @@ across all samples; 12) the list of tabulated distributions used for statistical
 “Contamination-source based K-sample clustering.”
 <em>Journal of Machine Learning Research</em>, <b>25</b>(287), 1–32.
 <a href="https://jmlr.org/papers/v25/23-0914.html" class="external-link">https://jmlr.org/papers/v25/23-0914.html</a>.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p><code><a href="print.admix_cluster.html">print.admix_cluster()</a></code>, <code><a href="summary.admix_cluster.html">summary.admix_cluster()</a></code>, <code><a href="get_known_component.html">get_known_component()</a></code>, <code><a href="get_cluster_members.html">get_cluster_members()</a></code>, <code><a href="get_cluster_sizes.html">get_cluster_sizes()</a></code>,
+<code><a href="get_tabulated_dist.html">get_tabulated_dist()</a></code> to access the tabulated distribution under the null hypothesis, which defines the quantile against
+which the test statistics is tested; <code><a href="get_discrepancy_matrix.html">get_discrepancy_matrix()</a></code> for a pairwise measure of discrepancy between samples.</p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -160,10 +169,10 @@ across all samples; 12) the list of tabulated distributions used for statistical
 <span class="r-out co"><span class="r-pr">#&gt;</span>     admixMod2, admixMod3, admixMod4), conf_level = 0.95, tune_penalty = TRUE, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     n_sim_tab = 10)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of detected clusters: 2.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> List of samples involved in each built cluster:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    - Cluster #1: samples 1, 3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    - Cluster #2: samples 2, 4</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Number of detected clusters: 2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Samples involved in each cluster:</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - Cluster #1: data1, data3 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   - Cluster #2: data2, data4 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>

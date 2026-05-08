@@ -2,7 +2,7 @@
 % Please edit documentation in R/admix_test.R
 \name{admix_test}
 \alias{admix_test}
-\title{Equality test for the unknown components in admixture models}
+\title{Hypothesis test for the unknown component(s) in admixture model(s)}
 \usage{
 admix_test(
   samples,
@@ -36,17 +36,19 @@ the test (1-alpha, where alpha denotes the level of the test or equivalently the
 of samples under study; the respective size of each sample; the information about known mixture components.
 }
 \description{
-Perform hypothesis test between unknown components of a list of admixture models, where we remind that the i-th admixture
-model has probability density function (pdf) l_i such that:
-l_i = p_i * f_i + (1-p_i) * g_i, with g_i the known component density.
-The unknown quantities p_i and f_i are thus estimated, leading to the test given by the following null and alternative hypothesis:
-H0: f_i = f_j for all i != j   against H1 : there exists at least i != j such that f_i differs from f_j.
-The test can be performed using two methods, either the comparison of coefficients obtained through polynomial basis expansions
-of the component densities, or by the inner-convergence property obtained using the IBM approach. See 'Details' below for further information.
+Perform hypothesis test on the unknown component(s) of a list of admixture model(s), where we remind that the \eqn{i}-th admixture
+model has probability density function (pdf) \eqn{\ell_i} such that:
+\deqn{
+  \ell_i = p_i f_i + (1 - p_i) g_i,
+}
+with \eqn{g_i} the known component density, and where \eqn{\ell_i} can be estimated consistently thanks to the observations.
+The test is made on the \eqn{f_i}'s, can be performed using two methods: either the comparison of coefficients obtained through
+polynomial basis expansions of the component densities, or by the inner-convergence property obtained using the IBM approach.
+See 'Details' below for further information.
 }
 \details{
-For further details on implemented hypothesis tests, see the references hereafter.
-.
+For further details on implemented hypothesis tests, see the references hereafter. When choosing the 'icv'
+testing method, it is recommended to use parallel computing.
 }
 \examples{
 ####### Example with 2 samples
@@ -72,6 +74,10 @@ admix_test(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
 \insertRef{MilhaudPommeretSalhiVandekerkhove2024b}{admix}
 \insertRef{MilhaudPommeretSalhiVandekerkhove2022}{admix}
 \insertRef{PommeretVandekerkhove2019}{admix}
+}
+\seealso{
+\code{\link[=gaussianity_test]{gaussianity_test()}}, \code{\link[=orthobasis_test]{orthobasis_test()}}, \code{\link[=IBM_k_samples_test]{IBM_k_samples_test()}}, \code{\link[=get_known_component]{get_known_component()}}, \code{\link[=get_mixing_weights]{get_mixing_weights()}},
+\code{\link[=reject_nullHyp]{reject_nullHyp()}}, \code{\link[=which_rank]{which_rank()}}
 }
 \author{
 Xavier Milhaud \href{mailto:xavier.milhaud.research@gmail.com}{xavier.milhaud.research@gmail.com}

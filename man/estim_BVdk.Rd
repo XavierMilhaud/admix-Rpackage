@@ -32,9 +32,11 @@ method that was used.
 \description{
 Estimates parameters in an admixture model where the unknown component is assumed to have a symmetric density.
 More precisely, estimates the two parameters (mixture weight and location shift) in the admixture model with pdf:
-l(x) = p*f(x-mu) + (1-p)*g(x), x in R,
-where g is the known component, p is the proportion and f is the unknown component with symmetric density.
-The localization shift parameter is denoted mu, and the component weight p.
+\deqn{
+  \ell(x) = p f(x-\mu) + (1 - p) g(x), \quad x \in \mathbb{R},
+}
+where \eqn{g} is the known component, \eqn{p} is the proportion and \eqn{f} is the unknown component with symmetric density.
+The localization shift parameter is denoted \eqn{\mu}, and the component weight \eqn{p}.
 See the reference below for further details.
 }
 \examples{

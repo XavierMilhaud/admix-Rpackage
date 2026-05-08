@@ -1,12 +1,18 @@
 #' Equality test of two unknown component distributions using polynomial expansions
 #'
-#' Tests the null hypothesis (H0: f1=f2) using the decomposition of unknown component densities of two admixture distributions in
-#' an adequate orthonormal polynomial basis. Recall that we have two admixture models with respective probability density
-#' functions (pdf) l1 = p1*f1 + (1-p1)*g1 and l2 = p2*f2 + (1-p2)*g2, where g1 and g2 are the only known elements and l1 and l2
-#' are observed. The admixture weights p1 and p2 thus have to be estimated. For further information on this method, see 'Details' below.
+#' Tests the null hypothesis
+#' \deqn{
+#'   H_0: \, f_1 = f_2 \quad \mbox{against} \quad H_1: \, f_1 \neq f_2,
+#' }
+#' using the decomposition of unknown component densities of two admixture distributions in an adequate orthonormal
+#' polynomial basis. Recall that we have two admixture models with respective probability density functions (pdf)
+#' \deqn{
+#'   \ell_i = p_i f_i + (1 - p_i) g_i, \; i=1,2,
+#' }
+#' where \eqn{g_1} and \eqn{g_2} are the only known elements and \eqn{\ell_1} and \eqn{\ell_2} are observed.
+#' The admixture weights \eqn{p_1} and \eqn{p_2} thus have to be estimated. For further information on this method, see 'Details' below.
 #'
-#' @param samples List of the two samples, each one following the mixture distribution given by l = p*f + (1-p)*g,
-#'                with f and p unknown and g known.
+#' @param samples List of the two samples, each one following the mixture distribution with f and p unknown and g known.
 #' @param admixMod A list of objects of class \link[admix]{admix_model}, containing useful information about distributions and parameters.
 #' @param conf_level The confidence level, default to 95 percent. Equals 1-alpha, where alpha is the level of the test (type-I error).
 #' @param est_method Estimation method to get the component weights, either 'PS' (Patra and Sen estimation) or 'BVdk'

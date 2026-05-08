@@ -1,6 +1,6 @@
 Package: admix
 Title: Package Admix for Admixture (aka Contamination) Models
-Version: 2.5.2
+Version: 2.6.1
 Authors@R: c(
     person("Xavier", "Milhaud", , "xavier.milhaud.research@gmail.com", role = c("aut", "cre")),
     person("Pierre", "Vandekerkhove", role = "ctb"),
@@ -34,7 +34,6 @@ RoxygenNote: 7.3.3
 Imports: 
     base,
     cubature,
-    EnvStats,
     fdrtool,
     graphics,
     Iso,

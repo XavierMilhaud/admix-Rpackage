@@ -1,10 +1,15 @@
 #' Equality test of K unknown component distributions
 #'
 #' Equality test of the unknown component distributions coming from K (K > 1) admixture models, based on the Inversion - Best
-#' Matching (IBM) approach. Recall that we have K populations following admixture models, each one with probability
-#' density functions (pdf) l_k = p_k*f_k + (1-p_k)*g_k, where g_k is the known pdf and l_k corresponds to the
-#' observed sample. Perform the following hypothesis test:
-#'    H0 : f_1 = ... = f_K  against  H1 : f_i differs from f_j (i different from j, and i,j in 1,...,K).
+#' Matching (IBM) approach. Recall that we have K populations following admixture models, each one with probability density functions (pdf)
+#' \deqn{
+#'   \ell_k = p_k f_k + (1 - p_k) g_k, \quad k=1,...,K,
+#' }
+#' where \eqn{g_k} is the known pdf and \eqn{l_k} corresponds to the observed sample.
+#' In such a context, perform the following hypothesis test:
+#' \deqn{
+#'   H_0: \, f_1 = f_K \quad \mbox{against} \quad H_1: \, \exists \mbox{ at least } i \neq j \mbox{ such that } f_i \neq f_j, \; i \neq j, \, i,j \in \{1,...,K\}.
+#' }
 #'
 #' @param samples A list of the K samples to be studied, all following admixture distributions.
 #' @param admixMod A list of objects of class \link[admix]{admix_model}, containing useful information about distributions and parameters.
@@ -18,9 +23,6 @@
 #' @param parallel (default to FALSE) Boolean to indicate whether parallel computations are performed (speed-up the tabulation).
 #' @param n_cpu (default to 2) Number of cores used when paralleling computations.
 #'
-#' @references
-#' \insertRef{MilhaudPommeretSalhiVandekerkhove2024b}{admix}
-#'
 #' @return An object of class 'IBM_test', containing 17 attributes: 1) the number of samples for the test; 2) the sizes of each sample;
 #'         3) the information about component distributions for each sample; 4) the reject decision of the test; 5) the confidence level
 #'         of the test (1-alpha, where alpha refers to the first-type error); 6) the test p-value; 7) the 95th-percentile of the contrast
@@ -31,6 +33,13 @@
 #'         tabulated distribution of the contrast; 16) the estimated mixing proportions (not implemented yet, since that makes sense only
 #'         in case of equal unknown component distributions); 17) the matrix of pairwise contrasts (distance between two samples); 18) the
 #'         matrix of the ranks of pairwise contrasts; and 19) the matrix of identifiers of pairwise contrasts.
+#'
+#' @seealso [get_tabulated_dist()] to access the tabulated distribution under the null hypothesis, which defines the
+#'          quantile against which the test statistics is tested; [get_discrepancy_rank()], [get_discrepancy_matrix()] to access the measure of
+#'          discrepancy between pairs of samples; [get_statistic_components()] in k-sample test;
+#'
+#' @references
+#' \insertRef{MilhaudPommeretSalhiVandekerkhove2024b}{admix}
 #'
 #' @examples
 #' \dontrun{

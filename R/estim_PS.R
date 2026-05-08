@@ -2,8 +2,10 @@
 #'
 #' Estimation of both the weight and the distribution of the unknown component in an admixture model, by Patra and Sen approach.
 #' Remind that the admixture probability density function (pdf) l is given by
-#'          l = p*f + (1-p)*g,
-#' where g is the known component of the two-component mixture, p is the unknown proportion of the unknown component distribution f.
+#' \deqn{
+#'   \ell = p f + (1 - p) g,
+#' }
+#' where \eqn{g} is the known component of the two-component mixture, \eqn{p} is the unknown proportion of the unknown component distribution \eqn{f}.
 #' More information in 'Details' below concerning the estimation method.
 #'
 #' @param samples Sample to be studied.
@@ -104,7 +106,13 @@ estim_PS <- function(samples, admixMod, method = c("fixed", "lwr.bnd", "cv"),
 		c.n <- out.cv$cn.cv
 	}
 
-	ret <- list(
+  ## Retrieve name of data
+  sample_name <- NULL
+  sample_expr <- match.call()$samples
+  sample_names <- as.character(sample_expr)[-1]
+  ## fallback if not retrievable
+  if (is.null(sample_names)) { sample_names <- "Sample_1" }
+  ret <- list(
 	  n_populations = 1,
 	  population_sizes = length(samples),
 	  admixture_models = admixMod,
@@ -115,8 +123,7 @@ estim_PS <- function(samples, admixMod, method = c("fixed", "lwr.bnd", "cv"),
 	  c.n = c.n,
 	  alp.Lwr = alp.Lwr,
 	  n = n,
-	  data = samples,
-	  data.name = deparse1(substitute(samples))
+	  data = samples
 	)
 
 	if (method == "cv"){ ret$cv.out <- out.cv
@@ -139,26 +146,32 @@ estim_PS <- function(samples, admixMod, method = c("fixed", "lwr.bnd", "cv"),
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @keywords internal
 
-print.estim_PS <- function(x, ...){
-  #cat("\n")
-  #cat("Call:")
-  #print(x$call)
-  cat("\n")
-  if(x$method != "lwr.bnd"){
-    cat(paste(" Estimated mixing weight (of the unknown component):" , round(x$estimated_mixing_weights,3)))
-    cat("\n", paste("Selected c_n equals", round(x$c.n, 3)), "in the penalization term. See ?estim_PS\n")
-#    if( !is.null(x$cv.out)){
-#      old_par <- graphics::par()$mfrow
-#      on.exit(graphics::par(old_par))
-#      graphics::par(mfrow=c(1,2))
-#      plot(x$cv.out)
-#    }
-#    plot(x$dist.out)
-  } else if(x$method == 'lwr.bnd'){
+print.estim_PS <- function(x, ...) {
+
+  cat("\nEstimation (PS method)\n\n")
+  if (!is.null(x$population_sizes)) { cat("Sample size:", x$population_sizes, "\n") }
+
+  if (x$method != "lwr.bnd") {
+    if (!is.null(x$estimated_mixing_weights)) {
+      cat("Mixing weight (unknown):", format(round(x$estimated_mixing_weights, 3), nsmall = 3), "\n")
+    }
+    if (!is.null(x$c.n)) {
+      cat("c_n (penalization):", format(round(x$c.n, 3), nsmall = 3), "\n")
+    }
+    if (x$method == "cv") { cat("Selection method: cross-validation\n")
+    } else if (x$method == "fixed") { cat("Selection method: fixed c_n\n") }
+
+  } else {
+    cat("Estimation type: lower bound\n")
+    if (!is.null(x$alp.Lwr)) {
+      cat("Lower bound (95%):", format(round(x$alp.Lwr, 3), nsmall = 3), "\n")
+    }
+    cat("\n(Distribution plot displayed)\n")
     plot(x$dist.out)
-    print (paste("The  '95%' lower confidence for alp_0 is ", x$alp.Lwr))
   }
-  cat("\n")
+
+  cat("\nUse `?estim_PS` for details on the penalization term.\n")
+  invisible(x)
 }
 
 
@@ -167,25 +180,48 @@ print.estim_PS <- function(x, ...){
 #' Summarizes the results stored in an object of class 'estim_PS'.
 #'
 #' @param object An object of class 'estim_PS'.
+#' @param show.call A boolean to print the call.
 #' @param ... A list of additional parameters belonging to the default method.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @keywords internal
 
-summary.estim_PS <- function(object, ...)
-{
-  cat("Call:")
-  print(object$call)
-  cat("\n")
-  cat("------- Sample characteristics -------\n")
-  cat("Sample size: ", object$population_sizes, "\n")
-  cat("-> Distribution of the known component:", object$admixture_models$comp.dist$known, "\n", sep="")
-  cat("-> Parameter(s) of the known component:", paste(names(object$admixture_models$comp.param$known), object$admixture_models$comp.param$known, collapse="\t", sep="="), sep="")
-  cat("\n")
-  cat("\n------- Estimation results -------\n")
-  cat(paste("Estimated mixing weight (of the unknown component):" , round(object$estimated_mixing_weights,3)))
-  cat("\n", paste("Selected c_n equals", round(object$c.n, 3)), "in the penalization term. See ?estim_PS\n")
-  cat("\n")
+summary.estim_PS <- function(object, show.call = TRUE, ...) {
+
+  if (show.call) {
+    cat("\nCall:\n")
+    print(object$call)
+  }
+
+  cat("\nData\n")
+  cat("----\n")
+  cat("Sample size:", object$population_sizes, "\n")
+  cat("Known component:", object$admixture_models$comp.dist$known, "\n")
+  params <- object$admixture_models$comp.param$known
+  if (!is.null(params)) {
+    param_str <- paste(names(params), "=", params, collapse = ", ")
+    cat("Known parameters:", param_str, "\n")
+  }
+
+  cat("\nEstimation (PS method)\n")
+  cat("----------------------\n")
+  if (object$method == "lwr.bnd") {
+    cat("Type: lower bound estimation\n")
+    if (!is.null(object$alp.Lwr)) {
+      cat("Lower bound (95%):", format(round(object$alp.Lwr, 3), nsmall = 3), "\n")
+    }
+  } else {
+    if (!is.null(object$estimated_mixing_weights)) {
+      cat("Mixing weight (unknown):", format(round(object$estimated_mixing_weights, 3), nsmall = 3), "\n")
+    }
+    if (!is.null(object$c.n)) {
+      cat("c_n (penalization):", format(round(object$c.n, 3), nsmall = 3), "\n")
+    }
+    cat("Selection method:", switch(object$method, "fixed" = "fixed c_n", "cv"    = "cross-validation", object$method),"\n")
+  }
+
+  cat("\nUse `?estim_PS` for details on the penalization term.\n")
+  invisible(object)
 }
 
 #plot.estim_PS <- function(x, ...){

@@ -1,8 +1,10 @@
 #' Simulation of a two-component mixture model
 #'
-#' Simulate a two-component mixture model following the probability density function (pdf) l such that l = p*f + (1-p)*g,
-#' with f and g the mixture component distributions, and p the mixing weight.
-
+#' Simulate a two-component mixture model following the probability density function (pdf) \eqn{\ell} such that
+#' \deqn{
+#'   \ell = p f + (1 - p) g,
+#' }
+#' with \eqn{f} and \eqn{g} the mixture component distributions, and \eqn{p} the mixing weight.
 #'
 #' @param n Number of observations to be simulated.
 #' @param weight Weight of the first component distribution (distribution f) in the mixture.
@@ -21,117 +23,81 @@
 #'         component distributions and their values, 6) the mixing proportion, 7) the observations coming from the first component,
 #'         8) the observations coming from the second component.
 #'
+#' @seealso [get_mixture_data()] to access the simulated mixture data.
+#'
 #' @examples
 #' ## Mixture of continuous random variables:
-#' sim.X <- twoComp_mixt(n = 2000, weight = 0.5,
-#'                       comp.dist = list("norm", "norm"),
-#'                       comp.param = list(list("mean"=3, "sd"=0.5),
-#'                                         list("mean"=0, "sd"=1)))
-#' print(sim.X)
-#' sim.Y <- twoComp_mixt(n = 1200, weight = 0.7,
+#' sim.X <- twoComp_mixt(n = 1200, weight = 0.7,
 #'                       comp.dist = list("norm", "exp"),
 #'                       comp.param = list(list("mean"=-3, "sd"=0.5),
 #'                                         list("rate"=1)))
-#' plot(sim.X, xlim=c(-5,5), ylim=c(0,0.5))
-#' plot(sim.Y, add_plot = TRUE, xlim=c(-5,5), ylim=c(0,0.5), col = "red")
+#' print(sim.X)
+#' data.X <- get_mixture_data(sim.X)
+#' plot(density(data.X))
 #'
 #' ## Mixture of discrete random variables:
-#' sim.X <- twoComp_mixt(n = 2000, weight = 0.5,
-#'                       comp.dist = list("multinom", "multinom"),
-#'                       comp.param = list(list("size"=1, "prob"=c(0.3,0.4,0.3)),
-#'                                         list("size"=1, "prob"=c(0.1,0.2,0.7))))
 #' sim.Y <- twoComp_mixt(n = 1800, weight = 0.7,
 #'                       comp.dist = list("multinom", "multinom"),
 #'                       comp.param = list(list("size"=1, "prob"=c(0.3,0.4,0.3)),
 #'                                         list("size"=1, "prob"=c(0.6,0.2,0.2))))
-#' sim.Z <- twoComp_mixt(n = 1800, weight = 0.3,
-#'                       comp.dist = list("multinom", "multinom"),
-#'                       comp.param = list(list("size"=1, "prob"=c(0.2,0.1,0.7)),
-#'                                         list("size"=1, "prob"=c(1/3,1/3,1/3))))
-#' plot(sim.X, offset = -0.05, bar_width = 0.05, col = "steelblue")
-#' plot(sim.Y, add_plot = TRUE, offset = 0, bar_width = 0.05, col = "orange")
-#' plot(sim.Z, add_plot = TRUE, offset = +0.05, bar_width = 0.05, col = "red")
+#' print(sim.Y)
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
 twoComp_mixt <- function(n = 1000, weight = 0.5, comp.dist = list("norm", "norm"),
-                         comp.param = list(list("mean"=0,"sd"=1), list("mean"=2,"sd"=1)))
+                         comp.param = list(list(mean = 0, sd = 1), list(mean = 2, sd = 1)))
 {
-  ## Some arguments to check:
-  if ( !((weight > 0) & (weight < 1)) ) stop("Mixing proportion in a mixture model must belong to ]0,1[.")
-  if ((length(comp.dist) != 2) | (length(comp.param) != 2)) stop("Please provide TWO distributions with corresponding parameters,
-                                                                 one for each of the mixture components.")
-  dist_table <- EnvStats::Distribution.df[ ,c("Name", "Type", "Number.parameters", "Parameter.1",
-                                              "Parameter.2", "Parameter.3", "Parameter.4", "Parameter.5")]
-  stopifnot("Unknown specified distribution" = any(comp.dist %in% rownames(dist_table)) | any(comp.dist == "multinom") | any(comp.dist == "gompertz"))
-  dist.type <- dist_table[match(unlist(comp.dist), rownames(dist_table)), "Type"]
-  if (any(comp.dist == "multinom")) {
-    dist.type <- c("Discrete", "Discrete")
-    if (!(all(comp.dist == "multinom"))) stop("Multinomial distribution can only be mixed with another multinomial distribution")
-  } else if (any(comp.dist == "gompertz")) {
-    dist.type <- c("Continuous", "Continuous")
-    if (!(all(comp.dist == "gompertz"))) stop("Gompertz distribution can only be mixed with another Gompertz distribution")
-  } else { NULL }
+  if (!is.numeric(n) || length(n) != 1 || n <= 0) { stop("`n` must be a positive integer.") }
+  if (!is.numeric(weight) || weight <= 0 || weight >= 1) { stop("`weight` must belong to (0,1).") }
+  if (length(comp.dist) != 2 || length(comp.param) != 2) { stop("Please provide exactly two component distributions.") }
 
-  nparam_theo <- numeric(length = 2L)
-  for (k in 1:length(nparam_theo)) {
-    if (any(comp.dist == "multinom") | any(comp.dist == "gompertz")) { nparam_theo[k] <- 2
-    } else { nparam_theo[k] <- dist_table[rownames(dist_table) == comp.dist[[k]], "Number.parameters"] }
+  for (k in 1:2) { validate_distribution(dist = comp.dist[[k]], params = comp.param[[k]] ) }
+
+  ## Distribution type
+  dist.type <- vapply(comp.dist, distribution_type, character(1))
+  ## Compatibility checks
+  if ("multinom" %in% comp.dist && !all(comp.dist == "multinom")) {
+    stop("`multinom` can only be mixed with another multinomial distribution.")
+  }
+  if ("gompertz" %in% comp.dist && !all(comp.dist == "gompertz")) {
+    stop("`gompertz` can only be mixed with another Gompertz distribution.")
   }
 
-  stopifnot("Mispecification of parameters" = all(nparam_theo == sapply(comp.param, length)))
-  for (k in 1:length(nparam_theo)) {
-    if (any(comp.dist == "multinom")) {
-      stopifnot("Name of parameters not appropriate" = all(names(comp.param[[k]]) == c("size","prob")))
-    } else if (any(comp.dist == "gompertz")) {
-      stopifnot("Name of parameters not appropriate" = all(names(comp.param[[k]]) == c("shape","rate")))
-    } else {
-      if (!all(as.character(dist_table[rownames(dist_table) == comp.dist[[k]], 4:(4+nparam_theo[k]-1)]) == names(comp.param[[k]]))) {
-        cat("Name of parameters not appropriate (see Distribution.df in package 'EnvStats'), please provide the following parameters :",
-              as.character(dist_table[rownames(dist_table) == comp.dist[[k]], 4:(4+nparam_theo[k]-1)]), sep = " / ")
-        cat("\n")
-        stop()
-      }
-    }
+  ## Random generation
+  rfun <- lapply(comp.dist, function(d) get(paste0("r", d), mode = "function"))
+  ## Component labels
+  z <- sample(x = 1:2, size = n, replace = TRUE, prob = c(weight, 1 - weight))
+  ## Generate observations
+  res <- vector("list", n)
+  for (i in seq_len(n)) {
+    k <- z[i]
+    res[[i]] <- do.call(rfun[[k]], c(list(n = 1), comp.param[[k]]) )
   }
 
-  ## Extracts the information on component distributions:
-  comp.dist_sim <- paste0("r", comp.dist)
-  comp_sim <- sapply(X = comp.dist_sim, FUN = get, mode = "function")
-  for (i in 1:length(comp_sim)) assign(x = names(comp_sim)[i], value = comp_sim[[i]])
-  ## Check if arguments of R core functions were correctly specified:
-  #arg.names <- sapply(X = comp_sim, FUN = methods::formalArgs)
-
-  ## Creates the expression allowing further to generate the right data:
-  make.expr_sim <- function(i) {
-    paste(names(comp_sim)[i], "(n=1,", paste(names(comp.param[[i]]), "=", comp.param[[i]], sep = "", collapse = ","), ")", sep="")
-  }
-  expr_sim <- sapply(1:length(comp.dist), make.expr_sim)
-
-  ## Generates the label for each observation:
-  z <- sample(x = 2, size = n, replace = TRUE, prob = c(weight, 1-weight))
-
-  ## Generates the final mixture data:
-  data.gen <- parse(text = expr_sim[z])
-  res <- sapply(data.gen, eval)
-  if (any(comp.dist_sim == "rmultinom")) {
-    res_tmp <- rowSums(res)
-    res <- unlist( apply( as.data.frame(1:length(res_tmp)), 1, function(k) { rep(k, res_tmp[k]) } ) )
+  ## Output
+  if (all(comp.dist == "multinom")) {
+    res_tmp <- vapply(res, function(x) which(x == 1), integer(1))
+    res <- res_tmp
+    #res_tmp <- rowSums(res)
+    #res <- unlist( apply( as.data.frame(1:length(res_tmp)), 1, function(k) { rep(k, res_tmp[k]) } ) )
+  } else {
+    res <- unlist(res)
   }
 
-  obj_res <- list(n = n,
-                  mixt.data = res,
-                  dist.type = dist.type,
-                  comp.dist = comp.dist,
-                  comp.param = comp.param,
-                  mix.prop = weight,
-                  comp1.data = res[z == 1],
-                  comp2.data = res[z == 2]
-                  )
+  obj_res <- list(
+    n = n,
+    mixt.data = res,
+    dist.type = dist.type,
+    comp.dist = comp.dist,
+    comp.param = comp.param,
+    mix.prop = weight,
+    comp1.data = res[z == 1],
+    comp2.data = res[z == 2],
+    call = match.call()
+  )
   class(obj_res) <- "twoComp_mixt"
-  obj_res$call <- match.call()
-  return(obj_res)
+  obj_res
 }
 
 
@@ -221,12 +187,46 @@ summary.twoComp_mixt <- function(object, ...)
 #'
 #' @return A plot with the densities of the samples provided as inputs.
 #'
+#' @examples
+#' ## Mixture of continuous random variables:
+#' sim.X <- twoComp_mixt(n = 2000, weight = 0.5,
+#'                       comp.dist = list("norm", "norm"),
+#'                       comp.param = list(list("mean"=3, "sd"=0.5),
+#'                                         list("mean"=0, "sd"=1)))
+#' sim.Y <- twoComp_mixt(n = 1200, weight = 0.7,
+#'                       comp.dist = list("norm", "exp"),
+#'                       comp.param = list(list("mean"=-3, "sd"=0.5),
+#'                                         list("rate"=1)))
+#' plot(sim.X, xlim=c(-5,5), ylim=c(0,0.5))
+#' plot(sim.Y, add_plot = TRUE, xlim=c(-5,5), ylim=c(0,0.5), col = "red")
+#' legend("topright", legend = c("sim.X","sim.Y"), col = c("black","red"),
+#'        lty = rep(1,2), bty = "n")
+#'
+#' ## Mixture of discrete random variables:
+#' sim.X <- twoComp_mixt(n = 2000, weight = 0.5,
+#'                       comp.dist = list("multinom", "multinom"),
+#'                       comp.param = list(list("size"=1, "prob"=c(0.3,0.4,0.3)),
+#'                                         list("size"=1, "prob"=c(0.1,0.2,0.7))))
+#' sim.Y <- twoComp_mixt(n = 1800, weight = 0.7,
+#'                       comp.dist = list("multinom", "multinom"),
+#'                       comp.param = list(list("size"=1, "prob"=c(0.3,0.4,0.3)),
+#'                                         list("size"=1, "prob"=c(0.6,0.2,0.2))))
+#' sim.Z <- twoComp_mixt(n = 1800, weight = 0.3,
+#'                       comp.dist = list("multinom", "multinom"),
+#'                       comp.param = list(list("size"=1, "prob"=c(0.2,0.1,0.7)),
+#'                                         list("size"=1, "prob"=c(1/3,1/3,1/3))))
+#' plot(sim.X, offset = -0.05, bar_width = 0.05, col = "steelblue")
+#' plot(sim.Y, add_plot = TRUE, offset = 0, bar_width = 0.05, col = "orange")
+#' plot(sim.Z, add_plot = TRUE, offset = +0.05, bar_width = 0.05, col = "red")
+#' legend("topleft", legend = c("sim.X","sim.Y","sim.Z"), col = c("steelblue","orange","red"),
+#'        lty = rep(1,3), bty = "n")
+#'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 #'
 plot.twoComp_mixt <- function(x, add_plot = FALSE, offset = 0, bar_width = 0.2, ...)
 {
-  if (all(x$dist.type == "Discrete")) {
+  if (all(x$dist.type == "Discrete") | all(x$dist.type == "Multivariate")) {
     ## Discrete data and density
     freq <- as.numeric(table(x$mixt.data))
     x_val <- as.numeric(names(table(x$mixt.data)))
@@ -234,7 +234,7 @@ plot.twoComp_mixt <- function(x, add_plot = FALSE, offset = 0, bar_width = 0.2, 
     if (!add_plot) {
       ## Initialise graphic window
       plot(range(x_val), range(0, heights * 1.1), type="n", xaxt="n",
-           xlab="x", ylab="Probability", ...)
+           xlab="support", ylab="probability mass", main = "Probability mass function", ...)
       graphics::axis(1, at=x_val, labels=as.character(x_val))
     }
     ## Bars
@@ -243,10 +243,13 @@ plot.twoComp_mixt <- function(x, add_plot = FALSE, offset = 0, bar_width = 0.2, 
                      xright = x_val[i] + bar_width/2 + offset,
                      ybottom = 0, ytop = heights[i], ...)
     }
+
   } else {
     ## Continuous case: densities
     densities <- stats::density(x$mixt.data)
-    if (!add_plot) { plot(densities, ...)
-    } else { graphics::lines(densities, ...) }
+    if (!add_plot) { plot(densities, xlab = "support", main = "Probability density function", ...)
+    } else {
+      graphics::lines(densities, main = "", ...)
+    }
   }
 }

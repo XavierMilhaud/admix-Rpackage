@@ -4,10 +4,12 @@
 \alias{summary.estim_BVdk}
 \title{Summary method for objects 'estim_BVdk'}
 \usage{
-\method{summary}{estim_BVdk}(object, ...)
+\method{summary}{estim_BVdk}(object, show.call = TRUE, ...)
 }
 \arguments{
 \item{object}{An object of class 'estim_BVdk'.}
+
+\item{show.call}{A boolean to print the call.}
 
 \item{...}{A list of additional parameters belonging to the default method.}
 }

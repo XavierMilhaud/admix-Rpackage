@@ -1,8 +1,11 @@
 #' Estimate weights of unknown components from two admixtures using IBM
 #'
 #' Estimation of the component weights from the Inversion - Best Matching (IBM) method, related to two admixture models
-#' with respective probability density function (pdf) l1 and l2, such that:
-#'    l1 = p1*f1 + (1-p1)*g1 and l2 = p2*f2 + (1-p2)*g2, where g1 and g2 are the known component densities.
+#' with respective probability density function (pdf) \eqn{\ell_1} and \eqn{\ell_2}, such that:
+#' \deqn{
+#'   \ell_i = p_i f_i + (1 - p_i) g_i, \quad i=1,2,
+#' }
+#' where \eqn{g_1} and \eqn{g_2} are the known component densities.
 #' For further details about IBM approach, see 'Details' below.
 #'
 #' @param samples A list of the two considered samples.
@@ -184,28 +187,38 @@ estim_IBM <- function(samples, admixMod, n.integ = 1000, compute_var = FALSE)
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @keywords internal
 
-print.estim_IBM <- function(x, ...)
-{
-#  cat("\n")
-#  cat("Call:")
-#  print(x$call)
-  cat("\n")
-  if (x$equal.knownComp) {
-    cat("Fixed mixing weight of the unknown distribution in the 1st sample (equal known components):", x$p.X.fixed, "\n")
-    cat("Estimated mixing weight of the unknown distribution in the 2nd sample:", round(x$estimated_mixing_weights,3), "\n")
+print.estim_IBM <- function(x, ...) {
+
+  cat("\nEstimation (IBM method)\n\n")
+  if (!is.null(x$population_sizes)) { cat("Sample sizes:", paste(x$population_sizes, collapse = " / "), "\n") }
+
+  if (isTRUE(x$equal.knownComp)) {
+    cat("Configuration: equal known components\n\n")
+    if (!is.null(x$p.X.fixed)) {
+      cat("Mixing weight (first sample, fixed and not estimated):", format(round(x$p.X.fixed, 3), nsmall = 3), "\n")
+    }
+    if (!is.null(x$estimated_mixing_weights)) {
+      cat("Mixing weight (second sample):", format(round(x$estimated_mixing_weights, 3), nsmall = 3), "\n")
+    }
+    ## Variances
     if (!is.na(x$variance_est_p2)) {
-      cat("Variance of the estimated weight in the 1st sample (no variance since fixed):", round(x$variance_est_p1,5), "\n")
-      cat("Variance of the estimated weight in the 2nd sample:", round(x$variance_est_p2,5), "\n")
+      cat("Variance (second sample):", format(round(x$variance_est_p2, 5), nsmall = 5), "\n")
     }
   } else {
-    cat("Estimated mixing weight of the unknown distribution in the 1st sample:", round(x$estimated_mixing_weights[1],3), "\n")
-    cat("Estimated mixing weight of the unknown distribution in the 2nd sample:", round(x$estimated_mixing_weights[2],3), "\n")
-    if (!is.na(x$variance_est_p1) & !is.na(x$variance_est_p2)) {
-      cat("Variance of the estimated weight in the 1st sample:", round(x$variance_est_p1,5), "\n")
-      cat("Variance of the estimated weight in the 2nd sample:", round(x$variance_est_p2,5), "\n")
+    cat("Configuration: distinct known components\n\n")
+    if (!is.null(x$estimated_mixing_weights)) {
+      cat("Mixing weight (first sample):", format(round(x$estimated_mixing_weights[1], 3), nsmall = 3), "\n")
+      cat("Mixing weight (second sample):", format(round(x$estimated_mixing_weights[2], 3), nsmall = 3), "\n")
+    }
+    ## Variances
+    if (!is.na(x$variance_est_p1) && !is.na(x$variance_est_p2)) {
+      cat("Variance (first sample):", format(round(x$variance_est_p1, 5), nsmall = 5), "\n")
+      cat("Variance (second sample):", format(round(x$variance_est_p2, 5), nsmall = 5), "\n")
     }
   }
-  cat("\n")
+
+  cat("\nUse `?estim_IBM` for further details.\n")
+  invisible(x)
 }
 
 
@@ -214,46 +227,68 @@ print.estim_IBM <- function(x, ...)
 #' Summarizes the results stored in an object of class 'estim_IBM'.
 #'
 #' @param object An object of class 'estim_IBM'.
+#' @param show.call A boolean to print the call.
 #' @param ... A list of additional parameters belonging to the default method.
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @keywords internal
 
-summary.estim_IBM <- function(object, ...)
-{
-  cat("Call:")
-  print(object$call)
-  cat("\n")
-  cat("----- Samples characteristics -----\n")
-  cat("Number of samples: ", object$n_populations, "\n")
-  cat("Sample sizes: ", object$population_sizes, "\n")
-  cat("Are the known component distributions equal? ", object$equal.knownComp,"\n")
-  for (k in 1:object$n_populations) {
-    cat("-> Distribution of the known component for admixture model #", k, ": ", object$admixture_models[[k]]$comp.dist$known, "\n", sep="")
-    cat("-> Parameter(s) of the known component for admixture model #", k, ": ",
-        paste(names(object$admixture_models[[k]]$comp.param$known), object$admixture_models[[k]]$comp.param$known, collapse="\t", sep="="), sep="")
-    cat("\n")
+summary.estim_IBM <- function(object, show.call = TRUE, ...) {
+
+  if (show.call) {
+    cat("\nCall:\n")
+    print(object$call)
   }
-  cat("\n----- Estimation results -----\n")
-  if (object$equal.knownComp) {
-    cat("Fixed weight of the unknown distribution in the 1st sample (equal known components):", object$p.X.fixed, "\n")
-    cat("Estimated weight of the unknown distribution in the 2nd sample:", round(object$estimated_mixing_weights,3), "\n")
+
+  cat("\nData\n")
+  cat("----\n")
+  cat("Number of samples:", object$n_populations, "\n")
+  cat("Sample sizes:", paste(object$population_sizes, collapse = " / "), "\n")
+  cat("Known components equal:", object$equal.knownComp, "\n")
+  for (k in seq_len(object$n_populations)) {
+    cat("\nSample", k, "\n")
+    cat("  Known component:", object$admixture_models[[k]]$comp.dist$known, "\n")
+    params <- object$admixture_models[[k]]$comp.param$known
+    if (!is.null(params)) {
+      param_str <- paste(names(params), "=", params, collapse = ", ")
+      cat("  Known parameters:", param_str, "\n")
+    }
+  }
+  cat("\nEstimation (IBM method)\n")
+  cat("-----------------------\n")
+  if (isTRUE(object$equal.knownComp)) {
+    cat("Configuration: equal known components\n\n")
+    if (!is.null(object$p.X.fixed)) {
+      cat("Mixing weight (first sample, fixed):", format(round(object$p.X.fixed, 3), nsmall = 3), "\n")
+    }
+    if (!is.null(object$estimated_mixing_weights)) {
+      cat("Mixing weight (second sample):      ", format(round(object$estimated_mixing_weights, 3), nsmall = 3), "\n")
+    }
     if (!is.na(object$variance_est_p2)) {
-      cat("Variance of the estimated weight in the 1st sample (no variance since fixed):", round(object$variance_est_p1,5), "\n")
-      cat("Variance of the estimated weight in the 2nd sample:", round(object$variance_est_p2,5), "\n")
+      cat("Variance mixing weight (second sample):", format(round(object$variance_est_p2, 5), nsmall = 5), "\n")
     }
   } else {
-    cat("Estimated weight of the unknown distribution in the 1st sample:", round(object$estimated_mixing_weights[1],3), "\n")
-    cat("Estimated weight of the unknown distribution in the 2nd sample:", round(object$estimated_mixing_weights[2],3), "\n")
-    if (!is.na(object$variance_est_p1) & !is.na(object$variance_est_p2)) {
-      cat("Variance of the estimated weight in the 1st sample:", round(object$variance_est_p1,5), "\n")
-      cat("Variance of the estimated weight in the 2nd sample:", round(object$variance_est_p2,5), "\n")
+    cat("Configuration: distinct known components\n\n")
+    if (!is.null(object$estimated_mixing_weights)) {
+      cat("Mixing weight (first sample): ", format(round(object$estimated_mixing_weights[1], 3), nsmall = 3), "\n")
+      cat("Mixing weight (second sample):", format(round(object$estimated_mixing_weights[2], 3), nsmall = 3), "\n")
+    }
+    if (!is.na(object$variance_est_p1) && !is.na(object$variance_est_p2)) {
+      cat("Variance mixing weight (first sample): ", format(round(object$variance_est_p1, 5), nsmall = 5), "\n")
+      cat("Variance mixing weight (second sample):", format(round(object$variance_est_p2, 5), nsmall = 5), "\n")
     }
   }
-  cat("\n----- Support -----\n")
-  cat("Integration support:", paste(round(utils::head(object$integ.supp,3),3), collapse=" "), "...",
-      paste(round(utils::tail(object$integ.supp,3),3), collapse = " "), "\n", sep="")
-  cat("\n")
+
+  cat("\nIntegration\n")
+  cat("-----------\n")
+  if (!is.null(object$integ.supp)) {
+    head_vals <- round(utils::head(object$integ.supp, 3), 3)
+    tail_vals <- round(utils::tail(object$integ.supp, 3), 3)
+    cat("Support (range preview):", paste(head_vals, collapse = " "), "...", paste(tail_vals, collapse = " "), "\n")
+  }
+
+  cat("\nUse `?estim_IBM` for further details.\n")
+  invisible(object)
 }
 
 
