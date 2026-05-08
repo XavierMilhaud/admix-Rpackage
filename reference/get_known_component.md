@@ -48,10 +48,14 @@ x <- admix_estim(samples = list(data1), admixMod = list(admixMod1), est_method =
 ## Extract the information about the known component:
 get_known_component(x)
 #> [[1]]
-#> Call:admix_model(knownComp_dist = mixt1$comp.dist[[2]], knownComp_param = mixt1$comp.param[[2]])
+#> Call:
+#> admix_model(knownComp_dist = mixt1$comp.dist[[2]], knownComp_param = mixt1$comp.param[[2]])
 #> 
-#> Known component distribution:  norm 
-#> Known component parameters: mean=0 sd=1
-#> 
+#> Admixture model
+#> ----------------
+#> Known component distribution: norm
+#> Known parameters:
+#>   - mean = 0
+#>   - sd = 1
 #> 
 ```

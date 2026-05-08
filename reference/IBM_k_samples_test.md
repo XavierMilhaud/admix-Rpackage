@@ -3,11 +3,12 @@
 Equality test of the unknown component distributions coming from K (K
 \> 1) admixture models, based on the Inversion - Best Matching (IBM)
 approach. Recall that we have K populations following admixture models,
-each one with probability density functions (pdf) l_k = p_k\*f_k +
-(1-p_k)\*g_k, where g_k is the known pdf and l_k corresponds to the
-observed sample. Perform the following hypothesis test: H0 : f_1 = ... =
-f_K against H1 : f_i differs from f_j (i different from j, and i,j in
-1,...,K).
+each one with probability density functions (pdf) \$\$ \ell_k = p_k
+f_k + (1 - p_k) g_k, \quad k=1,...,K, \$\$ where \\g_k\\ is the known
+pdf and \\l_k\\ corresponds to the observed sample. In such a context,
+perform the following hypothesis test: \$\$ H_0: \\ f_1 = f_K \quad
+\mbox{against} \quad H_1: \\ \exists \mbox{ at least } i \neq j \mbox{
+such that } f_i \neq f_j, \\ i \neq j, \\ i,j \in \\1,...,K\\. \$\$
 
 ## Usage
 
@@ -96,6 +97,17 @@ Milhaud X, Pommeret D, Salhi Y, Vandekerkhove P (2024).
 “Contamination-source based K-sample clustering.” *Journal of Machine
 Learning Research*, **25**(287), 1–32.
 <https://jmlr.org/papers/v25/23-0914.html>.
+
+## See also
+
+[`get_tabulated_dist()`](get_tabulated_dist.md) to access the tabulated
+distribution under the null hypothesis, which defines the quantile
+against which the test statistics is tested;
+[`get_discrepancy_rank()`](get_discrepancy_rank.md),
+[`get_discrepancy_matrix()`](get_discrepancy_matrix.md) to access the
+measure of discrepancy between pairs of samples;
+[`get_statistic_components()`](get_statistic_components.md) in k-sample
+test;
 
 ## Author
 

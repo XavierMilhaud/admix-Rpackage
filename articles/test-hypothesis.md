@@ -1,34 +1,40 @@
 # Hypothesis test in admixture models
 
 ``` r
+
 library(admix)
 ```
 
-We remind that a random variable $X$ following an admixture distribution
-has cumulative distribution function (cdf) $L$ given by
-$$L(x) = pF(x) + (1 - p)G(x),\qquad x \in {\mathbb{R}},$$ where $G$ is a
-mixture component whose distribution is perfectly known, whereas $p$ and
-$F$ are unknown. In this setting, if no parametric assumption is made on
-the unknown component distribution $F$, the mixture is considered as a
-semiparametric mixture. For an overview on semiparametric extensions of
-finite mixture models, see (Xiang and Yang 2018).
+We remind that a random variable $`X`$ following an admixture
+distribution has cumulative distribution function (cdf) $`L`$ given by
+``` math
+L(x) = pF(x) + (1-p)G(x), \qquad x \in \mathbb{R},
+```
+where $`G`$ is a mixture component whose distribution is perfectly
+known, whereas $`p`$ and $`F`$ are unknown. In this setting, if no
+parametric assumption is made on the unknown component distribution
+$`F`$, the mixture is considered as a semiparametric mixture. For an
+overview on semiparametric extensions of finite mixture models, see
+(Xiang and Yang 2018).
 
 The goal of this vignette is to introduce the functionalities that
 enable to perform hypothesis tests on the unknown component distribution
-$F$. We aim to test whether $F$ belongs to certain parametric family
+$`F`$. We aim to test whether $`F`$ belongs to certain parametric family
 (e.g. the Gaussian one) in a 1-sample case, or if two different
-decontaminated versions of $F_{1}$ and $F_{2}$ (obtained from two
-observed samples $X_{1}$ and $X_{2}$) are similar in the K-sample case
-($K \geq 2$). All the specific tests presented hereafter can be
+decontaminated versions of $`F_1`$ and $`F_2`$ (obtained from two
+observed samples $`X_1`$ and $`X_2`$) are similar in the K-sample case
+($`K \geq 2`$). All the specific tests presented hereafter can be
 performed using one single generic function for testing with appropriate
-arguments, the so-called $admix\_ test$ function.
+arguments, the so-called $`admix\_test`$ function.
 
 ## The one-sample case only available to symmetric unknown density
 
 In this setting, the test to be performed is a parametric family
 testing, i.e.
-$$H_{0}:\, F \in \mathcal{F}\qquad\text{against}\qquad H_{1}:\, F \notin \mathcal{F},$$
-where $\mathcal{F} = \left\{ F_{\theta}:\ \theta \in \Theta \right\}$.
+``` math
+H_0: \, F\in \mathcal{F} \qquad \mbox{against} \qquad  H_1: \, F\notin \mathcal{F},
+```
+where $`\mathcal{F}=\left\{F_\theta:~\theta\in \Theta \right\}`$.
 
 The support of the known component density has to be in line with the
 one of the unknown component density. Such tests have been introduced in
@@ -40,9 +46,9 @@ hypothesis test follows these steps:
 2.  get the expansion coefficients of such densities,
 3.  reformulate the null hypothesis of the test using these
     coefficients,
-4.  adopt a $\chi^{2}$ test strategy that relies on Central Limit
+4.  adopt a $`\chi^2`$ test strategy that relies on Central Limit
     Theorem (CLT) results on estimators of the (unknown) weight related
-    to the unknown component distribution $F$.
+    to the unknown component distribution $`F`$.
 
 Because of the use of asymptotically normal estimators, it is not
 possible to use the estimator provided in (Patra and Sen 2016) to
@@ -50,8 +56,8 @@ perform hypothesis testing. On the contrary, Bordes and Vandekerkhove
 (2010) propose an estimator that can be used if the unknown component
 density is assumed to be symmetric. More generally, Pommeret and
 Vandekerkhove (2019) give more details about the distribution of the
-test statistic under the null (hypothesis $H_{0}$), and under the
-alternative $H_{1}$.
+test statistic under the null (hypothesis $`H_0`$), and under the
+alternative $`H_1`$.
 
 Here, the implemented function allows to perform the so-called
 Gaussianity test, meaning that the parametric family against which the
@@ -59,6 +65,7 @@ unknown component is tested belongs to Gaussian distributions. Below is
 an example of hypothesis testing in this 1-sample case:
 
 ``` r
+
 ####### Under the null hypothesis H0.
 ## Simulate mixture data:
 mixt1 <- twoComp_mixt(n = 300, weight = 0.6,
@@ -80,29 +87,36 @@ admix_test(samples = list(data1), admixMod = list(admixMod), conf_level = 0.95,
 ```
 
 The result of the test is that we cannot reject the null hypothesis
-$H_{0}$, which is in line with the specified distribution for the
+$`H_0`$, which is in line with the specified distribution for the
 unknown component. Indeed, simulated data is a Gaussian mixture with two
-components, i.e. $F \sim \mathcal{N}(\mu,\sigma)$ where $\mu = 2$ and
-$\sigma = 0.5$.
+components, i.e. $`F \sim \mathcal{N}(\mu,\sigma)`$ where $`\mu=2`$ and
+$`\sigma=0.5`$.
 
 ## The two-sample case
 
-Let us introduce two random samples $X_{1}$ and $X_{2}$ following
-admixture models, such that $$\begin{array}{r}
-\left\{ \begin{array}{l}
-{L_{1}(x) = \left( 1 - p_{1} \right)G_{1}(x) + p_{1}F_{1}(x)} \\
-{L_{2}(x) = \left( 1 - p_{2} \right)G_{2}(x) + p_{2}F_{2}(x),}
-\end{array} \right.
-\end{array}$$
+Let us introduce two random samples $`X_1`$ and $`X_2`$ following
+admixture models, such that
+``` math
+\begin{align*}
+  \left\{
+    \begin{array}{l}
+        L_1(x) = (1-p_1)G_1(x) + p_1F_1(x) \\
+        L_2(x) = (1-p_2)G_2(x) + p_2F_2(x),
+    \end{array}
+    \right.
+\end{align*}
+```
 
 The goal here is to perform the following hypothesis test:
-$$H_{0}:\ F_{1} = F_{2}\qquad\text{against}\qquad H_{1}:F_{1} \neq F_{2}.$$
+``` math
+H_0: ~ F_1=F_2 \qquad \mbox{against} \qquad H_1: F_1\neq F_2.
+```
 
 ### Case of symmetric unknown densities
 
-In this framework, we assume that $F_{1}$ and $F_{2}$ both have a
+In this framework, we assume that $`F_1`$ and $`F_2`$ both have a
 symmetric density. This way the normally-distributed estimator of
-$p_{1}$ and $p_{2}$, proposed in (Bordes and Vandekerkhove 2010), can be
+$`p_1`$ and $`p_2`$, proposed in (Bordes and Vandekerkhove 2010), can be
 used together with the testing strategy suggested in (Milhaud et al.
 2022). This testing strategy is closely connected to (Pommeret and
 Vandekerkhove 2019), where the computation of the expansion coefficients
@@ -112,6 +126,7 @@ In what follows, we simulate two samples under the null and check
 whether the test provides satisfactory results.
 
 ``` r
+
 mixt1 <- twoComp_mixt(n = 600, weight = 0.8,
                       comp.dist = list("norm", "norm"),
                       comp.param = list(list("mean" = 3, "sd" = 0.5),
@@ -147,7 +162,7 @@ default values (but that the user can choose them setting parameter
 ‘ask_poly_param’ to TRUE):
 
 - ‘est_method’ is set to ‘BVdk’ to tell the program to estimate the
-  unknown proportions $p_{1}$ and $p_{2}$ using the estimator proposed
+  unknown proportions $`p_1`$ and $`p_2`$ using the estimator proposed
   in (Bordes and Vandekerkhove 2010),
 - ‘K’ equals 3 to mention that such expansions are computed up to the
   third order of the decomposition in the polynomial basis,
@@ -171,7 +186,7 @@ still use the function with same first arguments except ‘method’, and
 of simulated Gaussian processes used to tabulate the test statistic
 distribution (‘n_sim_tab’), and can accelerate computations using
 parallel computations and choosing an adequate number of cpus. Other
-arguments such as $support$ are useless.
+arguments such as $`support`$ are useless.
 
 ## The K-sample case
 
@@ -184,59 +199,73 @@ could use a pairwise version of the two sample test using the comparison
 of expansion coefficients in a polynomial orthonormal basis, associated
 to the estimation method provided by (Bordes and Vandekerkhove 2010).
 
-Consider $K$ samples. For $i = 1,...,K$, sample
-$X^{(i)} = \left( X_{1}^{(i)},...,X_{n_{i}}^{(i)} \right)$ follows
-$$L_{i}(x) = p_{i}F_{i}(x) + \left( 1 - p_{i} \right)G_{i},\qquad x \in {\mathbb{R}}.$$
+Consider $`K`$ samples. For $`i=1,...,K`$, sample
+$`X^{(i)} = (X_1^{(i)}, ..., X_{n_i}^{(i)})`$ follows
+``` math
+L_i(x) = p_i F_i(x) + (1-p_i) G_i, \qquad x \in \mathbb{R}.
+```
 The test to perform is given by
-$$H_{0}:\; F_{1} = ... = F_{K}\qquad\text{against}\qquad H_{1}:\; F_{i} \neq F_{j}\quad\text{for some}\quad i \neq j.$$
+``` math
+H_0 : \; F_1 = ... = F_K \qquad \mbox{against} \qquad H_1: \; F_i \neq F_j \quad \mbox{for some} \quad i \neq j.
+```
 We use the IBM approach to do so, where assumptions are
-(straightforwardly) adapted to deal with the $K$ samples.
+(straightforwardly) adapted to deal with the $`K`$ samples.
 
 Basically, we apply the theoretical results of IBM for each pair of
-populations $(i,j)$, and then build a series of embedded statistics.
+populations $`(i,j)`$, and then build a series of embedded statistics.
 
 Consider the set of pair indices: \${\cal S}(K) = \\(i,j)\in
 \mathbb{N}^2 ; \\ 1\leq i\<j \leq K\\\$.\\ Order \${\cal S}(K)\$
-lexicographically, and denote $r_{K}\left\lbrack (i,j) \right\rbrack$
-the rank of $(i,j)$ in the set $S(K)$.
+lexicographically, and denote $`r_K[(i,j)]`$ the rank of $`(i,j)`$ in
+the set $`S(K)`$.
 
-Then, $\forall i \neq j \in \{ 1,...,K\}$,
+Then, $`\forall i\neq j \in \{1,...,K\}`$,
 
 1.  Estimate
-    ${\widehat{\theta}}_{n}(i,j) = \arg\min_{\theta \in \Theta_{i,j}}d_{n}\lbrack i,j\rbrack(\theta)$,
+    $`\hat{\theta}_{n}(i,j) = \arg\min_{\theta\in \Theta_{i,j}}d_n[i,j](\theta)`$,
 2.  Compute the statistic
-    $T_{i,j} = n\, d_{n}\lbrack i,j\rbrack\left( {\widehat{\theta}}_{n}(i,j) \right)$.
+    $`T_{i,j} = n \, d_n[i,j](\hat{\theta}_n(i,j))`$.
 
-We then obtain $d(K) = K(K - 1)/2$ comparisons that we embed in a series
-of statistics: $$\begin{array}{rcl}
-U_{1} & = & T_{1,2} \\
-U_{2} & = & {T_{1,2} + T_{1,3}} \\
- & \vdots & \\
-U_{d{(K)}} & = & {T_{1,2} + \cdots + T_{K - 1,K},}
-\end{array}$$
+We then obtain $`d(K) = K(K-1)/2`$ comparisons that we embed in a series
+of statistics:
+``` math
+\begin{eqnarray*}
+    U_1 &= &T_{1,2} \\
+    U_2 & = & T_{1,2}+T_{1,3} \\
+        &\vdots& \\
+    U_{d(K)} & = &T_{1,2} + \cdots + T_{K-1,K},
+\end{eqnarray*}
+```
 
-To choose automatically the right order $k$ for testing, consider the
+To choose automatically the right order $`k`$ for testing, consider the
 penalization rule (mimicking Schwarz criteria procedure, see (Schwarz
 1978)):
-$$S(n) = \min\left\{ \arg\max\limits_{1 \leq k \leq d{(K)}}\left( U_{k} - k\sum\limits_{{(i,j)} \in S{(K)}}l_{n}(i,j)\; 1_{\{ r_{K}{(i,j)} = k\}} \right) \right\}.$$
+``` math
+S(n) = \min \left\{\arg\max_{1 \leq k \leq d(K)} \left ({U}_{k} - k \sum_{(i,j)\in S(K)} l_n(i,j) \; 1_{\left\{r_K(i,j)=k\right\}} \right )  \right\}.
+```
 
 Our data-driven test statistic is given by
-$${\widetilde{U}}_{n} = U_{S{(n)}}.$$
+``` math
+\tilde{U}_n =  U_{S(n)}.
+```
 
-It can be shown that under $H_{0}$ and appropriate assumptions, $S(n)$
-converges in probablity towards 1 as
-$\left. n\rightarrow + \infty \right.$; meaning that we asymptotically
-choose the first element of \${\cal S}(K)\$.\\ Moreover, under $H_{0}$,
-$U_{S{(n)}}$ converges in law towards $U^{0}(1,2)$, which is exactly the
-null limit distribution studied in the two-sample case. Finally, we thus
-consider the $H_{0}$-rejection rule:
-$$\left. {\widetilde{U}}_{n}\quad \geq \quad{\widehat{q}}_{1 - \alpha}\qquad\Rightarrow\qquad H_{0}\;\text{is rejected}. \right.$$
+It can be shown that under $`H_0`$ and appropriate assumptions, $`S(n)`$
+converges in probablity towards 1 as $`n \rightarrow +\infty`$; meaning
+that we asymptotically choose the first element of \${\cal S}(K)\$.\\
+Moreover, under $`H_0`$, $`U_{S(n)}`$ converges in law towards
+$`U^{0}(1,2)`$, which is exactly the null limit distribution studied in
+the two-sample case. Finally, we thus consider the $`H_0`$-rejection
+rule:
+``` math
+\tilde{U}_n \quad \geq \quad \hat q_{1-\alpha} \qquad \Rightarrow \qquad H_0 \; \mbox{is rejected}.
+```
 
-We now provide the way to perform this test with the package $admix$
+We now provide the way to perform this test with the package $`admix`$
 with Gaussian mixtures. First, let us study the case where we are under
-the null hypothesis $H_{0}$, considering $K = 3$ different populations.
+the null hypothesis $`H_0`$, considering $`K=3`$ different populations.
 
 ``` r
+
 mixt1 <- twoComp_mixt(n = 450, weight = 0.4,
                       comp.dist = list("norm", "norm"),
                       comp.param = list(c("mean" = -2, "sd" = 0.5),
@@ -283,11 +312,13 @@ The Symmetric Case.” *Journal of Statistical Planning and Inference*
 216: 135–50.
 https://doi.org/<https://doi.org/10.1016/j.jspi.2021.05.010>.
 
-———. 2024a. “Contamination-Source Based k-Sample Clustering.” *Journal
-of Machine Learning Research* 25 (287): 1–32.
+Milhaud, Xavier, Denys Pommeret, Yahia Salhi, and Pierre Vandekerkhove.
+2024a. “Contamination-Source Based k-Sample Clustering.” *Journal of
+Machine Learning Research* 25 (287): 1–32.
 <https://jmlr.org/papers/v25/23-0914.html>.
 
-———. 2024b. “Two-sample contamination model test.” *Bernoulli* 30 (1):
+Milhaud, Xavier, Denys Pommeret, Yahia Salhi, and Pierre Vandekerkhove.
+2024b. “Two-sample contamination model test.” *Bernoulli* 30 (1):
 170–97. <https://doi.org/10.3150/23-BEJ1593>.
 
 Patra, Rohit Kumar, and Bodhisattva Sen. 2016. “Estimation of a

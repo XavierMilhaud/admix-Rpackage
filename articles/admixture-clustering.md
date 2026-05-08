@@ -1,22 +1,25 @@
 # Clustering of unknown subpopulations in admixture models
 
 ``` r
+
 library(admix)
 ```
 
 The clustering of populations following admixture models is, for now,
 based on the K-sample test theory (see (Milhaud et al. 2024). Consider
-$K$ samples. For $i = 1,...,K$, sample
-$X^{(i)} = \left( X_{1}^{(i)},...,X_{n_{i}}^{(i)} \right)$ follows
-$$L_{i}(x) = p_{i}F_{i}(x) + \left( 1 - p_{i} \right)G_{i},\qquad x \in {\mathbb{R}}.$$
+$`K`$ samples. For $`i=1,...,K`$, sample
+$`X^{(i)} = (X_1^{(i)}, ..., X_{n_i}^{(i)})`$ follows
+``` math
+L_i(x) = p_i F_i(x) + (1-p_i) G_i, \qquad x \in \mathbb{R}.
+```
 
 We still use IBM approach to perform pairwise hypothesis testing. The
 idea is to adapt the K-sample test procedure to obtain a data-driven
-method that cluster the $K$ populations into $N$ subgroups,
+method that cluster the $`K`$ populations into $`N`$ subgroups,
 characterized by a common unknown mixture component. The advantages of
 such an approach is twofold:
 
-- the number $N$ of clusters is automatically chosen by the procedure,
+- the number $`N`$ of clusters is automatically chosen by the procedure,
 - Each subgroup is validated by the K-sample testing method, which has
   theoretical guarantees.
 
@@ -28,18 +31,18 @@ K-sample 2-component mixture clustering (K2MC).
 
 We now detail the steps of the algorithm.
 
-1.  Initialization: create the first cluster to be filled, i.e. $c = 1$.
-    By convention, $S_{0} = \varnothing$.
+1.  Initialization: create the first cluster to be filled,
+    i.e. $`c = 1`$. By convention, $`S_0=\emptyset`$.
 2.  Select \$\\x,y\\={\rm argmin}\\d_n(i,j); i \neq j \in S \setminus
     \bigcup\_{k=1}^c S\_{k-1}\\\$.
-3.  Test $H_{0}$ between $x$ and $y$.
+3.  Test $`H_0`$ between $`x`$ and $`y`$.
 
 &nbsp;
 
     If $H_0$ is not rejected then $S_1 = \{x,y\}$,\\
     Else $S_1 = \{x\}$, $S_{c+1} = \{y\}$ and then $c=c+1$.
 
-4.  While $S\backslash\bigcup_{k = 1}^{c}S_{k} = \varnothing$ do
+4.  While $`S\setminus \bigcup_{k=1}^c S_k = \emptyset`$ do
 
 &nbsp;
 
@@ -50,13 +53,14 @@ We now detail the steps of the algorithm.
 
 ## Applications
 
-### On ${\mathbb{R}}^{+}$
+### On $`\mathbb{R}^+`$
 
 We present a case study with 5 populations to cluster on
-${\mathbb{R}}^{+}$, with Gamma-Exponential, Exponential-Exponential and
+$`\mathbb{R}^+`$, with Gamma-Exponential, Exponential-Exponential and
 Gamma-Gamma mixtures.
 
 ``` r
+
 ## Simulate mixture data:
 mixt1 <- twoComp_mixt(n = 6000, weight = 0.8,
                       comp.dist = list("gamma", "exp"),

@@ -16,13 +16,13 @@ Source:
 [`DESCRIPTION`](https://github.com/XavierMilhaud/admix-Rpackage/blob/main/DESCRIPTION)
 
 Milhaud X (2026). *admix: Package Admix for Admixture (aka
-Contamination) Models*. R package version 2.5.2,
+Contamination) Models*. R package version 2.6.1,
 <https://github.com/XavierMilhaud/admix-Rpackage>.
 
     @Manual{,
       title = {admix: Package Admix for Admixture (aka Contamination) Models},
       author = {Xavier Milhaud},
       year = {2026},
-      note = {R package version 2.5.2},
+      note = {R package version 2.6.1},
       url = {https://github.com/XavierMilhaud/admix-Rpackage},
     }

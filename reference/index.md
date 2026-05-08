@@ -11,8 +11,8 @@
 - [`admix_model()`](admix_model.md) : Define the
   distribution/parameter(s) of the known component
 
-- [`admix_test()`](admix_test.md) : Equality test for the unknown
-  components in admixture models
+- [`admix_test()`](admix_test.md) : Hypothesis test for the unknown
+  component(s) in admixture model(s)
 
 - [`allGalaxies`](allGalaxies.md) : Measurements of heliocentric
   velocities
@@ -22,6 +22,9 @@
 
 - [`detect_support_type()`](detect_support_type.md) : Detect the type of
   support of some random variables
+
+- [`distribution_type()`](distribution_type.md) : Determine the type of
+  distribution under consideration
 
 - [`get_cluster_members()`](get_cluster_members.md) : Extractor for
   members of clusters
@@ -34,6 +37,9 @@
 
 - [`get_discrepancy_rank()`](get_discrepancy_rank.md) : Extractor for
   pairwise discrepancy rankings
+
+- [`get_distribution_parameters()`](get_distribution_parameters.md) :
+  Check the validity of the specified distributions
 
 - [`get_known_component()`](get_known_component.md) : Extractor for
   known component(s) in admixture model(s)
@@ -119,6 +125,9 @@
 
 - [`twoComp_mixt()`](twoComp_mixt.md) : Simulation of a two-component
   mixture model
+
+- [`validate_distribution()`](validate_distribution.md) : Check the
+  validity of the specified distribution and parameter(s)
 
 - [`which_rank()`](which_rank.md) : Extractor for the selected rank in
   the test statistic

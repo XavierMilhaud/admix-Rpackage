@@ -1,8 +1,9 @@
 # Simulation of a two-component mixture model
 
 Simulate a two-component mixture model following the probability density
-function (pdf) l such that l = p\*f + (1-p)\*g, with f and g the mixture
-component distributions, and p the mixing weight.
+function (pdf) \\\ell\\ such that \$\$ \ell = p f + (1 - p) g, \$\$ with
+\\f\\ and \\g\\ the mixture component distributions, and \\p\\ the
+mixing weight.
 
 ## Usage
 
@@ -59,6 +60,11 @@ distributions and their values, 6) the mixing proportion, 7) the
 observations coming from the first component, 8) the observations coming
 from the second component.
 
+## See also
+
+[`get_mixture_data()`](get_mixture_data.md) to access the simulated
+mixture data.
+
 ## Author
 
 Xavier Milhaud <xavier.milhaud.research@gmail.com>
@@ -67,48 +73,43 @@ Xavier Milhaud <xavier.milhaud.research@gmail.com>
 
 ``` r
 ## Mixture of continuous random variables:
-sim.X <- twoComp_mixt(n = 2000, weight = 0.5,
-                      comp.dist = list("norm", "norm"),
-                      comp.param = list(list("mean"=3, "sd"=0.5),
-                                        list("mean"=0, "sd"=1)))
-print(sim.X)
-#> 
-#> Call:twoComp_mixt(n = 2000, weight = 0.5, comp.dist = list("norm", 
-#>     "norm"), comp.param = list(list(mean = 3, sd = 0.5), list(mean = 0, 
-#>     sd = 1)))
-#> 
-#> Number of observations: 2000 
-#> 
-#> Simulated data (first 5 obs.): 
-#>  4.077998 3.254178 2.962865 3.033011 2.949357
-#> Simulated observations coming from the 1st component (first 5 obs.): 
-#>  4.077998 3.254178 2.962865 3.033011 2.949357
-#> Simulated observations coming from the 2nd component (first 5 obs.): 
-#>  -0.05767787 0.685809 0.08247877 0.2320074 -0.1573974
-#> 
-sim.Y <- twoComp_mixt(n = 1200, weight = 0.7,
+sim.X <- twoComp_mixt(n = 1200, weight = 0.7,
                       comp.dist = list("norm", "exp"),
                       comp.param = list(list("mean"=-3, "sd"=0.5),
                                         list("rate"=1)))
-plot(sim.X, xlim=c(-5,5), ylim=c(0,0.5))
-plot(sim.Y, add_plot = TRUE, xlim=c(-5,5), ylim=c(0,0.5), col = "red")
+print(sim.X)
+#> 
+#> Call:twoComp_mixt(n = 1200, weight = 0.7, comp.dist = list("norm", 
+#>     "exp"), comp.param = list(list(mean = -3, sd = 0.5), list(rate = 1)))
+#> 
+#> Number of observations: 1200 
+#> 
+#> Simulated data (first 5 obs.): 
+#>  0.5504287 -2.349743 -3.420734 -3.350772 -4.005017
+#> Simulated observations coming from the 1st component (first 5 obs.): 
+#>  -2.349743 -3.420734 -3.350772 -4.005017 -3.701633
+#> Simulated observations coming from the 2nd component (first 5 obs.): 
+#>  0.5504287 1.698026 0.265485 2.098534 1.058672
+#> 
+data.X <- get_mixture_data(sim.X)
+plot(density(data.X))
 
 
 ## Mixture of discrete random variables:
-sim.X <- twoComp_mixt(n = 2000, weight = 0.5,
-                      comp.dist = list("multinom", "multinom"),
-                      comp.param = list(list("size"=1, "prob"=c(0.3,0.4,0.3)),
-                                        list("size"=1, "prob"=c(0.1,0.2,0.7))))
 sim.Y <- twoComp_mixt(n = 1800, weight = 0.7,
                       comp.dist = list("multinom", "multinom"),
                       comp.param = list(list("size"=1, "prob"=c(0.3,0.4,0.3)),
                                         list("size"=1, "prob"=c(0.6,0.2,0.2))))
-sim.Z <- twoComp_mixt(n = 1800, weight = 0.3,
-                      comp.dist = list("multinom", "multinom"),
-                      comp.param = list(list("size"=1, "prob"=c(0.2,0.1,0.7)),
-                                        list("size"=1, "prob"=c(1/3,1/3,1/3))))
-plot(sim.X, offset = -0.05, bar_width = 0.05, col = "steelblue")
-plot(sim.Y, add_plot = TRUE, offset = 0, bar_width = 0.05, col = "orange")
-plot(sim.Z, add_plot = TRUE, offset = +0.05, bar_width = 0.05, col = "red")
-
+print(sim.Y)
+#> 
+#> Call:twoComp_mixt(n = 1800, weight = 0.7, comp.dist = list("multinom", 
+#>     "multinom"), comp.param = list(list(size = 1, prob = c(0.3, 
+#>     0.4, 0.3)), list(size = 1, prob = c(0.6, 0.2, 0.2))))
+#> 
+#> Number of observations: 1800 
+#> 
+#> Obtained multinomial mixture distribution: 
+#>  663 612 525 
+#> 
+#> 
 ```

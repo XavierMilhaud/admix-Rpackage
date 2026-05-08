@@ -1,9 +1,8 @@
 # Print method for objects of class `admix_model`
 
-Print an object of class 'admix_mod'. An admixture model has probability
-density function (pdf) l_i such that: l_i = p_i \* f_i + (1-p_i) \* g_i,
-with g_i the known component density. The unknown quantities are
-therefore p_i and f_i.
+Print the information about the distribution of the known component of
+an admixture model, as well as the known parameters for this
+distribution.
 
 ## Usage
 

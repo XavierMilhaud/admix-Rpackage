@@ -23,8 +23,9 @@ admix_cluster(
 
 - samples:
 
-  A list of the K (K\>1) samples to be studied, all following admixture
-  distributions.
+  A named list of the K (K\>1) samples to be studied, all following
+  admixture distributions. If names are provided, they are used in the
+  output to identify samples; otherwise default labels are used.
 
 - admixMod:
 
@@ -64,19 +65,19 @@ admix_cluster(
 
 ## Value
 
-An object of class admix_cluster, containing 12 attributes: 1) the
-number of samples under study; 2) the sizes of samples; 3) the
-information about mixture components in each sample (distributions and
-parameters); 4) the number of detected clusters; 5) the list of p-values
-for each k-sample test at the origin of detected clusters; 6) the
-cluster affiliation for each sample; 7) the confidence level of
-statistical tests; 8) which samples in which cluster; 9) the size of
-clusters; 10) the estimated weights of the unknown component
+An object of class admix_cluster, containing 14 attributes: 1) the
+number of samples under study; 2) the names of samples; 3) the sizes of
+samples; 4) the information about mixture components in each sample
+(distributions and parameters); 5) the number of detected clusters; 6)
+the list of p-values for each k-sample test at the origin of detected
+clusters; 7) the cluster affiliation for each sample; 8) the confidence
+level of statistical tests; 9) which samples in which cluster; 10) the
+size of clusters; 11) the estimated weights of the unknown component
 distributions inside each cluster (remind that estimated weights are
 consistent only if unknown components are tested to be identical, which
-is the case inside clusters); 11) the matrix of pairwise discrepancies
-across all samples; 12) the list of tabulated distributions used for
-statistical tests involved in building the clusters.
+is the case inside clusters); 12) the matrix of pairwise discrepancies
+across all samples; 13) the list of tabulated distributions used for
+statistical tests involved in building the clusters; 14) the call.
 
 ## References
 
@@ -84,6 +85,19 @@ Milhaud X, Pommeret D, Salhi Y, Vandekerkhove P (2024).
 “Contamination-source based K-sample clustering.” *Journal of Machine
 Learning Research*, **25**(287), 1–32.
 <https://jmlr.org/papers/v25/23-0914.html>.
+
+## See also
+
+[`print.admix_cluster()`](print.admix_cluster.md),
+[`summary.admix_cluster()`](summary.admix_cluster.md),
+[`get_known_component()`](get_known_component.md),
+[`get_cluster_members()`](get_cluster_members.md),
+[`get_cluster_sizes()`](get_cluster_sizes.md),
+[`get_tabulated_dist()`](get_tabulated_dist.md) to access the tabulated
+distribution under the null hypothesis, which defines the quantile
+against which the test statistics is tested;
+[`get_discrepancy_matrix()`](get_discrepancy_matrix.md) for a pairwise
+measure of discrepancy between samples.
 
 ## Author
 
@@ -133,10 +147,10 @@ admix_cluster(samples = list(data1, data2, data3, data4),
 #>     admixMod2, admixMod3, admixMod4), conf_level = 0.95, tune_penalty = TRUE, 
 #>     n_sim_tab = 10)
 #> 
-#> Number of detected clusters: 2.
-#> List of samples involved in each built cluster:
-#>    - Cluster #1: samples 1, 3
-#>    - Cluster #2: samples 2, 4
+#> Number of detected clusters: 2 
+#> Samples involved in each cluster:
+#>   - Cluster #1: data2, data4 
+#>   - Cluster #2: data1, data3 
 #> 
 # }
 ```

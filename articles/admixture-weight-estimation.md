@@ -1,25 +1,29 @@
 # Estimation of unknown elements in admixture models
 
 ``` r
+
 library(admix)
 ```
 
-We remind that a random variable $X$ following an admixture distribution
-has cumulative distribution function (cdf) $L$ given by
-$$L(x) = pF(x) + (1 - p)G(x),\qquad x \in {\mathbb{R}},$$ where $G$ is a
-mixture component whose distribution is perfectly known, whereas $p$ and
-$F$ are unknown. In this setting, if no parametric assumption is made on
-the unknown component distribution $F$, the mixture is considered as a
-semiparametric mixture. For an overview on semiparametric extensions of
-finite mixture models, see (Xiang and Yang 2018).
+We remind that a random variable $`X`$ following an admixture
+distribution has cumulative distribution function (cdf) $`L`$ given by
+``` math
+L(x) = pF(x) + (1-p)G(x), \qquad x \in \mathbb{R},
+```
+where $`G`$ is a mixture component whose distribution is perfectly
+known, whereas $`p`$ and $`F`$ are unknown. In this setting, if no
+parametric assumption is made on the unknown component distribution
+$`F`$, the mixture is considered as a semiparametric mixture. For an
+overview on semiparametric extensions of finite mixture models, see
+(Xiang and Yang 2018).
 
 ## Estimation of the unknown component weight in an admixture model
 
-The mixture weight $p$ of the unknown component distribution can be
+The mixture weight $`p`$ of the unknown component distribution can be
 estimated using diverse techniques depending on the assumptions made on
-the unknown cdf $F$, among which the ones discussed in the sequel:
+the unknown cdf $`F`$, among which the ones discussed in the sequel:
 
-- the estimator provided by Bordes and Vandekerkhove, see (L. Bordes and
+- the estimator provided by Bordes and Vandekerkhove, see (Bordes and
   Vandekerkhove 2010);
 - the estimator provided by Patra and Sen, see (Patra and Sen 2016);
 - the estimator provided by the Inversion - Best Matching method, see
@@ -27,39 +31,46 @@ the unknown cdf $F$, among which the ones discussed in the sequel:
 
 All these estimation methods can be performed using one single generic
 function for estimation with appropriate arguments, the so-called
-$admix\_ estim$ function.
+$`admix\_estim`$ function.
 
 ### The one-sample case
 
 Many works studied the estimation of the unknown proportion in
-two-component admixture models. Among them, seminal papers are (Laurent
-Bordes, Delmas, and Vandekerkhove 2006) and (S. Bordes L. Mottelet and
-Vandekerkhove 2006). These papers are closely connected to the paper by
-(L. Bordes and Vandekerkhove 2010), where an asymptotic normal estimator
-is provided for the unknown component weight.
+two-component admixture models. Among them, seminal papers are (Bordes
+et al. 2006) and (Bordes and Vandekerkhove 2006). These papers are
+closely connected to the paper by (Bordes and Vandekerkhove 2010), where
+an asymptotic normal estimator is provided for the unknown component
+weight.
 
 #### Case of symmetric unknown density
 
-In this case, we use the Bordes and Vandekerkhove estimator, see (L.
-Bordes and Vandekerkhove 2010).
+In this case, we use the Bordes and Vandekerkhove estimator, see (Bordes
+and Vandekerkhove 2010).
 
 ``` r
+
 ## Simulate mixture data:
 mixt1 <- twoComp_mixt(n = 400, weight = 0.7,
                       comp.dist = list("norm", "norm"),
-                      comp.param = list(c("mean" = 3, "sd" = 0.5),
-                                        c("mean" = 0, "sd" = 1)))
+                      comp.param = list(list("mean" = 3, "sd" = 0.5),
+                                        list("mean" = 0, "sd" = 1)))
 data1 <- get_mixture_data(mixt1)
 ## Define the admixture model:
 admixMod <- admix_model(knownComp_dist = mixt1$comp.dist[[2]],
                         knownComp_param = mixt1$comp.param[[2]])
 admix_estim(samples = list(data1), admixMod = list(admixMod), est_method = 'BVdk')
 #> 
-#> Call:admix_estim(samples = list(data1), admixMod = list(admixMod), 
+#> Call:
+#> admix_estim(samples = list(data1), admixMod = list(admixMod), 
 #>     est_method = "BVdk")
 #> 
-#> ******** Sample #1 ********
-#> Estimated mixing weight: 0.665 / Estimated location shift: 2.976
+#> Method: BVdk 
+#> Number of samples: 1 
+#> 
+#>  Sample Mixing weight location   n
+#>   data1         0.665     2.98 400
+#> 
+#>  Use `?estim_BVdk` for details on the optimization method.
 ```
 
 Because this estimation method relies on the symmetry of the unknown
@@ -74,14 +85,20 @@ distribution), we use the Patra and Sen estimator, see (Patra and Sen
 2016).
 
 ``` r
+
 admix_estim(samples = list(data1), admixMod = list(admixMod), est_method = 'PS')
 #> 
-#> Call:admix_estim(samples = list(data1), admixMod = list(admixMod), 
+#> Call:
+#> admix_estim(samples = list(data1), admixMod = list(admixMod), 
 #>     est_method = "PS")
 #> 
-#> ******** Sample #1 ********
-#>  Estimated mixing weight (of the unknown component): 0.641
-#>  Selected c_n equals 0.179 in the penalization term. See ?estim_PS
+#> Method: PS 
+#> Number of samples: 1 
+#> 
+#>  Sample Mixing weight   n
+#>   data1         0.641 400
+#> 
+#>  Use `?estim_PS` for details on the penalization term.
 ```
 
 In this case, the only estimated parameter is the mixing proportion
@@ -93,19 +110,20 @@ In the two-sample setting, one idea could be to use the Inversion - Best
 Matching (IBM) approach. The IBM method ensures asymptotically normal
 estimators of the unknown quantities, which will be very useful in a
 testing perspective. However, it is important to note that such
-estimators are mostly biased when $F_{1} \neq F_{2}$, and general
-one-sample estimation strategies such as (Patra and Sen 2016) or (L.
-Bordes and Vandekerkhove 2010) may be preferred to estimate the unknown
+estimators are mostly biased when $`F_1 \neq F_2`$, and general
+one-sample estimation strategies such as (Patra and Sen 2016) or (Bordes
+and Vandekerkhove 2010) may be preferred to estimate the unknown
 component proportion in general settings (despite that this is more
 time-consuming). In the latter case, one performs twice the estimation
 method, on each of the two samples under study.
 
-#### Under the null hypothesis $H_{0}:F_{1} = F_{2}$
+#### Under the null hypothesis $`H_0: F_1 = F_2`$
 
 When we are under the null, Milhaud et al. (2024) show that the
 estimators is consistent towards the true parameter values.
 
 ``` r
+
 ## Simulate mixture data:
 mixt1 <- twoComp_mixt(n = 450, weight = 0.4,
                       comp.dist = list("norm", "norm"),
@@ -125,26 +143,30 @@ admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
 admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, admixMod2),
             est_method = 'IBM')
 #> 
-#> Call:admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, 
+#> Call:
+#> admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, 
 #>     admixMod2), est_method = "IBM")
 #> 
-#> Pairwise estimation performed (IBM estimation method).
+#> Method: IBM 
+#> Pairwise estimation
 #> 
-#> ******** Samples #1 with #2 ********
-#> Estimated mixing weight of the unknown distribution in the 1st sample: 0.409 
-#> Estimated mixing weight of the unknown distribution in the 2nd sample: 0.725
+#>            Pair    p1    p2 var.p1 var.p2  n1  n2
+#>  data1 vs data2 0.409 0.725     NA     NA 450 380
+#> 
+#>  Use `?estim_IBM` for further details.
 ```
 
 Indeed, one can see that the two unknown proportions were consistently
 estimated.
 
-#### Under the alternative hypothesis $H_{1}:F_{1} \neq F_{2}$
+#### Under the alternative hypothesis $`H_1: F_1 \neq F_2`$
 
-Estimators are also consistent under $H_{1}$, although they can be
+Estimators are also consistent under $`H_1`$, although they can be
 (strongly) biased as compared to their true values as illustrated in the
 following example.
 
 ``` r
+
 ## Simulate mixture data:
 mixt1 <- twoComp_mixt(n = 800, weight = 0.5,
                       comp.dist = list("norm", "norm"),
@@ -165,49 +187,59 @@ admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
 admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, admixMod2),
             est_method = 'IBM')
 #> 
-#> Call:admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, 
+#> Call:
+#> admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, 
 #>     admixMod2), est_method = "IBM")
 #> 
-#> Pairwise estimation performed (IBM estimation method).
+#> Method: IBM 
+#> Pairwise estimation
 #> 
-#> ******** Samples #1 with #2 ********
-#> Estimated mixing weight of the unknown distribution in the 1st sample: 0.332 
-#> Estimated mixing weight of the unknown distribution in the 2nd sample: 0.655
+#>            Pair    p1    p2 var.p1 var.p2  n1  n2
+#>  data1 vs data2 0.332 0.655     NA     NA 800 600
+#> 
+#>  Use `?estim_IBM` for further details.
 ```
 
 In such a framework, it is therefore better to use the estimator by
 (Patra and Sen 2016), which shows better performance:
 
 ``` r
+
 admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, admixMod2),
             est_method = 'PS')
 #> 
-#> Call:admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, 
+#> Call:
+#> admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, 
 #>     admixMod2), est_method = "PS")
 #> 
-#> ******** Sample #1 ********
-#>  Estimated mixing weight (of the unknown component): 0.45
-#>  Selected c_n equals 0.19 in the penalization term. See ?estim_PS
+#> Method: PS 
+#> Number of samples: 2 
 #> 
-#> ******** Sample #2 ********
-#>  Estimated mixing weight (of the unknown component): 0.727
-#>  Selected c_n equals 0.186 in the penalization term. See ?estim_PS
+#>  Sample Mixing weight   n
+#>   data1         0.450 800
+#>   data2         0.727 600
+#> 
+#>  Use `?estim_PS` for details on the penalization term.
 ```
 
 ## Estimation of the unknown cumulative distribution function
 
-Concerning the unknown cdf $F$, one usually estimate it thanks to the
-inversion formula $$F(x) = \frac{L(x) - (1 - p)G(x)}{p},$$ once $p$ has
-been consistenly estimated.
+Concerning the unknown cdf $`F`$, one usually estimate it thanks to the
+inversion formula
+``` math
+F(x) = \dfrac{L(x) - (1-p)G(x)}{p},
+```
+once $`p`$ has been consistenly estimated.
 
 This is what is commonly called the decontaminated density of the
 unknown component. In the following, we propose to compare the two
 decontaminated densities obtained once the unknown quantities have been
 consistently estimated by the IBM approach. Note that we are under the
-null ($F_{1} = F_{2}$), and thus that the decontaminated densities
-should look similar.
+null ($`F_1=F_2`$), and thus that the decontaminated densities should
+look similar.
 
 ``` r
+
 ## Simulate mixture data:
 mixt1 <- twoComp_mixt(n = 800, weight = 0.4,
                       comp.dist = list("norm", "norm"),

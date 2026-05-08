@@ -25,5 +25,5 @@ A data frame with 170,601 rows and 1 column:
 Walker MG, Mateo M, Olszewski EW, Gnedin OY, Wang X, Sen B, Woodroofe M
 (2007). “Velocity Dispersion Profiles of Seven Dwarf Spheroidal
 Galaxies.” *The Astrophysical Journal*, **667**(1), L53–L56. ISSN
-1538-4357, [doi:10.1086/521998](https://doi.org/10.1086/521998) ,
+1538-4357. [doi:10.1086/521998](https://doi.org/10.1086/521998) .
 <http://dx.doi.org/10.1086/521998>.

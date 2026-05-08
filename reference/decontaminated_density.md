@@ -1,8 +1,10 @@
 # Probability density function of the unknown component
 
-Estimates the decontaminated probability density function (PDF) of the
+Estimates the decontaminated probability density function (pdf) of the
 unknown component in an admixture model, based on the inversion of the
-admixture density equation \\l = p f + (1-p) g\\.
+admixture density equation \$\$ \ell = p f + (1-p) g, \$\$ where \\p\\
+and \\f\\ are unknown, \\\ell\\ is observed and \\g\\ is the known
+component.
 
 ## Usage
 
@@ -45,15 +47,15 @@ An object of class `decontaminated_density` containing:
 ## Details
 
 The decontaminated density \\f\\ is computed as: \$\$f(x) = (1 /
-\hat{p}) \[ \hat{l}(x) - (1 - \hat{p}) g(x) \]\$\$ where:
+\hat{p}) \[ \hat{\ell}(x) - (1 - \hat{p}) g(x) \]\$\$ where:
 
-- \\\hat{l}(x)\\ is the empirical density of the sample,
+- \\\hat{\ell}(x)\\ is the empirical density of the sample,
 
 - \\g(x)\\ is the known component’s theoretical density,
 
 - \\\hat{p}\\ is the estimated mixture weight.
 
-For continuous data, \\\hat{l}(x)\\ is estimated using kernel density
+For continuous data, \\\hat{\ell}(x)\\ is estimated using kernel density
 estimation. For discrete data, it is approximated from normalized
 frequencies.
 
@@ -85,7 +87,7 @@ print(x)
 #> 
 #> Statistics about the estimated decontaminated density function:
 #>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-#>  0.0000  0.0000  0.1153  0.2322  0.4930  0.6413 
+#> 0.00000 0.00566 0.10146 0.22604 0.47388 0.60128 
 #> 
 summary(x)
 #> Call:decontaminated_density(sample1 = data1, admixMod = admixMod1, 
@@ -94,14 +96,12 @@ summary(x)
 #> Type of support: Continuous
 #> Statistical indicators about the support:
 #>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-#> -3.3584 -1.8533 -0.8103 -0.7550  0.2527  2.4840 
+#> -3.3482 -1.9116 -0.7855 -0.6916  0.4366  2.9353 
 #> 
 #> Statistics about the estimated decontaminated density function:
 #>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-#>  0.0000  0.0000  0.1153  0.2322  0.4930  0.6413 
+#> 0.00000 0.00566 0.10146 0.22604 0.47388 0.60128 
 #> 
-plot(x)
-
 
 ####### Discrete support:
 mixt1 <- twoComp_mixt(n = 4000, weight = 0.6,
@@ -139,8 +139,33 @@ y <- decontaminated_density(sample1 = data2, admixMod = admixMod2,
                             estim.p = get_mixing_weights(est)[2])
 z <- decontaminated_density(sample1 = data3, admixMod = admixMod3,
                             estim.p = get_mixing_weights(est2))
-plot(x, offset = -0.2, bar_width = 0.2, col = "steelblue")
-plot(y, add_plot = TRUE, offset = 0, bar_width = 0.2, col = "red")
-plot(z, add_plot = TRUE, offset = 0.2, bar_width = 0.2, col = "orange")
-
+print(x)
+#> Call:decontaminated_density(sample1 = data1, admixMod = admixMod1, 
+#>     estim.p = get_mixing_weights(est)[1])
+#> 
+#> Statistics about the estimated decontaminated density function:
+#>      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+#> 0.0003338 0.1527997 0.1618358 0.1730202 0.2289368 0.2364810 
+#> 
+summary(y)
+#> Call:decontaminated_density(sample1 = data2, admixMod = admixMod2, 
+#>     estim.p = get_mixing_weights(est)[2])
+#> 
+#> Type of support: Discrete
+#> Count table:
+#>   0   1   2   3   4   5   6   7   8   9  10  11 
+#> 130 410 608 633 485 382 191  98  39  20   3   1 
+#> 
+#> Statistics about the estimated decontaminated density function:
+#>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#>  0.0000  0.1096  0.1756  0.1609  0.2206  0.2371 
+#> 
+print(z)
+#> Call:decontaminated_density(sample1 = data3, admixMod = admixMod3, 
+#>     estim.p = get_mixing_weights(est2))
+#> 
+#> Statistics about the estimated decontaminated density function:
+#>      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+#> 0.0000000 0.0006439 0.0310954 0.0606527 0.1413325 0.1568087 
+#> 
 ```

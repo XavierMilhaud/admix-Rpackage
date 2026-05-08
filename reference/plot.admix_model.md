@@ -1,16 +1,13 @@
 # Plot method for objects of class `admix_model`
 
 Plots the probability density function of the known component of the
-admixture model, where we recall that an admixture model has probability
-density function (pdf) l_i such that: l_i = p_i \* f_i + (1-p_i) \* g_i,
-with g_i the known component density. The unknown quantities are
-therefore p_i and f_i.
+admixture model.
 
 ## Usage
 
 ``` r
 # S3 method for class 'admix_model'
-plot(x, ...)
+plot(x, n = 1000, main = "Known component distribution", ...)
 ```
 
 ## Arguments
@@ -18,6 +15,15 @@ plot(x, ...)
 - x:
 
   An object of class `admix_model`.
+
+- n:
+
+  The number of 'x' values to consider for plotting the pdf in the
+  continuous case.
+
+- main:
+
+  The title of the plot.
 
 - ...:
 

@@ -1,17 +1,15 @@
-# Equality test for the unknown components in admixture models
+# Hypothesis test for the unknown component(s) in admixture model(s)
 
-Perform hypothesis test between unknown components of a list of
-admixture models, where we remind that the i-th admixture model has
-probability density function (pdf) l_i such that: l_i = p_i \* f_i +
-(1-p_i) \* g_i, with g_i the known component density. The unknown
-quantities p_i and f_i are thus estimated, leading to the test given by
-the following null and alternative hypothesis: H0: f_i = f_j for all i
-!= j against H1 : there exists at least i != j such that f_i differs
-from f_j. The test can be performed using two methods, either the
-comparison of coefficients obtained through polynomial basis expansions
-of the component densities, or by the inner-convergence property
-obtained using the IBM approach. See 'Details' below for further
-information.
+Perform hypothesis test on the unknown component(s) of a list of
+admixture model(s), where we remind that the \\i\\-th admixture model
+has probability density function (pdf) \\\ell_i\\ such that: \$\$ \ell_i
+= p_i f_i + (1 - p_i) g_i, \$\$ with \\g_i\\ the known component
+density, and where \\\ell_i\\ can be estimated consistently thanks to
+the observations. The test is made on the \\f_i\\'s, can be performed
+using two methods: either the comparison of coefficients obtained
+through polynomial basis expansions of the component densities, or by
+the inner-convergence property obtained using the IBM approach. See
+'Details' below for further information.
 
 ## Usage
 
@@ -72,7 +70,8 @@ mixture components.
 ## Details
 
 For further details on implemented hypothesis tests, see the references
-hereafter. .
+hereafter. When choosing the 'icv' testing method, it is recommended to
+use parallel computing.
 
 ## References
 
@@ -82,11 +81,20 @@ Learning Research*, **25**(287), 1–32.
 <https://jmlr.org/papers/v25/23-0914.html>. Milhaud X, Pommeret D, Salhi
 Y, Vandekerkhove P (2022). “Semiparametric two-sample admixture
 components comparison test: The symmetric case.” *Journal of Statistical
-Planning and Inference*, **216**, 135-150. ISSN 0378-3758,
+Planning and Inference*, **216**, 135-150. ISSN 0378-3758.
 [doi:10.1016/j.jspi.2021.05.010](https://doi.org/10.1016/j.jspi.2021.05.010)
 . Pommeret D, Vandekerkhove P (2019). “Semiparametric density testing in
 the contamination model.” *Electronic Journal of Statistics*, 4743–4793.
 [doi:10.1214/19-EJS1650](https://doi.org/10.1214/19-EJS1650) .
+
+## See also
+
+[`gaussianity_test()`](gaussianity_test.md),
+[`orthobasis_test()`](orthobasis_test.md),
+[`IBM_k_samples_test()`](IBM_k_samples_test.md),
+[`get_known_component()`](get_known_component.md),
+[`get_mixing_weights()`](get_mixing_weights.md),
+[`reject_nullHyp()`](reject_nullHyp.md), [`which_rank()`](which_rank.md)
 
 ## Author
 
@@ -120,7 +128,7 @@ admix_test(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
 #>  pdfs
 #> 
 #> data:  samples
-#> T = 1.4929, expansion order S = 1, p-value = 0.2218
+#> T = 0.31727, expansion order S = 1, p-value = 0.5733
 #> alternative hypothesis: Distributions of unknown components involved 
 #>                         in the contamination models are different
 #> 

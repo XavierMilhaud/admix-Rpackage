@@ -2,10 +2,10 @@
 
 Estimation of the component weights from the Inversion - Best Matching
 (IBM) method, related to two admixture models with respective
-probability density function (pdf) l1 and l2, such that: l1 = p1\*f1 +
-(1-p1)*g1 and l2 = p2*f2 + (1-p2)\*g2, where g1 and g2 are the known
-component densities. For further details about IBM approach, see
-'Details' below.
+probability density function (pdf) \\\ell_1\\ and \\\ell_2\\, such that:
+\$\$ \ell_i = p_i f_i + (1 - p_i) g_i, \quad i=1,2, \$\$ where \\g_1\\
+and \\g_2\\ are the known component densities. For further details about
+IBM approach, see 'Details' below.
 
 ## Usage
 

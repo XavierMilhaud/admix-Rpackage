@@ -1,12 +1,14 @@
 # Gaussianity test in an admixture model
 
 Performs an hypothesis test to check for the gaussianity of the unknown
-mixture component. Recall that an admixture model has probability
-density function (pdf) l = p\*f + (1-p)\*g, where g is the known pdf and
-l is observed (others are unknown). This test requires optimization (to
-estimate the unknown parameters) as defined by Bordes & Vandekerkhove
-(2010), which means that the unknown mixture component must have a
-symmetric density.
+mixture component \\f\\, i.e. \$\$ H_0: \\ f \sim \mathcal{N}(.,.) \quad
+\mbox{against} \quad H_1: f \mbox{ is not Gaussian}, \$\$ using
+polynomial expansions of the probability density functions. Recall that
+an admixture model has probability density function (pdf) \$\$ \ell = p
+f + (1 - p) g, \$\$ where \\g\\ is the known pdf and \\l\\ is observed
+(others are unknown). This test requires to estimate the unknown
+parameters, as defined by Bordes & Vandekerkhove (2010), meaning that
+the unknown mixture component must have a symmetric density.
 
 ## Usage
 

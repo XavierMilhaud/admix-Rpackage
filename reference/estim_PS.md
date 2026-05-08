@@ -2,11 +2,11 @@
 
 Estimation of both the weight and the distribution of the unknown
 component in an admixture model, by Patra and Sen approach. Remind that
-the admixture probability density function (pdf) l is given by l =
-p\*f + (1-p)\*g, where g is the known component of the two-component
-mixture, p is the unknown proportion of the unknown component
-distribution f. More information in 'Details' below concerning the
-estimation method.
+the admixture probability density function (pdf) l is given by \$\$ \ell
+= p f + (1 - p) g, \$\$ where \\g\\ is the known component of the
+two-component mixture, \\p\\ is the unknown proportion of the unknown
+component distribution \\f\\. More information in 'Details' below
+concerning the estimation method.
 
 ## Usage
 

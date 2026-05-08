@@ -17,11 +17,11 @@ admix_model(knownComp_dist, knownComp_param)
 - knownComp_dist:
 
   (Character) The name of the distribution (specified as in R glossary)
-  of the known component of the admixture model
+  of the known component of the admixture model.
 
 - knownComp_param:
 
-  (Character) A vector of the names of the parameters (specified as in R
+  (Character) A list of the names of the parameters (specified as in R
   glossary) involved in the chosen known distribution, with their
   values.
 
@@ -41,29 +41,43 @@ Xavier Milhaud <xavier.milhaud.research@gmail.com>
 
 ``` r
 admix_model(knownComp_dist = "norm", knownComp_param = list("mean"=0, "sd"=1))
-#> Call:admix_model(knownComp_dist = "norm", knownComp_param = list(mean = 0, 
+#> Call:
+#> admix_model(knownComp_dist = "norm", knownComp_param = list(mean = 0, 
 #>     sd = 1))
 #> 
-#> Known component distribution:  norm 
-#> Known component parameters: mean=0 sd=1
-#> 
+#> Admixture model
+#> ----------------
+#> Known component distribution: norm
+#> Known parameters:
+#>   - mean = 0
+#>   - sd = 1
 admix_model(knownComp_dist = "exp", knownComp_param = list("rate"=2))
-#> Call:admix_model(knownComp_dist = "exp", knownComp_param = list(rate = 2))
+#> Call:
+#> admix_model(knownComp_dist = "exp", knownComp_param = list(rate = 2))
 #> 
-#> Known component distribution:  exp 
-#> Known component parameters: rate=2
-#> 
+#> Admixture model
+#> ----------------
+#> Known component distribution: exp
+#> Known parameters:
+#>   - rate = 2
 admix_model(knownComp_dist = "pois", knownComp_param = list("lambda"=5))
-#> Call:admix_model(knownComp_dist = "pois", knownComp_param = list(lambda = 5))
+#> Call:
+#> admix_model(knownComp_dist = "pois", knownComp_param = list(lambda = 5))
 #> 
-#> Known component distribution:  pois 
-#> Known component parameters: lambda=5
+#> Admixture model
+#> ----------------
+#> Known component distribution: pois
+#> Known parameters:
+#>   - lambda = 5
+admix_model(knownComp_dist = "multinom", knownComp_param = list("size"=1, "prob"=c(0.1,0.8,0.1)))
+#> Call:
+#> admix_model(knownComp_dist = "multinom", knownComp_param = list(size = 1, 
+#>     prob = c(0.1, 0.8, 0.1)))
 #> 
-admix_model(knownComp_dist = "multinom", knownComp_param = list("size"=1, "prob"=c(0.2,0.8,0.1)))
-#> Call:admix_model(knownComp_dist = "multinom", knownComp_param = list(size = 1, 
-#>     prob = c(0.2, 0.8, 0.1)))
-#> 
-#> Known component distribution:  multinom 
-#> Known component parameters: size=1 prob=c(0.2, 0.8, 0.1)
-#> 
+#> Admixture model
+#> ----------------
+#> Known component distribution: multinom
+#> Known parameters:
+#>   - size = 1
+#>   - prob = 0.1, 0.8, 0.1
 ```

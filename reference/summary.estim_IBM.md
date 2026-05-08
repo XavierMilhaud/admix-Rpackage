@@ -6,7 +6,7 @@ Summarizes the results stored in an object of class 'estim_IBM'.
 
 ``` r
 # S3 method for class 'estim_IBM'
-summary(object, ...)
+summary(object, show.call = TRUE, ...)
 ```
 
 ## Arguments
@@ -14,6 +14,10 @@ summary(object, ...)
 - object:
 
   An object of class 'estim_IBM'.
+
+- show.call:
+
+  A boolean to print the call.
 
 - ...:
 

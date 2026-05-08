@@ -1,11 +1,12 @@
 # Estimate the unknown weight in an admixture model
 
-Estimate the unknown component weight (and possibly location shift
+Estimate the unknown component weight (and possibly a location shift
 parameter in case of a symmetric unknown component density), using
-different estimation techniques. We remind that the i-th admixture model
-has probability density function (pdf) l_i such that: l_i = p_i \* f_i +
-(1-p_i) \* g_i, where g_i is the known component density. The unknown
-quantities p_i and f_i then have to be estimated.
+different estimation techniques. We recall that the \\i\\-th admixture
+model has probability density function \\\ell_i\\ such that: \$\$ \ell_i
+= p_i f_i + (1 - p_i) g_i, \$\$ where \\g_i\\ is the known component
+density. The unknown quantities \\p_i\\ and \\f_i\\ then have to be
+estimated.
 
 ## Usage
 
@@ -43,14 +44,10 @@ admix_estim(samples, admixMod, est_method = c("PS", "BVdk", "IBM"), ...)
 ## Value
 
 An object of class `estim_BVdk`, `estim_PS` or `estim_IBM` (that
-inherits from class admix_estim), containing at least 5 attributes: 1)
-the number of samples under study; 2) the information about the mixture
-components (distributions and parameters); 3) the sizes of the samples;
-4) the chosen estimation technique (one of 'BVdk', 'PS' or 'IBM'); 5)
-the estimated mixing proportions (weights of the unknown component
-distributions in the mixture model). In case of 'BVdk' estimation, one
-additional attribute corresponding to the estimated location shift
-parameter is included.
+inherits from class admix_estim), with two attributes, 'class' and
+'names'. The latter contains three elements, among which 'estim_objects'
+that lists for each sample under study all the information of the
+estimation procedure.
 
 ## Details
 
@@ -61,7 +58,7 @@ Important note: estimation by 'IBM' requires at least two samples at
 hand, and provides unbiased estimators only if the distributions of
 unknown components are equal (meaning that it requires to perform
 previously this test between the pairs of samples, see
-[admix_test](admix_test.md).
+[admix_test](admix_test.md)).
 
 ## References
 
@@ -70,7 +67,7 @@ with applications to multiple testing.” *Journal of the Royal
 Statistical Society Series B*, **78**(4), 869-893. Bordes L, Delmas C,
 Vandekerkhove P (2006). “Semiparametric Estimation of a Two-Component
 Mixture Model Where One Component Is Known.” *Scandinavian Journal of
-Statistics*, **33**(4), 733–752. ISSN 03036898, 14679469,
+Statistics*, **33**(4), 733–752. ISSN 03036898, 14679469.
 <http://www.jstor.org/stable/4616955>. Bordes L, Vandekerkhove P (2010).
 “Semiparametric two-component mixture model with a known component: An
 asymptotically normal estimator.” *Mathematical Methods of Statistics*,
@@ -79,6 +76,22 @@ asymptotically normal estimator.” *Mathematical Methods of Statistics*,
 . Milhaud X, Pommeret D, Salhi Y, Vandekerkhove P (2024). “Two-sample
 contamination model test.” *Bernoulli*, **30**(1), 170–197.
 [doi:10.3150/23-BEJ1593](https://doi.org/10.3150/23-BEJ1593) .
+
+## See also
+
+[`get_mixing_weights()`](get_mixing_weights.md) to access the estimated
+mixing weight(s), [`get_known_component()`](get_known_component.md) to
+access the known component(s),
+[`print.admix_estim()`](print.admix_estim.md) for a brief description of
+the results, and [`summary.admix_estim()`](summary.admix_estim.md) for
+an overview of the estimation process. More precisely, 1) the number of
+samples under study; 2) the information about the known mixture
+components (distributions and parameters); 3) the sizes of the samples;
+4) the chosen estimation technique (one of 'BVdk', 'PS' or 'IBM'); 5)
+the estimated mixing proportions (weights of the unknown component
+distributions in the mixture model). In case of 'BVdk' estimation, one
+additional attribute corresponding to the estimated location shift
+parameter is included.
 
 ## Author
 
@@ -121,45 +134,47 @@ admix_estim(samples = list(data1), admixMod = list(admixMod1), est_method = "BVd
 #> Mixing weight estimation using 'BVdk' assumes the unknown component
 #> distribution to have a symmetric probability density function.
 #> 
-#> Call:admix_estim(samples = list(data1), admixMod = list(admixMod1), 
+#> Call:
+#> admix_estim(samples = list(data1), admixMod = list(admixMod1), 
 #>     est_method = "BVdk")
 #> 
-#> ******** Sample #1 ********
-#> Estimated mixing weight: 0.685 / Estimated location shift: -2.052 
+#> Method: BVdk 
+#> Number of samples: 1 
 #> 
+#>  Sample Mixing weight location   n
+#>   data1         0.720    -2.01 300
+#> 
+#>  Use `?estim_BVdk` for details on the optimization method.
 admix_estim(samples = list(data1, data2, data3, data4),
             admixMod = list(admixMod1, admixMod2, admixMod3, admixMod4), est_method = "PS")
 #> 
-#> Call:admix_estim(samples = list(data1, data2, data3, data4), admixMod = list(admixMod1, 
+#> Call:
+#> admix_estim(samples = list(data1, data2, data3, data4), admixMod = list(admixMod1, 
 #>     admixMod2, admixMod3, admixMod4), est_method = "PS")
 #> 
-#> ******** Sample #1 ********
-#>  Estimated mixing weight (of the unknown component): 0.655
-#>  Selected c_n equals 0.174 in the penalization term. See ?estim_PS
+#> Method: PS 
+#> Number of samples: 4 
 #> 
-#> ******** Sample #2 ********
-#>  Estimated mixing weight (of the unknown component): 0.841
-#>  Selected c_n equals 0.171 in the penalization term. See ?estim_PS
+#>  Sample Mixing weight    n
+#>   data1         0.682  300
+#>   data2         0.849  250
+#>   data3         0.479  500
+#>   data4         0.138 1500
 #> 
-#> ******** Sample #3 ********
-#>  Estimated mixing weight (of the unknown component): 0.458
-#>  Selected c_n equals 0.183 in the penalization term. See ?estim_PS
-#> 
-#> ******** Sample #4 ********
-#>  Estimated mixing weight (of the unknown component): 0.203
-#>  Selected c_n equals 0.199 in the penalization term. See ?estim_PS
-#> 
+#>  Use `?estim_PS` for details on the penalization term.
 admix_estim(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2), est_method = "IBM")
 #>  IBM estimators of two unknown proportions are reliable only if the two corresponding
 #>  unknown component distributions have previously been tested equal (see ?admix_test).
 #> 
-#> Call:admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, 
+#> Call:
+#> admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, 
 #>     admixMod2), est_method = "IBM")
 #> 
-#> Pairwise estimation performed (IBM estimation method).
+#> Method: IBM 
+#> Pairwise estimation
 #> 
-#> ******** Samples #1 with #2 ********
-#> Estimated mixing weight of the unknown distribution in the 1st sample: 0.748 
-#> Estimated mixing weight of the unknown distribution in the 2nd sample: 0.895 
+#>            Pair    p1    p2 var.p1 var.p2  n1  n2
+#>  data1 vs data2 0.720 0.865     NA     NA 300 250
 #> 
+#>  Use `?estim_IBM` for further details.
 ```
