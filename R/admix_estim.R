@@ -156,12 +156,12 @@ print.admix_estim <- function(x, ...) {
   print(x$call)
   method <- class(x)[1]
   method <- sub("estim_", "", method)
-  cat("\nMethod:", method, "\n")
+  cat("\nMethod:", method, " - ")
 
   if (inherits(x, "estim_IBM")) {
     valid_objects <- Filter(Negate(is.null), x$estim_objects)
     n_samples     <- length(valid_objects) + 1
-    cat("Pairwise estimation\n\n")
+    cat(" Pairwise estimation\n\n")
     sample_names <- x$sample_names
     if (is.null(sample_names)) { sample_names <- names(valid_objects) }
     if (is.null(sample_names) || any(sample_names == "")) { sample_names <- paste0("Sample_", seq_len(n_samples)) }
@@ -173,21 +173,21 @@ print.admix_estim <- function(x, ...) {
       variance.p1 <- obj$variance_est_p1
       variance.p2 <- obj$variance_est_p2
       if (isTRUE(obj$equal.knownComp)) {
-        data.frame(Pair = pairs[k], `p1 (fixed)` = format(round(obj$p.X.fixed, 3), nsmall=3), p2 = format(round(w,3), nsmall=3),
-                   var.p1 = format(round(variance.p1,5), nsmall=5), var.p2 = format(round(variance.p2,5), nsmall=5),
-                   n1 = obj$population_sizes[1], n2 = obj$population_sizes[2], check.names = FALSE)
+        data.frame(pair = pairs[k], size_1st = obj$population_sizes[1], size_2nd = obj$population_sizes[2],
+                   `mix_weight_1st (fixed)` = format(round(obj$p.X.fixed, 3), nsmall=3), var_1st = format(round(variance.p1,5), nsmall=5),
+                   mix_weight_2nd = format(round(w,3), nsmall=3), var_2nd = format(round(variance.p2,5), nsmall=5), check.names = FALSE)
       } else {
-        data.frame(Pair = pairs[k], `p1` = format(round(w[1], 3), nsmall = 3), p2 = format(round(w[2], 3), nsmall = 3),
-                   var.p1 = format(round(variance.p1,5), nsmall=5), var.p2 = format(round(variance.p2,5), nsmall=5),
-                   n1 = obj$population_sizes[1], n2 = obj$population_sizes[2], check.names = FALSE)
+        data.frame(pair = pairs[k], size_1st = obj$population_sizes[1], size_2nd = obj$population_sizes[2],
+                   `mix_weight_1st` = format(round(w[1], 3), nsmall = 3), var_1st = format(round(variance.p1,5), nsmall=5),
+                   mix_weight_2nd = format(round(w[2], 3), nsmall = 3), var_2nd = format(round(variance.p2,5), nsmall=5), check.names = FALSE)
       }
     })
     ## Equivalent of dplyr::bind_rows (fills missing columns with NA)
     has_fixed <- any(sapply(valid_objects, function(obj) isTRUE(obj$equal.knownComp)))
     all_cols <- if (has_fixed) {
-      c("Pair", "p1 (fixed)", "p1", "p2", "var.p1", "var.p2", "n1", "n2")
+      c("pair", "size_1st", "size_2nd", "mix_weight_1st (fixed)", "mix_weight_1st", "var_1st", "mix_weight_2nd", "var_2nd")
     } else {
-      c("Pair", "p1", "p2", "var.p1", "var.p2", "n1", "n2")
+      c("pair", "size_1st", "size_2nd", "mix_weight_1st", "var_1st", "mix_weight_2nd", "var_2nd")
     }
     df <- do.call(rbind, lapply(rows, function(r) {
       missing <- setdiff(all_cols, names(r))
@@ -198,22 +198,22 @@ print.admix_estim <- function(x, ...) {
 
   } else {
     n_samples <- length(x$estim_objects)
-    cat("Number of samples:", n_samples, "\n\n")
+    cat(" Number of samples:", n_samples, "\n\n")
     sample_names <- x$sample_names
     if (is.null(sample_names)) { sample_names <- names(x$estim_objects) }
     if (is.null(sample_names) || any(sample_names == "")) { sample_names <- paste0("Sample_", seq_len(n_samples)) }
     weights <- sapply(x$estim_objects, function(obj) {
       format(round(obj$estimated_mixing_weights, 3), nsmall = 3)
     })
-    df <- data.frame(Sample = sample_names, `Mixing weight` = weights, check.names = FALSE)
+    sizes <- sapply(x$estim_objects, function(obj) { obj$population_sizes })
+    df <- data.frame(Sample = sample_names, Size = sizes, `Mix.weight` = weights, check.names = FALSE)
     if (inherits(x, "estim_BVdk")) {
-      df$location <- sapply(x$estim_objects, function(obj) { format(round(obj$estimated_locations, 2), nsmall = 2) })
+      df$Location <- sapply(x$estim_objects, function(obj) { format(round(obj$estimated_locations, 2), nsmall = 2) })
       if (!is.na(x$estim_objects[[1]]$mix_weight_variance) && !is.na(x$estim_objects[[1]]$location_variance)) {
-        df$var.weight <- sapply(x$estim_objects, function(obj) { format(round(obj$mix_weight_variance, 5), nsmall = 5) })
+        df$var.Mix.weight <- sapply(x$estim_objects, function(obj) { format(round(obj$mix_weight_variance, 5), nsmall = 5) })
         df$var.location <- sapply(x$estim_objects, function(obj) { format(round(obj$location_variance, 5), nsmall = 5) })
       }
     }
-    df$n <- sapply(x$estim_objects, function(obj) { obj$population_sizes })
     print(df, row.names = FALSE, right = TRUE)
   }
 

@@ -62,8 +62,7 @@ print.admix_model <- function(x, ...)
 {
   cat("Call:\n")
   print(x$call)
-  cat("\nAdmixture model\n")
-  cat("----------------\n")
+  cat("\n")
   cat("Known component distribution: ", x$comp.dist$known,"\n",sep = "")
   cat("Known parameters:\n")
   for (nm in names(x$comp.param$known)) {
