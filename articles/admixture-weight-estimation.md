@@ -64,11 +64,10 @@ admix_estim(samples = list(data1), admixMod = list(admixMod), est_method = 'BVdk
 #> admix_estim(samples = list(data1), admixMod = list(admixMod), 
 #>     est_method = "BVdk")
 #> 
-#> Method: BVdk 
-#> Number of samples: 1 
+#> Method: BVdk  -  Number of samples: 1 
 #> 
-#>  Sample Mixing weight location   n
-#>   data1         0.665     2.98 400
+#>  Sample Size Mix.weight Location
+#>   data1  400      0.665     2.98
 #> 
 #>  Use `?estim_BVdk` for details on the optimization method.
 ```
@@ -92,11 +91,10 @@ admix_estim(samples = list(data1), admixMod = list(admixMod), est_method = 'PS')
 #> admix_estim(samples = list(data1), admixMod = list(admixMod), 
 #>     est_method = "PS")
 #> 
-#> Method: PS 
-#> Number of samples: 1 
+#> Method: PS  -  Number of samples: 1 
 #> 
-#>  Sample Mixing weight   n
-#>   data1         0.641 400
+#>  Sample Size Mix.weight
+#>   data1  400      0.641
 #> 
 #>  Use `?estim_PS` for details on the penalization term.
 ```
@@ -147,11 +145,10 @@ admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, admixMod2),
 #> admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, 
 #>     admixMod2), est_method = "IBM")
 #> 
-#> Method: IBM 
-#> Pairwise estimation
+#> Method: IBM  -  Pairwise estimation
 #> 
-#>            Pair    p1    p2 var.p1 var.p2  n1  n2
-#>  data1 vs data2 0.409 0.725     NA     NA 450 380
+#>            pair size_1st size_2nd mix_weight_1st var_1st mix_weight_2nd var_2nd
+#>  data1 vs data2      450      380          0.409      NA          0.725      NA
 #> 
 #>  Use `?estim_IBM` for further details.
 ```
@@ -191,11 +188,10 @@ admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, admixMod2),
 #> admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, 
 #>     admixMod2), est_method = "IBM")
 #> 
-#> Method: IBM 
-#> Pairwise estimation
+#> Method: IBM  -  Pairwise estimation
 #> 
-#>            Pair    p1    p2 var.p1 var.p2  n1  n2
-#>  data1 vs data2 0.332 0.655     NA     NA 800 600
+#>            pair size_1st size_2nd mix_weight_1st var_1st mix_weight_2nd var_2nd
+#>  data1 vs data2      800      600          0.332      NA          0.655      NA
 #> 
 #>  Use `?estim_IBM` for further details.
 ```
@@ -212,12 +208,11 @@ admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, admixMod2),
 #> admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, 
 #>     admixMod2), est_method = "PS")
 #> 
-#> Method: PS 
-#> Number of samples: 2 
+#> Method: PS  -  Number of samples: 2 
 #> 
-#>  Sample Mixing weight   n
-#>   data1         0.450 800
-#>   data2         0.727 600
+#>  Sample Size Mix.weight
+#>   data1  800      0.450
+#>   data2  600      0.727
 #> 
 #>  Use `?estim_PS` for details on the penalization term.
 ```

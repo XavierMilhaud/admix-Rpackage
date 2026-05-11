@@ -185,11 +185,10 @@ to the estimated location shift parameter is included.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> admix_estim(samples = list(data1), admixMod = list(admixMod1), </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     est_method = "BVdk")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Method: BVdk </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of samples: 1 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Method: BVdk  -  Number of samples: 1 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Sample Mixing weight location   n</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   data1         0.720    -2.01 300</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Sample Size Mix.weight Location</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   data1  300      0.720    -2.01</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Use `?estim_BVdk` for details on the optimization method.</span>
 <span class="r-in"><span><span class="fu">admix_estim</span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>, <span class="va">data2</span>, <span class="va">data3</span>, <span class="va">data4</span><span class="op">)</span>,</span></span>
@@ -199,14 +198,13 @@ to the estimated location shift parameter is included.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> admix_estim(samples = list(data1, data2, data3, data4), admixMod = list(admixMod1, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     admixMod2, admixMod3, admixMod4), est_method = "PS")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Method: PS </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Number of samples: 4 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Method: PS  -  Number of samples: 4 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Sample Mixing weight    n</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   data1         0.682  300</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   data2         0.849  250</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   data3         0.479  500</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   data4         0.138 1500</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Sample Size Mix.weight</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   data1  300      0.682</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   data2  250      0.849</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   data3  500      0.479</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   data4 1500      0.138</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Use `?estim_PS` for details on the penalization term.</span>
 <span class="r-in"><span><span class="fu">admix_estim</span><span class="op">(</span>samples <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">data1</span>,<span class="va">data2</span><span class="op">)</span>, admixMod <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">admixMod1</span>,<span class="va">admixMod2</span><span class="op">)</span>, est_method <span class="op">=</span> <span class="st">"IBM"</span><span class="op">)</span></span></span>
@@ -217,11 +215,10 @@ to the estimated location shift parameter is included.</p></div>
 <span class="r-out co"><span class="r-pr">#&gt;</span> admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     admixMod2), est_method = "IBM")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Method: IBM </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Pairwise estimation</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Method: IBM  -  Pairwise estimation</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            Pair    p1    p2 var.p1 var.p2  n1  n2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  data1 vs data2 0.720 0.865     NA     NA 300 250</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            pair size_1st size_2nd mix_weight_1st var_1st mix_weight_2nd var_2nd</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  data1 vs data2      300      250          0.720      NA          0.865      NA</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Use `?estim_IBM` for further details.</span>
 <span class="r-in"><span></span></span>

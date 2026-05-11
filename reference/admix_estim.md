@@ -138,11 +138,10 @@ admix_estim(samples = list(data1), admixMod = list(admixMod1), est_method = "BVd
 #> admix_estim(samples = list(data1), admixMod = list(admixMod1), 
 #>     est_method = "BVdk")
 #> 
-#> Method: BVdk 
-#> Number of samples: 1 
+#> Method: BVdk  -  Number of samples: 1 
 #> 
-#>  Sample Mixing weight location   n
-#>   data1         0.720    -2.01 300
+#>  Sample Size Mix.weight Location
+#>   data1  300      0.720    -2.01
 #> 
 #>  Use `?estim_BVdk` for details on the optimization method.
 admix_estim(samples = list(data1, data2, data3, data4),
@@ -152,14 +151,13 @@ admix_estim(samples = list(data1, data2, data3, data4),
 #> admix_estim(samples = list(data1, data2, data3, data4), admixMod = list(admixMod1, 
 #>     admixMod2, admixMod3, admixMod4), est_method = "PS")
 #> 
-#> Method: PS 
-#> Number of samples: 4 
+#> Method: PS  -  Number of samples: 4 
 #> 
-#>  Sample Mixing weight    n
-#>   data1         0.682  300
-#>   data2         0.849  250
-#>   data3         0.479  500
-#>   data4         0.138 1500
+#>  Sample Size Mix.weight
+#>   data1  300      0.682
+#>   data2  250      0.849
+#>   data3  500      0.479
+#>   data4 1500      0.138
 #> 
 #>  Use `?estim_PS` for details on the penalization term.
 admix_estim(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2), est_method = "IBM")
@@ -170,11 +168,10 @@ admix_estim(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2), e
 #> admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, 
 #>     admixMod2), est_method = "IBM")
 #> 
-#> Method: IBM 
-#> Pairwise estimation
+#> Method: IBM  -  Pairwise estimation
 #> 
-#>            Pair    p1    p2 var.p1 var.p2  n1  n2
-#>  data1 vs data2 0.720 0.865     NA     NA 300 250
+#>            pair size_1st size_2nd mix_weight_1st var_1st mix_weight_2nd var_2nd
+#>  data1 vs data2      300      250          0.720      NA          0.865      NA
 #> 
 #>  Use `?estim_IBM` for further details.
 ```

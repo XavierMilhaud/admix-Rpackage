@@ -45,8 +45,6 @@ admix_model(knownComp_dist = "norm", knownComp_param = list("mean"=0, "sd"=1))
 #> admix_model(knownComp_dist = "norm", knownComp_param = list(mean = 0, 
 #>     sd = 1))
 #> 
-#> Admixture model
-#> ----------------
 #> Known component distribution: norm
 #> Known parameters:
 #>   - mean = 0
@@ -55,8 +53,6 @@ admix_model(knownComp_dist = "exp", knownComp_param = list("rate"=2))
 #> Call:
 #> admix_model(knownComp_dist = "exp", knownComp_param = list(rate = 2))
 #> 
-#> Admixture model
-#> ----------------
 #> Known component distribution: exp
 #> Known parameters:
 #>   - rate = 2
@@ -64,8 +60,6 @@ admix_model(knownComp_dist = "pois", knownComp_param = list("lambda"=5))
 #> Call:
 #> admix_model(knownComp_dist = "pois", knownComp_param = list(lambda = 5))
 #> 
-#> Admixture model
-#> ----------------
 #> Known component distribution: pois
 #> Known parameters:
 #>   - lambda = 5
@@ -74,8 +68,6 @@ admix_model(knownComp_dist = "multinom", knownComp_param = list("size"=1, "prob"
 #> admix_model(knownComp_dist = "multinom", knownComp_param = list(size = 1, 
 #>     prob = c(0.1, 0.8, 0.1)))
 #> 
-#> Admixture model
-#> ----------------
 #> Known component distribution: multinom
 #> Known parameters:
 #>   - size = 1
