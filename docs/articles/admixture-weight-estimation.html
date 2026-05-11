@@ -139,11 +139,10 @@ weight.</p>
 <span><span class="co">#&gt; admix_estim(samples = list(data1), admixMod = list(admixMod), </span></span>
 <span><span class="co">#&gt;     est_method = "BVdk")</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Method: BVdk </span></span>
-<span><span class="co">#&gt; Number of samples: 1 </span></span>
+<span><span class="co">#&gt; Method: BVdk  -  Number of samples: 1 </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Sample Mixing weight location   n</span></span>
-<span><span class="co">#&gt;   data1         0.665     2.98 400</span></span>
+<span><span class="co">#&gt;  Sample Size Mix.weight Location</span></span>
+<span><span class="co">#&gt;   data1  400      0.665     2.98</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Use `?estim_BVdk` for details on the optimization method.</span></span></code></pre></div>
 <p>Because this estimation method relies on the symmetry of the unknown
@@ -163,11 +162,10 @@ distribution), we use the Patra and Sen estimator, see <span class="citation">(P
 <span><span class="co">#&gt; admix_estim(samples = list(data1), admixMod = list(admixMod), </span></span>
 <span><span class="co">#&gt;     est_method = "PS")</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Method: PS </span></span>
-<span><span class="co">#&gt; Number of samples: 1 </span></span>
+<span><span class="co">#&gt; Method: PS  -  Number of samples: 1 </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Sample Mixing weight   n</span></span>
-<span><span class="co">#&gt;   data1         0.641 400</span></span>
+<span><span class="co">#&gt;  Sample Size Mix.weight</span></span>
+<span><span class="co">#&gt;   data1  400      0.641</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Use `?estim_PS` for details on the penalization term.</span></span></code></pre></div>
 <p>In this case, the only estimated parameter is the mixing proportion
@@ -219,11 +217,10 @@ parameter values.</p>
 <span><span class="co">#&gt; admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, </span></span>
 <span><span class="co">#&gt;     admixMod2), est_method = "IBM")</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Method: IBM </span></span>
-<span><span class="co">#&gt; Pairwise estimation</span></span>
+<span><span class="co">#&gt; Method: IBM  -  Pairwise estimation</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;            Pair    p1    p2 var.p1 var.p2  n1  n2</span></span>
-<span><span class="co">#&gt;  data1 vs data2 0.409 0.725     NA     NA 450 380</span></span>
+<span><span class="co">#&gt;            pair size_1st size_2nd mix_weight_1st var_1st mix_weight_2nd var_2nd</span></span>
+<span><span class="co">#&gt;  data1 vs data2      450      380          0.409      NA          0.725      NA</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Use `?estim_IBM` for further details.</span></span></code></pre></div>
 <p>Indeed, one can see that the two unknown proportions were
@@ -262,11 +259,10 @@ as illustrated in the following example.</p>
 <span><span class="co">#&gt; admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, </span></span>
 <span><span class="co">#&gt;     admixMod2), est_method = "IBM")</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Method: IBM </span></span>
-<span><span class="co">#&gt; Pairwise estimation</span></span>
+<span><span class="co">#&gt; Method: IBM  -  Pairwise estimation</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;            Pair    p1    p2 var.p1 var.p2  n1  n2</span></span>
-<span><span class="co">#&gt;  data1 vs data2 0.332 0.655     NA     NA 800 600</span></span>
+<span><span class="co">#&gt;            pair size_1st size_2nd mix_weight_1st var_1st mix_weight_2nd var_2nd</span></span>
+<span><span class="co">#&gt;  data1 vs data2      800      600          0.332      NA          0.655      NA</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Use `?estim_IBM` for further details.</span></span></code></pre></div>
 <p>In such a framework, it is therefore better to use the estimator by
@@ -280,12 +276,11 @@ performance:</p>
 <span><span class="co">#&gt; admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, </span></span>
 <span><span class="co">#&gt;     admixMod2), est_method = "PS")</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Method: PS </span></span>
-<span><span class="co">#&gt; Number of samples: 2 </span></span>
+<span><span class="co">#&gt; Method: PS  -  Number of samples: 2 </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;  Sample Mixing weight   n</span></span>
-<span><span class="co">#&gt;   data1         0.450 800</span></span>
-<span><span class="co">#&gt;   data2         0.727 600</span></span>
+<span><span class="co">#&gt;  Sample Size Mix.weight</span></span>
+<span><span class="co">#&gt;   data1  800      0.450</span></span>
+<span><span class="co">#&gt;   data2  600      0.727</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;  Use `?estim_PS` for details on the penalization term.</span></span></code></pre></div>
 </div>
