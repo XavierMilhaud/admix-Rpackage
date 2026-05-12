@@ -8,7 +8,15 @@ distribution functions.
 
 ``` r
 # S3 method for class 'decontaminated_density'
-plot(x, x_val = NULL, add_plot = FALSE, offset = 0, bar_width = 0.3, ...)
+plot(
+  x,
+  x_val = NULL,
+  add_plot = FALSE,
+  offset = 0,
+  bar_width = 0.3,
+  main = "pdf of the unknown component",
+  ...
+)
 ```
 
 ## Arguments
@@ -33,6 +41,12 @@ plot(x, x_val = NULL, add_plot = FALSE, offset = 0, bar_width = 0.3, ...)
 - bar_width:
 
   Width of bars to be plotted.
+
+- main:
+
+  The title of the plot (typically 'probability density function of the
+  unknown component', or 'probability mass function of the unknown
+  component').
 
 - ...:
 
@@ -112,7 +126,7 @@ y <- decontaminated_density(sample1 = data2, admixMod = admixMod2,
                             estim.p = get_mixing_weights(est)[2])
 z <- decontaminated_density(sample1 = data3, admixMod = admixMod3,
                             estim.p = get_mixing_weights(est2))
-plot(x, offset = -0.2, bar_width = 0.2, col = "steelblue")
+plot(x, offset = -0.2, bar_width = 0.2, main = "pmf of the unknown component", col = "steelblue")
 plot(y, add_plot = TRUE, offset = 0, bar_width = 0.2, col = "red")
 plot(z, add_plot = TRUE, offset = 0.2, bar_width = 0.2, col = "orange")
 legend("topright", legend = c("data1","data2","data3"), col = c("steelblue","red","orange"),

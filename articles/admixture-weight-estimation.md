@@ -66,10 +66,8 @@ admix_estim(samples = list(data1), admixMod = list(admixMod), est_method = 'BVdk
 #> 
 #> Method: BVdk  -  Number of samples: 1 
 #> 
-#>  Sample Size Mix.weight Location
+#>  sample size mix_weight location
 #>   data1  400      0.665     2.98
-#> 
-#>  Use `?estim_BVdk` for details on the optimization method.
 ```
 
 Because this estimation method relies on the symmetry of the unknown
@@ -93,10 +91,8 @@ admix_estim(samples = list(data1), admixMod = list(admixMod), est_method = 'PS')
 #> 
 #> Method: PS  -  Number of samples: 1 
 #> 
-#>  Sample Size Mix.weight
+#>  sample size mix_weight
 #>   data1  400      0.641
-#> 
-#>  Use `?estim_PS` for details on the penalization term.
 ```
 
 In this case, the only estimated parameter is the mixing proportion
@@ -149,8 +145,6 @@ admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, admixMod2),
 #> 
 #>            pair size_1st size_2nd mix_weight_1st var_1st mix_weight_2nd var_2nd
 #>  data1 vs data2      450      380          0.409      NA          0.725      NA
-#> 
-#>  Use `?estim_IBM` for further details.
 ```
 
 Indeed, one can see that the two unknown proportions were consistently
@@ -192,8 +186,6 @@ admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, admixMod2),
 #> 
 #>            pair size_1st size_2nd mix_weight_1st var_1st mix_weight_2nd var_2nd
 #>  data1 vs data2      800      600          0.332      NA          0.655      NA
-#> 
-#>  Use `?estim_IBM` for further details.
 ```
 
 In such a framework, it is therefore better to use the estimator by
@@ -210,11 +202,9 @@ admix_estim(samples = list(data1, data2), admixMod = list(admixMod1, admixMod2),
 #> 
 #> Method: PS  -  Number of samples: 2 
 #> 
-#>  Sample Size Mix.weight
+#>  sample size mix_weight
 #>   data1  800      0.450
 #>   data2  600      0.727
-#> 
-#>  Use `?estim_PS` for details on the penalization term.
 ```
 
 ## Estimation of the unknown cumulative distribution function

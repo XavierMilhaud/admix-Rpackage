@@ -140,10 +140,8 @@ admix_estim(samples = list(data1), admixMod = list(admixMod1), est_method = "BVd
 #> 
 #> Method: BVdk  -  Number of samples: 1 
 #> 
-#>  Sample Size Mix.weight Location
+#>  sample size mix_weight location
 #>   data1  300      0.720    -2.01
-#> 
-#>  Use `?estim_BVdk` for details on the optimization method.
 admix_estim(samples = list(data1, data2, data3, data4),
             admixMod = list(admixMod1, admixMod2, admixMod3, admixMod4), est_method = "PS")
 #> 
@@ -153,13 +151,11 @@ admix_estim(samples = list(data1, data2, data3, data4),
 #> 
 #> Method: PS  -  Number of samples: 4 
 #> 
-#>  Sample Size Mix.weight
+#>  sample size mix_weight
 #>   data1  300      0.682
 #>   data2  250      0.849
 #>   data3  500      0.479
 #>   data4 1500      0.138
-#> 
-#>  Use `?estim_PS` for details on the penalization term.
 admix_estim(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2), est_method = "IBM")
 #>  IBM estimators of two unknown proportions are reliable only if the two corresponding
 #>  unknown component distributions have previously been tested equal (see ?admix_test).
@@ -172,6 +168,4 @@ admix_estim(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2), e
 #> 
 #>            pair size_1st size_2nd mix_weight_1st var_1st mix_weight_2nd var_2nd
 #>  data1 vs data2      300      250          0.720      NA          0.865      NA
-#> 
-#>  Use `?estim_IBM` for further details.
 ```

@@ -7,7 +7,14 @@ arguments to improve the visualization.
 
 ``` r
 # S3 method for class 'twoComp_mixt'
-plot(x, add_plot = FALSE, offset = 0, bar_width = 0.2, ...)
+plot(
+  x,
+  add_plot = FALSE,
+  offset = 0,
+  bar_width = 0.2,
+  main = "Mixture distribution (density or mass function)",
+  ...
+)
 ```
 
 ## Arguments
@@ -28,6 +35,10 @@ plot(x, add_plot = FALSE, offset = 0, bar_width = 0.2, ...)
 - bar_width:
 
   Width of bars to be plotted.
+
+- main:
+
+  The title of the plot.
 
 - ...:
 
