@@ -33,8 +33,8 @@ gaussianity_test(
 
 - admixMod:
 
-  An object of class [admix_model](admix_model.md), containing useful
-  information about distributions and parameters.
+  An object of class [admix_model](admix_model.md), with information
+  about the known distribution and associated known parameter(s).
 
 - conf_level:
 

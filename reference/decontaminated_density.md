@@ -20,8 +20,8 @@ decontaminated_density(sample1, admixMod, estim.p)
 
 - admixMod:
 
-  An object of class `admix_model`, containing useful information about
-  known distribution(s) and parameter(s).
+  An object of class [admix_model](admix_model.md), with information
+  about the known distribution and associated known parameter(s).
 
 - estim.p:
 

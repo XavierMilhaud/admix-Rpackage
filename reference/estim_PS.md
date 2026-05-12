@@ -32,9 +32,8 @@ estim_PS(
 
 - admixMod:
 
-  An object of class [admix_model](admix_model.md), containing
-  information about the known component distribution and its
-  parameter(s).
+  An object of class [admix_model](admix_model.md), with information
+  about the known distribution and associated known parameter(s).
 
 - method:
 

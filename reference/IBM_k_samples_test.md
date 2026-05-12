@@ -35,7 +35,7 @@ IBM_k_samples_test(
 - admixMod:
 
   A list of objects of class [admix_model](admix_model.md), containing
-  useful information about distributions and parameters.
+  information about known distributions and known associated parameters.
 
 - conf_level:
 

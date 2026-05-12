@@ -94,11 +94,12 @@ The admixture weights \(p_1\) and \(p_2\) thus have to be estimated. For further
 
 
 <dl><dt id="arg-samples">samples<a class="anchor" aria-label="anchor" href="#arg-samples"></a></dt>
-<dd><p>List of the two samples, each one following the mixture distribution with f and p unknown and g known.</p></dd>
+<dd><p>List of the two samples, each one following an admixture distribution.</p></dd>
 
 
 <dt id="arg-admixmod">admixMod<a class="anchor" aria-label="anchor" href="#arg-admixmod"></a></dt>
-<dd><p>A list of objects of class <a href="admix_model.html">admix_model</a>, containing useful information about distributions and parameters.</p></dd>
+<dd><p>A list of two objects of class <a href="admix_model.html">admix_model</a>, one for each sample. Each object
+contains information about the known distribution and associated known parameter(s).</p></dd>
 
 
 <dt id="arg-conf-level">conf_level<a class="anchor" aria-label="anchor" href="#arg-conf-level"></a></dt>

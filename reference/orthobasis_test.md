@@ -32,13 +32,13 @@ orthobasis_test(
 
 - samples:
 
-  List of the two samples, each one following the mixture distribution
-  with f and p unknown and g known.
+  List of the two samples, each one following an admixture distribution.
 
 - admixMod:
 
-  A list of objects of class [admix_model](admix_model.md), containing
-  useful information about distributions and parameters.
+  A list of two objects of class [admix_model](admix_model.md), one for
+  each sample. Each object contains information about the known
+  distribution and associated known parameter(s).
 
 - conf_level:
 

@@ -22,7 +22,8 @@ estim_IBM(samples, admixMod, n.integ = 1000, compute_var = FALSE)
 - admixMod:
 
   A list of two objects of class [admix_model](admix_model.md), one for
-  each sample.
+  each sample. Each object contains information about the known
+  distribution and associated known parameter(s).
 
 - n.integ:
 

@@ -23,8 +23,8 @@ admix_estim(samples, admixMod, est_method = c("PS", "BVdk", "IBM"), ...)
 
 - admixMod:
 
-  A list of objects of class [admix_model](admix_model.md), containing
-  useful information about distributions and parameters.
+  A list of objects of class [admix_model](admix_model.md), with
+  information about known distributions and known parameters.
 
 - est_method:
 

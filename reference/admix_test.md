@@ -32,9 +32,8 @@ admix_test(
 
 - admixMod:
 
-  A list of objects of class [admix_model](admix_model.md), containing
-  useful information about distributions and parameters of the
-  contamination / admixture models under study.
+  A list of objects of class [admix_model](admix_model.md), with
+  information about known distributions and known parameters.
 
 - test_method:
 
