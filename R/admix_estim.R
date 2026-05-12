@@ -206,24 +206,24 @@ print.admix_estim <- function(x, ...) {
       format(round(obj$estimated_mixing_weights, 3), nsmall = 3)
     })
     sizes <- sapply(x$estim_objects, function(obj) { obj$population_sizes })
-    df <- data.frame(Sample = sample_names, Size = sizes, `Mix.weight` = weights, check.names = FALSE)
+    df <- data.frame(sample = sample_names, size = sizes, `mix_weight` = weights, check.names = FALSE)
     if (inherits(x, "estim_BVdk")) {
-      df$Location <- sapply(x$estim_objects, function(obj) { format(round(obj$estimated_locations, 2), nsmall = 2) })
+      df$location <- sapply(x$estim_objects, function(obj) { format(round(obj$estimated_locations, 2), nsmall = 2) })
       if (!is.na(x$estim_objects[[1]]$mix_weight_variance) && !is.na(x$estim_objects[[1]]$location_variance)) {
-        df$var.Mix.weight <- sapply(x$estim_objects, function(obj) { format(round(obj$mix_weight_variance, 5), nsmall = 5) })
-        df$var.location <- sapply(x$estim_objects, function(obj) { format(round(obj$location_variance, 5), nsmall = 5) })
+        df$var_mix_weight <- sapply(x$estim_objects, function(obj) { format(round(obj$mix_weight_variance, 5), nsmall = 5) })
+        df$var_location <- sapply(x$estim_objects, function(obj) { format(round(obj$location_variance, 5), nsmall = 5) })
       }
     }
     print(df, row.names = FALSE, right = TRUE)
   }
 
-  if (inherits(x, "estim_PS")) {
-    cat("\n Use `?estim_PS` for details on the penalization term.\n")
-  } else if (inherits(x, "estim_BVdk")) {
-    cat("\n Use `?estim_BVdk` for details on the optimization method.\n")
-  } else {
-    cat("\n Use `?estim_IBM` for further details.\n")
-  }
+#  if (inherits(x, "estim_PS")) {
+#    cat("\n Use `?estim_PS` for details on the penalization term.\n")
+#  } else if (inherits(x, "estim_BVdk")) {
+#    cat("\n Use `?estim_BVdk` for details on the optimization method.\n")
+#  } else {
+#    cat("\n Use `?estim_IBM` for further details.\n")
+#  }
   invisible(x)
 }
 

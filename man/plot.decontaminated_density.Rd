@@ -4,7 +4,15 @@
 \alias{plot.decontaminated_density}
 \title{Plot method for object of class \code{decontaminated_density}}
 \usage{
-\method{plot}{decontaminated_density}(x, x_val = NULL, add_plot = FALSE, offset = 0, bar_width = 0.3, ...)
+\method{plot}{decontaminated_density}(
+  x,
+  x_val = NULL,
+  add_plot = FALSE,
+  offset = 0,
+  bar_width = 0.3,
+  main = "pdf of the unknown component",
+  ...
+)
 }
 \arguments{
 \item{x}{An object of class \code{decontaminated_density} (see ?decontaminated_density).}
@@ -16,6 +24,9 @@
 \item{offset}{Numeric. Position of the bars relative to the labels on the x-axis.}
 
 \item{bar_width}{Width of bars to be plotted.}
+
+\item{main}{The title of the plot (typically 'probability density function of the unknown component',
+or 'probability mass function of the unknown component').}
 
 \item{...}{Arguments to be passed to generic method \code{plot}, such as graphical parameters (see ?par).}
 }
@@ -83,7 +94,7 @@ y <- decontaminated_density(sample1 = data2, admixMod = admixMod2,
                             estim.p = get_mixing_weights(est)[2])
 z <- decontaminated_density(sample1 = data3, admixMod = admixMod3,
                             estim.p = get_mixing_weights(est2))
-plot(x, offset = -0.2, bar_width = 0.2, col = "steelblue")
+plot(x, offset = -0.2, bar_width = 0.2, main = "pmf of the unknown component", col = "steelblue")
 plot(y, add_plot = TRUE, offset = 0, bar_width = 0.2, col = "red")
 plot(z, add_plot = TRUE, offset = 0.2, bar_width = 0.2, col = "orange")
 legend("topright", legend = c("data1","data2","data3"), col = c("steelblue","red","orange"),

@@ -60,7 +60,7 @@ admix_model <- function(knownComp_dist, knownComp_param)
 
 print.admix_model <- function(x, ...)
 {
-  cat("Call:\n")
+  cat("\nCall:\n")
   print(x$call)
   cat("\n")
   cat("Known component distribution: ", x$comp.dist$known,"\n",sep = "")

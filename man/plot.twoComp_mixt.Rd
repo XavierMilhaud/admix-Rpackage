@@ -4,7 +4,14 @@
 \alias{plot.twoComp_mixt}
 \title{Plot the empirical mixture pdf}
 \usage{
-\method{plot}{twoComp_mixt}(x, add_plot = FALSE, offset = 0, bar_width = 0.2, ...)
+\method{plot}{twoComp_mixt}(
+  x,
+  add_plot = FALSE,
+  offset = 0,
+  bar_width = 0.2,
+  main = "Mixture distribution (density or mass function)",
+  ...
+)
 }
 \arguments{
 \item{x}{Object of class \code{twoComp_mixt} from which the density will be plotted.}
@@ -14,6 +21,8 @@
 \item{offset}{Numeric. Position of the bars relative to the labels on the x-axis.}
 
 \item{bar_width}{Width of bars to be plotted.}
+
+\item{main}{The title of the plot.}
 
 \item{...}{further classical arguments and graphical parameters for methods plot and hist.}
 }

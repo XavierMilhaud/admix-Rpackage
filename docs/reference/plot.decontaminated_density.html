@@ -48,7 +48,15 @@ cumulative distribution functions.</p>
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for class 'decontaminated_density'</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, x_val <span class="op">=</span> <span class="cn">NULL</span>, add_plot <span class="op">=</span> <span class="cn">FALSE</span>, offset <span class="op">=</span> <span class="fl">0</span>, bar_width <span class="op">=</span> <span class="fl">0.3</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  x_val <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  add_plot <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  offset <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  bar_width <span class="op">=</span> <span class="fl">0.3</span>,</span>
+<span>  main <span class="op">=</span> <span class="st">"pdf of the unknown component"</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -73,6 +81,11 @@ cumulative distribution functions.</p>
 
 <dt id="arg-bar-width">bar_width<a class="anchor" aria-label="anchor" href="#arg-bar-width"></a></dt>
 <dd><p>Width of bars to be plotted.</p></dd>
+
+
+<dt id="arg-main">main<a class="anchor" aria-label="anchor" href="#arg-main"></a></dt>
+<dd><p>The title of the plot (typically 'probability density function of the unknown component',
+or 'probability mass function of the unknown component').</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -150,7 +163,7 @@ unknown component f after having estimated p and l.</p>
 <span class="r-in"><span>                            estim.p <span class="op">=</span> <span class="fu"><a href="get_mixing_weights.html">get_mixing_weights</a></span><span class="op">(</span><span class="va">est</span><span class="op">)</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="decontaminated_density.html">decontaminated_density</a></span><span class="op">(</span>sample1 <span class="op">=</span> <span class="va">data3</span>, admixMod <span class="op">=</span> <span class="va">admixMod3</span>,</span></span>
 <span class="r-in"><span>                            estim.p <span class="op">=</span> <span class="fu"><a href="get_mixing_weights.html">get_mixing_weights</a></span><span class="op">(</span><span class="va">est2</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, offset <span class="op">=</span> <span class="op">-</span><span class="fl">0.2</span>, bar_width <span class="op">=</span> <span class="fl">0.2</span>, col <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span>, offset <span class="op">=</span> <span class="op">-</span><span class="fl">0.2</span>, bar_width <span class="op">=</span> <span class="fl">0.2</span>, main <span class="op">=</span> <span class="st">"pmf of the unknown component"</span>, col <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">y</span>, add_plot <span class="op">=</span> <span class="cn">TRUE</span>, offset <span class="op">=</span> <span class="fl">0</span>, bar_width <span class="op">=</span> <span class="fl">0.2</span>, col <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">z</span>, add_plot <span class="op">=</span> <span class="cn">TRUE</span>, offset <span class="op">=</span> <span class="fl">0.2</span>, bar_width <span class="op">=</span> <span class="fl">0.2</span>, col <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/legend.html" class="external-link">legend</a></span><span class="op">(</span><span class="st">"topright"</span>, legend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"data1"</span>,<span class="st">"data2"</span>,<span class="st">"data3"</span><span class="op">)</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"steelblue"</span>,<span class="st">"red"</span>,<span class="st">"orange"</span><span class="op">)</span>,</span></span>

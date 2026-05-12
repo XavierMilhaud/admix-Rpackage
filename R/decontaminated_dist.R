@@ -216,6 +216,8 @@ summary.decontaminated_density <- function(object, ...)
 #' @param add_plot Boolean, TRUE when a new plot is added to the existing one.
 #' @param offset Numeric. Position of the bars relative to the labels on the x-axis.
 #' @param bar_width Width of bars to be plotted.
+#' @param main The title of the plot (typically 'probability density function of the unknown component',
+#'              or 'probability mass function of the unknown component').
 #' @param ... Arguments to be passed to generic method \code{plot}, such as graphical parameters (see ?par).
 #'
 #' @details The decontaminated density is obtained by inverting the admixture density, given by l = p*f + (1-p)*g, to isolate the
@@ -276,7 +278,7 @@ summary.decontaminated_density <- function(object, ...)
 #'                             estim.p = get_mixing_weights(est)[2])
 #' z <- decontaminated_density(sample1 = data3, admixMod = admixMod3,
 #'                             estim.p = get_mixing_weights(est2))
-#' plot(x, offset = -0.2, bar_width = 0.2, col = "steelblue")
+#' plot(x, offset = -0.2, bar_width = 0.2, main = "pmf of the unknown component", col = "steelblue")
 #' plot(y, add_plot = TRUE, offset = 0, bar_width = 0.2, col = "red")
 #' plot(z, add_plot = TRUE, offset = 0.2, bar_width = 0.2, col = "orange")
 #' legend("topright", legend = c("data1","data2","data3"), col = c("steelblue","red","orange"),
@@ -285,7 +287,8 @@ summary.decontaminated_density <- function(object, ...)
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 
-plot.decontaminated_density <- function(x, x_val = NULL, add_plot = FALSE, offset = 0, bar_width = 0.3, ...)
+plot.decontaminated_density <- function(x, x_val = NULL, add_plot = FALSE, offset = 0,
+                                        bar_width = 0.3, main = "pdf of the unknown component", ...)
 {
   support <- x$support
   if (!is.null(x_val)) {
@@ -305,12 +308,10 @@ plot.decontaminated_density <- function(x, x_val = NULL, add_plot = FALSE, offse
     if (support == "Discrete") {
       ## initialise an empty plot
       plot(range(x_val), range(0, decontamin_dens_values * 1.1), type="n",
-           xaxt="n", xlab = "x", ylab = "probability",
-           main = "pmf of the unknown component",...)
+           xaxt="n", xlab = "x", ylab = "probability", main = main, ...)
       graphics::axis(1, at=x_val, labels=as.character(x_val))
     } else {
-      plot(x = x_val, y = decontamin_dens_values, type="l", xlab = "x", ylab = "density",
-           main = "pdf of the unknown component", ...)
+      plot(x = x_val, y = decontamin_dens_values, type="l", xlab = "x", ylab = "density", main = main, ...)
     }
   }
 

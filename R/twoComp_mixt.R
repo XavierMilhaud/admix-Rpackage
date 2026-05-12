@@ -183,6 +183,7 @@ summary.twoComp_mixt <- function(object, ...)
 #' @param add_plot (default to FALSE) Option to plot another mixture distribution on the same graph.
 #' @param offset Numeric. Position of the bars relative to the labels on the x-axis.
 #' @param bar_width Width of bars to be plotted.
+#' @param main The title of the plot.
 #' @param ... further classical arguments and graphical parameters for methods plot and hist.
 #'
 #' @return A plot with the densities of the samples provided as inputs.
@@ -224,7 +225,8 @@ summary.twoComp_mixt <- function(object, ...)
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @export
 #'
-plot.twoComp_mixt <- function(x, add_plot = FALSE, offset = 0, bar_width = 0.2, ...)
+plot.twoComp_mixt <- function(x, add_plot = FALSE, offset = 0, bar_width = 0.2,
+                              main = "Mixture distribution (density or mass function)", ...)
 {
   if (all(x$dist.type == "Discrete") | all(x$dist.type == "Multivariate")) {
     ## Discrete data and density
@@ -234,7 +236,7 @@ plot.twoComp_mixt <- function(x, add_plot = FALSE, offset = 0, bar_width = 0.2, 
     if (!add_plot) {
       ## Initialise graphic window
       plot(range(x_val), range(0, heights * 1.1), type="n", xaxt="n",
-           xlab="support", ylab="probability mass", main = "Probability mass function", ...)
+           xlab="support", ylab="probability mass", main = main, ...)
       graphics::axis(1, at=x_val, labels=as.character(x_val))
     }
     ## Bars
@@ -247,7 +249,7 @@ plot.twoComp_mixt <- function(x, add_plot = FALSE, offset = 0, bar_width = 0.2, 
   } else {
     ## Continuous case: densities
     densities <- stats::density(x$mixt.data)
-    if (!add_plot) { plot(densities, xlab = "support", main = "Probability density function", ...)
+    if (!add_plot) { plot(densities, xlab = "support", main = main, ...)
     } else {
       graphics::lines(densities, main = "", ...)
     }
