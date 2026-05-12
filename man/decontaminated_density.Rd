@@ -9,7 +9,8 @@ decontaminated_density(sample1, admixMod, estim.p)
 \arguments{
 \item{sample1}{Numeric vector, sample under study.}
 
-\item{admixMod}{An object of class \code{admix_model}, containing useful information about known distribution(s) and parameter(s).}
+\item{admixMod}{An object of class \link[admix]{admix_model}, with information about the
+known distribution and associated known parameter(s).}
 
 \item{estim.p}{Numeric. The estimated mixing proportion \eqn{\hat{p}} of the unknown component.}
 }

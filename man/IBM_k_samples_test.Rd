@@ -18,7 +18,8 @@ IBM_k_samples_test(
 \arguments{
 \item{samples}{A list of the K samples to be studied, all following admixture distributions.}
 
-\item{admixMod}{A list of objects of class \link[admix]{admix_model}, containing useful information about distributions and parameters.}
+\item{admixMod}{A list of objects of class \link[admix]{admix_model}, containing information about known distributions and
+known associated parameters.}
 
 \item{conf_level}{The confidence level of the K-sample test.}
 

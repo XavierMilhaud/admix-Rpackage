@@ -12,7 +12,7 @@
 #' defined by Bordes & Vandekerkhove (2010), meaning that the unknown mixture component must have a symmetric density.
 #'
 #' @param sample (numeric) The sample under study.
-#' @param admixMod An object of class \link[admix]{admix_model}, containing useful information about distributions and parameters.
+#' @param admixMod An object of class \link[admix]{admix_model}, with information about the known distribution and associated known parameter(s).
 #' @param conf_level (default to 0.95) The confidence level. Equals 1-alpha, where alpha is the level of the test (type-I error).
 #' @param ask_poly_param (default to FALSE) If TRUE, ask the user to choose both the order 'K' of expansion coefficients in the
 #'                        orthonormal polynomial basis, and the penalization rate 's' involved on the penalization rule for the test.

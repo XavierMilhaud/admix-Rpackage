@@ -5,7 +5,7 @@
 #'
 #' @param samples A named list of the K (K>1) samples to be studied, all following admixture distributions.
 #'                If names are provided, they are used in the output to identify samples; otherwise default labels are used.
-#' @param admixMod A list of objects of class \link[admix]{admix_model}, containing useful information about distributions and parameters.
+#' @param admixMod A list of objects of class \link[admix]{admix_model}, with information about known distributions and known parameters.
 #' @param conf_level (default to 0.95) The confidence level of the k-sample tests used in the clustering procedure.
 #' @param tune_penalty (default to TRUE) A boolean that allows to choose between a classical penalty term or an optimized penalty (embedding
 #'                     some tuning parameters, automatically optimized). Optimized penalty is particularly useful for low/mid-sized samples,

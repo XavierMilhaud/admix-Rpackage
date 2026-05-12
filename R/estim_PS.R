@@ -9,7 +9,8 @@
 #' More information in 'Details' below concerning the estimation method.
 #'
 #' @param samples Sample to be studied.
-#' @param admixMod An object of class \link[admix]{admix_model}, containing information about the known component distribution and its parameter(s).
+#' @param admixMod An object of class \link[admix]{admix_model}, with information about the
+#'                 known distribution and associated known parameter(s).
 #' @param method One of 'lwr.bnd', fixed' or 'cv': depending on whether compute some lower bound of the mixing proportion, the estimate
 #'               based on the value of 'c.n' or use cross-validation for choosing 'c.n' (tuning parameter).
 #' @param c.n (default to NULL) A positive number for the penalization, see reference below. If NULL, equals to 0.1*log(log(n)).

@@ -19,7 +19,8 @@ estim_PS(
 \arguments{
 \item{samples}{Sample to be studied.}
 
-\item{admixMod}{An object of class \link[admix]{admix_model}, containing information about the known component distribution and its parameter(s).}
+\item{admixMod}{An object of class \link[admix]{admix_model}, with information about the
+known distribution and associated known parameter(s).}
 
 \item{method}{One of 'lwr.bnd', fixed' or 'cv': depending on whether compute some lower bound of the mixing proportion, the estimate
 based on the value of 'c.n' or use cross-validation for choosing 'c.n' (tuning parameter).}

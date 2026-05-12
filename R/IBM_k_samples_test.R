@@ -12,7 +12,8 @@
 #' }
 #'
 #' @param samples A list of the K samples to be studied, all following admixture distributions.
-#' @param admixMod A list of objects of class \link[admix]{admix_model}, containing useful information about distributions and parameters.
+#' @param admixMod A list of objects of class \link[admix]{admix_model}, containing information about known distributions and
+#'                 known associated parameters.
 #' @param conf_level The confidence level of the K-sample test.
 #' @param sim_U (default to NULL) Random draws of the inner convergence part of the contrast as defined in the IBM approach (see references below).
 #' @param tune_penalty (default to TRUE) A boolean that allows to choose between a classical penalty term or an optimized penalty (embedding

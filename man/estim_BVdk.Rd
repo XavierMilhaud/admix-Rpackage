@@ -14,7 +14,8 @@ estim_BVdk(
 \arguments{
 \item{samples}{The observed sample under study.}
 
-\item{admixMod}{An object of class \link[admix]{admix_model}, containing useful information about distributions and parameters.}
+\item{admixMod}{An object of class \link[admix]{admix_model}, with information about the
+known distribution and associated known parameter(s).}
 
 \item{method}{The method used throughout the optimization process, either 'L-BFGS-B' or 'Nelder-Mead' (see ?optim).}
 

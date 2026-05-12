@@ -12,8 +12,9 @@
 #' where \eqn{g_1} and \eqn{g_2} are the only known elements and \eqn{\ell_1} and \eqn{\ell_2} are observed.
 #' The admixture weights \eqn{p_1} and \eqn{p_2} thus have to be estimated. For further information on this method, see 'Details' below.
 #'
-#' @param samples List of the two samples, each one following the mixture distribution with f and p unknown and g known.
-#' @param admixMod A list of objects of class \link[admix]{admix_model}, containing useful information about distributions and parameters.
+#' @param samples List of the two samples, each one following an admixture distribution.
+#' @param admixMod A list of two objects of class \link[admix]{admix_model}, one for each sample. Each object
+#'                 contains information about the known distribution and associated known parameter(s).
 #' @param conf_level The confidence level, default to 95 percent. Equals 1-alpha, where alpha is the level of the test (type-I error).
 #' @param est_method Estimation method to get the component weights, either 'PS' (Patra and Sen estimation) or 'BVdk'
 #'                   (Bordes and Vendekerkhove estimation). Choosing 'PS' requires to specify the number of bootstrap samples.

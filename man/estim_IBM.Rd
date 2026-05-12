@@ -9,7 +9,8 @@ estim_IBM(samples, admixMod, n.integ = 1000, compute_var = FALSE)
 \arguments{
 \item{samples}{A list of the two considered samples.}
 
-\item{admixMod}{A list of two objects of class \link[admix]{admix_model}, one for each sample.}
+\item{admixMod}{A list of two objects of class \link[admix]{admix_model}, one for each sample. Each object
+contains information about the known distribution and associated known parameter(s).}
 
 \item{n.integ}{Number of data points generated for the distribution on which to integrate.}
 

@@ -19,9 +19,10 @@ orthobasis_test(
 )
 }
 \arguments{
-\item{samples}{List of the two samples, each one following the mixture distribution with f and p unknown and g known.}
+\item{samples}{List of the two samples, each one following an admixture distribution.}
 
-\item{admixMod}{A list of objects of class \link[admix]{admix_model}, containing useful information about distributions and parameters.}
+\item{admixMod}{A list of two objects of class \link[admix]{admix_model}, one for each sample. Each object
+contains information about the known distribution and associated known parameter(s).}
 
 \item{conf_level}{The confidence level, default to 95 percent. Equals 1-alpha, where alpha is the level of the test (type-I error).}
 

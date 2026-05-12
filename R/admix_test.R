@@ -11,8 +11,7 @@
 #' See 'Details' below for further information.
 #'
 #' @param samples A list of the K (K > 0) samples to be studied, each one assumed to follow a mixture distribution.
-#' @param admixMod A list of objects of class \link[admix]{admix_model}, containing useful information about distributions and parameters
-#'                 of the contamination / admixture models under study.
+#' @param admixMod A list of objects of class \link[admix]{admix_model}, with information about known distributions and known parameters.
 #' @param test_method The testing method to be applied. Can be either 'poly' (polynomial basis expansion) or 'icv' (inner
 #'                    convergence from IBM). The same testing method is performed between all samples. In the one-sample case,
 #'                    only 'poly' is available and the test is a gaussianity test. For further details, see section 'Details' below.

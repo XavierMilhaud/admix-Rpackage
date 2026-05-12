@@ -10,7 +10,8 @@
 #' See the reference below for further details.
 #'
 #' @param samples The observed sample under study.
-#' @param admixMod An object of class \link[admix]{admix_model}, containing useful information about distributions and parameters.
+#' @param admixMod An object of class \link[admix]{admix_model}, with information about the
+#'                 known distribution and associated known parameter(s).
 #' @param method The method used throughout the optimization process, either 'L-BFGS-B' or 'Nelder-Mead' (see ?optim).
 #' @param compute_var (default to FALSE) A boolean that indicates whether one computes the variance
 #'                    of the estimators of unknown mixing proportions and location shift parameter.

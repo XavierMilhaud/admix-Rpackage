@@ -9,7 +9,8 @@
 #' For further details about IBM approach, see 'Details' below.
 #'
 #' @param samples A list of the two considered samples.
-#' @param admixMod A list of two objects of class \link[admix]{admix_model}, one for each sample.
+#' @param admixMod A list of two objects of class \link[admix]{admix_model}, one for each sample. Each object
+#'                 contains information about the known distribution and associated known parameter(s).
 #' @param n.integ Number of data points generated for the distribution on which to integrate.
 #' @param compute_var (default to FALSE) A boolean that indicates whether one computes the variance
 #'                    of the estimators of unknown mixing proportions.

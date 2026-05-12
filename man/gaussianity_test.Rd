@@ -18,7 +18,7 @@ gaussianity_test(
 \arguments{
 \item{sample}{(numeric) The sample under study.}
 
-\item{admixMod}{An object of class \link[admix]{admix_model}, containing useful information about distributions and parameters.}
+\item{admixMod}{An object of class \link[admix]{admix_model}, with information about the known distribution and associated known parameter(s).}
 
 \item{conf_level}{(default to 0.95) The confidence level. Equals 1-alpha, where alpha is the level of the test (type-I error).}
 

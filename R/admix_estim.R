@@ -11,7 +11,7 @@
 #' \eqn{p_i} and \eqn{f_i} then have to be estimated.
 #'
 #' @param samples A list of the K (K>0) samples to be studied, all following admixture distributions.
-#' @param admixMod A list of objects of class \link[admix]{admix_model}, containing useful information about distributions and parameters.
+#' @param admixMod A list of objects of class \link[admix]{admix_model}, with information about known distributions and known parameters.
 #' @param est_method The estimation method to be applied. Can be one of 'BVdk' (Bordes and Vandekerkhove estimator), 'PS' (Patra and Sen
 #'         estimator), or 'IBM' (Inversion Best-Matching approach) in the continuous case (continuous random variable). Only 'IBM' for
 #'         discrete random variables. The same estimation method is performed on each sample if several samples are provided.
