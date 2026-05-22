@@ -62,15 +62,18 @@ gaussianity_test <- function(sample, admixMod, conf_level = 0.95, ask_poly_param
   support <- match.arg(support)
 
   if (ask_poly_param) {
-    K.user <- base::readline("Please enter 'K' (integer), the order for the polynomial expansion in the orthonormal basis: ")
-    s.user <- base::readline("Please enter 's' in ]0,0.5[, involved in the penalization rule for model selection where lower values of 's' lead to more powerful tests: ")
+    K.user <- as.integer(base::readline("Please enter 'K' (integer), the order for the polynomial expansion in the orthonormal basis: "))
+    s.user <- as.numeric(base::readline("Please enter 's' in ]0,0.5[, involved in the penalization rule for model selection where lower values of 's' lead to more powerful tests: "))
   } else {
     K.user <- K
     s.user <- s
   }
+  if (is.na(K.user) || K.user <= 0)
+    stop("'K' must be a positive integer.")
+  if (is.na(s.user) || s.user <= 0 || s.user >= 0.5)
+    stop("The penalty exponent 's' was not correctly defined.")
 
   if (any(admixMod$comp.dist == "multinom")) stop("Gaussianity test for contamination models with multinomial known distribution is not supported.\n")
-  if ((s.user <= 0) | (s.user >= 0.5)) stop("The penalty exponent 's' was not correctly defined.")
 
   ## Extract the information on component distributions:
   comp.dist.dens <- paste0("d", admixMod$comp.dist$known)
@@ -140,13 +143,20 @@ gaussianity_test <- function(sample, admixMod, conf_level = 0.95, ask_poly_param
 	                                   method = "pcubature")$integral
 	}
   #hat_s2 <- (1/hat_p) * ( mean(sample^2) - ((1-hat_p) * m2_knownComp) ) - (1/hat_p^2) * (mean(sample)-(1-hat_p)*m1_knownComp)^2
+	if (!is.finite(hat_s2) || length(hat_s2) == 0 || hat_s2 <= 0) {
+	  warning("Estimated variance is invalid; replacing with sample variance.")
+	  hat_s2 <- stats::var(sample)
+	}
+	if (!is.finite(total_weight) || length(total_weight) == 0 || total_weight <= 0) {
+	  stop("Failed to estimate normalization constant.")
+	}
 
 	##-------- Compute test statistics with data 'data.coef' -----------##
 	stat.R <- matrix(rep(NA, n.coef*K.user), nrow = K.user, ncol = n.coef)
 	## Plug-in (estimation of param. 'mu' et 's') to deduce coef. in Hermite polynomial orthonormal basis:
-	coef.known <- unlist(lapply(X = orthoBasis_coef(data = eval(parse(text = expr.sim)), supp = support, degree = K.user, m = 3, other = NULL), FUN = mean))
+	coef.known <- unlist(lapply(X = orthoBasis_coef(data = eval(parse(text = expr.sim)), supp = support, degree = K.user, m = 3, bounds = NULL), FUN = mean))
 	## Gaussianity test implies to assume a gaussian distribution of the unknown component:
-	coef.unknown <- unlist(lapply(X = orthoBasis_coef(data = stats::rnorm(100000, hat_loc, sqrt(hat_s2)), supp = support, degree = K.user, m = 3, other = NULL), FUN = mean))
+	coef.unknown <- unlist(lapply(X = orthoBasis_coef(data = stats::rnorm(100000, hat_loc, sqrt(hat_s2)), supp = support, degree = K.user, m = 3, bounds = NULL), FUN = mean))
 
 	## Cf definition of R_kn below formula (12) p.5 :
 	poly_basis <- poly_orthonormal_basis(support = support, deg = K.user, x = data.coef, m = 3)
@@ -181,6 +191,10 @@ gaussianity_test <- function(sample, admixMod, conf_level = 0.95, ask_poly_param
 	  test.statistic[k] <- val + n^s.user * statistics.R[k]^2 * var.R[k,k]^(-1) - log(n)
 		val <- test.statistic[k]
 	}
+	if (all(is.na(test.statistic))) {
+	  stop("All test statistics are NA.")
+	}
+
 	## Select the right order (optimal number of coefficients needed in the expansion) :
 	selected.index <- which.max(test.statistic)
 	## Then remove previously introduced penalty in the selection rule to get back to the test statistic (Equation (14) p.5):

@@ -318,13 +318,15 @@ IBM_k_samples_test <- function(samples, admixMod, conf_level = 0.95, sim_U = NUL
     names(stat_param) <- "number of terms S"
     estimated_values <- vector(mode = "numeric", length = 2L)
     estimated_values <- c(gamma_opt, cst_selected)
-    names(estimated_values) <- c("tuned Gamma","tuned C")
+    names(estimated_values) <- c("Tuned Gamma","Tuned C")
 
     obj <- list(
       #null.value = null_val,
+      calibrated_quantile = null_val,
       alternative = "Distributions of unknown components involved \n                        in the contamination models are different",
       method = "Equality test of unknown distributions using Inner ConVergence regime",
       #estimate = estimated_values,
+      tuning_param = estimated_values,
       data.name = deparse(substitute(samples)),
       statistic = finalStat_value,
       parameters = stat_param,
@@ -414,13 +416,15 @@ summary.IBM_test <- function(object, ...)
   cat("\n* Value of the test statistic: ", round(object$statistic,2), "\n", sep="")
   cat("* Discrepancy terms involved in the statistic: ", paste(object$statistic_name, sep = ""), "\n", sep = "")
   cat("* Optimal tuning parameters (if argument 'tune.penalty' is true):\n")
-  cat("- Gamma: ", object$estimate["Tuned Gamma"], "\n", sep = "")
-  cat("- Constant: ", object$estimate["Tuned constant C"], "\n", sep = "")
+  cat("- Gamma: ", object$tuning_param["Tuned Gamma"], "\n", sep = "")
+  cat("- Constant: ", object$tuning_param["Tuned C"], "\n", sep = "")
   cat("* Chosen penalty rule: ", ifelse(object$penalty_nullHyp, "H0", "H1"), sep = "")
-  cat("\n\n----- Tabulated test statistic distribution -----\n")
-  cat("* Quantile at level ", object$confidence_level*100, "%: ", round(object$null.value, 3), "\n", sep = "")
-  cat("* Tabulated distribution: ", paste(utils::head(round(sort(object$tabulated_dist),2),3), collapse = " "), "....",
-      paste(utils::tail(round(sort(object$tabulated_dist),2),3), collapse = " "), "\n", sep = "")
+  if (!is.null(object$calibrated_quantile)) {
+    cat("\n\n----- Tabulated test statistic distribution -----\n")
+    cat("* Quantile at level ", object$confidence_level*100, "%: ", round(object$calibrated_quantile, 3), "\n", sep = "")
+    cat("* Tabulated distribution: ", paste(utils::head(round(sort(object$tabulated_dist),2),3), collapse = " "), "....",
+        paste(utils::tail(round(sort(object$tabulated_dist),2),3), collapse = " "), "\n", sep = "")
+  }
   cat("\n")
 }
 
@@ -546,6 +550,7 @@ IBM_2samples_test <- function(samples, admixMod, conf_level = 0.95, parallel = F
 
   obj <- list(
     #null.value = null_val,
+    calibrated_quantile = null_val,
     alternative = "Distributions of unknown components involved \n                        in the contamination models are different",
     method = "Equality test of unknown distributions using Inner ConVergence regime",
     #estimate = estimated_values,

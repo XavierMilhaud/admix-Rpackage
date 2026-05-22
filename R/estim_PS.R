@@ -112,7 +112,7 @@ estim_PS <- function(samples, admixMod, method = c("fixed", "lwr.bnd", "cv"),
   sample_expr <- match.call()$samples
   sample_names <- as.character(sample_expr)[-1]
   ## fallback if not retrievable
-  if (is.null(sample_names)) { sample_names <- "Sample_1" }
+  if (is.null(sample_names)) { sample_names <- "Sample_1" } # nocov
   ret <- list(
 	  n_populations = 1,
 	  population_sizes = length(samples),
@@ -218,7 +218,7 @@ summary.estim_PS <- function(object, show.call = TRUE, ...) {
     if (!is.null(object$c.n)) {
       cat("c_n (penalization):", format(round(object$c.n, 3), nsmall = 3), "\n")
     }
-    cat("Selection method:", switch(object$method, "fixed" = "fixed c_n", "cv"    = "cross-validation", object$method),"\n")
+    cat("Selection method:", switch(object$method, "fixed" = "fixed c_n", "cv" = "cross-validation", object$method),"\n")
   }
 
   cat("\nUse `?estim_PS` for details on the penalization term.\n")
@@ -285,7 +285,7 @@ summary.estim_PS <- function(object, show.call = TRUE, ...) {
 
 estimCV_PS <- function(data, admixMod, folds = 10, reps = 1, cn.s = NULL, cn.length = NULL, gridsize = 200)
 {
-  if (!is.vector(data)) stop("'data' has to be a vector.")
+  if (!is.numeric(data)) stop("'data' has to be a numerical vector")
   n <- length(data)
   # cvFolds(length(data), K = folds, R = reps, type = "random")
 
@@ -374,7 +374,7 @@ print.estimCV_PS <- function(x,...)
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @noRd
 
-plot.PS_estimCV <- function(x,...)
+plot.estimCV_PS <- function(x,...)
 {
   plot(x$cn.s, x$score, ylab= "cross validation score", xlab= "c_n" )
 }

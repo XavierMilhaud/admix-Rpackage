@@ -88,7 +88,7 @@ admix_cluster <- function(samples, admixMod, conf_level = 0.95, tune_penalty = T
   if (is.call(sample_expr) && sample_expr[[1]] == as.name("list")) {
     expr_list <- as.list(sample_expr)[-1]
     sample_names <- names(expr_list)
-    unnamed <- is.null(sample_names) || sample_names == ""
+    unnamed <- is.null(sample_names) || any(sample_names == "")
     if (all(unnamed)) {
       sample_names <- sapply(expr_list, deparse)
     } else {

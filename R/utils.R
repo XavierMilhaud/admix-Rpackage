@@ -26,7 +26,7 @@ admixStartupMessage <- function()
 }
 
 
-.onLoad <- function(libname, pkgname) {
+.onLoad <- function(libname, pkgname) { # nocov start
   ns <- asNamespace(pkgname)
   # si les fonctions méthodes existent dans le namespace, enregistre-les
   if (exists("get_mixture_data.twoComp_mixt", envir = ns, inherits = FALSE)) {
@@ -121,7 +121,7 @@ admixStartupMessage <- function()
     registerS3method("get_cluster_sizes", "admix_cluster",
                      get("get_cluster_sizes.admix_cluster", envir = ns), envir = ns)
   }
-}
+} # nocov end
 
 
 #' Check the validity of the specified distributions
@@ -159,7 +159,7 @@ get_distribution_parameters <- function(dist) {
 #' Check the validity of the specified distribution and parameter(s)
 #'
 #' @param dist A single string naming the distribution under consideration.
-#' @param params A character vector composed of the names of the parameters for a given distribution.
+#' @param params A named list of parameters for the distribution under consideration.
 #'
 #' @return A vector composed of the names of the parameters of the distribution.
 #'
@@ -210,7 +210,7 @@ validate_distribution <- function(dist, params)
 
   ## --- Validation of supplied parameters ------------------------
   supplied_params <- names(params)
-  ok <- any(vapply(valid_param_sets, function(x) identical(x, supplied_params), logical(1)))
+  ok <- any(vapply(valid_param_sets, function(x) setequal(x, supplied_params), logical(1)))
   if (!ok) {
     expected_txt <- vapply(valid_param_sets, paste, collapse = ", ", FUN.VALUE = character(1))
     stop("Invalid parameter names for distribution `", dist, "`.\nExpected:\n  - ", paste(expected_txt, collapse = "\n  - "))
@@ -248,8 +248,8 @@ distribution_type <- function(dist)
 #' Detect the type of support of some random variables
 #'
 #' Given one or two sets of observations (samples), the function provides with the most plausible type of support for the
-#' underlying random variables to be studied. If less than 3 percents of the observations have different values,
-#' we consider that the support is discrete. Otherwise, we consider it as a continuous support.
+#' underlying random variables to be studied. If there are too many duplicated values, we consider that the support is discrete.
+#' Otherwise, we consider it as a continuous support.
 #'
 #' @param sample1 The first sample of observations under study.
 #' @param sample2 The second sample of observations under study.
@@ -276,16 +276,21 @@ distribution_type <- function(dist)
 
 detect_support_type <- function(sample1, sample2 = NULL)
 {
-  if (is.null(sample2)) {
-    ## Number of different observed values compared to total number of observed values
-    if ((length(unique(sample1)) / length(sample1)) < 0.03) { support <- "Discrete"
-    } else { support <- "Continuous" }
-  } else {
-    if ( ((length(unique(sample1)) / length(sample1)) < 0.03) &
-         ((length(unique(sample2)) / length(sample2)) < 0.03) ) { support <- "Discrete"
-    } else { support <- "Continuous" }
+  detect_one <- function(x)
+  {
+    x <- x[!is.na(x)]
+    dup_rate <- 1 - length(unique(x)) / length(x)
+    if (dup_rate > 0.03) { "Discrete"
+    } else { "Continuous" }
   }
-  return(support)
+
+  support1 <- detect_one(sample1)
+  if (is.null(sample2)) { return(support1) }
+
+  support2 <- detect_one(sample2)
+  if (support1 == "Discrete" && support2 == "Discrete") { return("Discrete") }
+
+  return("Continuous")
 }
 
 
@@ -489,41 +494,6 @@ knownComp_to_uniform <- function(data, admixMod)
   return(data_transformed)
 }
 
-#knownComp_to_uniform <- function(data, admixMod)
-#{
-#  if (!inherits(x = admixMod, what = "admix_model"))
-#    stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
-#
-#  ## Extracts the information about component distributions for inversion
-#  ## (transformation to uniform distribution of the known component):
-#  comp.dist.inv <- paste0("p", admixMod$comp.dist$known)
-#  if (comp.dist.inv == "pmultinom") eff <- as.numeric(table(data))
-#  comp.inv <- sapply(X = comp.dist.inv, FUN = get, mode = "function")
-#  assign(x = names(comp.inv)[1], value = comp.inv[[1]])
-#
-#  ## Creates the adequate expression:
-#  make.expr.multinom <- function(z) {
-#    paste(names(comp.inv)[1],"(q = eff, n = sum(eff), prob = ",
-#          paste("c(", paste(admixMod$comp.param$known$prob, collapse = ","), "), lower.tail=TRUE)", sep = ""), sep = "")
-#  }
-#  #make.expr.multinom <- function(z) {
-#  #  paste(names(comp.inv)[1],"(q=c(rep(0,", z-1, "), 1, rep(0,", length(admixMod$comp.param$known$prob)-z, ")), n = 1, ",
-#  #        paste("c(", paste(admixMod$comp.param$known$prob, collapse = ","), "), lower.tail=TRUE)", sep = ""), sep = "")
-#  #}
-#  make.expr.inv <- function(z) paste(names(comp.inv)[1],"(q=", z, ",", paste(names(admixMod$comp.param$known),
-#                                     "=", admixMod$comp.param$known, sep="", collapse=","), ")", sep="")
-#  if (comp.dist.inv == "pmultinom") {
-#    expr.inv <- parse(text = make.expr.multinom(data))
-#  } else {
-#    expr.inv <- parse(text = make.expr.inv(data))
-#  }
-#
-#  ## Inversion of the second component to get a Uniform distribution for the second component:
-#  data.transformed <- sapply(expr.inv, eval)
-#
-#  return(data.transformed)
-#}
-
 
 #' Builds a polynomial orthonormal basis
 #'
@@ -582,7 +552,7 @@ poly_orthonormal_basis <- function(support = c("Real","Integer","Positive","Boun
 #' @param supp Support of the density considered.
 #' @param degree Degree up to which the polynomial basis is built.
 #' @param m (default to 3) Only used when support is 'Integer'. Corresponds to the mean of the reference measure, i.e. Poisson(m).
-#' @param other (default to NULL) A list to precise bounds when the support is bounded, where the second and fourth elements give bounds.
+#' @param bounds (default to NULL) A numeric vector to precise bounds when the support is bounded, specified as c(min,max).
 #'
 #' @return The list composed of 'degree' elements, each element being a numeric vector (with sample size) where each value represents
 #'         the k-th order coefficient found when decomposing the density in the orthonormal polynomial basis.
@@ -591,14 +561,14 @@ poly_orthonormal_basis <- function(support = c("Real","Integer","Positive","Boun
 #' ## Simulate data:
 #' sample1 <- rnorm(n = 7000, mean = 3, sd = 1)
 #' ## Compute the expansion coefficients in the orthonormal polynomial basis:
-#' coeff <- orthoBasis_coef(data = sample1, supp = "Real", degree = 3, m=NULL, other=NULL)
+#' coeff <- orthoBasis_coef(data = sample1, supp = "Real", degree = 3)
 #' sapply(coeff, mean)
 #'
 #' @author Xavier Milhaud <xavier.milhaud.research@gmail.com>
 #' @noRd
 
 orthoBasis_coef <- function(data, supp = c('Real','Integer','Positive','Bounded.continuous'),
-                            degree, m = 3, other = NULL)
+                            degree, m = 3, bounds = NULL)
 {
   ## Builds the orthonormal polynomial basis:
   if (supp == "Integer") {
@@ -625,9 +595,9 @@ orthoBasis_coef <- function(data, supp = c('Real','Integer','Positive','Bounded.
 
   } else if (supp == "Bounded.continuous") {
     ## Reference measure Unif(a,b)
-    if (is.null(other)) { bounds <- c(min(data), max(data))
-    } else { bounds <- other[[2]] }
-    for (i in 1:degree) coef.list[[i]] <- (orthopolynom::polynomial.values(poly_basis, (2*data-bounds[1]-bounds[2])/(bounds[2]-bounds[1]))[[i+1]]) / sqrt(2*i+1)
+    if (is.null(bounds)) { bound <- c(min(data), max(data))
+    } else { bound <- bounds }
+    for (i in 1:degree) coef.list[[i]] <- (orthopolynom::polynomial.values(poly_basis, (2*data-bound[1]-bound[2])/(bound[2]-bound[1]))[[i+1]]) / sqrt(2*i+1)
 
   } else stop("Change the support since the choosen one is not considered!")
 

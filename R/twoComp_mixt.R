@@ -48,7 +48,7 @@
 twoComp_mixt <- function(n = 1000, weight = 0.5, comp.dist = list("norm", "norm"),
                          comp.param = list(list(mean = 0, sd = 1), list(mean = 2, sd = 1)))
 {
-  if (!is.numeric(n) || length(n) != 1 || n <= 0) { stop("`n` must be a positive integer.") }
+  if (!is.numeric(n) || length(n) != 1 || n <= 0 || n %% 1 != 0) { stop("`n` must be a positive integer.") }
   if (!is.numeric(weight) || weight <= 0 || weight >= 1) { stop("`weight` must belong to (0,1).") }
   if (length(comp.dist) != 2 || length(comp.param) != 2) { stop("Please provide exactly two component distributions.") }
 

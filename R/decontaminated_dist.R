@@ -308,7 +308,7 @@ plot.decontaminated_density <- function(x, x_val = NULL, add_plot = FALSE, offse
     if (support == "Discrete") {
       ## initialise an empty plot
       plot(range(x_val), range(0, decontamin_dens_values * 1.1), type="n",
-           xaxt="n", xlab = "x", ylab = "probability", main = main, ...)
+           xaxt="n", xlab = "x", ylab = "probability", main = "pmf of the unknown component", ...)
       graphics::axis(1, at=x_val, labels=as.character(x_val))
     } else {
       plot(x = x_val, y = decontamin_dens_values, type="l", xlab = "x", ylab = "density", main = main, ...)

@@ -9,7 +9,7 @@ validate_distribution(dist, params)
 \arguments{
 \item{dist}{A single string naming the distribution under consideration.}
 
-\item{params}{A character vector composed of the names of the parameters for a given distribution.}
+\item{params}{A named list of parameters for the distribution under consideration.}
 }
 \value{
 A vector composed of the names of the parameters of the distribution.

@@ -4,9 +4,9 @@
 #' An admixture (aka contamination) model is a two-component mixture model with one known component.
 #' Both the second component distribution and the mixing weight are unknown.
 #'
-#' @param knownComp_dist (Character) The name of the distribution (specified as in R glossary) of the known component
+#' @param knownComp_dist The name of the distribution (specified as in R glossary) of the known component
 #'                        of the admixture model.
-#' @param knownComp_param (Character) A list of the names of the parameters (specified as in R glossary) involved in
+#' @param knownComp_param A list of the names of the parameters (specified as in R glossary) involved in
 #'                        the chosen known distribution, with their values.
 #'
 #' @return An object of class \link[admix]{admix_model}, containing 2 attributes: 1) a list that gives the information about the distributions

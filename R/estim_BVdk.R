@@ -673,7 +673,7 @@ BVdk_ML_varCov_estimators <- function(data, admixMod, hat_w, hat_loc, hat_var)
   variances <- (1/length(data)) * ( (-matvar[1,1] * matvar[1,2] + matvar[1,1] * matvar[2,2]) /
                                       (-(matvar[1,3])^2 * matvar[2,2] + matvar[1,1] * matvar[1,3] * matvar[2,3] + matvar[1,2] * matvar[1,3] * matvar[2,3] - matvar[1,1] * matvar[2,3]^2 -
                                          matvar[1,1] * matvar[1,2] * matvar[3,3] + matvar[1,1] * matvar[2,2] * matvar[3,3]) )
-  if (variances < 0) stop("Plug-in strategy has led to a negative estimated variance with ML estimation.")
+  if (is.na(variances) | variances < 0) stop("Plug-in strategy has led to a negative estimated variance with ML estimation.")
 
   return(variances)
 }

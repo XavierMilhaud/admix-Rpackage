@@ -81,7 +81,7 @@
 
 admix_estim <- function(samples, admixMod, est_method = c("PS","BVdk","IBM"), ...)
 {
-  if (!is.list(samples) | !is.list(admixMod))
+  if (!is.list(samples) || !is.list(admixMod))
     stop("Please provide sample(s) AND admixture model(s) in a list, also with only one sample!")
   if (!all(sapply(X = admixMod, FUN = inherits, what = "admix_model")))
     stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
@@ -114,7 +114,7 @@ distribution to have a symmetric probability density function.")
     any_knownComp_equal <- vector(mode = "logical", length = (n_samples-1))
     for (k in 2:n_samples) { any_knownComp_equal[k-1] <- is_equal_knownComp(admixMod[[1]], admixMod[[k]]) }
     if (any(any_knownComp_equal == TRUE)) {
-      message("/n When both the known and unknown component distributions of the mixture models are
+      message("\n When both the known and unknown component distributions of the mixture models are
  identical, IBM provides an estimated ratio of the mixing weights (and not the weights).\n")
     }
     for (k in 2:n_samples) {
@@ -122,7 +122,7 @@ distribution to have a symmetric probability density function.")
                                  admixMod = list(admixMod[[1]], admixMod[[k]]), ...)
     }
     estimate[[1]] <- NULL
-  } else stop("Please choose appropriately the arguments of the function.")
+  } else stop("Please choose appropriately the arguments of the function.") # nocov
 
   estimators <- list(estim_objects = estimate)
   specific_class <- switch(meth, "BVdk" = "estim_BVdk",

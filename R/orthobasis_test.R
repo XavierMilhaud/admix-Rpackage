@@ -102,9 +102,9 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
 
   ## Compute expansion coefficients in the orthonormal basis of the known components of the two admixture models:
   known.coef <- list(g1 = NULL, g2 = NULL)
-  coef.g1 <- orthoBasis_coef(data = sim.knownComp[[1]], supp = support, degree = K.user, m = 3, other = NULL)
+  coef.g1 <- orthoBasis_coef(data = sim.knownComp[[1]], supp = support, degree = K.user, m = 3, bounds = NULL)
   known.coef$g1 <- sapply(coef.g1, mean)
-  coef.g2 <- orthoBasis_coef(data = sim.knownComp[[2]], supp = support, degree = K.user, m = 3, other = NULL)
+  coef.g2 <- orthoBasis_coef(data = sim.knownComp[[2]], supp = support, degree = K.user, m = 3, bounds = NULL)
   known.coef$g2 <- sapply(coef.g2, mean)
 
   ##---- Splitting the original data for future uncorrelated estimations ----##
@@ -122,10 +122,10 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
 
   ##---- Estimate the expansion coefficients of the admixture sample in the orthonormal polynomial basis ----##
   coef.h1 <- coef.h2 <- moy.coef1 <- moy.coef2 <- var.coef1 <- var.coef2 <- NULL
-  coef.h1 <- orthoBasis_coef(data = data.coef1, supp = support, degree = K.user, m = 3, other = bounds_supp)
+  coef.h1 <- orthoBasis_coef(data = data.coef1, supp = support, degree = K.user, m = 3, bounds = bounds_supp)
   moy.coef1 <- sapply(coef.h1, mean)
   var.coef1 <- sapply(coef.h1, stats::var)
-  coef.h2 <- orthoBasis_coef(data = data.coef2, supp = support, degree = K.user, m = 3, other = bounds_supp)
+  coef.h2 <- orthoBasis_coef(data = data.coef2, supp = support, degree = K.user, m = 3, bounds = bounds_supp)
   moy.coef2 <- sapply(coef.h2, mean)
   var.coef2 <- sapply(coef.h2, stats::var)
 
@@ -179,8 +179,8 @@ orthobasis_test <- function(samples, admixMod, conf_level = 0.95, est_method = c
     coef.h1 <- coef.h2 <- moy.coef1 <- moy.coef2 <- NULL
     statU.boot <- moy.coef1 <- moy.coef2 <- matrix(NA, nrow = nb_echBoot, ncol = K.user)
     for (j in 1:nb_echBoot) {
-      coef.h1 <- orthoBasis_coef(data = bootstrap.samples.coef1[j, ], supp = support, degree = K.user, m = 3, other = bounds_supp)
-      coef.h2 <- orthoBasis_coef(data = bootstrap.samples.coef2[j, ], supp = support, degree = K.user, m = 3, other = bounds_supp)
+      coef.h1 <- orthoBasis_coef(data = bootstrap.samples.coef1[j, ], supp = support, degree = K.user, m = 3, bounds = bounds_supp)
+      coef.h2 <- orthoBasis_coef(data = bootstrap.samples.coef2[j, ], supp = support, degree = K.user, m = 3, bounds = bounds_supp)
       moy.coef1[j, ] <- unlist( lapply(coef.h1, mean, na.rm = TRUE) )
       moy.coef2[j, ] <- unlist( lapply(coef.h2, mean, na.rm = TRUE) )
       ## We get the vector U representing the test statistic for each development order, composed of terms R_kn :
@@ -320,5 +320,5 @@ summary.orthobasis_test <- function(object, ...)
   print(object$varCov_matrix)
   cat("\n------- Estimates -------\n")
   cat("Estimated mixing proportion (listed in the same order as samples): ",
-      paste(round(object$estimate,3), collapse = " "), "\n", sep = "")
+      paste(round(object$weights,3), collapse = " "), "\n", sep = "")
 }

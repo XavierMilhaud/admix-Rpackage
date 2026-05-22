@@ -61,7 +61,7 @@
 
 admix_test <- function(samples, admixMod, test_method = c("poly","icv"), conf_level = 0.95, ...)
 {
-  if (!is.list(samples) | !is.list(admixMod))
+  if (!is.list(samples) || !is.list(admixMod))
     stop("Please provide sample(s) AND admixture model(s) in a list, also with only one sample!")
   if (!all(sapply(X = admixMod, FUN = inherits, what = "admix_model")))
     stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")

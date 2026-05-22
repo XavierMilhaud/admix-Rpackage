@@ -7,10 +7,10 @@
 admix_model(knownComp_dist, knownComp_param)
 }
 \arguments{
-\item{knownComp_dist}{(Character) The name of the distribution (specified as in R glossary) of the known component
+\item{knownComp_dist}{The name of the distribution (specified as in R glossary) of the known component
 of the admixture model.}
 
-\item{knownComp_param}{(Character) A list of the names of the parameters (specified as in R glossary) involved in
+\item{knownComp_param}{A list of the names of the parameters (specified as in R glossary) involved in
 the chosen known distribution, with their values.}
 }
 \value{
