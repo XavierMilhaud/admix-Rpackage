@@ -87,7 +87,7 @@ print(x)
 #> 
 #> Statistics about the estimated decontaminated density function:
 #>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-#> 0.00000 0.00566 0.10146 0.22604 0.47388 0.60128 
+#>  0.0000  0.0000  0.1080  0.2705  0.5902  0.7440 
 #> 
 summary(x)
 #> Call:decontaminated_density(sample1 = data1, admixMod = admixMod1, 
@@ -96,11 +96,11 @@ summary(x)
 #> Type of support: Continuous
 #> Statistical indicators about the support:
 #>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-#> -3.3482 -1.9116 -0.7855 -0.6916  0.4366  2.9353 
+#> -2.9417 -1.9291 -0.8985 -0.7761  0.2516  2.3680 
 #> 
 #> Statistics about the estimated decontaminated density function:
 #>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-#> 0.00000 0.00566 0.10146 0.22604 0.47388 0.60128 
+#>  0.0000  0.0000  0.1080  0.2705  0.5902  0.7440 
 #> 
 
 ####### Discrete support:
@@ -145,7 +145,7 @@ print(x)
 #> 
 #> Statistics about the estimated decontaminated density function:
 #>      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
-#> 0.0003338 0.1527997 0.1618358 0.1730202 0.2289368 0.2364810 
+#> 0.0003456 0.1595809 0.1638397 0.1714445 0.2240638 0.2296767 
 #> 
 summary(y)
 #> Call:decontaminated_density(sample1 = data2, admixMod = admixMod2, 
@@ -154,18 +154,18 @@ summary(y)
 #> Type of support: Discrete
 #> Count table:
 #>   0   1   2   3   4   5   6   7   8   9  10  11 
-#> 130 410 608 633 485 382 191  98  39  20   3   1 
+#> 137 400 617 629 490 375 190  97  39  20   5   1 
 #> 
 #> Statistics about the estimated decontaminated density function:
 #>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-#>  0.0000  0.1096  0.1756  0.1609  0.2206  0.2371 
+#>  0.0000  0.1065  0.1689  0.1605  0.2181  0.2407 
 #> 
 print(z)
 #> Call:decontaminated_density(sample1 = data3, admixMod = admixMod3, 
 #>     estim.p = get_mixing_weights(est2))
 #> 
 #> Statistics about the estimated decontaminated density function:
-#>      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
-#> 0.0000000 0.0006439 0.0310954 0.0606527 0.1413325 0.1568087 
+#>     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+#> 0.000000 0.002309 0.034423 0.061584 0.138558 0.152762 
 #> 
 ```

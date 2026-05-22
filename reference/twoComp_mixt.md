@@ -85,11 +85,11 @@ print(sim.X)
 #> Number of observations: 1200 
 #> 
 #> Simulated data (first 5 obs.): 
-#>  0.5504287 -2.349743 -3.420734 -3.350772 -4.005017
+#>  -3.96349 0.2227572 -3.038955 -3.917214 -3.048229
 #> Simulated observations coming from the 1st component (first 5 obs.): 
-#>  -2.349743 -3.420734 -3.350772 -4.005017 -3.701633
+#>  -3.96349 -3.038955 -3.917214 -3.048229 -3.023971
 #> Simulated observations coming from the 2nd component (first 5 obs.): 
-#>  0.5504287 1.698026 0.265485 2.098534 1.058672
+#>  0.2227572 0.2443438 0.462243 0.3416537 5.555245
 #> 
 data.X <- get_mixture_data(sim.X)
 plot(density(data.X))
@@ -109,7 +109,7 @@ print(sim.Y)
 #> Number of observations: 1800 
 #> 
 #> Obtained multinomial mixture distribution: 
-#>  663 612 525 
+#>  699 611 490 
 #> 
 #> 
 ```

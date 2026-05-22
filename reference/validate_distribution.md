@@ -16,8 +16,7 @@ validate_distribution(dist, params)
 
 - params:
 
-  A character vector composed of the names of the parameters for a given
-  distribution.
+  A named list of parameters for the distribution under consideration.
 
 ## Value
 

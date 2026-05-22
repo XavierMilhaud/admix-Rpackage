@@ -16,14 +16,13 @@ admix_model(knownComp_dist, knownComp_param)
 
 - knownComp_dist:
 
-  (Character) The name of the distribution (specified as in R glossary)
-  of the known component of the admixture model.
+  The name of the distribution (specified as in R glossary) of the known
+  component of the admixture model.
 
 - knownComp_param:
 
-  (Character) A list of the names of the parameters (specified as in R
-  glossary) involved in the chosen known distribution, with their
-  values.
+  A list of the names of the parameters (specified as in R glossary)
+  involved in the chosen known distribution, with their values.
 
 ## Value
 

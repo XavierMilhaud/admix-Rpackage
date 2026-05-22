@@ -2,9 +2,9 @@
 
 Given one or two sets of observations (samples), the function provides
 with the most plausible type of support for the underlying random
-variables to be studied. If less than 3 percents of the observations
-have different values, we consider that the support is discrete.
-Otherwise, we consider it as a continuous support.
+variables to be studied. If there are too many duplicated values, we
+consider that the support is discrete. Otherwise, we consider it as a
+continuous support.
 
 ## Usage
 

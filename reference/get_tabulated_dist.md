@@ -44,6 +44,5 @@ admixMod2 <- admix_model(knownComp_dist = mixt2$comp.dist[[2]],
 x <- admix_test(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
                 conf_level = 0.95, test_method = "icv", n_sim_tab = 10)
 get_tabulated_dist(x)
-#> [1] 0.04059019 0.07711249 0.07749773 0.18327382 0.20848239 0.27703866 0.33898424
-#> [8] 1.51542607
+#> logical(0)
 ```
