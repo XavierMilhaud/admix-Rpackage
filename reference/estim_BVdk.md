@@ -50,7 +50,7 @@ information about mixture components (distributions and parameters); 4)
 the estimation method (Bordes and Vandekerkhove here, see the given
 reference); 5) the estimated mixing proportion (weight of the unknown
 component distribution); 6) the estimated location parameter of the
-unknown component distribution (with symetric density); 7) the variance
+unknown component distribution (with symmetric density); 7) the variance
 of the two estimators (respectively the mixing proportion and location
 shift); 8) the optimization method that was used.
 

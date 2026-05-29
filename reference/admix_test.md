@@ -127,7 +127,7 @@ admix_test(samples = list(data1,data2), admixMod = list(admixMod1,admixMod2),
 #>  pdfs
 #> 
 #> data:  samples
-#> T = 0.52976, expansion order S = 1, p-value = 0.4667
+#> T = 0.52988, expansion order S = 1, p-value = 0.4667
 #> alternative hypothesis: Distributions of unknown components involved 
 #>                         in the contamination models are different
 #> 

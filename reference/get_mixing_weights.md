@@ -51,5 +51,5 @@ x <- admix_estim(samples = list(data1), admixMod = list(admixMod1), est_method =
 #> distribution to have a symmetric probability density function.
 ## Extract the information about the known component:
 get_mixing_weights(x)
-#> [1] 0.7107364
+#> [1] 0.7107306
 ```
