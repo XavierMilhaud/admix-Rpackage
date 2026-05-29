@@ -26,7 +26,7 @@ of the estimators of unknown mixing proportions and location shift parameter.}
 An object of class \link[admix]{estim_BVdk}, containing 8 attributes: 1) the number of sample under study (set to 1 here);
 2) the sample size; 3) the information about mixture components (distributions and parameters); 4) the estimation
 method (Bordes and Vandekerkhove here, see the given reference); 5) the estimated mixing proportion (weight of the
-unknown component distribution); 6) the estimated location parameter of the unknown component distribution (with symetric
+unknown component distribution); 6) the estimated location parameter of the unknown component distribution (with symmetric
 density); 7) the variance of the two estimators (respectively the mixing proportion and location shift); 8) the optimization
 method that was used.
 }

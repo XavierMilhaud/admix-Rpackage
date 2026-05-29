@@ -39,6 +39,9 @@ For further details on the different estimation techniques, see references below
 ii) Bordes and Vandekerkhove estimator ; iii) Inversion Best-Matching approach. Important note: estimation by 'IBM'
 requires at least two samples at hand, and provides unbiased estimators only if the distributions of unknown components
 are equal (meaning that it requires to perform previously this test between the pairs of samples, see \link[admix]{admix_test}).
+When selecting 'BVdk' estimation method, the initialization parameters for the optimization process have been arbitrarily
+set. The mixing proportion is fixed to 0.5. For the localization parameter, it is based on taking the first moment
+in the model (\eqn{\ell(x) = p f(x-\mu) + (1 - p) g(x)}), and isolating \eqn{\mu} by an inversion formula.
 }
 \examples{
 ## Simulate mixture data:

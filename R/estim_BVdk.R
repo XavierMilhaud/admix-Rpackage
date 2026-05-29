@@ -22,7 +22,7 @@
 #' @return An object of class \link[admix]{estim_BVdk}, containing 8 attributes: 1) the number of sample under study (set to 1 here);
 #'         2) the sample size; 3) the information about mixture components (distributions and parameters); 4) the estimation
 #'         method (Bordes and Vandekerkhove here, see the given reference); 5) the estimated mixing proportion (weight of the
-#'         unknown component distribution); 6) the estimated location parameter of the unknown component distribution (with symetric
+#'         unknown component distribution); 6) the estimated location parameter of the unknown component distribution (with symmetric
 #'         density); 7) the variance of the two estimators (respectively the mixing proportion and location shift); 8) the optimization
 #'         method that was used.
 #'
@@ -68,21 +68,13 @@ estim_BVdk <- function(samples, admixMod, method = c("L-BFGS-B","Nelder-Mead"), 
     stop("Argument 'admixMod' is not correctly specified. See ?admix_model.")
 
   ## Extract useful information about known component distribution:
-  comp.dist.sim <- paste0("r", admixMod$comp.dist$known)
-  comp.sim <- sapply(X = comp.dist.sim, FUN = get, mode = "function")
-  assign(x = names(comp.sim)[1], value = comp.sim[[1]])
-  expr.sim <- paste(names(comp.sim)[1],"(n=100000,", paste(names(admixMod$comp.param$known),
-                    "=", admixMod$comp.param$known, sep = "", collapse = ","), ")", sep="")
-  ## Initialization of the parameters: localization parameter is initialized depending on whether the global mean
-  ## of the sample is lower than the mean of the known component (or not).
-  Seed <- .Random.seed
-  if (mean(samples) > mean(eval(parse(text = expr.sim)))) {
-    init.param <- c(0.5, 0.99 * max(samples))
-  } else {
-    init.param <- c(0.5, (min(samples) + 0.01 * abs(min(samples))))
-  }
-  ## To get the same estimated parameters at the end after the latter simulations:
-  .Random.seed <- Seed
+  r_known <- get(paste0("r", admixMod$comp.dist$known), mode = "function")
+  sim_sample <- do.call(r_known, c(list(n = 100000), admixMod$comp.param$known))
+  ## Initialization of the parameters based on the model from the original paper, considering moments:
+  known_mean <- mean(sim_sample)
+  p0 <- 0.5
+  mu0 <- (mean(samples) - (1 - p0) * known_mean) / p0
+  init.param <- c(p0, mu0)
 
   ## Select the bandwith :
   bandw <- stats::density(samples)$bw
@@ -245,30 +237,32 @@ summary.estim_BVdk <- function(object, show.call = TRUE, ...)
 
 BVdk_contrast <- function(param, data, admixMod, h)
 {
-  ## Extracts the information on component distributions and stores in expressions:
-  exp.comp.dist <- paste0("p", admixMod$comp.dist$known)
-  comp_BVdk <- sapply(X = exp.comp.dist, FUN = get, mode = "function")
-  assign(x = names(comp_BVdk)[1], value = comp_BVdk[[1]])
+  ## Retrieve known component CDF:
+  p_known <- get(paste0("p", admixMod$comp.dist$known), mode = "function")
+  ## Known parameters:
+  known_param <- admixMod$comp.param$known
 
-  ## Creates the expression allowing further to generate the right data:
-  expr1 <- paste(names(comp_BVdk)[1],"(data[i] + mu,", paste(names(admixMod$comp.param$known), "=", admixMod$comp.param$known, sep = "", collapse = ","), ")", sep="")
-  expr2 <- paste(names(comp_BVdk)[1],"(mu - data[i],", paste(names(admixMod$comp.param$known), "=", admixMod$comp.param$known, sep = "", collapse = ","), ")", sep="")
-
-  p <- param[1]
+  p  <- param[1]
   mu <- param[2]
-
-  ## Here, 'G' is the cdf of the admixture model, Fo is the cdf of the known component, and H is the cdf of the unknown component.
+  ## H is the CDF of the unknown component, F0 the known one
   n <- length(data)
-  H <- G <- Fo <- rep(0, n)
-  for (i in 1:n) {
-    G[i]  <- mean(kernel_cdf(data[i] + mu - data, h)) + mean(kernel_cdf(mu - data[i] - data, h))
-    Fo[i] <- eval(parse(text = expr1)) + eval(parse(text = expr2))
+  H  <- numeric(n)
+  G  <- numeric(n)
+  Fo <- numeric(n)
+
+  for (i in seq_len(n)) {
+    ## Kernel-based empirical quantity:
+    G[i] <- mean(kernel_cdf(data[i] + mu - data, h)) + mean(kernel_cdf(mu - data[i] - data, h))
+    ## Known component contribution:
+    Fo[i] <-
+      do.call(p_known, c(list(q = data[i] + mu), known_param)) +
+      do.call(p_known, c(list(q = mu - data[i]), known_param))
   }
 
-  ## cf formula (2.3) p.5 :
-  H <- ( (G - (1-p) * Fo) / p ) - 1
+  ## Formula (2.3), p.5:
+  H <- ((G - (1 - p) * Fo) / p) - 1
 
-  return( mean(H^2) )
+  mean(H^2)
 }
 
 
@@ -308,45 +302,46 @@ BVdk_contrast <- function(param, data, admixMod, h)
 
 BVdk_contrast_gradient <- function(param, data, admixMod, h)
 {
-  ## Extracts the information on component distributions and stores in expressions:
-  comp.dist.cdf <- paste0("p", admixMod$comp.dist$known)
-  comp_cdf <- sapply(X = comp.dist.cdf, FUN = get, mode = "function")
-  assign(x = names(comp_cdf)[1], value = comp_cdf[[1]])
-  ## Creates the expression allowing further to generate the right data:
-  expr1.cdf <- paste(names(comp_cdf)[1],"(data[i] + mu,", paste(names(admixMod$comp.param$known), "=", admixMod$comp.param$known, sep = "", collapse = ","), ")", sep="")
-  expr2.cdf <- paste(names(comp_cdf)[1],"(mu - data[i],", paste(names(admixMod$comp.param$known), "=", admixMod$comp.param$known, sep = "", collapse = ","), ")", sep="")
+  ## Retrieve known component CDF and density:
+  p_known <- get(paste0("p", admixMod$comp.dist$known), mode = "function")
+  d_known <- get(paste0("d", admixMod$comp.dist$known), mode = "function")
+  ## Known parameters:
+  known_param <- admixMod$comp.param$known
 
-  ## Same with density functions :
-  comp.dist.dens <- paste0("d", admixMod$comp.dist$known)
-  comp_dens <- sapply(X = comp.dist.dens, FUN = get, mode = "function")
-  assign(x = names(comp_dens)[1], value = comp_dens[[1]])
-  ## Creates the expression allowing further to generate the right data:
-  expr1.dens <- paste(names(comp_dens)[1],"(data[i] + mu,", paste(names(admixMod$comp.param$known), "=", admixMod$comp.param$known, sep = "", collapse = ","), ")", sep="")
-  expr2.dens <- paste(names(comp_dens)[1],"(mu - data[i],", paste(names(admixMod$comp.param$known), "=", admixMod$comp.param$known, sep = "", collapse = ","), ")", sep="")
-
-  p <- param[1]
+  p  <- param[1]
   mu <- param[2]
-
-  ## Here, 'G' is the cdf of the admixture model, Fo is the cdf of the known component, and H is the cdf of the unknown component.
-  ## Lowercase letters refer to the corresponding densities.
+  ## Here:
+  ## - G  : cdf-related quantity from admixture model
+  ## - Fo : known component cdf-related quantity
+  ## - H  : inferred unknown symmetric component quantity
+  ## Lowercase quantities correspond to densities.
   n <- length(data)
-  H <- G <- Fo <- g <- fo <- rep(0, n)
+  H  <- numeric(n)
+  G  <- numeric(n)
+  Fo <- numeric(n)
+  g  <- numeric(n)
+  fo <- numeric(n)
 
-  for (i in 1:n) {
-    G[i]  <- mean( kernel_cdf(data[i] + mu - data, h) + kernel_cdf(mu - data[i] - data, h) )
-    g[i]  <- mean( kernel_density(data[i] + mu - data, h) + kernel_density(mu - data[i] - data, h) )
-    Fo[i] <- eval(parse(text = expr1.cdf)) + eval(parse(text = expr2.cdf))
-    fo[i] <- eval(parse(text = expr1.dens)) + eval(parse(text = expr2.dens))
+  for (i in seq_len(n)) {
+    ## Kernel-based empirical quantities:
+    G[i] <- mean(kernel_cdf(data[i] + mu - data, h) + kernel_cdf(mu - data[i] - data, h))
+    g[i] <- mean(kernel_density(data[i] + mu - data, h) + kernel_density(mu - data[i] - data, h))
+    ## Known component CDF:
+    Fo[i] <- do.call(p_known, c(list(q = data[i] + mu), known_param)) +
+      do.call(p_known, c(list(q = mu - data[i]), known_param))
+    ## Known component density:
+    fo[i] <- do.call(d_known, c(list(x = data[i] + mu), known_param)) +
+      do.call(d_known, c(list(x = mu - data[i]), known_param))
   }
 
-  ## Inversion formula to isolate the unknown component cdf:
-  H <- ( (G - (1-p) * Fo) / p ) - 1
-  ## Partial derivative with respect to the component weight 'p':
+  ## Inversion formula to isolate unknown component cdf:
+  H <- ((G - (1 - p) * Fo) / p) - 1
+  ## Partial derivative w.r.t. mixing weight p:
   d_p_H <- (Fo - G) / p^2
-  ## Partial derivative with respect to the location parmaeter 'mu':
-  d_mu_H <- (g - (1-p) * fo) / p
+  ## Partial derivative w.r.t. location parameter mu:
+  d_mu_H <- (g - (1 - p) * fo) / p
 
-  return( c(mean(H * d_p_H), mean(H * d_mu_H)) )
+  2 * c(mean(H * d_p_H), mean(H * d_mu_H))
 }
 
 
